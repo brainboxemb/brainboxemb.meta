@@ -4,6 +4,8 @@
 
 - Rename the repository to `brainboxemb.meta` and establish it as the portfolio-level coordination source for public brainboxemb repositories.
 - Add the phased `brainboxemb.meta` consolidation migration plan and reusable handoff.
+- Add `repositories/catalog.yml` as the canonical inventory/classification source for public repositories and derive the dashboard runtime repository groups from it.
+- Preserve stable SCAD current/classic project-infrastructure classification while expanding catalog coverage to the current public repository set.
 - Preserve the dashboard as an active sub-capability while deferring its filesystem move to a dedicated migration phase.
 - Update dashboard self-identification from `brainboxemb.dashboard` to `brainboxemb.meta`.
 - Add `tool.eng-docs` to **Tooling**.
