@@ -20,10 +20,12 @@ There is currently **no active migration**.
 
 ## Proposed / inactive
 
-- [002 — SCAD build-decision audit](002-scad-build-decision-audit/README.md) — proposed only; reassess before activation.
+- [004 — SCAD repository execution model](004-scad-repository-execution-model/README.md) — review the project/library Build/Verify execution model before choosing an implementation.
 
 ## Complete
 
+- [003 — SCAD v0.12 rollout](003-scad-v0.12-rollout/README.md) — rolled the released tool through the template, both SCAD libraries and the real HUB75 frame.
+- [002 — SCAD build-decision audit](002-scad-build-decision-audit/README.md) — added and qualified the explicit post-build decision audit.
 - [001 — Consolidate public portfolio context into brainboxemb.meta](001-brainboxemb-meta/README.md) — completed repository/catalog/dashboard/documentation consolidation.
 
 ## When to create a migration
