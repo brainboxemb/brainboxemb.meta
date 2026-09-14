@@ -30,12 +30,11 @@ The idea is to add a check in `tool.scad-project` that compares what changed wit
 
 Nothing from Migration 002 should be implemented until it is explicitly activated and the plan is rechecked against the current tooling.
 
-See [Migration 002](migrations/002-scad-build-decision-audit/README.md) for the proposed plan.
+See [Migration 002](migrations/002-scad-build-decision-audit/README.md) and issue #19.
 
 ## Other follow-ups
 
-These are useful ideas, but they are not blocking current work:
+Two useful cross-project improvements remain parked until there is a reason to pick them up:
 
-- **Physical-verification document bundles** — issue #18;
-- **Cross-project release/version preparation** — issue #20;
-- **Architecture-view refresh** — issue #21.
+- **Self-contained physical-verification document packages** — issue #18;
+- **One release flow for requested versions across project types** — issue #20.
