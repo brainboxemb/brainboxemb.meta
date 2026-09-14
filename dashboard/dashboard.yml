@@ -28,8 +28,8 @@ dashboard:
   action_metrics_days: 30
   stale_after_hours: 168
 
-# Canonical public repository membership and grouping now lives here.
-catalog: repositories/catalog.yml
+# Canonical public repository membership and grouping lives outside the dashboard subproject.
+catalog: ../repositories/catalog.yml
 
 workflow_labels:
   pages-build-deployment: Pages
