@@ -6,19 +6,26 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active cross-project migration**.
+There is currently **no active cross-project migration on `main`**. Migration 004 is approved for activation immediately after its proposal PR is merged.
 
 ## Proposed next
 
 ### Migration 004 — define the current SCAD repository execution model
 
-**Proposed / inactive.**
+**Proposed; approved for activation after proposal merge.**
 
-Before changing the SCAD libraries again, review why current projects and libraries use different Build/Verify execution models and decide which differences are genuinely justified.
+The reviewed change request now chooses a concrete direction:
 
-The review uses `template.scad-project` as the reference project and `lib.scad.clamps` as the practical reference library. It explicitly evaluates Moon, Build/Verify independence, duplicate container startup, container timing, evidence/publication behaviour and whether a separate `template.scad-lib` is actually useful.
+- one recognizable SCAD production lifecycle for current projects and libraries;
+- Moon as repository-level orchestration and affected/preflight layer;
+- SCons retained as the qualified fine-grained SCAD target engine;
+- Build and Verify remain logically independent;
+- one normal heavy SCAD job/container when production is affected;
+- a lightweight host preflight must prevent the SCAD container from starting for README-only or otherwise unaffected changes;
+- publication happens outside the SCAD container;
+- `template.scad-project` is the reference project and `lib.scad.clamps` the reference library.
 
-No implementation starts until the [change request](migrations/004-scad-repository-execution-model/change-request.md) has been reviewed and Migration 004 is explicitly activated. Tracking issue: #49.
+Tracking issue: #49. The separate question whether Moon can replace SCons is parked as experiment #51 and is not part of Migration 004.
 
 ## Recently completed
 
@@ -56,6 +63,10 @@ See [Migration 002](migrations/002-scad-build-decision-audit/README.md) and its 
 `tech.scad` and `meta.scad-projects` are private archives.
 
 See [Migration 001](migrations/001-brainboxemb-meta/README.md) for its history and evidence.
+
+## Parked experiment
+
+- **Moon as SCAD target engine** — issue #51. This is explicitly outside Migration 004; SCons remains the target engine during the execution-model migration.
 
 ## Other follow-ups
 
