@@ -8,18 +8,20 @@ It is not the general overview of the brainboxemb repository collection. For tha
 
 ### Migration 001 — consolidate coordination into `brainboxemb.meta`
 
-**Status: active — remaining `meta.scad-projects` consolidation.**
+**Status: active — final archival/private closeout.**
 
-The dashboard/catalog and `tech.scad` portions are already migrated. The remaining work is the bounded transfer of useful current coordination responsibility from `meta.scad-projects`.
+The dashboard/catalog, `tech.scad` knowledge, durable working conventions and current `meta.scad-projects` coordination state have been transferred.
 
 Current slices:
 
 1. **Readable status and next-migration model** — complete.
-2. **Durable technical conventions** — complete; current shared guidance now lives under `docs/`.
-3. **Active issue transfer and source redirect** — in progress; relevant old coordination issues are being moved/closed and `meta.scad-projects` will become a historical source.
-4. **Consolidation closeout / archival readiness** — next; verify no current responsibility depends on the old meta repositories before archival.
+2. **Durable technical conventions** — complete; current shared guidance lives under `docs/`.
+3. **Active issue transfer and source redirect** — **complete**; relevant old issues were completed, superseded or recreated here, and `meta.scad-projects` now redirects current work to `brainboxemb.meta`.
+4. **Consolidation closeout / archival readiness** — **active**; the remaining external action is to archive/make `meta.scad-projects` private, then remove it from the public-only catalog and re-qualify the dashboard.
 
-Tracking: issues #11, #25, #31 and #32.
+Tracking: issues #11, #25 and #32.
+
+The retained Phase-5 disposition/evidence summary is [`migrations/001-brainboxemb-meta/phase5-meta-scad-closeout.md`](migrations/001-brainboxemb-meta/phase5-meta-scad-closeout.md), so public current understanding does not depend on future access to the old repository.
 
 ## Recently completed foundations
 
@@ -32,6 +34,7 @@ These are useful context, but they are **not active migrations**:
 | Deterministic real-SCons decision conformance | **complete** | Supported selective-build/cache behaviour is covered by deterministic real-SCons tests. |
 | Engineering-document assembly foundation | **complete** | `tool.eng-docs v0.2.0` provides the generic manifest/assembly boundary and has cross-domain consumer qualification. |
 | `tech.scad` active catalog role | **superseded** | The current public repository catalog and SCAD landscape overview now live in `brainboxemb.meta`. |
+| `meta.scad-projects` coordination role | **superseded** | Current guidance, status and cross-project planning now live in `brainboxemb.meta`; the old repository is ready for archival/private retention. |
 
 The old phrase **“Step 2.5 core complete” is intentionally not used as current status**. It mixed a completed document-assembly foundation with an optional physical-verification follow-up and obscured what work was actually active.
 
@@ -53,15 +56,12 @@ Purpose: add a post-build audit in `tool.scad-project` that checks whether obser
 
 It does not redesign SCons, implement physical-verification document bundles, introduce a second build engine or broadly migrate consumers.
 
-Migration 002 may only become active after Migration 001 has transferred the required coordination context and the proposed audit is rechecked against the then-current `tool.scad-project` implementation.
+Migration 002 may only become active after Migration 001 closes and the proposed audit is rechecked against the then-current `tool.scad-project` implementation.
 
 See [`migrations/002-scad-build-decision-audit/README.md`](migrations/002-scad-build-decision-audit/README.md) and activation-gate issue #26.
 
-## Historical source repositories
+## Remaining closeout action
 
-Until Migration 001 finishes:
+`meta.scad-projects` is expected to become archived/private. Because the canonical catalog contains **public repositories only**, its catalog entry must be removed after that visibility change. The dashboard must then be regenerated/qualified against the remaining public set.
 
-- `meta.scad-projects` remains a historical/detail evidence source plus a temporary source for not-yet-transferred coordination material;
-- `tech.scad` is already superseded as a current owner but remains available for history until archival.
-
-Do not resume an old numbered roadmap mechanically. Start from the normal repository overview/technical guide, and use this page only when you need the current cross-project change status.
+Do not activate Migration 002 automatically as part of that closeout.
