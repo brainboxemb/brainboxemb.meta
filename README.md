@@ -42,6 +42,8 @@ Read [STATUS.md](STATUS.md).
 
 This is intentionally separate from the general documentation. It tells you whether a repository-spanning migration is active, what is deferred, and which plans are only proposals.
 
+To continue cross-project work in a fresh ChatGPT/work session, use the copy/paste instruction in [New chat / work-session handoff](docs/00-new-chat-handoff.md).
+
 ### Experiments
 
 The [experiments section](experiments/README.md) explains which separate experiment repositories were used to investigate technical choices.
