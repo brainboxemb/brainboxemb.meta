@@ -1,68 +1,56 @@
-# Public repository catalog
+# Public repository overview
 
-`repositories/catalog.yml` is the canonical catalog of public `brainboxemb` repositories.
+This section answers a simple question: **what kinds of public brainboxemb repositories are there, and where should I look?**
 
-It owns stable classification and intent. Live operational state remains sourced from GitHub.
+For live information such as workflow status, open pull requests and recent activity, use the [dashboard](../dashboard/README.md).
 
-## What belongs in the catalog
+## Main groups
 
-Use the catalog for information such as:
+### Projects
 
-```text
-repository identity
-category
-domain
-lifecycle where meaningful
-high-level role
-dashboard grouping
-project-infrastructure generation/provider
-engine metadata where already established
-```
+Projects contain the actual design or software work.
 
-Do **not** copy changing GitHub state into the catalog:
+- SCAD/CAD projects → [SCAD projects](../domains/scad/projects.md)
+- event-timing software planning → [`2026-010-01.meta.event-timing-software`](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software)
+- Java event-timing framework → [`2026-010-02.java.event-timing-framework`](https://github.com/brainboxemb/2026-010-02.java.event-timing-framework)
 
-```text
-workflow status
-open pull requests
-latest tag
-branch protection
-branch cleanup candidates
-recent activity
-```
+### Reusable libraries
 
-The dashboard reads those values directly from GitHub.
+Libraries contain components intended to be reused by multiple projects.
 
-## Dashboard integration
+- SCAD libraries → [Reusable SCAD libraries](../domains/scad/libraries.md)
 
-`dashboard/dashboard.yml` contains dashboard policy and points to the central catalog with a path relative to the dashboard subproject:
+### Shared tooling and templates
 
-```yaml
-catalog: ../repositories/catalog.yml
-```
+Tool repositories provide shared project or build behaviour. Templates are small reference projects that demonstrate the intended setup.
 
-`dashboard/src/prepare_dashboard_config.py` translates catalog membership/grouping into the existing dashboard `groups[].repositories` runtime shape. This deliberately keeps the proven status collector, metrics code and renderer unchanged.
+- SCAD tooling → [SCAD tooling and templates](../domains/scad/tooling.md)
+- generic repository tooling → [`tool.git-project`](https://github.com/brainboxemb/tool.git-project)
+- Java project tooling → [`tool.java-project`](https://github.com/brainboxemb/tool.java-project)
+- engineering-document tooling → [`tool.eng-docs`](https://github.com/brainboxemb/tool.eng-docs)
 
-The generated runtime file is `dashboard/.dashboard.runtime.yml` and is not committed.
+### Sites and experiments
 
-## Coverage
+Site repositories contain published web content or site experiments. Experiment repositories investigate technical choices without becoming normal project dependencies.
 
-The catalog is public-repository-only. Phase 2 was built from the current GitHub public repository inventory and the established SCAD classification in `tech.scad/catalog.yml`.
+See the [dashboard](../dashboard/README.md) for the complete current public set and live status.
 
-Older SCAD projects remain explicit as:
+## The machine-readable catalog
 
-```yaml
-project_infrastructure:
-  generation: classic
-```
+[`catalog.yml`](catalog.yml) is the maintained list used by the dashboard. It records stable information such as:
 
-where that classification was already established. Current consumers use `generation: current` with the relevant tooling provider.
+- repository name;
+- broad role/category;
+- domain;
+- whether known project infrastructure is current or classic;
+- the shared tool that provides that project setup where relevant.
 
-`tool.sw-docs` is not a separate current repository: that earlier name was broadened to `tool.eng-docs`, which is the catalog entry to use.
+It deliberately does **not** store changing GitHub information such as workflow health or open pull requests. The dashboard reads those directly from GitHub.
 
 ## Adding or changing a repository
 
-Update `repositories/catalog.yml`. Do not add the repository a second time to dashboard configuration.
+When the public repository collection changes, update `catalog.yml` once. Do not maintain a second copy of the same membership list in dashboard configuration.
 
-For dashboard-specific overrides, use the optional per-entry `dashboard` mapping. Supported overrides are intentionally limited to the existing dashboard contract, such as branch/workflow filtering and cleanup exclusions.
+Private repositories are outside this catalog.
 
-After a catalog change, normal dashboard CI builds `dashboard/.dashboard.runtime.yml`, runs the existing collectors and publishes Pages only when dashboard-visible state changed.
+For dashboard implementation details, see [`../dashboard/README.md`](../dashboard/README.md).
