@@ -1,72 +1,58 @@
 # Migration 002 — SCAD build-decision audit
 
-Status: **active**
+Status: **complete**
 
 Tracking issue: [#19](https://github.com/brainboxemb/brainboxemb.meta/issues/19)
 
 Implementation change request: [change-request.md](change-request.md)
 
-## Goal
+Qualification evidence: [evidence.md](evidence.md)
 
-Add a conservative post-build audit to `tool.scad-project`.
+## What changed
 
-The audit checks whether the structured build outcome for a target contradicts impact that can actually be proven from changed inputs and the target's recorded SCAD dependency list.
+`tool.scad-project` now has an explicit post-build audit for its structured SCons build-decision reports.
 
-Example: when the build report proves a target depends on a changed SCAD file, `BUILT` or `CACHE_RESTORED` can be valid, but `CURRENT` is a correctness contradiction.
+The audit receives a build-decision report plus changed paths and checks whether an observed target outcome contradicts impact that can actually be proven from the target's recorded SCAD dependencies.
 
-## Reassessment before activation
+For example, when a changed path occurs in a target's recorded `sources`, the target may be `BUILT` or `CACHE_RESTORED`, but it must not be reported `CURRENT`.
 
-Migration 002 was rechecked against current `tool.scad-project` main before activation.
+## Implementation result
 
-The current implementation already provides the foundations the audit needs:
-
-- schema-v1 machine-readable target outcomes: `BUILT`, `CACHE_RESTORED`, `CURRENT`, `ERROR`;
-- each target report contains its resolved `sources` / OpenSCAD dependencies;
-- deterministic real-SCons conformance tests already cover private/shared dependency changes and cache behaviour.
-
-The main correction to the earlier high-level plan is that the first implementation does **not** need another dependency model and must not implement generic Git change discovery.
-
-Instead, the first slice takes an explicit list of changed paths and evaluates those paths against the existing target `sources` evidence.
-
-## Owner
-
-Implementation owner: [`brainboxemb/tool.scad-project`](https://github.com/brainboxemb/tool.scad-project).
-
-`brainboxemb.meta` owns only the change request, migration scope, ordering and retained qualification evidence.
-
-## First implementation slice
-
-The active first slice is defined in [change-request.md](change-request.md).
-
-In summary it adds:
+The owner implementation added:
 
 - a pure build-decision audit module;
-- an explicit `scad-project build-audit` command;
-- schema-v1 machine-readable audit output;
+- `scad-project build-audit`;
+- explicit changed-path input, including newline-delimited files;
+- schema-v1 machine-readable audit evidence;
 - exact changed-path-to-target-source matching;
 - failure for proven affected targets reported `CURRENT`;
-- warnings, not failures, for possible overbuild;
-- focused unit and CLI tests.
+- warnings rather than failures for possible overbuild;
+- focused policy/CLI tests and owner documentation.
 
-The audit is **not automatically called by `scad-project build` in this first slice** because generic changed-path discovery is not currently owned by the SCAD build command.
+The implementation deliberately reuses the existing target `sources` evidence. It does not create another dependency model.
 
-## Not part of this migration slice
+## Boundary retained
 
-- generic `git diff` / GitHub-event interpretation;
+The first implementation does **not** discover changed repository paths itself.
+
+Generic `git diff` / GitHub-event interpretation does not belong in the SCAD build policy layer. Changed paths are explicit audit input until a separate generic integration is justified.
+
+Also not included:
+
 - SCons reimplementation;
-- artifact-content integrity checks;
-- automatic workflow enforcement;
+- cache artifact-content integrity checks;
+- automatic Build/Verify workflow enforcement;
 - physical-verification document packages (#18);
-- broad `lib.scad.clamps` / `lib.scad.hub75` rollout.
-
-The libraries can be updated after this audit capability is implemented and qualified; consumer rollout is a separate decision.
+- `lib.scad.clamps` / `lib.scad.hub75` rollout.
 
 ## Qualification
 
-Migration 002 is complete when:
+Owner PR #49 merged as `d4991b8b4ebf0746e19030d5ca72662976ee3aed`.
 
-1. the owner implementation satisfies the change-request acceptance criteria;
-2. owner unit/CLI tests are green;
-3. structured audit output and failure/warning behaviour are documented in `tool.scad-project`;
-4. the agreed qualification evidence is recorded here;
-5. no extra Git/change-discovery or consumer-migration scope was pulled into the implementation.
+Both the final PR qualification and exact-main qualification passed with **200 tests**. See [evidence.md](evidence.md) for exact runs and artifacts.
+
+## Next decision
+
+Migration 002 itself is complete.
+
+Before updating SCAD library consumers, reassess how the new `tool.scad-project` capability should be released/versioned. Consumer updates should not silently depend on an arbitrary unreleased main commit when a normal tool release is the appropriate contract.
