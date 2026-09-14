@@ -10,12 +10,12 @@ on:
   push:
     branches: [main]
     paths:
-      - "dashboard.yml"
+      - "dashboard/dashboard.yml"
       - "repositories/catalog.yml"
-      - "requirements.txt"
-      - "src/**"
-      - "site/**"
-      - "tests/**"
+      - "dashboard/requirements.txt"
+      - "dashboard/src/**"
+      - "dashboard/site/**"
+      - "dashboard/tests/**"
       - ".github/workflows/deploy-dashboard.yml"
 
 permissions:
@@ -44,21 +44,22 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+          cache-dependency-path: dashboard/requirements.txt
 
       - name: Install dependencies
         timeout-minutes: 2
-        run: pip install -r requirements.txt
+        run: pip install -r dashboard/requirements.txt
 
       - name: Run tests
         timeout-minutes: 2
-        run: python -m unittest discover -s tests -v
+        run: python -m unittest discover -s dashboard/tests -v
 
       - name: Prepare dashboard config
         timeout-minutes: 2
         run: >-
-          python src/prepare_dashboard_config.py
-          --config dashboard.yml
-          --output .dashboard.runtime.yml
+          python dashboard/src/prepare_dashboard_config.py
+          --config dashboard/dashboard.yml
+          --output dashboard/.dashboard.runtime.yml
 
       - name: Select daily Actions metrics cache
         id: metrics-day
@@ -70,7 +71,7 @@ jobs:
         timeout-minutes: 2
         uses: actions/cache/restore@v4
         with:
-          path: site/action-metrics.json
+          path: dashboard/site/action-metrics.json
           key: dashboard-action-metrics-${{ steps.metrics-day.outputs.date }}
           restore-keys: |
             dashboard-action-metrics-
@@ -85,20 +86,20 @@ jobs:
           DASHBOARD_TOKEN: ${{ secrets.DASHBOARD_TOKEN }}
         run: |
           set -euo pipefail
-          python src/collect_action_metrics.py \
-            --config .dashboard.runtime.yml \
-            --output site/action-metrics.json \
-            --changed-output .action-metrics-changed \
-            --valid-output .action-metrics-valid
-          echo "changed=$(cat .action-metrics-changed)" >> "$GITHUB_OUTPUT"
-          echo "valid=$(cat .action-metrics-valid)" >> "$GITHUB_OUTPUT"
+          python dashboard/src/collect_action_metrics.py \
+            --config dashboard/.dashboard.runtime.yml \
+            --output dashboard/site/action-metrics.json \
+            --changed-output dashboard/.action-metrics-changed \
+            --valid-output dashboard/.action-metrics-valid
+          echo "changed=$(cat dashboard/.action-metrics-changed)" >> "$GITHUB_OUTPUT"
+          echo "valid=$(cat dashboard/.action-metrics-valid)" >> "$GITHUB_OUTPUT"
 
       - name: Save daily Actions metrics
         if: steps.metrics-cache.outputs.cache-hit != 'true' && steps.metrics-collect.outputs.valid == 'true'
         timeout-minutes: 2
         uses: actions/cache/save@v4
         with:
-          path: site/action-metrics.json
+          path: dashboard/site/action-metrics.json
           key: dashboard-action-metrics-${{ steps.metrics-day.outputs.date }}
 
       - name: Generate dashboard
@@ -108,10 +109,10 @@ jobs:
           DASHBOARD_TOKEN: ${{ secrets.DASHBOARD_TOKEN }}
           DASHBOARD_ADMIN_TOKEN: ${{ secrets.DASHBOARD_ADMIN_TOKEN }}
         run: >-
-          python src/dashboard_entry.py
-          --config .dashboard.runtime.yml
-          --output site/index.html
-          --hash-output .dashboard-content-hash
+          python dashboard/src/dashboard_entry.py
+          --config dashboard/.dashboard.runtime.yml
+          --output dashboard/site/index.html
+          --hash-output dashboard/.dashboard-content-hash
 
       - name: Compare with deployed dashboard
         timeout-minutes: 2
@@ -123,7 +124,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          new_hash="$(tr -d '\r\n' < .dashboard-content-hash)"
+          new_hash="$(tr -d '\r\n' < dashboard/.dashboard-content-hash)"
           current_hash="$(
             curl --fail --silent --show-error --location --max-time 20 \
               "${PAGES_URL}?_check=${GITHUB_RUN_ID}" 2>/dev/null \
@@ -157,7 +158,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: dashboard/site
 
   deploy:
     environment:
