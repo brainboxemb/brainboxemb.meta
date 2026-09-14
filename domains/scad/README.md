@@ -1,37 +1,37 @@
 # SCAD domain
 
-`domains/scad/` is the portfolio-level knowledge and navigation layer for the public SCAD/CAD ecosystem.
+`domains/scad/` is the public portfolio-level knowledge and navigation layer for the SCAD/CAD repositories.
 
-The canonical repository inventory is **not** duplicated here. Repository membership and stable classification live in [`../../repositories/catalog.yml`](../../repositories/catalog.yml); live status comes from GitHub and the dashboard.
+Repository membership and stable classification live in [`../../repositories/catalog.yml`](../../repositories/catalog.yml); live operational state comes from GitHub and the dashboard.
 
-## Scope
+## What belongs here
 
 The SCAD landscape includes:
 
 - generic repository/bootstrap tooling used by SCAD projects;
 - SCAD-specific project/build tooling;
 - shared OpenSCAD/PythonSCAD runtime infrastructure;
-- reference consumers/templates;
+- templates and reference consumers;
 - reusable `lib.scad.*` libraries;
 - current structured CAD projects;
 - classic CAD projects that still use earlier infrastructure.
 
 See [architecture.md](architecture.md) for the durable architecture and migration-scope rules.
 
-## Broad landscape versus controlled integration
+## Two useful views
 
-Keep these two views distinct:
+The portfolio deliberately keeps two different views without maintaining two separate catalog repositories:
 
 ```text
-repositories/catalog.yml + domains/scad/
-    broad portfolio view
-    includes current and classic SCAD/CAD repositories
+broad portfolio view
+    repositories/catalog.yml + domains/scad/
+    all relevant public current/classic SCAD/CAD repositories
 
-controlled SCAD integration set
-    smaller set used to evolve and qualify the current shared SCAD stack
+controlled integration view
+    a smaller representative set used when shared SCAD tooling is evolved or qualified
 ```
 
-The controlled integration set and its current qualification/migration plans are being migrated from [`meta.scad-projects`](https://github.com/brainboxemb/meta.scad-projects) in Migration 001 Phase 5. Until that phase is complete, `meta.scad-projects` remains authoritative for those active integration plans/evidence.
+The controlled integration set is a testing/coordination concept, not a second repository inventory. New cross-project qualification or migration work is planned under [`../../migrations/`](../../migrations/) and implemented in the owning repositories.
 
 ## Source-of-truth boundaries
 
@@ -39,18 +39,12 @@ The controlled integration set and its current qualification/migration plans are
 
 - the public repository catalog and stable classification;
 - portfolio-level SCAD architecture and navigation;
-- cross-project migration coordination once migrated here.
+- cross-project migration coordination.
 
-Individual repositories own:
+Individual repositories own their source/geometry, configuration and actual dependency versions, releases/tags, tests and verification, generated evidence, and project-specific design documentation.
 
-- source code and CAD geometry;
-- project configuration and actual dependency versions;
-- releases/tags;
-- tests, verification and generated evidence;
-- project-specific design documentation and implementation status.
+A normal project depends directly on the tooling and libraries it needs. `brainboxemb.meta` is an information and coordination layer, not a runtime dependency.
 
-A normal project must depend directly on the tooling/libraries it needs. `brainboxemb.meta` and the former `tech.scad` catalog are information layers, not runtime dependencies.
+## Historical consolidation
 
-## Historical source
-
-[`tech.scad`](https://github.com/brainboxemb/tech.scad) established the broad SCAD catalog, project-infrastructure generation classification and architecture rules that were consolidated here. Its static tooling/library/project indexes are retained in repository history rather than copied into a second maintained list.
+The current view combines responsibilities that were previously split across `tech.scad` (broad catalog/landscape) and `meta.scad-projects` (controlled integration and cross-project planning). Those repositories may be retained privately as archive history, but current public guidance must not require access to them.
