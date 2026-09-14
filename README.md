@@ -8,7 +8,7 @@ Central coordination, architecture, repository catalog, migration planning, and 
 
 It owns information that is intentionally broader than one implementation repository:
 
-- the public repository catalog and high-level lifecycle/classification;
+- the canonical public repository catalog and high-level lifecycle/classification;
 - cross-project architecture and ownership boundaries;
 - shared working conventions such as branches, generated output, pull requests and releases;
 - current cross-project migrations, their evidence and ChatGPT handoffs;
@@ -38,13 +38,11 @@ Only the first category extends the blocking path.
 
 ## Continue cross-project work
 
-Use [the migration handoff](migrations/001-brainboxemb-meta/handoff.md) while the consolidation is active. It tells a new session to reconstruct state from the repositories, issue/PR/CI evidence and the migration plan rather than from old chat history.
+Use [the migration handoff](migrations/001-brainboxemb-meta/handoff.md) while the consolidation is active. It tells a new session to reconstruct state from repositories, issues/PRs, CI/evidence and generated output rather than from old chat history.
 
-After this consolidation is complete, the root handoff will become the generic entry point for new cross-project work.
+After consolidation, the root handoff becomes the generic entry point for new cross-project work.
 
 ## Repository layout
-
-The target structure is intentionally split by responsibility:
 
 ```text
 brainboxemb.meta/
@@ -60,7 +58,7 @@ brainboxemb.meta/
 
 ### Transitional dashboard layout
 
-During the first migration phases the working dashboard implementation deliberately remains at its original root paths:
+The working dashboard implementation deliberately remains at its historical root paths until its dedicated relocation phase:
 
 ```text
 dashboard.yml
@@ -71,18 +69,19 @@ requirements.txt
 .github/workflows/deploy-dashboard.yml
 ```
 
-This avoids coupling the repository rename to a Pages/workflow relocation. See [dashboard/README.md](dashboard/README.md).
+This avoids coupling the meta/catalog migration to a Pages/workflow relocation. See [dashboard/README.md](dashboard/README.md).
 
 ## Repository catalog
 
-The canonical public catalog will live under `repositories/`.
+[`repositories/catalog.yml`](repositories/catalog.yml) is the canonical inventory/classification source for public brainboxemb repositories.
 
-Until that migration slice is completed, two older sources still exist:
+The catalog owns stable information such as repository identity, category/domain, lifecycle where useful, role and project-infrastructure generation/provider. It currently includes the full public repository set used by this migration, including current tools/reference consumers, classic SCAD projects, sites and experiment repositories.
 
-- `brainboxemb/tech.scad/catalog.yml` — broad SCAD landscape and current/classic infrastructure classification;
-- `dashboard.yml` — repositories currently monitored by the dashboard.
+Live facts such as workflow health, open PRs, tags, branch protection and activity are still read from GitHub instead of being copied into the catalog.
 
-Do not silently treat either source as the final all-domain catalog. Phase 2 merges the proven information into one canonical catalog and then makes the dashboard consume it.
+Root `dashboard.yml` now contains dashboard policy and points to the canonical catalog. `src/prepare_dashboard_config.py` converts it to the existing dashboard runtime shape, so the proven status/metrics/rendering code does not need a second repository inventory.
+
+See [repositories/README.md](repositories/README.md) for the catalog contract.
 
 ## Domain coordination
 
@@ -93,7 +92,7 @@ The SCAD domain is currently being migrated from:
 - `brainboxemb/meta.scad-projects` — SCAD architecture, workflow and cross-project plans;
 - `brainboxemb/tech.scad` — broader SCAD catalog and landscape documentation.
 
-Those repositories remain authoritative during the relevant migration phases and are not archived until their active responsibilities, links and evidence are covered here.
+Those repositories remain authoritative for responsibilities not yet migrated and are not archived until active responsibilities, links and evidence are covered here.
 
 ## Cross-project migrations
 
@@ -110,10 +109,10 @@ Project-specific implementation plans stay in the owning project repository.
 
 ## Experiments
 
-Experiments and test repositories stay independent. `brainboxemb.meta` records what question they tested, what decision they support, and whether that result has been adopted. See [experiments/README.md](experiments/README.md).
+Experiments and test repositories stay independent. `brainboxemb.meta` records what question they tested, what decision they support and whether that result has been adopted. See [experiments/README.md](experiments/README.md).
 
 ## Dashboard
 
-The existing static GitHub Actions/status dashboard remains an active sub-capability of this repository. It continues to publish via GitHub Pages while the broader meta structure is introduced.
+The existing static GitHub Actions/status dashboard remains an active sub-capability and continues to publish through GitHub Pages while the broader meta structure is introduced.
 
 See [dashboard/README.md](dashboard/README.md) for dashboard-specific maintenance guidance.
