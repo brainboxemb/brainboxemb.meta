@@ -28,47 +28,8 @@ dashboard:
   action_metrics_days: 30
   stale_after_hours: 168
 
-groups:
-  - name: Tooling
-    repositories:
-      - brainboxemb.github.actions
-      - docker.scad-toolchain
-      - docker.scad-toolchain.test
-      - template.scad-project
-      - tool.scad-project
-      - tool.java-project
-      - tool.git-project
-      - tool.eng-docs
-      - tech.scad
-      - meta.scad-projects
-
-  - name: CAD libraries
-    repositories:
-      - lib.scad.clamps
-      - lib.scad.hub75
-
-  - name: CAD projects
-    repositories:
-      - 2026-003-01.cad.garden-tool-cart
-      - 2026-004-01.cad.metabo-tsu-slot-insert
-      - 2026-005-01.cad.aluminium-profile-mft
-      - 2026-006-01.cad.HUB75-display-frame
-      - 2026-006-02.cad.HUB75-display-case
-      - 2026-007-01.cad.tool-board
-      - 2026-008-01.cad.bosch-table
-      - 2026-009-01.cad.HUB75-display-frame
-
-  - name: Software projects
-    repositories:
-      - 2026-010-01.meta.event-timing-software
-      - 2026-010-02.java.event-timing-framework
-
-  - name: Sites & experiments
-    repositories:
-      - site.notes
-      - site.hugo-step001
-      - brainboxemb.github.io
-      - exp.2026-001.marp
+# Canonical public repository membership and grouping now lives here.
+catalog: repositories/catalog.yml
 
 workflow_labels:
   pages-build-deployment: Pages

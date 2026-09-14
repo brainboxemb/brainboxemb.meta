@@ -1,0 +1,275 @@
+schema_version: 1
+
+# Canonical catalog of public brainboxemb repositories.
+# Stable classification belongs here; live GitHub state does not.
+# The dashboard consumes dashboard_group only as presentation grouping.
+
+repositories:
+  - repository: brainboxemb/brainboxemb.meta
+    category: coordination
+    domain: cross-project
+    lifecycle: current
+    dashboard_group: Coordination
+    role: Portfolio-level coordination, architecture, migration planning, repository overview, and dashboard.
+
+  - repository: brainboxemb/tech.scad
+    category: ecosystem-engineering
+    domain: scad
+    lifecycle: current
+    dashboard_group: Coordination
+    role: Broad SCAD landscape/catalog source being consolidated into brainboxemb.meta.
+
+  - repository: brainboxemb/meta.scad-projects
+    category: ecosystem-engineering
+    domain: scad
+    lifecycle: current
+    dashboard_group: Coordination
+    role: SCAD cross-project architecture and migration coordination being consolidated into brainboxemb.meta.
+
+  - repository: brainboxemb/brainboxemb.github.actions
+    category: tooling
+    domain: scad
+    lifecycle: classic
+    dashboard_group: Tooling
+    role: Shared OpenSCAD GitHub Actions and support scripts used by the earlier CAD-project generation.
+    engines:
+      - openscad
+
+  - repository: brainboxemb/docker.scad-toolchain
+    category: tooling
+    domain: scad
+    lifecycle: current
+    dashboard_group: Tooling
+    role: Shared SCAD runtime and build container.
+    engines:
+      - openscad
+      - pythonscad
+
+  - repository: brainboxemb/docker.scad-toolchain.test
+    category: tooling
+    domain: scad
+    lifecycle: current
+    dashboard_group: Tooling
+    role: Consumer-style verification of the SCAD runtime/toolchain.
+    engines:
+      - openscad
+      - pythonscad
+
+  - repository: brainboxemb/tool.git-project
+    category: tooling
+    domain: repository
+    lifecycle: current
+    dashboard_group: Tooling
+    role: Generic Git project bootstrap, pinned dependency, submodule, Moon orchestration, and generated-output support.
+
+  - repository: brainboxemb/tool.scad-project
+    category: tooling
+    domain: scad
+    lifecycle: current
+    dashboard_group: Tooling
+    role: Reusable SCAD project CLI, build/design/verification policy, and GitHub Actions workflows.
+    engines:
+      - openscad
+      - pythonscad
+
+  - repository: brainboxemb/template.scad-project
+    category: template
+    domain: scad
+    lifecycle: current
+    dashboard_group: Tooling
+    role: Reference consumer and starting point for structured SCAD projects.
+    engines:
+      - openscad
+      - pythonscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
+
+  - repository: brainboxemb/tool.java-project
+    category: tooling
+    domain: java
+    lifecycle: current
+    dashboard_group: Tooling
+    role: Reusable Java project build and verification tooling.
+
+  - repository: brainboxemb/template.java-project
+    category: template
+    domain: java
+    lifecycle: current
+    dashboard_group: Tooling
+    role: Minimal external reference consumer for released Java and repository-orchestration tooling.
+    project_infrastructure:
+      generation: current
+      provider: tool.java-project
+
+  - repository: brainboxemb/tool.eng-docs
+    category: tooling
+    domain: documentation
+    lifecycle: current
+    dashboard_group: Tooling
+    role: Domain-neutral engineering-document assembly and publication tooling.
+
+  - repository: brainboxemb/lib.scad.clamps
+    category: library
+    domain: scad
+    lifecycle: current
+    dashboard_group: CAD libraries
+    role: Reusable parametric clamp geometry and library API.
+    engines:
+      - openscad
+      - pythonscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
+
+  - repository: brainboxemb/lib.scad.hub75
+    category: library
+    domain: scad
+    lifecycle: current
+    dashboard_group: CAD libraries
+    role: Reusable HUB75 LED-panel reference geometry and mechanical API.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
+
+  - repository: brainboxemb/2026-003-01.cad.garden-tool-cart
+    category: project
+    domain: cad
+    dashboard_group: CAD projects
+    role: Modular storage design for a mobile garden tool rack.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: classic
+      provider: brainboxemb.github.actions
+
+  - repository: brainboxemb/2026-004-01.cad.metabo-tsu-slot-insert
+    category: project
+    domain: cad
+    dashboard_group: CAD projects
+    role: Insert for locating mounting bolts in a Metabo TSU table-saw stand.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: classic
+      provider: none
+
+  - repository: brainboxemb/2026-005-01.cad.aluminium-profile-mft
+    category: project
+    domain: cad
+    dashboard_group: CAD projects
+    role: Aluminium-extrusion MFT-style multifunction workbench.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: classic
+      provider: none
+
+  - repository: brainboxemb/2026-006-01.cad.HUB75-display-frame
+    category: project
+    domain: cad
+    dashboard_group: CAD projects
+    role: Earlier-generation mechanical frame for HUB75 LED matrix panels.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: classic
+      provider: brainboxemb.github.actions
+
+  - repository: brainboxemb/2026-006-02.cad.HUB75-display-case
+    category: project
+    domain: cad
+    dashboard_group: CAD projects
+    role: Wooden enclosure and carry structure for a HUB75 LED display.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: classic
+      provider: brainboxemb.github.actions
+
+  - repository: brainboxemb/2026-007-01.cad.tool-board
+    category: project
+    domain: cad
+    dashboard_group: CAD projects
+    role: Parametric garage and workshop tool-board layout model.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: classic
+      provider: brainboxemb.github.actions
+
+  - repository: brainboxemb/2026-008-01.cad.bosch-table
+    category: project
+    domain: cad
+    dashboard_group: CAD projects
+    role: Mobile workshop stand for a Bosch GTS 10 XC table saw.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: classic
+      provider: brainboxemb.github.actions
+
+  - repository: brainboxemb/2026-009-01.cad.HUB75-display-frame
+    category: project
+    domain: cad
+    dashboard_group: CAD projects
+    role: Structured HUB75 display-frame project using current SCAD project tooling.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
+
+  - repository: brainboxemb/2026-010-01.meta.event-timing-software
+    category: project
+    domain: software
+    lifecycle: current
+    dashboard_group: Software projects
+    role: Cross-project planning and software architecture for the event-timing software project.
+
+  - repository: brainboxemb/2026-010-02.java.event-timing-framework
+    category: project
+    domain: java
+    lifecycle: current
+    dashboard_group: Software projects
+    role: Java framework implementation for the event-timing software project.
+    project_infrastructure:
+      generation: current
+      provider: tool.java-project
+
+  - repository: brainboxemb/site.notes
+    category: site
+    domain: web
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Public notes/site repository.
+
+  - repository: brainboxemb/site.hugo-step001
+    category: site
+    domain: web
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Hugo site experiment/reference repository.
+
+  - repository: brainboxemb/brainboxemb.github.io
+    category: site
+    domain: web
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Public brainboxemb GitHub Pages site.
+
+  - repository: brainboxemb/exp.2026-001.marp
+    category: experiment
+    domain: documentation
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Marp documentation/presentation experiment.
+
+  - repository: brainboxemb/exp.2026-002.repo-build-tools
+    category: experiment
+    domain: repository
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Experiment comparing repository capability-graph and orchestration approaches, including Moon.
