@@ -20,9 +20,9 @@ It includes both current and classic project infrastructure, reusable libraries,
 
 ### Controlled integration view
 
-A smaller controlled set is used to evolve and qualify the current shared SCAD stack. It may contain generic bootstrap tooling, runtime/runtime verification, SCAD project tooling, a reference consumer and representative library/real-consumer integration.
+A smaller controlled set is used to evolve and qualify the current shared SCAD stack. It may contain generic bootstrap tooling, runtime verification, SCAD project tooling, a reference consumer and representative library/real-consumer integration.
 
-That controlled set must not become a second complete CAD-project inventory. Its active plans/evidence are being migrated from `meta.scad-projects` separately.
+That controlled set must not become a second complete CAD-project inventory. Active cross-project plans and qualification evidence belong in `brainboxemb.meta/migrations/`; implementation evidence remains in the repositories that own the implementation.
 
 ## Project-infrastructure generations
 
@@ -107,7 +107,7 @@ A controlled integration/qualification set may be smaller than the broad current
 
 - public repository membership and stable portfolio classification;
 - broad SCAD architecture and navigation;
-- repository-spanning migration plans/evidence that have been migrated into this repository.
+- repository-spanning migration plans and retained cross-project evidence.
 
 Individual repositories own:
 
@@ -123,4 +123,4 @@ Shared tool repositories own their implementation contracts. The meta layer desc
 
 ## Historical origin
 
-These rules were originally documented in `brainboxemb/tech.scad`, which separated the broad SCAD landscape from the smaller `meta.scad-projects` integration set. Migration 001 keeps that distinction while consolidating the overview/catalog responsibility into `brainboxemb.meta`.
+The current architecture consolidates ideas that were previously maintained in separate public `tech.scad` and `meta.scad-projects` repositories. Their useful rules and current status have been transferred here; those old repositories can therefore become private archives without being required for current public understanding.
