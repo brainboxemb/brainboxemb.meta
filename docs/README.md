@@ -1,49 +1,54 @@
 # Technical guide
 
-This section explains how the public brainboxemb repositories are organised and how the shared tooling fits together.
+This section explains how the public brainboxemb repositories work together.
 
-You do not need to read everything in order. Pick the question that matches what you are trying to understand.
+You do not need to read it from top to bottom. Pick the question that matches what you are trying to understand.
 
-## I want to understand how a project is structured
+## How is a project organised?
 
 Start with [How brainboxemb projects are organised](working-model/projects.md).
 
-It explains the current project model, the difference between generic tooling, domain tooling and project code, how dependencies are pinned, and why generated output is kept away from source.
+It explains what normally lives in a project repository, what shared tooling provides, and how current projects differ from older classic projects.
 
-## I want to understand which tool owns what
+## Which shared tool does what?
 
-Read [Repository tooling boundaries](architecture/repository-tooling.md).
+Read [How the shared tools fit together](architecture/repository-tooling.md).
 
-This explains the roles of `tool.git-project`, domain tools such as `tool.scad-project` and `tool.java-project`, consumer repositories, and this meta repository.
+This gives a practical overview of `tool.git-project`, domain tools such as `tool.scad-project` and `tool.java-project`, and the project repositories that use them.
 
-## I want to understand generated output and the special branches
+## Where does generated output go?
 
 Read [Generated output and publication](working-model/generated-output.md).
 
-This covers pull-request previews, production output and release output (`dev/pr-N/*`, `prod/*`, `rel/vX.Y.Z/*`), plus the distinction between producer evidence and later materialisation/publication.
+This explains why renders, binaries, verification results and assembled documentation are kept separate from normal source, and where review, production and release output can be found.
 
-## I want to understand versions and releases
+## How do versions and releases work?
 
 Read [Versioning and releases](working-model/versioning-and-releases.md).
 
-This covers independent repository versions, released tool interfaces, dependency policy versus exact gitlink locks, and exact-revision release qualification.
+This explains how repositories release independently and how projects keep an exact accepted version of their dependencies.
 
-## I want domain-specific information
+## I am looking for SCAD/CAD information
 
-SCAD-specific architecture and ecosystem information lives under [`../domains/scad/`](../domains/scad/).
+Go to [SCAD and CAD](../domains/scad/README.md).
 
-More domain sections can be added when they provide useful portfolio-level guidance rather than duplicating project documentation.
+That section has separate readable pages for projects, reusable libraries and shared tooling.
 
-## I want to see which repositories exist
+## I want to see the repositories
 
-Use the [public repository catalog](../repositories/README.md). The catalog records stable classification; changing operational status is read from GitHub and shown through the dashboard.
+Use the [repository overview](../repositories/README.md) for the maintained public list and the [dashboard](../dashboard/README.md) for live GitHub status.
 
-## I want current refactoring or migration work
+## I want to know what is changing across repositories
 
-Use [STATUS.md](../STATUS.md) and the [migrations index](../migrations/README.md).
+Use [STATUS.md](../STATUS.md).
 
-Those are deliberately separate from the technical guide: a migration is temporary work, while the pages above describe the current intended working model.
+Migration plans and their evidence are kept under [migrations/](../migrations/README.md), separate from the normal technical guide because migrations are temporary work rather than the permanent explanation of how the repositories work.
 
-## Documentation boundary
+## Where should detailed information live?
 
-This section describes shared technical concepts. Project-specific design belongs in the project repository, implementation/API details belong in the owning tool or library, and detailed completed migration evidence can remain in historical source repositories rather than being copied into the current guide.
+This guide explains ideas that apply across repositories. Detailed design or implementation information stays closer to the thing it describes:
+
+- project design → project repository;
+- reusable component/API → library repository;
+- tool behaviour → tool repository;
+- cross-project overview → this repository.
