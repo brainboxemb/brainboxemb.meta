@@ -1,38 +1,68 @@
 # Public repository catalog
 
-This directory is the target home for the canonical catalog of public `brainboxemb` repositories.
+`repositories/catalog.yml` is the canonical catalog of public `brainboxemb` repositories.
 
-## Current state
+It owns stable classification and intent. Live operational state remains sourced from GitHub.
 
-The final catalog is **not yet authoritative**. It is intentionally deferred to Migration 001 Phase 2 so the repository rename/foundation does not become a simultaneous data-model and dashboard migration.
+## What belongs in the catalog
 
-Current inputs that must be reconciled in Phase 2:
-
-- `brainboxemb/tech.scad` → `catalog.yml` for the broad SCAD landscape and current/classic infrastructure classification;
-- root `dashboard.yml` for the wider set of repositories monitored by the status dashboard.
-
-## Intended catalog ownership
-
-The catalog should contain stable classification/intent, for example:
+Use the catalog for information such as:
 
 ```text
 repository identity
 category
 domain
-lifecycle / infrastructure generation
+lifecycle where meaningful
 high-level role
-provider / ownership relationships where useful
+dashboard grouping
+project-infrastructure generation/provider
+engine metadata where already established
 ```
 
-Changing operational state should come from GitHub instead of being copied into YAML:
+Do **not** copy changing GitHub state into the catalog:
 
 ```text
 workflow status
-open PR count
+open pull requests
 latest tag
 branch protection
 branch cleanup candidates
 recent activity
 ```
 
-The dashboard will consume the canonical catalog after Phase 2 is qualified.
+The dashboard reads those values directly from GitHub.
+
+## Dashboard integration
+
+Root `dashboard.yml` now contains dashboard policy only and points to:
+
+```yaml
+catalog: repositories/catalog.yml
+```
+
+`src/prepare_dashboard_config.py` translates catalog membership/grouping into the existing dashboard `groups[].repositories` runtime shape. This deliberately keeps the proven status collector, metrics code and renderer unchanged.
+
+The generated runtime file is `.dashboard.runtime.yml` and is not committed.
+
+## Coverage
+
+The catalog is public-repository-only. Phase 2 was built from the current GitHub public repository inventory and the established SCAD classification in `tech.scad/catalog.yml`.
+
+Older SCAD projects remain explicit as:
+
+```yaml
+project_infrastructure:
+  generation: classic
+```
+
+where that classification was already established. Current consumers use `generation: current` with the relevant tooling provider.
+
+`tool.sw-docs` is not a separate current repository: that earlier name was broadened to `tool.eng-docs`, which is the catalog entry to use.
+
+## Adding or changing a repository
+
+Update `repositories/catalog.yml`. Do not add the repository a second time to `dashboard.yml`.
+
+For dashboard-specific overrides, use the optional per-entry `dashboard` mapping. Supported overrides are intentionally limited to the existing dashboard contract, such as branch/workflow filtering and cleanup exclusions.
+
+After a catalog change, normal dashboard CI builds `.dashboard.runtime.yml`, runs the existing collectors and publishes Pages only when dashboard-visible state changed.

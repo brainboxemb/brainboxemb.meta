@@ -11,6 +11,7 @@ on:
     branches: [main]
     paths:
       - "dashboard.yml"
+      - "repositories/catalog.yml"
       - "requirements.txt"
       - "src/**"
       - "site/**"
@@ -52,6 +53,13 @@ jobs:
         timeout-minutes: 2
         run: python -m unittest discover -s tests -v
 
+      - name: Prepare dashboard config
+        timeout-minutes: 2
+        run: >-
+          python src/prepare_dashboard_config.py
+          --config dashboard.yml
+          --output .dashboard.runtime.yml
+
       - name: Select daily Actions metrics cache
         id: metrics-day
         shell: bash
@@ -78,7 +86,7 @@ jobs:
         run: |
           set -euo pipefail
           python src/collect_action_metrics.py \
-            --config dashboard.yml \
+            --config .dashboard.runtime.yml \
             --output site/action-metrics.json \
             --changed-output .action-metrics-changed \
             --valid-output .action-metrics-valid
@@ -101,7 +109,7 @@ jobs:
           DASHBOARD_ADMIN_TOKEN: ${{ secrets.DASHBOARD_ADMIN_TOKEN }}
         run: >-
           python src/dashboard_entry.py
-          --config dashboard.yml
+          --config .dashboard.runtime.yml
           --output site/index.html
           --hash-output .dashboard-content-hash
 

@@ -35,12 +35,18 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Prepare dashboard config
+        run: >-
+          python src/prepare_dashboard_config.py
+          --config dashboard.yml
+          --output .dashboard.runtime.yml
+
       - name: Configure repositories
         env:
           DASHBOARD_ADMIN_TOKEN: ${{ secrets.DASHBOARD_ADMIN_TOKEN }}
         run: >-
           python src/configure_repository_settings.py
-          --config dashboard.yml
+          --config .dashboard.runtime.yml
           --repository "${{ inputs.repository }}"
           --delete-branch-on-merge "${{ inputs.delete_branch_on_merge }}"
 
