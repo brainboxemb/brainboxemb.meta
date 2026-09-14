@@ -12,20 +12,6 @@ repositories:
     dashboard_group: Coordination
     role: Portfolio-level coordination, architecture, migration planning, repository overview, and dashboard.
 
-  - repository: brainboxemb/tech.scad
-    category: ecosystem-engineering
-    domain: scad
-    lifecycle: superseded
-    dashboard_group: Coordination
-    role: Historical SCAD landscape/catalog source; current catalog and SCAD domain knowledge are owned by brainboxemb.meta.
-
-  - repository: brainboxemb/meta.scad-projects
-    category: ecosystem-engineering
-    domain: scad
-    lifecycle: current
-    dashboard_group: Coordination
-    role: SCAD cross-project architecture and migration coordination being consolidated into brainboxemb.meta.
-
   - repository: brainboxemb/brainboxemb.github.actions
     category: tooling
     domain: scad
