@@ -1,6 +1,6 @@
 # Migration 001 — Consolidate public coordination into brainboxemb.meta
 
-Status: **active — Phase 5A readable current status**
+Status: **active — Phase 5B durable coordination conventions**
 
 Tracking issue: [#11](https://github.com/brainboxemb/brainboxemb.meta/issues/11)
 
@@ -26,14 +26,7 @@ The result should reduce duplicated sources without turning `brainboxemb.meta` i
 
 ## Non-goals
 
-This migration does **not**:
-
-- migrate private repositories;
-- rewrite individual project plans into the meta repository;
-- modernize every legacy project;
-- implement deferred SCAD/tooling improvements;
-- absorb experiment/test code;
-- resume old roadmap steps simply because they are present in historical documentation.
+This migration does **not** migrate private repositories, rewrite individual project plans into meta, modernize every legacy project, implement deferred SCAD/tooling improvements, absorb experiment code, or resume old roadmap steps merely because they remain in historical documentation.
 
 ## Ownership boundary
 
@@ -43,15 +36,7 @@ Individual repositories continue to own implementation, project-specific plans/i
 
 ## Migration discipline
 
-Classify discoveries as:
-
-```text
-migration blocker
-follow-up migration
-backlog / improvement
-```
-
-Only a blocker may extend the current migration slice.
+Classify discoveries as `migration blocker`, `follow-up migration`, or `backlog / improvement`. Only a blocker may extend the current migration slice.
 
 A later migration can be prepared as **proposed / inactive** without becoming current work. Activation is an explicit decision.
 
@@ -110,24 +95,34 @@ Status: **active, split into bounded slices**
 
 The repository-build transition in the old meta repository is already complete. Phase 5 therefore does **not** copy its old roadmaps wholesale or present completed work as still active.
 
-The remaining transfer is:
-
 ### 5A — readable current status
 
-Status: **active** — issue #27.
+Status: **complete** — issue #27 / PR #35.
 
-- create `STATUS.md` as the primary human-readable current-work entry point;
-- clearly separate completed foundations, deferred work and next proposed work;
-- retire “Step 2.5 core complete” as current-status wording;
-- prepare proposed/inactive Migration 002 with an explicit activation gate.
+Result:
+
+- `STATUS.md` is now the primary current-work entry point;
+- completed, deferred and proposed work are separated explicitly;
+- “Step 2.5 core complete” is no longer the current headline;
+- Migration 002 exists as a proposed/inactive plan with an explicit activation gate.
 
 ### 5B — durable SCAD coordination conventions
 
-Status: **planned** — issue #30.
+Status: **active** — issue #30.
 
-Move only cross-project rules that are still current, such as ownership boundaries, current/classic migration scope, dependency/bootstrap responsibilities and stable version/release interface conventions.
+Move only cross-project rules that are still current.
 
-Historical plan detail and implementation detail remain in source/owner history.
+Current destination structure:
+
+```text
+docs/architecture/repository-tooling.md
+docs/working-model/generated-output.md
+docs/working-model/versioning-and-releases.md
+domains/scad/
+repositories/catalog.yml
+```
+
+This captures ownership boundaries, `tool.git-project` responsibilities, current/classic migration scope, generated-output publication namespaces, evidence identity separation and stable version/release interface rules without copying historical plans wholesale.
 
 ### 5C — active issue transfer and source redirect
 
