@@ -34,15 +34,15 @@ The dashboard reads those values directly from GitHub.
 
 ## Dashboard integration
 
-Root `dashboard.yml` now contains dashboard policy only and points to:
+`dashboard/dashboard.yml` contains dashboard policy and points to the central catalog with a path relative to the dashboard subproject:
 
 ```yaml
-catalog: repositories/catalog.yml
+catalog: ../repositories/catalog.yml
 ```
 
-`src/prepare_dashboard_config.py` translates catalog membership/grouping into the existing dashboard `groups[].repositories` runtime shape. This deliberately keeps the proven status collector, metrics code and renderer unchanged.
+`dashboard/src/prepare_dashboard_config.py` translates catalog membership/grouping into the existing dashboard `groups[].repositories` runtime shape. This deliberately keeps the proven status collector, metrics code and renderer unchanged.
 
-The generated runtime file is `.dashboard.runtime.yml` and is not committed.
+The generated runtime file is `dashboard/.dashboard.runtime.yml` and is not committed.
 
 ## Coverage
 
@@ -61,8 +61,8 @@ where that classification was already established. Current consumers use `genera
 
 ## Adding or changing a repository
 
-Update `repositories/catalog.yml`. Do not add the repository a second time to `dashboard.yml`.
+Update `repositories/catalog.yml`. Do not add the repository a second time to dashboard configuration.
 
 For dashboard-specific overrides, use the optional per-entry `dashboard` mapping. Supported overrides are intentionally limited to the existing dashboard contract, such as branch/workflow filtering and cleanup exclusions.
 
-After a catalog change, normal dashboard CI builds `.dashboard.runtime.yml`, runs the existing collectors and publishes Pages only when dashboard-visible state changed.
+After a catalog change, normal dashboard CI builds `dashboard/.dashboard.runtime.yml`, runs the existing collectors and publishes Pages only when dashboard-visible state changed.
