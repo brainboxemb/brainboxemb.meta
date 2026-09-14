@@ -1,66 +1,46 @@
 # Migration 004 — SCAD repository execution model
 
-Status: **proposed / inactive**
+Status: **proposed; approved for activation after proposal merge**
 
 Tracking issue: [#49](https://github.com/brainboxemb/brainboxemb.meta/issues/49)
 
-## Goal
+Implementation change request: [change-request.md](change-request.md)
 
-Decide and document the intended execution model for a current SCAD repository before changing the libraries again.
+## Purpose
 
-The immediate question is not whether a library *can* use Moon. The question is whether projects and libraries need different Build/Verify execution models at all, and if so, what concrete library-specific requirement justifies the difference.
+Align current SCAD repositories on one understandable execution model and remove avoidable CI overhead.
 
-`template.scad-project` is the reference project consumer. `lib.scad.clamps` is the practical reference library because it is small enough to expose the library requirements without the additional HUB75 complexity.
+The migration will use:
 
-## Why this needs a migration
+- Moon for repository-level orchestration and affected/preflight decisions;
+- SCons for the already-qualified fine-grained SCAD target decisions;
+- one normal SCAD production job/container when affected;
+- logically independent Build and Verify domains;
+- lightweight publication outside the SCAD container.
 
-The current repositories expose two different execution models:
+A key completion criterion is that a README-only or otherwise unaffected change does **not** start the SCAD toolchain container.
 
-- `template.scad-project` and `2026-009-01.cad.HUB75-display-frame` run one SCAD production job and use a repository-level Moon task graph;
-- `lib.scad.clamps` and `lib.scad.hub75` call separate reusable Build and Verify workflows, resulting in separate jobs and separate SCAD-toolchain container starts.
+## Reference repositories
 
-A difference may be valid, but it is currently not explained by a documented library requirement. The repositories should therefore not be changed merely for visual consistency, and the existing difference should not be preserved merely because it already exists.
+- `template.scad-project` — reference project;
+- `lib.scad.clamps` — reference library;
+- `lib.scad.hub75` — second library qualification;
+- `2026-009-01.cad.HUB75-display-frame` — realistic project requalification if needed.
 
-## Before activation
+## Owner sequence
 
-Review the [change request](change-request.md) and answer the architectural questions there.
+1. `tool.git-project` — generic Moon affected/preflight capability;
+2. `template.scad-project` — correct the Build/Verify task graph;
+3. `tool.scad-project` — reusable SCAD production workflow;
+4. `template.scad-project` — qualify the released shared workflow and pre-container skip;
+5. `lib.scad.clamps` — reference library rollout and rationale;
+6. `lib.scad.hub75` — second library rollout;
+7. HUB75 frame — requalify when shared changes affect it.
 
-In particular, activation requires an agreed answer to:
+Each step must be re-evaluated before implementation. Do not continue merely because it appears in this sequence.
 
-1. what lifecycle behaviour is common to every current SCAD repository;
-2. what is genuinely library-specific;
-3. whether Moon adds enough value to belong to the common layer;
-4. whether Build and Verify should remain logically independent while sharing one CI/container execution;
-5. whether the SCAD container can be started later, after cheap repository-level decisions;
-6. whether the current template task graph correctly represents the `tool.scad-project` Build/Verify contract;
-7. whether a separate `template.scad-lib` is justified or whether `lib.scad.clamps` remains the practical reference library.
+## Explicitly outside this migration
 
-## Possible outcomes
+Whether Moon should replace SCons as the SCAD target engine is a separate parked experiment tracked by meta issue #51.
 
-This review is allowed to conclude any of the following:
-
-- one common Moon-backed execution model for projects and libraries;
-- one common execution shape with a lighter non-Moon library implementation;
-- an intentionally different library execution model, with a concrete reason and documented trade-off;
-- only corrections to the template/current model, with no library migration;
-- creation of `template.scad-lib`, but only if repeated library-specific structure makes a separate template useful rather than decorative.
-
-## Proposed implementation order if activated
-
-The exact implementation steps are intentionally not fixed before the architecture review. If a repository change is justified, use this default order and re-evaluate it before each step:
-
-1. correct or clarify the shared/reference model in `tool.git-project`, `tool.scad-project` and/or `template.scad-project`;
-2. prove the library form with `lib.scad.clamps`;
-3. apply the proven form to `lib.scad.hub75` only if it still makes sense;
-4. requalify `2026-009-01.cad.HUB75-display-frame` only when shared tooling/reference behaviour changed in a way that affects it;
-5. document the final project-versus-library decision in the relevant repositories and the SCAD overview.
-
-## Not part of this migration
-
-- physical HUB75 verification such as SQ-01;
-- CAD geometry/API changes;
-- introducing Moon merely to make repository file trees look alike;
-- combining Build and Verify into one semantic domain;
-- introducing another dependency/change detector alongside the existing repository orchestration and SCons dependency model.
-
-No implementation work starts until this migration is explicitly activated.
+Physical HUB75 verification work such as SQ-01 is also outside this migration.
