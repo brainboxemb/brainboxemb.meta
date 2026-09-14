@@ -6,26 +6,23 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active cross-project migration on `main`**. Migration 004 is approved for activation immediately after its proposal PR is merged.
+### Migration 004 — SCAD repository execution model
 
-## Proposed next
+**Active.**
 
-### Migration 004 — define the current SCAD repository execution model
+The migration aligns current SCAD projects and libraries on one understandable production lifecycle:
 
-**Proposed; approved for activation after proposal merge.**
-
-The reviewed change request now chooses a concrete direction:
-
-- one recognizable SCAD production lifecycle for current projects and libraries;
 - Moon as repository-level orchestration and affected/preflight layer;
 - SCons retained as the qualified fine-grained SCAD target engine;
 - Build and Verify remain logically independent;
-- one normal heavy SCAD job/container when production is affected;
+- at most one normal heavy SCAD job/container when production is affected;
 - a lightweight host preflight must prevent the SCAD container from starting for README-only or otherwise unaffected changes;
 - publication happens outside the SCAD container;
 - `template.scad-project` is the reference project and `lib.scad.clamps` the reference library.
 
-Tracking issue: #49. The separate question whether Moon can replace SCons is parked as experiment #51 and is not part of Migration 004.
+Step 1 is complete: `tool.git-project v0.2.5` provides the released generic Moon affected preflight. Step 2 now re-checks and corrects the template Build/Verify task graph before shared SCAD workflow extraction.
+
+Tracking issue: #49. See [Migration 004](migrations/004-scad-repository-execution-model/README.md) and its [qualification evidence](migrations/004-scad-repository-execution-model/evidence.md).
 
 ## Recently completed
 
@@ -70,7 +67,9 @@ See [Migration 001](migrations/001-brainboxemb-meta/README.md) for its history a
 
 ## Other follow-ups
 
-Two useful cross-project improvements remain parked until there is a reason to pick them up:
+Useful cross-project improvements remain parked until there is a reason to pick them up:
 
 - **Self-contained physical-verification document packages** — issue #18;
 - **One release flow for requested versions across project types** — issue #20.
+
+A generic release robustness issue discovered during Migration 004 is tracked locally in `tool.git-project` issue #22 and does not block this migration.
