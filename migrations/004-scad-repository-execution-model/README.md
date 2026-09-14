@@ -1,16 +1,18 @@
 # Migration 004 — SCAD repository execution model
 
-Status: **proposed; approved for activation after proposal merge**
+Status: **active**
 
 Tracking issue: [#49](https://github.com/brainboxemb/brainboxemb.meta/issues/49)
 
 Implementation change request: [change-request.md](change-request.md)
 
+Qualification evidence: [evidence.md](evidence.md)
+
 ## Purpose
 
 Align current SCAD repositories on one understandable execution model and remove avoidable CI overhead.
 
-The migration will use:
+The migration uses:
 
 - Moon for repository-level orchestration and affected/preflight decisions;
 - SCons for the already-qualified fine-grained SCAD target decisions;
@@ -19,6 +21,16 @@ The migration will use:
 - lightweight publication outside the SCAD container.
 
 A key completion criterion is that a README-only or otherwise unaffected change does **not** start the SCAD toolchain container.
+
+## Progress
+
+### Step 1 — generic Moon affected preflight
+
+**Complete.** `tool.git-project v0.2.5` provides the released host-side affected decision used before expensive domain jobs. Exact released source: `ce7c81c39ebc70933b4150028aa74d928a53c2ba`.
+
+### Step 2 — reference task-graph correction
+
+**Next.** Re-check `template.scad-project` and remove the current `scad.verify -> scad.build` dependency only if the present verification implementation confirms that Verify does not consume normal Build output.
 
 ## Reference repositories
 
@@ -29,8 +41,8 @@ A key completion criterion is that a README-only or otherwise unaffected change 
 
 ## Owner sequence
 
-1. `tool.git-project` — generic Moon affected/preflight capability;
-2. `template.scad-project` — correct the Build/Verify task graph;
+1. `tool.git-project` — generic Moon affected/preflight capability — complete;
+2. `template.scad-project` — correct the Build/Verify task graph — next;
 3. `tool.scad-project` — reusable SCAD production workflow;
 4. `template.scad-project` — qualify the released shared workflow and pre-container skip;
 5. `lib.scad.clamps` — reference library rollout and rationale;
