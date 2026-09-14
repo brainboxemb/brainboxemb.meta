@@ -49,22 +49,36 @@ Qualified main/release source: `3174d3b0d69f0bc590e6b0e13d2ba976159a5014`
 
 The panel API and main verification behaviour were preserved.
 
-### Ongoing physical verification branch
+### Separate physical-verification work
 
-Draft PR #19 remains a separate physical-verification workstream. It was brought forward onto the v0.1.3/v0.12.0 baseline with two-parent merge commit `379a553d86abb48672e763ca84fd966a7ab2f38d` without rewriting its existing history.
+Draft PR #19 is not part of Migration 003. It is a dedicated `lib.scad.hub75` physical-verification step that will be continued after this migration.
+
+The branch was brought forward onto the v0.1.3/v0.12.0 baseline with two-parent merge commit `379a553d86abb48672e763ca84fd966a7ab2f38d` without rewriting its physical-verification history.
 
 - PR #19 Build: `34874033509` — passed;
-- PR #19 Verify: `34874033493` — passed, including verification publication.
+- PR #19 Verify: `34874033493` — passed, including verification publication;
+- the published workbench output still contains separate Dutch and English SQ-01 test cases plus the testcase template under `dev/pr-19/verification`.
 
-PR #19 intentionally remains draft because physical SQ-01 work is pending. The project-specific SQ-01 link rewrite remains in place; generic self-contained document packaging stays tracked by `brainboxemb.meta#18` and is not a Migration-003 blocker.
+PR #19 remains draft because physical SQ-01 work is pending. The project-specific SQ-01 link rewrite remains in place; generic self-contained document packaging stays tracked by `brainboxemb.meta#18`.
 
 ## Phase D — `2026-009-01.cad.HUB75-display-frame`
-
-Pending final qualification.
 
 Target dependency state:
 
 - `tool.scad-project v0.12.0` / `68301267273ea21c4b82ff3b26e1c8a30ff7b065`;
 - `lib.scad.hub75 v0.1.3` / `3174d3b0d69f0bc590e6b0e13d2ba976159a5014`.
 
-Frame issue #29 and PR #30 own the final consumer update. Migration 003 closes only after PR qualification, merge and exact-main production/publication evidence are green.
+Qualified main: `99ada1ed0f186259c57b4cdb76354adaa4b78cfe`
+
+- PR #30 final-head production run: `34875048610` — passed;
+- PR build publication: passed;
+- PR verification publication: passed;
+- exact-main production run: `34875322954` — passed;
+- exact-main build publication: passed;
+- exact-main verification publication: passed.
+
+The existing Moon/T6 production graph, geometry, fit/section verification, interactive smoke checks, execution evidence, domain evidence and materialization evidence all remained green. No frame release was created because its current `Unreleased` section also contains independent geometry work.
+
+## Result
+
+Migration 003 is complete. The dependency chain is now based on released and qualified versions from the tool through the template and libraries to the real HUB75 frame consumer.
