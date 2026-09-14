@@ -1,6 +1,6 @@
 # Migration 001 — Consolidate public coordination into brainboxemb.meta
 
-Status: **active — Phase 2 catalog reassessment**
+Status: **active — Phase 3 dashboard relocation**
 
 Tracking issue: [#11](https://github.com/brainboxemb/brainboxemb.meta/issues/11)
 
@@ -69,61 +69,74 @@ Purpose:
 - create the migration/handoff structure;
 - create clear places for repositories, domains and experiments;
 - correct rename-sensitive dashboard configuration;
-- preserve the working dashboard at its current paths.
+- preserve the working dashboard without coupling the rename to a filesystem move.
 
 Completion evidence:
 
 - PR #12 qualified the exact Phase-1 change set;
 - merge commit `62df26489e84dedc9cbd11c7cdf7186e0b78261d` is on `main`;
 - Deploy run `34853241040` passed on that exact commit;
-- dashboard unit tests passed in the Deploy build job;
-- dashboard generation passed;
-- Pages artifact upload and Pages deployment both passed;
-- root documentation now describes the portfolio-level meta role;
-- dashboard-specific documentation and agent guidance are preserved under `dashboard/`;
-- dashboard implementation paths were deliberately not moved.
-
-See [evidence.md](evidence.md) for retained Phase-1 evidence.
-
-Explicitly deferred by Phase 1:
-
-- moving `src/`, `site/`, `tests/`, `dashboard.yml` or workflows;
-- creating the final canonical catalog;
-- migrating `tech.scad` or `meta.scad-projects` content/issues.
+- dashboard tests, generation, Pages artifact upload and Pages deployment passed.
 
 ## Phase 2 — Canonical public repository catalog
 
-Status: **next candidate; reassessment in progress**
+Status: **complete**
 
 Goal:
 
-Create one domain-neutral public repository catalog under `repositories/` from the proven stable classification in `tech.scad/catalog.yml` plus the broader repository membership currently duplicated in `dashboard.yml`.
+Create one domain-neutral public repository catalog under `repositories/` from the proven stable classification in `tech.scad/catalog.yml` plus the broader dashboard repository membership, while keeping live operational state in GitHub.
 
-The catalog should own stable facts such as:
+Result:
 
-- repository identity;
-- category/domain;
-- lifecycle/generation (for example current/classic/legacy where useful);
-- high-level role;
-- infrastructure/provider relationships.
+- `repositories/catalog.yml` is the canonical public repository inventory/classification source;
+- it contains 29 unique public repositories in the qualified baseline;
+- stable SCAD current/classic infrastructure metadata is retained;
+- `tool.eng-docs` is the current engineering-documentation tool name; obsolete `tool.sw-docs` is not a separate entry;
+- `dashboard.yml` no longer carries a second repository inventory;
+- `src/prepare_dashboard_config.py` converts catalog membership/grouping to the existing dashboard runtime contract;
+- dashboard collector, metrics and renderer semantics were not redesigned.
 
-Live workflow status, releases, branch protection, PR counts and similar changing facts should continue to come from GitHub.
+Completion evidence:
 
-Then adapt the dashboard to consume the canonical catalog instead of maintaining a second repository inventory.
-
-Initial reassessment after Phase 1 shows that the existing dashboard collector already consumes a simple `groups[].repositories` structure before reading all live status from GitHub. Therefore Phase 2 should prefer a thin catalog-to-groups input transformation rather than redesigning the status engine.
-
-Completion requires dashboard-equivalent coverage plus tests proving catalog parsing/grouping.
+- PR #14 merged as `7a8ad3974bf9b3e43ce0744825d124595ae894e2`;
+- exact-main Deploy run `34855023365` passed;
+- all 28 tests passed;
+- runtime preparation reported `29 repositories in 6 groups`;
+- dashboard generation successfully collected and rendered all 29 repositories;
+- Pages artifact upload and Pages deployment passed.
 
 ## Phase 3 — Isolate dashboard implementation
 
-Status: **planned; revalidate before execution**
+Status: **active**
 
-Move dashboard implementation into its dedicated subdirectory only after Phase 2 is stable.
+Goal:
 
-Expected scope includes path changes for workflows, local commands, tests, static output and Pages artifacts. The move is complete only when the dashboard tests and Pages deployment are green on the new paths.
+Move the dashboard implementation into `dashboard/` now that catalog ownership is stable, without changing dashboard behaviour.
 
-Do not combine this phase with unrelated dashboard redesign.
+Scope:
+
+```text
+dashboard/dashboard.yml
+dashboard/requirements.txt
+dashboard/src/
+dashboard/site/
+dashboard/tests/
+dashboard/README.md
+dashboard/AGENTS.md
+```
+
+Repository-level workflows stay under `.github/workflows/` because GitHub requires that location. They run dashboard commands with `dashboard/` as their working directory.
+
+Completion requires:
+
+- no dashboard runtime/config/test/static files left at their former root paths;
+- central catalog reference still resolves correctly from the moved config;
+- unit tests green;
+- runtime config generation green;
+- dashboard generation green;
+- Pages publication green on exact `main`.
+
+Do not combine this phase with dashboard redesign.
 
 ## Phase 4 — Integrate tech.scad
 
@@ -138,6 +151,8 @@ domains/scad/
 
 Preserve the useful distinction between broad domain membership and a smaller controlled integration set.
 
+Do not copy historical material merely because it exists. Prefer current durable knowledge and links to historical evidence.
+
 Only after equivalent navigation/classification exists here should `tech.scad` become a candidate for archival.
 
 ## Phase 5 — Integrate meta.scad-projects
@@ -148,7 +163,7 @@ Migrate durable cross-project SCAD architecture, working conventions, active mig
 
 Do **not** copy old plans wholesale. Separate current durable knowledge from historical evidence and obsolete implementation assumptions.
 
-Project-specific implementation remains in its owning repository.
+Project-specific implementation remains in its owning project repository.
 
 Active `meta.scad-projects` issues should be migrated when they still represent real cross-project work, with links to the original issue/discussion.
 
