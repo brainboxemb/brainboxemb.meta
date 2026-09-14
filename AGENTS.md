@@ -8,8 +8,6 @@ Persistent guidance for automated agents working in `brainboxemb.meta`.
 
 It owns cross-project information and migrations, not the implementation of the projects it describes.
 
-Use this ownership split:
-
 ```text
 brainboxemb.meta
     public repository catalog / lifecycle overview
@@ -50,7 +48,7 @@ Explicitly re-evaluate:
 
 ## Keep the blocking path small
 
-Every newly discovered item must be classified before it is added to an active migration:
+Classify every newly discovered item before adding it to an active migration:
 
 ```text
 migration blocker
@@ -65,7 +63,7 @@ backlog / improvement
 
 Do not promote a follow-up or improvement into a blocker merely because it was discovered during the migration.
 
-Each phase should leave the affected repositories usable and should be independently reviewable.
+Each phase should leave affected repositories usable and should be independently reviewable.
 
 ## Migration plan convention
 
@@ -83,11 +81,11 @@ When a migration needs changes in another repository, implement those details th
 
 ## Repository catalog
 
-The target source of truth for public repository membership/classification is `repositories/`.
+`repositories/catalog.yml` is the canonical source of truth for public repository membership and stable classification.
 
-During consolidation, do not prematurely delete useful information from `tech.scad/catalog.yml` or `dashboard.yml`. Migrate and validate the data first, then remove duplicate ownership in a separate reviewed step.
+Live operational facts that can be read from GitHub should be generated/read from GitHub rather than manually duplicated in the catalog. The catalog focuses on stable classification and intent: role, domain, lifecycle/generation and relevant ownership/provider relationships.
 
-Live operational facts that can be read from GitHub should be generated/read from GitHub rather than manually duplicated in the catalog. The catalog should focus on stable classification and intent: role, domain, lifecycle/generation and relevant ownership/provider relationships.
+`tech.scad/catalog.yml` remains an input/history source until its remaining useful SCAD-domain responsibilities have been migrated; do not let it become a second current all-domain catalog.
 
 ## Domain views
 
@@ -102,24 +100,26 @@ Do not copy entire old repositories blindly. Separate:
 
 ## Issues and history
 
-Open issues from an older meta repository should be migrated only when they still represent active cross-project work. Preserve links to the original issue/history. Closed historical issues do not need to be duplicated merely for completeness.
+Open issues from an older meta repository should be migrated only when they still represent active cross-project work. Preserve links to original issue/history. Closed historical issues do not need to be duplicated merely for completeness.
 
 Superseded repositories should be archived, not deleted, after their current responsibilities are covered and important history/evidence remains navigable.
 
-## Dashboard transition
+## Dashboard
 
-The dashboard is an active sub-capability. During the first consolidation phases its implementation intentionally stays at the historical root paths:
+The dashboard is an active sub-capability isolated under `dashboard/`:
 
 ```text
-dashboard.yml
-src/
-site/
-tests/
-requirements.txt
-.github/workflows/deploy-dashboard.yml
+dashboard/
+    dashboard.yml
+    requirements.txt
+    src/
+    site/
+    tests/
+    README.md
+    AGENTS.md
 ```
 
-Do not relocate those files as collateral work. The dashboard move is its own migration phase with unit tests and Pages evidence.
+Repository-level GitHub Actions workflows stay under `.github/workflows/` because GitHub requires that location. Dashboard workflows run commands with `dashboard/` as their working directory.
 
 Dashboard operational rules remain important:
 
@@ -132,13 +132,14 @@ Dashboard operational rules remain important:
 - secrets/tokens must never be printed or written to generated output;
 - Pages deployment remains change-aware and should not run only because time passed.
 
-See `dashboard/README.md` for dashboard-specific development commands and layout.
+See `dashboard/README.md` and `dashboard/AGENTS.md` for dashboard-specific development rules.
 
 ## Testing and evidence
 
-Use the owner repository's normal tests for implementation changes. For dashboard changes in this repository run:
+Use the owner repository's normal tests for implementation changes. For dashboard changes:
 
 ```text
+cd dashboard
 python -m unittest discover -s tests -v
 ```
 
@@ -150,4 +151,4 @@ Prefer exact revisions/run IDs for qualification evidence when reproducibility m
 
 Root documentation describes current portfolio-level behavior. Historical/planning language that is no longer current should either be clearly marked as historical or remain in archived source history.
 
-Keep generated operational state out of maintained Markdown when it can be generated from the repositories themselves.
+Keep generated operational state out of maintained Markdown when it can be generated from repositories themselves.
