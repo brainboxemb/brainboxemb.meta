@@ -66,6 +66,7 @@ A proposed migration may have its own handoff before activation so the intended 
 ```text
 brainboxemb.meta/
 ├── STATUS.md              human-readable current work / next work
+├── docs/                  durable cross-project architecture and working model
 ├── repositories/          canonical public repository catalog and overview
 ├── domains/               domain-specific cross-project views
 ├── migrations/            active, proposed and completed cross-project migrations
@@ -76,6 +77,18 @@ brainboxemb.meta/
 ```
 
 The dashboard is isolated under `dashboard/`; GitHub Actions workflows remain at root `.github/workflows/` because GitHub requires that location.
+
+## Cross-project architecture and working model
+
+Durable repository-spanning conventions live under [`docs/`](docs/README.md).
+
+Current entry points include:
+
+- [repository tooling boundaries](docs/architecture/repository-tooling.md) — `tool.git-project`, domain tooling, consumers and meta ownership;
+- [generated output and publication](docs/working-model/generated-output.md) — source/generated separation, Moon/domain boundary and `dev`/`prod`/`rel` namespaces;
+- [versioning and releases](docs/working-model/versioning-and-releases.md) — independent versions, exact locks and released cross-repository interfaces.
+
+This documentation is intentionally current and compact. Detailed completed migration evidence is not copied wholesale from historical meta repositories.
 
 ## Repository catalog
 
