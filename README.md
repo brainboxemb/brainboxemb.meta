@@ -1,129 +1,91 @@
 # brainboxemb.meta
 
-Central coordination, architecture, repository catalog, migration planning, and status overview for public brainboxemb projects and tooling.
+`brainboxemb.meta` is the landing page and technical guide for the public brainboxemb repositories.
 
-## Start here
+If you arrive here without knowing the repository structure yet, this is the place to discover **what exists, how projects are organised, which shared tools they use, where generated output goes, and what cross-project changes are currently being worked on**.
 
-For the current cross-project position, read **[STATUS.md](STATUS.md)** first.
+The individual repositories remain the source of truth for their own implementation. This repository connects them and explains the common model.
 
-It answers in plain language:
+## Where do I start?
 
-- what is finished;
-- what is active now;
-- what is deferred and non-blocking;
-- which migration is proposed next but not yet active.
+### I want to see the projects and tools
 
-Historical step numbers remain available in retained evidence but are not the primary status model.
+Start with the [public repository catalog](repositories/README.md). It groups the public repositories by role and records stable information such as domain, lifecycle and whether a project uses the current or classic infrastructure generation.
 
-## Purpose
+For live operational information such as workflow health, pull requests and recent activity, use the [dashboard](dashboard/README.md). The dashboard reads current state from GitHub rather than duplicating it in maintained documentation.
 
-`brainboxemb.meta` is the portfolio-level coordination repository for the public `brainboxemb` repositories.
+### I want to understand how a normal project works
 
-It owns information that is intentionally broader than one implementation repository:
+Read [How brainboxemb projects are organised](docs/working-model/projects.md).
 
-- the canonical public repository catalog and high-level lifecycle/classification;
-- cross-project architecture and ownership boundaries;
-- shared working conventions;
-- current cross-project migrations, their evidence and ChatGPT handoffs;
-- domain views such as the SCAD ecosystem;
-- references to experiments that justify cross-project technical decisions;
-- the GitHub Actions/status dashboard.
+That page explains the current project model in practical terms: what belongs in a project repository, what is provided by shared tooling, how dependencies are pinned, and why generated build/verification output is kept separate from source.
 
-Individual repositories remain authoritative for their own implementation, project-specific plans, releases, local documentation and local issues.
+The small reference projects are useful concrete examples:
 
-This repository covers **public repositories only**. Private-project coordination belongs in an explicitly separate scope.
+- [`template.scad-project`](https://github.com/brainboxemb/template.scad-project) for current SCAD/CAD projects;
+- [`template.java-project`](https://github.com/brainboxemb/template.java-project) for current Java projects.
 
-## Current migration
+Older projects can still use the classic infrastructure. “Classic” means not yet migrated to the current shared project stack; it does not mean the project is invalid or automatically scheduled for migration.
 
-Migration 001 is consolidating responsibilities previously split across the dashboard repository, `tech.scad` and `meta.scad-projects`.
+### I want to understand the shared tooling
 
-The dashboard/catalog and `tech.scad` slices are complete. The current bounded work is transferring only the still-current coordination responsibility from `meta.scad-projects`.
+The [technical guide](docs/README.md) explains the common infrastructure without requiring you to read the implementation repositories first.
 
-See:
+Useful entry points are:
 
-- [STATUS.md](STATUS.md);
-- [Migration 001](migrations/001-brainboxemb-meta/README.md);
-- [issue #11](https://github.com/brainboxemb/brainboxemb.meta/issues/11).
+- [Repository tooling boundaries](docs/architecture/repository-tooling.md) — what `tool.git-project`, domain tools and project repositories each own;
+- [Generated output and publication](docs/working-model/generated-output.md) — how review, production and release output is published without mixing generated files into source;
+- [Versioning and releases](docs/working-model/versioning-and-releases.md) — how independently versioned repositories consume released tooling and exact dependency locks.
 
-Do not turn useful discoveries into migration blockers automatically. Classify them as:
+The generic repository layer is provided by `tool.git-project`. Domain-specific behaviour stays in domain tools such as `tool.scad-project`, `tool.java-project` and `tool.eng-docs`.
 
-```text
-migration blocker
-follow-up migration
-backlog / improvement
-```
+### I want domain-specific information
 
-Only the first category extends the blocking path.
+Use the [`domains/`](domains/) area. The SCAD section currently contains the most developed domain overview and explains the current SCAD ecosystem, current-versus-classic infrastructure and the relationship between projects, libraries and tooling.
 
-## Continue cross-project work
+Domain documentation here is intentionally broader than one project. Detailed component design or implementation documentation remains in the repository that owns it.
 
-While Migration 001 is active, use its [handoff](migrations/001-brainboxemb-meta/handoff.md) after reading `STATUS.md`.
+### I want to know what is changing now
 
-A proposed migration may have its own handoff before activation so the intended work is clear, but its presence does not authorize implementation. Migration 002 is currently such a proposed/inactive plan.
+Read [STATUS.md](STATUS.md).
 
-## Repository layout
+That page is about **current cross-project work**, not about the whole purpose of this repository. It separates completed foundations, active work, deferred improvements and proposed migrations.
 
-```text
-brainboxemb.meta/
-├── STATUS.md              human-readable current work / next work
-├── docs/                  durable cross-project architecture and working model
-├── repositories/          canonical public repository catalog and overview
-├── domains/               domain-specific cross-project views
-├── migrations/            active, proposed and completed cross-project migrations
-├── experiments/           references to independent experiment/test repositories
-├── dashboard/             dashboard implementation and dashboard-specific docs
-├── .github/workflows/     repository-level automation
-└── README.md
-```
+Repository-spanning changes that need coordinated work live under [migrations/](migrations/README.md). A migration can be documented before it is activated; a plan marked **proposed / inactive** must not start automatically.
 
-The dashboard is isolated under `dashboard/`; GitHub Actions workflows remain at root `.github/workflows/` because GitHub requires that location.
+### I want to understand why a technical choice was made
 
-## Cross-project architecture and working model
+Experiments stay in their own repositories so evidence and temporary test code do not become production dependencies. The [`experiments/`](experiments/README.md) section records what those experiments investigated and which decisions they support.
 
-Durable repository-spanning conventions live under [`docs/`](docs/README.md).
+## How the repository collection fits together
 
-Current entry points include:
+The public repositories broadly fall into a few roles:
 
-- [repository tooling boundaries](docs/architecture/repository-tooling.md) — `tool.git-project`, domain tooling, consumers and meta ownership;
-- [generated output and publication](docs/working-model/generated-output.md) — source/generated separation, Moon/domain boundary and `dev`/`prod`/`rel` namespaces;
-- [versioning and releases](docs/working-model/versioning-and-releases.md) — independent versions, exact locks and released cross-repository interfaces.
+- **projects** contain the actual CAD, software or other product work;
+- **libraries** provide reusable domain components;
+- **tools** provide shared repository or domain behaviour;
+- **templates** are small reference consumers that demonstrate the intended current setup;
+- **experiments** test architectural or tooling choices without becoming normal dependencies;
+- **brainboxemb.meta** provides the overview, common technical guidance, catalog, dashboard and cross-project migration coordination.
 
-This documentation is intentionally current and compact. Detailed completed migration evidence is not copied wholesale from historical meta repositories.
+This separation is deliberate. A project should not need `brainboxemb.meta` to build, and this repository should not absorb implementation details merely because several projects use the same tool.
 
-## Repository catalog
+## Generated output is part of the workflow
 
-[`repositories/catalog.yml`](repositories/catalog.yml) is the canonical inventory/classification source for public brainboxemb repositories.
+Many repositories publish generated results separately from their source branches. A pull request can have review output under `dev/pr-N/...`, the current main revision under `prod/...`, and releases under `rel/vX.Y.Z/...`.
 
-The catalog owns stable information such as repository identity, category/domain, lifecycle where useful, role and project-infrastructure generation/provider. Live facts such as workflow health, open PRs, tags, branch protection and activity are read from GitHub instead of being copied into the catalog.
+This makes renders, binaries, verification evidence and assembled documentation inspectable without committing generated files into normal source history. The detailed model is described in [Generated output and publication](docs/working-model/generated-output.md).
 
-[`dashboard/dashboard.yml`](dashboard/dashboard.yml) contains dashboard policy and points to the central catalog. `dashboard/src/prepare_dashboard_config.py` converts it to the existing dashboard runtime shape so status, metrics and rendering keep one repository inventory.
+## Repository catalog and dashboard
 
-See [repositories/README.md](repositories/README.md) for the catalog contract.
+[`repositories/catalog.yml`](repositories/catalog.yml) is the canonical catalog for the public repository set. It stores stable classification and intent.
 
-## Domain coordination
+Live state is deliberately not copied into that file. The dashboard obtains changing information directly from GitHub and uses the central catalog only to know which repositories and classifications to present.
 
-Domain-specific cross-project knowledge belongs under `domains/` when it remains useful at portfolio level.
+## Scope
 
-For SCAD:
+This repository covers the **public** brainboxemb repository collection.
 
-- the broad catalog/landscape responsibility formerly owned by `tech.scad` is now consolidated into [`repositories/catalog.yml`](repositories/catalog.yml) and [`domains/scad/`](domains/scad/);
-- [`tech.scad`](https://github.com/brainboxemb/tech.scad) is retained as a superseded historical source until archival;
-- Migration 001 Phase 5 is transferring the remaining current coordination responsibility from [`meta.scad-projects`](https://github.com/brainboxemb/meta.scad-projects) without copying obsolete plans wholesale.
+Individual repositories remain authoritative for their own code, releases, project-specific architecture, tests and local plans. `brainboxemb.meta` provides the map and the common technical context around them.
 
-## Cross-project migrations
-
-See [migrations/README.md](migrations/README.md).
-
-A migration has an explicit state. In particular, **proposed / inactive** means the plan is ready to understand and review but implementation must not start until it is deliberately activated.
-
-Project-specific implementation plans stay in the owning project repository.
-
-## Experiments
-
-Experiments and test repositories stay independent. `brainboxemb.meta` records what question they tested, what decision they support and whether that result has been adopted. See [experiments/README.md](experiments/README.md).
-
-## Dashboard
-
-The static GitHub Actions/status dashboard is an active sub-capability under [`dashboard/`](dashboard/). It publishes through GitHub Pages while meta coordination work proceeds.
-
-See [dashboard/README.md](dashboard/README.md) for dashboard-specific maintenance guidance.
+For maintenance/agent guidance, see [AGENTS.md](AGENTS.md).

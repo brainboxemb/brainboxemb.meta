@@ -1,29 +1,29 @@
-# Current cross-project status
+# Current cross-project changes
 
-This page is the short human-readable answer to: **what is finished, what is still open, and what should happen next?**
+This page tracks **temporary/current work that spans repositories**: active migrations, recently completed foundations, deferred follow-ups and proposed next migrations.
 
-Detailed historical step numbering remains in source repositories and retained evidence, but it is deliberately not the primary status language here.
+It is not the general overview of the brainboxemb repository collection. For that, start with [`README.md`](README.md). For the normal technical working model, use [`docs/`](docs/README.md).
 
 ## Active now
 
 ### Migration 001 — consolidate coordination into `brainboxemb.meta`
 
-**Status: active — Phase 5B durable coordination conventions.**
+**Status: active — remaining `meta.scad-projects` consolidation.**
 
-The dashboard/catalog and `tech.scad` portions are already migrated. The remaining work is the bounded transfer of current coordination responsibility from `meta.scad-projects`.
+The dashboard/catalog and `tech.scad` portions are already migrated. The remaining work is the bounded transfer of useful current coordination responsibility from `meta.scad-projects`.
 
-Current Phase-5 slices:
+Current slices:
 
-1. **5A — readable current status** — **complete**; `STATUS.md` and the proposed/inactive Migration 002 now make finished/deferred/next work explicit.
-2. **5B — durable SCAD coordination conventions** — **active now**; move only still-current cross-project architecture/working rules, not historical plans wholesale.
-3. **5C — active issue transfer and source redirect** — finish moving relevant issues, then make `meta.scad-projects` point to the new owner.
-4. **5D — consolidation closeout / archival readiness** — close Migration 001 and archive superseded coordination sources when safe.
+1. **Readable status and next-migration model** — complete.
+2. **Durable technical conventions** — complete; current shared guidance now lives under `docs/`.
+3. **Active issue transfer and source redirect** — in progress; relevant old coordination issues are being moved/closed and `meta.scad-projects` will become a historical source.
+4. **Consolidation closeout / archival readiness** — next; verify no current responsibility depends on the old meta repositories before archival.
 
-Tracking: issues #11, #25, #30, #31 and #32.
+Tracking: issues #11, #25, #31 and #32.
 
-## Finished foundations
+## Recently completed foundations
 
-These are complete and should not be treated as current blocking migrations:
+These are useful context, but they are **not active migrations**:
 
 | Foundation | Status | Meaning |
 | --- | --- | --- |
@@ -33,26 +33,13 @@ These are complete and should not be treated as current blocking migrations:
 | Engineering-document assembly foundation | **complete** | `tool.eng-docs v0.2.0` provides the generic manifest/assembly boundary and has cross-domain consumer qualification. |
 | `tech.scad` active catalog role | **superseded** | The current public repository catalog and SCAD landscape overview now live in `brainboxemb.meta`. |
 
-The phrase **“Step 2.5 core complete” is intentionally retired from current-status wording**. It mixed a completed document-assembly foundation with one optional physical-verification follow-up and made the actual next work unclear.
-
-## Current durable guidance
-
-The cross-project rules being consolidated now live under [`docs/`](docs/):
-
-- repository/tool/domain ownership boundaries;
-- `tool.git-project` generic bootstrap/dependency/orchestration role;
-- current versus classic project-infrastructure classification;
-- generated-output namespaces such as `dev/pr-N/*`, `prod/*`, `rel/vX.Y.Z/*`;
-- producer versus materialization/publication evidence;
-- independent repository versions and exact-revision release rules.
-
-SCAD-specific landscape details remain under [`domains/scad/`](domains/scad/).
+The old phrase **“Step 2.5 core complete” is intentionally not used as current status**. It mixed a completed document-assembly foundation with an optional physical-verification follow-up and obscured what work was actually active.
 
 ## Deferred, not blocking
 
-These are useful follow-ups, but none blocks Migration 001 or the proposed next SCAD tooling migration:
+These are valid follow-ups but do not block the current consolidation or the proposed next SCAD tooling migration:
 
-- **Physical-verification document bundles** — issue #18. Improve generic workbench-package assembly for cases such as HUB75 SQ-01; current project-local publication continues to work.
+- **Physical-verification document bundles** — issue #18. Improve generic workbench-package assembly for cases such as HUB75 SQ-01; the existing project-local publication path continues to work.
 - **Explicit cross-project release request/version preparation** — issue #20.
 - **Architecture-view refresh** — issue #21.
 
@@ -64,7 +51,7 @@ These are useful follow-ups, but none blocks Migration 001 or the proposed next 
 
 Purpose: add a post-build audit in `tool.scad-project` that checks whether observed target outcomes are compatible with impacts that can actually be proven from changed inputs and structured build evidence.
 
-It does **not** redesign SCons, implement physical-verification document bundles, introduce a second build engine or broadly migrate consumers.
+It does not redesign SCons, implement physical-verification document bundles, introduce a second build engine or broadly migrate consumers.
 
 Migration 002 may only become active after Migration 001 has transferred the required coordination context and the proposed audit is rechecked against the then-current `tool.scad-project` implementation.
 
@@ -74,7 +61,7 @@ See [`migrations/002-scad-build-decision-audit/README.md`](migrations/002-scad-b
 
 Until Migration 001 finishes:
 
-- `meta.scad-projects` remains historical/detail evidence plus a temporary source for not-yet-transferred coordination material;
+- `meta.scad-projects` remains a historical/detail evidence source plus a temporary source for not-yet-transferred coordination material;
 - `tech.scad` is already superseded as a current owner but remains available for history until archival.
 
-Do not resume an old numbered roadmap mechanically. Start from this status, then open the active or explicitly activated migration plan.
+Do not resume an old numbered roadmap mechanically. Start from the normal repository overview/technical guide, and use this page only when you need the current cross-project change status.
