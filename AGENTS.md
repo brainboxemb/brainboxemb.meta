@@ -4,157 +4,134 @@ Persistent guidance for automated agents working in `brainboxemb.meta`.
 
 ## Repository purpose
 
-`brainboxemb.meta` is the portfolio-level coordination source for **public** brainboxemb repositories.
+`brainboxemb.meta` is the **landing page, technical guide and portfolio overview** for the public brainboxemb repositories.
 
-It owns cross-project information and migrations, not the implementation of the projects it describes.
+Its responsibilities include:
 
-```text
-brainboxemb.meta
-    public repository catalog / lifecycle overview
-    cross-project architecture and working conventions
-    repository-spanning migration plans and evidence
-    migration handoffs
-    domain-level overviews
-    dashboard/status overview
-    experiment references and decisions
+- explaining what repositories exist and what roles they have;
+- describing how current projects are organised;
+- documenting shared technical conventions and tooling boundaries;
+- providing domain-level overviews;
+- presenting live repository status through the dashboard;
+- coordinating repository-spanning migrations and retaining their evidence;
+- recording the role of experiments that support technical decisions.
 
-individual repository
-    implementation
-    project-specific architecture and plan
-    local tests and releases
-    project-specific issues and evidence
-```
+Cross-repository migration coordination is therefore **one capability of this repository, not its whole purpose**.
 
-Do not move implementation detail into this repository merely because a migration touches multiple repositories.
+Individual repositories remain authoritative for their own implementation, project-specific architecture/plans, releases, tests and local issues.
 
-## Determine current work
+## Choose the right entry point
 
-**Read `STATUS.md` first.**
+Use the repository according to the question being answered:
 
-It is the primary human-readable current-work entry point and distinguishes:
+- general overview / first-time reader → `README.md`;
+- how projects and tooling work → `docs/README.md` and `docs/working-model/`;
+- which public repositories exist → `repositories/`;
+- domain-specific ecosystem information → `domains/`;
+- live GitHub/project status → `dashboard/`;
+- current cross-project changes → `STATUS.md`;
+- repository-spanning refactoring/migration → `migrations/`;
+- technical experiments and their conclusions → `experiments/`.
+
+Do **not** make `STATUS.md` or the active migration the framing for unrelated documentation work. They describe temporary/current work, while README/docs describe the repository collection and intended working model.
+
+## Current work and migrations
+
+When the task actually concerns current cross-project work, read `STATUS.md` first.
+
+It distinguishes:
 
 - completed foundations;
-- the active migration/slice;
+- active migration/slice;
 - deferred non-blocking follow-ups;
 - proposed migrations that are intentionally inactive.
 
 Do not infer current work from the highest step number in an older roadmap.
 
-A migration marked **proposed / inactive** must not be implemented merely because its README/handoff exists. It requires an explicit activation decision and its current assumptions must be reassessed first.
+A migration marked **proposed / inactive** must not be implemented merely because its README/handoff exists. It requires an explicit activation decision and current assumptions must be reassessed first.
 
-## Current consolidation migration
-
-Migration 001 is tracked in:
+Migration 001 is currently tracked in:
 
 - issue #11;
 - `migrations/001-brainboxemb-meta/README.md`;
 - `migrations/001-brainboxemb-meta/handoff.md`.
 
-Its current bounded Phase-5 transfer is tracked by issue #25 and the slices named in `STATUS.md`.
-
-Before each phase, re-check actual repositories, open issues/PRs, CI/evidence and generated output. Do not execute a phase only because an older plan says it is next.
-
-Explicitly re-evaluate:
-
-- whether the phase still solves the right problem;
-- whether owner/ownership boundaries are still correct;
-- whether prerequisites/order still hold;
-- whether later work already implemented part of the scope;
-- whether planned evidence covers the real risk;
-- whether the step can be made smaller or more reversible.
+Before every active migration phase, re-check actual repositories, issues/PRs, CI/evidence and generated output. Re-evaluate the goal, owner, prerequisites, current assumptions, evidence coverage and whether the slice can be smaller or more reversible.
 
 ## Keep the blocking path small
 
-Classify every newly discovered item before adding it to an active migration:
+Classify newly discovered migration-related work as:
 
-```text
-migration blocker
-    required for the current migration to be safe/correct
-
-follow-up migration
-    valuable cross-project change, but not required to finish the current slice
-
-backlog / improvement
-    useful cleanup or enhancement that should not block productive work
-```
+- **migration blocker** — required for the current migration to be safe/correct;
+- **follow-up migration** — valuable cross-project change, but independently schedulable;
+- **backlog / improvement** — useful cleanup or enhancement that should not block productive work.
 
 Do not promote a follow-up or improvement into a blocker merely because it was discovered during migration.
 
-Each phase should leave affected repositories usable and should be independently reviewable.
-
 ## Migration plan convention
 
-Repository-spanning migrations live under `migrations/` and should have:
+Repository-spanning migrations live under `migrations/` and should normally contain:
 
-```text
-README.md      goal, status, scope, ownership, phases and completion criteria
-handoff.md     reusable ChatGPT/new-session handoff
-evidence.md    retained qualification evidence when useful
-```
+- `README.md` — purpose, status, scope, ownership, phases and completion criteria;
+- `handoff.md` — reusable ChatGPT/new-session handoff;
+- `evidence.md` — retained qualification evidence when useful.
 
 Migration status must be explicit: `active`, `proposed / inactive`, or `complete` where applicable.
 
-Individual project plans remain in the owning repository. When a migration needs changes in another repository, implement those details there and record only cross-project status/evidence here.
+Implementation belongs in the repository that owns the behavior. `brainboxemb.meta` keeps the cross-project scope, status and evidence.
+
+## Technical documentation
+
+Technical pages should be written for a reader trying to understand the system, not as compressed internal implementation notes.
+
+Prefer this order:
+
+1. what problem/concept is being explained;
+2. the mental model and practical meaning;
+3. where it applies and where to look next;
+4. lower-level configuration, commands or evidence only when useful.
+
+Avoid making pages a wall of code blocks or migration terminology. Small examples are useful, but prose should explain why the reader cares about them.
+
+Shared technical concepts live under `docs/`. Project-specific design stays in the owning project, and API/implementation detail stays in the owning tool/library.
 
 ## Repository catalog
 
 `repositories/catalog.yml` is the canonical source of truth for public repository membership and stable classification.
 
-Live operational facts that can be read from GitHub should be generated/read from GitHub rather than manually duplicated. The catalog focuses on stable classification and intent: role, domain, lifecycle/generation and relevant ownership/provider relationships.
+Live operational facts that GitHub can provide should not be manually duplicated there. The catalog focuses on identity, role, domain, lifecycle/generation and relevant ownership/provider relationships.
 
-`tech.scad` is now a superseded historical source, not a second current catalog owner.
+`tech.scad` is a superseded historical source, not a second current catalog owner.
 
 ## Domain views
 
-Domain-specific cross-project knowledge belongs under `domains/<domain>/` only when it is still useful at portfolio level.
+Domain-specific portfolio knowledge belongs under `domains/<domain>/` when it helps explain the ecosystem beyond one project.
 
-Do not copy entire old repositories blindly. Separate:
-
-- durable cross-project architecture/conventions;
-- historical migration evidence worth retaining;
-- project-local implementation detail that stays with its owner;
-- obsolete planning that remains accessible through archived repository history rather than becoming current guidance.
+Do not copy whole old repositories blindly. Separate durable cross-project knowledge from historical evidence, obsolete planning and project-local implementation detail.
 
 ## Issues and history
 
-Open issues from an older meta repository should be recreated here only when they still represent real work worth tracking. Preserve origin links and classify them as active migration, proposed migration, deferred follow-up, backlog, completed or superseded.
+When consolidating an older meta repository, recreate only issues that still represent useful work. Preserve origin links and classify them clearly as active migration, proposed migration, deferred follow-up, backlog, completed or superseded.
 
-Do not leave a completed historical issue appearing as current work merely because it was accidentally left open in the old repository.
-
-Superseded repositories should be archived, not deleted, after current responsibilities are covered and important history/evidence remains navigable.
+Superseded repositories should be archived rather than deleted after their current responsibilities are covered and their history remains navigable.
 
 ## Dashboard
 
-The dashboard is an active sub-capability isolated under `dashboard/`:
+The dashboard is an active sub-capability under `dashboard/`. Repository-level GitHub Actions workflows remain under `.github/workflows/` because GitHub requires that location.
 
-```text
-dashboard/
-    dashboard.yml
-    requirements.txt
-    src/
-    site/
-    tests/
-    README.md
-    AGENTS.md
-```
+See `dashboard/README.md` and `dashboard/AGENTS.md` for dashboard-specific maintenance rules.
 
-Repository-level GitHub Actions workflows stay under `.github/workflows/`. Dashboard workflows run commands with `dashboard/` as their working directory.
-
-See `dashboard/README.md` and `dashboard/AGENTS.md` for dashboard-specific rules.
-
-## Testing and evidence
-
-Use the owner repository's normal tests for implementation changes. For dashboard changes:
+For dashboard tests:
 
 ```text
 cd dashboard
 python -m unittest discover -s tests -v
 ```
 
-A cross-project phase is complete only when its required evidence exists, not merely when files were moved. Prefer exact revisions/run IDs where reproducibility matters.
+## Evidence and documentation discipline
 
-## Documentation discipline
+A migration phase is complete only when its required evidence exists, not merely when files were moved. Prefer exact revisions/run IDs where reproducibility matters.
 
-Root documentation describes current portfolio-level behavior. Historical/planning language that is no longer current should be clearly marked historical or remain in archived source history.
+Root documentation should describe the current portfolio and working model. Historical planning language that is no longer current should either be marked historical or remain in archived source history.
 
 Keep generated operational state out of maintained Markdown when it can be generated from repositories themselves.
