@@ -30,7 +30,13 @@ A key completion criterion is that a README-only or otherwise unaffected change 
 
 ### Step 2 — reference task-graph correction
 
-**Next.** Re-check `template.scad-project` and remove the current `scad.verify -> scad.build` dependency only if the present verification implementation confirms that Verify does not consume normal Build output.
+**Complete.** `template.scad-project` PR #22 removed the stale `scad.verify -> scad.build` dependency after confirming Verify does not consume normal Build output. Merge/exact-main revision: `082b0cecb47ba082899214751080adc54556e94c`. PR run `34893868011` and exact-main run `34894004036` passed with Build and Verification publication intact.
+
+### Step 3 — shared SCAD production workflow
+
+**Next.** Owner: `tool.scad-project`.
+
+Extract the reusable production workflow with a host-side Moon preflight, a conditional single SCAD container job and lightweight publication jobs. Before fixing the checkout contract, qualify Moon 2.5.4 `changed-files --base <sha> --head <sha>` with only the exact base and head commits locally present. The current template is blobless but uses `fetch-depth: 0`; that broad history fetch must not be copied into the new preflight unless the focused qualification proves it is necessary.
 
 ## Reference repositories
 
@@ -42,8 +48,8 @@ A key completion criterion is that a README-only or otherwise unaffected change 
 ## Owner sequence
 
 1. `tool.git-project` — generic Moon affected/preflight capability — complete;
-2. `template.scad-project` — correct the Build/Verify task graph — next;
-3. `tool.scad-project` — reusable SCAD production workflow;
+2. `template.scad-project` — correct the Build/Verify task graph — complete;
+3. `tool.scad-project` — reusable SCAD production workflow — next;
 4. `template.scad-project` — qualify the released shared workflow and pre-container skip;
 5. `lib.scad.clamps` — reference library rollout and rationale;
 6. `lib.scad.hub75` — second library rollout;
