@@ -56,8 +56,40 @@ A duplicate release run (`34887175316`) started for the same request and failed 
 
 ## Step 2 — reference task-graph correction
 
-Status: **next; not yet implemented**
+Status: **complete**
 
 Owner: `brainboxemb/template.scad-project`.
 
-Before changing the graph, re-check whether the current template verification producer actually consumes normal Build output. Remove `scad.verify -> scad.build` only if current repository behavior confirms the dependency is stale rather than required.
+Owner work:
+
+- PR #22 — `Make SCAD Build and Verify logically independent`;
+- merge/exact-main revision: `082b0cecb47ba082899214751080adc54556e94c`;
+- stale `scad.verify -> scad.build` dependency removed after confirming Verify does not consume normal Build output;
+- `scad.ci` remains the aggregate root;
+- Build-only, Verify-only and aggregate semantics remain distinct.
+
+Qualification:
+
+- PR run `34893868011` — passed;
+- exact-main run `34894004036` — passed;
+- Build and Verification publication remained intact.
+
+Performance observation relevant to Step 3:
+
+- SCAD job container initialization was about 17 s on the PR run and about 30 s on exact main, before checkout;
+- this strengthens pre-container gating as a required acceptance criterion rather than a later optimization.
+
+## Step 3 — shared SCAD production workflow
+
+Status: **next; prerequisite qualification required**
+
+Owner: `brainboxemb/tool.scad-project`.
+
+Before fixing the reusable workflow's preflight checkout contract, prove with Moon 2.5.4 that `changed-files --base <sha> --head <sha>` works when the local repository contains only the exact head commit and the exact base commit needed for the comparison, without fetching intervening history or unrelated branches/tags.
+
+Current reference-template evidence:
+
+- checkout is already blobless (`filter: blob:none`);
+- it still uses `fetch-depth: 0`, which fetches complete history and is broader than the intended preflight contract.
+
+If the focused two-commit qualification succeeds, Step 3 should use a shallow/blobless host preflight checkout plus an explicit fetch of only the required base commit. The conditional SCAD job should then checkout only the exact source revision plus the submodules/tooling it actually needs.
