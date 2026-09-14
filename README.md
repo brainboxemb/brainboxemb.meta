@@ -54,28 +54,13 @@ brainboxemb.meta/
 └── README.md
 ```
 
-The dashboard is now an isolated subproject:
-
-```text
-dashboard/
-├── dashboard.yml
-├── requirements.txt
-├── src/
-├── site/
-├── tests/
-├── README.md
-└── AGENTS.md
-```
-
-GitHub Actions workflows remain under root `.github/workflows/`, because GitHub only discovers workflow files there.
+The dashboard is isolated under `dashboard/`; GitHub Actions workflows remain at root `.github/workflows/` because GitHub requires that location.
 
 ## Repository catalog
 
 [`repositories/catalog.yml`](repositories/catalog.yml) is the canonical inventory/classification source for public brainboxemb repositories.
 
-The catalog owns stable information such as repository identity, category/domain, lifecycle where useful, role and project-infrastructure generation/provider. It includes current tools/reference consumers, classic SCAD projects, sites and experiment repositories.
-
-Live facts such as workflow health, open PRs, tags, branch protection and activity are read from GitHub instead of being copied into the catalog.
+The catalog owns stable information such as repository identity, category/domain, lifecycle where useful, role and project-infrastructure generation/provider. Live facts such as workflow health, open PRs, tags, branch protection and activity are read from GitHub instead of being copied into the catalog.
 
 [`dashboard/dashboard.yml`](dashboard/dashboard.yml) contains dashboard policy and points to the central catalog. `dashboard/src/prepare_dashboard_config.py` converts it to the existing dashboard runtime shape so status, metrics and rendering keep one repository inventory.
 
@@ -83,14 +68,15 @@ See [repositories/README.md](repositories/README.md) for the catalog contract.
 
 ## Domain coordination
 
-Domain-specific cross-project knowledge belongs under `domains/` when it remains useful after consolidation.
+Domain-specific cross-project knowledge belongs under `domains/` when it remains useful at portfolio level.
 
-The SCAD domain is currently being migrated from:
+For SCAD:
 
-- `brainboxemb/meta.scad-projects` — SCAD architecture, workflow and cross-project plans;
-- `brainboxemb/tech.scad` — broader SCAD catalog and landscape documentation.
+- the broad catalog/landscape responsibility formerly owned by `tech.scad` is now consolidated into [`repositories/catalog.yml`](repositories/catalog.yml) and [`domains/scad/`](domains/scad/);
+- [`tech.scad`](https://github.com/brainboxemb/tech.scad) is retained as a superseded historical source until the final archival phase;
+- [`meta.scad-projects`](https://github.com/brainboxemb/meta.scad-projects) still owns the current controlled SCAD integration plans/evidence that have not yet been reassessed and migrated.
 
-Those repositories remain authoritative for responsibilities not yet migrated and are not archived until active responsibilities, links and evidence are covered here.
+Migration 001 Phase 5 explicitly reassesses `meta.scad-projects` before moving anything, so historical documents or useful-but-nonblocking improvements do not automatically enter the blocking path.
 
 ## Cross-project migrations
 
@@ -111,6 +97,6 @@ Experiments and test repositories stay independent. `brainboxemb.meta` records w
 
 ## Dashboard
 
-The static GitHub Actions/status dashboard is an active sub-capability under [`dashboard/`](dashboard/). It continues to publish through GitHub Pages while the broader meta consolidation proceeds.
+The static GitHub Actions/status dashboard is an active sub-capability under [`dashboard/`](dashboard/). It publishes through GitHub Pages while the broader meta consolidation proceeds.
 
 See [dashboard/README.md](dashboard/README.md) for dashboard-specific maintenance guidance.
