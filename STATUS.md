@@ -6,9 +6,20 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active cross-project migration**.
+### Migration 003 — roll out `tool.scad-project v0.12.0` through SCAD consumers
 
-The next practical decision is whether to publish the newly qualified `tool.scad-project` build-audit capability as a normal tool release before updating SCAD library consumers.
+**Active.**
+
+The build-decision audit from Migration 002 is implemented. The next work is to move that capability through the actual SCAD dependency chain using released and qualified versions rather than ad-hoc main commits.
+
+Order:
+
+1. release and tag-qualify `tool.scad-project v0.12.0`;
+2. update and qualify `template.scad-project` first;
+3. independently modernize, qualify and release `lib.scad.clamps` and `lib.scad.hub75`;
+4. update `2026-009-01.cad.HUB75-display-frame` last as the real end-to-end consumer.
+
+See [Migration 003](migrations/003-scad-v0.12-rollout/README.md) and issue #46.
 
 ## Recently completed
 
