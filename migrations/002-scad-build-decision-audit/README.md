@@ -4,118 +4,64 @@ Status: **proposed / inactive**
 
 Tracking issue: [#19](https://github.com/brainboxemb/brainboxemb.meta/issues/19)
 
-Activation gate: [#26](https://github.com/brainboxemb/brainboxemb.meta/issues/26)
+## What problem would this solve?
 
-## What this migration would do
+`tool.scad-project` already records what happened to each build target, for example whether it was built, restored from cache or left current.
 
-Add one additional assurance layer to the current SCAD build system: after a real build, compare the structured target decisions with impact that can actually be proven from changed inputs.
+The proposed audit adds one extra check after a normal SCons build: if the available dependency information proves that a target was affected by a changed input, the reported result must make sense for that impact.
 
-Example:
+A simple example is a target that definitely depends on a changed SCAD file. It may be rebuilt or restored from a valid cache, but it should not be reported unchanged.
 
-```text
-changed SCAD dependency
-        ↓
-current target/dependency manifest proves target A depends on it
-        ↓
-SCons runs normally
-        ↓
-structured report says what happened to target A
-        ↓
-audit checks that the outcome is compatible with the proven impact
-```
+## What would be added?
 
-The purpose is to detect correctness contradictions such as a target that is definitely affected but is reported `CURRENT`.
+The first version should stay conservative:
 
-## Why it is separate
+- use existing structured build/dependency evidence;
+- distinguish proven impact from possible or unproven impact;
+- accept `BUILT` and valid `CACHE_RESTORED` for a proven affected target;
+- report a proven affected target as an error when it is incorrectly marked `CURRENT`;
+- treat unnecessary rebuilds as observations/warnings at first rather than correctness failures;
+- keep uncertainty visible instead of guessing.
 
-The foundations already exist:
+Implementation belongs in [`tool.scad-project`](https://github.com/brainboxemb/tool.scad-project). This repository only keeps the cross-project migration plan and qualification record.
 
-- structured target outcomes are implemented;
-- deterministic real-SCons decision tests are implemented;
-- repository-build/Moon orchestration migration is complete.
+## What is deliberately not part of it?
 
-This audit is therefore a new, bounded capability. It is not unfinished work from the repository-build migration and it does not need the deferred physical-verification document-bundle work.
+Migration 002 does not:
 
-## Owner
+- replace or reimplement SCons dependency handling;
+- prove artifact integrity merely because a cache restore occurred;
+- introduce another generic build engine;
+- redesign physical-verification documentation;
+- require a broad migration of SCAD projects.
 
-Implementation owner: `brainboxemb/tool.scad-project`.
+The physical-verification document follow-up in issue #18 remains independent.
 
-`brainboxemb.meta` owns only:
+## Before activating it
 
-- migration scope and activation decision;
-- cross-project contract/ordering;
-- qualification evidence and closeout.
+The migration is not active merely because this plan exists. Before implementation starts:
 
-## Proposed initial scope
+1. reread the current `tool.scad-project` main branch, tests and build-decision report format;
+2. confirm that this audit still solves a real current problem;
+3. confirm that a post-build audit is still the smallest useful next step;
+4. recheck which inputs can genuinely prove target impact;
+5. simplify or change this plan if the implementation has evolved;
+6. keep unrelated follow-ups outside the migration.
 
-The first version should be conservative.
+Activation means explicitly changing this migration to **active** and recording the reassessment in issue #19. There is no separate activation-gate issue.
 
-### Proven impact
+## Expected qualification
 
-Treat impact as proven only when current structured evidence directly links a changed input to a target, for example:
-
-```text
-changed path ∈ target.sources
-```
-
-A future independently stored baseline may prove additional causes such as changed target-spec/backend signatures, but the first implementation must not invent certainty from a current digest alone.
-
-### Allowed outcomes
-
-For a proven affected target, both can be legitimate depending on cache context:
-
-```text
-BUILT
-CACHE_RESTORED
-```
-
-`CURRENT` for a proven affected existing target is a correctness contradiction.
-
-`ERROR` remains an error.
-
-For targets with no proven impact, an unnecessary `BUILT` is initially an overbuild warning/observation rather than a correctness failure.
-
-## Important boundaries
-
-This migration must not:
-
-- reimplement or second-guess SCons dependency resolution;
-- infer artifact integrity from `CACHE_RESTORED`;
-- turn GitHub Actions cache metadata into a second per-target oracle;
-- introduce a generic build engine;
-- redesign documentation/physical verification;
-- force broad consumer migration merely to qualify the audit.
-
-## Reassessment before activation
-
-Before changing status to `active`:
-
-1. verify Migration 001 has transferred the required coordination context;
-2. inspect current `tool.scad-project` main, tests and build-decision report schema;
-3. confirm a post-build audit is still the smallest useful next assurance layer;
-4. revalidate the exact input/evidence matrix and command/API shape;
-5. simplify the plan if current implementation has made part of it obsolete;
-6. keep physical-verification bundle work separate unless new evidence creates a real dependency.
-
-## Proposed evidence
-
-When activated, qualification should include deterministic cases for at least:
+When activated, tests should at least cover:
 
 - proven dependency impact + `BUILT` → pass;
 - proven dependency impact + valid `CACHE_RESTORED` → pass;
 - proven dependency impact + `CURRENT` → fail;
-- invalid/missing target outcome → fail;
+- missing/invalid target outcome → fail;
 - no proven impact + `CURRENT` → pass;
-- no proven impact + `BUILT` → warning/observation initially;
-- possible impact without independent baseline → report uncertainty, do not claim correctness failure;
-- cache provenance remains explanatory rather than an independent artifact-integrity guarantee.
+- no proven impact + `BUILT` → observation/warning;
+- possible impact without enough evidence → report uncertainty rather than a false failure.
 
-## Completion condition
+## When is the migration complete?
 
-Migration 002 is complete only when the owner implementation, deterministic owner tests and agreed cross-project qualification evidence are green, and the resulting audit contract is documented in `tool.scad-project`.
-
-## Activation
-
-This directory being present does **not** activate the migration.
-
-Activation is an explicit coordination decision: change this status to `active`, close activation-gate issue #26 as completed, record the reassessment, and only then start owner implementation.
+Migration 002 is complete only when the owner implementation, deterministic owner tests and agreed qualification evidence are green, and `tool.scad-project` documents the resulting audit behaviour.
