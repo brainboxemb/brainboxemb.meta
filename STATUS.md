@@ -6,32 +6,32 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 003 — roll out `tool.scad-project v0.12.0` through SCAD consumers
-
-**Active.**
-
-The build-decision audit from Migration 002 is implemented. The next work is to move that capability through the actual SCAD dependency chain using released and qualified versions rather than ad-hoc main commits.
-
-Order:
-
-1. release and tag-qualify `tool.scad-project v0.12.0`;
-2. update and qualify `template.scad-project` first;
-3. independently modernize, qualify and release `lib.scad.clamps` and `lib.scad.hub75`;
-4. update `2026-009-01.cad.HUB75-display-frame` last as the real end-to-end consumer.
-
-See [Migration 003](migrations/003-scad-v0.12-rollout/README.md) and issue #46.
+There is currently **no active cross-project migration**.
 
 ## Recently completed
+
+### Migration 003 — roll out `tool.scad-project v0.12.0` through SCAD consumers
+
+**Complete.**
+
+The released SCAD tool was qualified through the template, both reusable SCAD libraries, and finally the real HUB75 frame project.
+
+Current qualified versions include:
+
+- `tool.scad-project v0.12.0`;
+- `lib.scad.clamps v0.1.2`;
+- `lib.scad.hub75 v0.1.3`;
+- `2026-009-01.cad.HUB75-display-frame` on tool v0.12.0 + HUB75 library v0.1.3.
+
+The separate physical-verification work in `lib.scad.hub75` PR #19 is project-local work, not a continuation of this migration.
+
+See [Migration 003](migrations/003-scad-v0.12-rollout/README.md) and its [qualification evidence](migrations/003-scad-v0.12-rollout/evidence.md).
 
 ### Migration 002 — check build decisions after a SCAD build
 
 **Complete.**
 
-`tool.scad-project` now provides an explicit post-build audit that compares changed paths with the dependency evidence already recorded for each SCons target.
-
-A target that is proven to depend on a changed path may be rebuilt or restored from cache, but it may not remain `CURRENT`. Possible overbuild is reported as a warning rather than a correctness failure.
-
-The first slice deliberately leaves generic changed-path discovery and automatic workflow enforcement outside the SCAD tool.
+`tool.scad-project` provides an explicit post-build audit that compares changed paths with dependency evidence already recorded for each SCons target.
 
 See [Migration 002](migrations/002-scad-build-decision-audit/README.md) and its [qualification evidence](migrations/002-scad-build-decision-audit/evidence.md).
 
@@ -39,11 +39,11 @@ See [Migration 002](migrations/002-scad-build-decision-audit/README.md) and its 
 
 **Complete.**
 
-`brainboxemb.meta` now contains the public repository overview, dashboard, shared guidance and SCAD/CAD navigation that had previously been split across several repositories.
+`brainboxemb.meta` contains the public repository overview, dashboard, shared guidance and SCAD/CAD navigation that had previously been split across several repositories.
 
-`tech.scad` and `meta.scad-projects` are now private archives.
+`tech.scad` and `meta.scad-projects` are private archives.
 
-See [Migration 001](migrations/001-brainboxemb-meta/README.md) only if you want the migration history or evidence.
+See [Migration 001](migrations/001-brainboxemb-meta/README.md) for its history and evidence.
 
 ## Other follow-ups
 
