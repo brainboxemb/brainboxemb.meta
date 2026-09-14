@@ -20,7 +20,11 @@ The migration aligns current SCAD projects and libraries on one understandable p
 - publication happens outside the SCAD container;
 - `template.scad-project` is the reference project and `lib.scad.clamps` the reference library.
 
-Step 1 is complete: `tool.git-project v0.2.5` provides the released generic Moon affected preflight. Step 2 now re-checks and corrects the template Build/Verify task graph before shared SCAD workflow extraction.
+Step 1 is complete: `tool.git-project v0.2.5` provides the released generic Moon affected preflight.
+
+Step 2 is complete: `template.scad-project` PR #22 removed the stale `scad.verify -> scad.build` dependency and requalified Build/Verify independence on exact main `082b0cecb47ba082899214751080adc54556e94c`.
+
+Step 3 is next and is owned by `tool.scad-project`: extract the reusable SCAD production workflow with a lightweight host preflight, a conditional single SCAD container job and lightweight publication. Before fixing the preflight checkout contract, qualify Moon 2.5.4 `changed-files --base <sha> --head <sha>` with only the exact base and head commits locally present; do not inherit the template's current `fetch-depth: 0` by default.
 
 Tracking issue: #49. See [Migration 004](migrations/004-scad-repository-execution-model/README.md) and its [qualification evidence](migrations/004-scad-repository-execution-model/evidence.md).
 
