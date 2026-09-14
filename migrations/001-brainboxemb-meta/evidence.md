@@ -4,82 +4,48 @@
 
 Status: **qualified**
 
-### Source change
-
 - PR #12 — Establish `brainboxemb.meta` migration foundation
 - Qualified PR head: `061733fca1f4d2f347df87e351c5b82dc508ab8f`
 - Main merge commit: `62df26489e84dedc9cbd11c7cdf7186e0b78261d`
-
-### Main CI / Pages evidence
-
 - Deploy run: `34853241040`
-- Source revision: `62df26489e84dedc9cbd11c7cdf7186e0b78261d`
-- dashboard tests: success
-- dashboard generation: success
-- Pages artifact: success
-- Pages deployment: success
-
-Phase 1 established the portfolio-level meta identity and migration structure without coupling the rename to catalog or dashboard-path changes.
+- dashboard tests, generation, Pages artifact and Pages deployment: success
 
 ## Phase 2 — Canonical public repository catalog
 
 Status: **qualified**
 
-### Source change
-
 - PR #14 — Introduce canonical public repository catalog
 - Qualified PR head: `dbaee6d6e87cbe7bd82e80ae793d783d3fefd38b`
 - Main merge commit: `7a8ad3974bf9b3e43ce0744825d124595ae894e2`
-
-### Main CI / Pages evidence
-
 - Deploy run: `34855023365`
-- Source revision: `7a8ad3974bf9b3e43ce0744825d124595ae894e2`
 - 28 unit tests: success
 - catalog runtime preparation: `29 repositories in 6 groups`
-- dashboard generation: 29 repositories rendered successfully
-- Pages artifact: success
-- Pages deployment: success
+- dashboard generation: 29 repositories
+- Pages artifact/deployment: success
 
-### Contract proven
+Contract proven:
 
-- `repositories/catalog.yml` is the single public repository membership/classification source;
-- stable SCAD current/classic infrastructure metadata was retained;
-- `dashboard.yml` no longer owns a duplicate repository list;
-- dashboard/metrics/settings reuse the existing runtime `groups[].repositories` contract through a thin catalog adapter;
-- status collectors and renderer semantics did not need redesign.
+- one public repository membership/classification source;
+- stable SCAD current/classic metadata retained;
+- dashboard/metrics/settings reuse the existing runtime contract through a thin catalog adapter;
+- no dashboard status/renderer redesign required.
 
 ## Phase 3 — Dashboard subproject relocation
 
 Status: **qualified**
 
-### Source change
-
 - PR #15 — Move dashboard implementation under dashboard
 - Qualified PR head: `caeea117650b43242422ad7d0c0787a8cc083ab8`
 - Main merge commit: `fa1a2157f0ad39d3a64efa1fe02bcb614b281343`
-
-The implementation files were Git renames; dashboard collector, metrics, renderer and test logic were unchanged.
-
-### Main CI / Pages evidence
-
 - Deploy run: `34856871791`
-- Source revision: `fa1a2157f0ad39d3a64efa1fe02bcb614b281343`
-- dependency install from `dashboard/requirements.txt`: success
-- 28 unit tests from `dashboard/tests/`: success
-- runtime config generation from `dashboard/dashboard.yml`: success
-- runtime config reported `29 repositories in 6 groups`
-- first metrics refresh on the relocated cache path: success
-- metrics snapshot: `4179 runs across 29 repositories`
-- dashboard generation from the relocated subproject: success
+- 28 relocated unit tests: success
+- runtime config: `29 repositories in 6 groups`
+- first metrics refresh on relocated path: `4179 runs across 29 repositories`
 - generated dashboard: 29 repositories
 - Pages artifact source: `dashboard/site`
-- Pages artifact upload: success
-- Pages deployment: success
+- Pages artifact/deployment: success
 
-### Contract proven
-
-The dashboard is now isolated under:
+Contract proven:
 
 ```text
 dashboard/
@@ -92,16 +58,65 @@ dashboard/
     AGENTS.md
 ```
 
-Repository-level workflows remain under `.github/workflows/` and run dashboard commands with `dashboard/` as their working directory.
+Repository-level workflows remain in `.github/workflows/`; central catalog resolves from the dashboard through `../repositories/catalog.yml`.
 
-The central catalog remains outside the dashboard subproject and resolves through `../repositories/catalog.yml`.
+## Phase 4 — tech.scad integration
 
-## Deferred from Phases 1–3
+Status: **qualified**
 
-The following remain separate migration responsibilities rather than retroactive blockers:
+### Reassessment
 
-- durable `tech.scad` domain-knowledge migration;
-- durable `meta.scad-projects` architecture/working-plan migration;
-- still-active cross-project issue migration;
-- archival of superseded source repositories;
-- unrelated dashboard redesign or feature work.
+`tech.scad` had no open issues. Phase 2 had already migrated the broad machine-readable repository classification into `brainboxemb.meta/repositories/catalog.yml`.
+
+Copying its static tooling/library/project indexes would have recreated a second hand-maintained repository inventory, so those tables were intentionally left as historical content.
+
+### Destination evidence
+
+`brainboxemb.meta` PR #16 — Integrate durable `tech.scad` domain knowledge:
+
+- qualified head: `b5e9e169b4ba27228aa564600c1c32c1d3501837`;
+- merge commit: `7ca593b76a26ac05861b86604fcb6f25baeac5fa`.
+
+Durable knowledge now lives under `domains/scad/` and covers:
+
+- broad landscape versus controlled integration view;
+- classic standalone, classic shared-actions and current infrastructure generations;
+- engine classification separate from infrastructure generation;
+- evidence-based engine classification rather than name inference;
+- direct project dependency boundaries;
+- current-generation migration-scope rule;
+- portfolio versus repository source-of-truth boundaries.
+
+### Source redirect evidence
+
+`tech.scad` PR #2 — Point `tech.scad` to `brainboxemb.meta`:
+
+- qualified head: `50d89c4182e967fd8e1c84e1a56f98015daa8af3`;
+- merge commit: `b04e539a2215efa3b38fe1aa5a4d657fe4a89ae1`.
+
+Its README/AGENTS now state that:
+
+- `brainboxemb.meta` owns the current catalog and SCAD portfolio knowledge;
+- existing `catalog.yml`, architecture and indexes are historical evidence;
+- new membership/classification must not be added there;
+- the repository is not yet archived.
+
+### Closeout state
+
+The central catalog marks `brainboxemb/tech.scad` as:
+
+```yaml
+lifecycle: superseded
+```
+
+The repository remains visible and unarchived until the final source-closeout phase. This preserves links, Git history and old evidence without retaining duplicate current ownership.
+
+## Deferred beyond Phase 4
+
+The following remain separate responsibilities and do not retroactively block qualified phases:
+
+- reassessment/migration of current `meta.scad-projects` responsibilities;
+- still-active cross-project issues/plans that survive that reassessment;
+- formal GitHub archival of superseded sources;
+- unrelated SCAD tooling improvements;
+- unrelated dashboard feature work.
