@@ -3,5 +3,6 @@ __pycache__/
 *.pyc
 site/action-metrics.json
 .dashboard-content-hash
+.dashboard.runtime.yml
 .action-metrics-changed
 .action-metrics-valid
