@@ -8,6 +8,18 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 There is currently **no active cross-project migration**.
 
+## Proposed next
+
+### Migration 004 — define the current SCAD repository execution model
+
+**Proposed / inactive.**
+
+Before changing the SCAD libraries again, review why current projects and libraries use different Build/Verify execution models and decide which differences are genuinely justified.
+
+The review uses `template.scad-project` as the reference project and `lib.scad.clamps` as the practical reference library. It explicitly evaluates Moon, Build/Verify independence, duplicate container startup, container timing, evidence/publication behaviour and whether a separate `template.scad-lib` is actually useful.
+
+No implementation starts until the [change request](migrations/004-scad-repository-execution-model/change-request.md) has been reviewed and Migration 004 is explicitly activated. Tracking issue: #49.
+
 ## Recently completed
 
 ### Migration 003 — roll out `tool.scad-project v0.12.0` through SCAD consumers
@@ -23,7 +35,7 @@ Current qualified versions include:
 - `lib.scad.hub75 v0.1.3`;
 - `2026-009-01.cad.HUB75-display-frame` on tool v0.12.0 + HUB75 library v0.1.3.
 
-The separate physical-verification work in `lib.scad.hub75` PR #19 is project-local work, not a continuation of this migration.
+The separate physical-verification work in `lib.scad.hub75` is project-local work, not a continuation of this migration.
 
 See [Migration 003](migrations/003-scad-v0.12-rollout/README.md) and its [qualification evidence](migrations/003-scad-v0.12-rollout/evidence.md).
 
