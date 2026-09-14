@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Rename the repository to `brainboxemb.meta` and establish it as the portfolio-level coordination source for public brainboxemb repositories.
+- Add the phased `brainboxemb.meta` consolidation migration plan and reusable handoff.
+- Preserve the dashboard as an active sub-capability while deferring its filesystem move to a dedicated migration phase.
+- Update dashboard self-identification from `brainboxemb.dashboard` to `brainboxemb.meta`.
 - Add `tool.eng-docs` to **Tooling**.
 - Add `tool.git-project` to **Tooling**.
 - Add `2026-010-02.java.event-timing-framework` to **Software projects**.
