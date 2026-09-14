@@ -1,50 +1,52 @@
-# SCAD domain
+# SCAD and CAD
 
-`domains/scad/` is the public portfolio-level knowledge and navigation layer for the SCAD/CAD repositories.
+This section is the easiest place to understand the public SCAD/CAD repositories as a group.
 
-Repository membership and stable classification live in [`../../repositories/catalog.yml`](../../repositories/catalog.yml); live operational state comes from GitHub and the dashboard.
+You do not need to know the tooling architecture first. Start with the part you are interested in:
 
-## What belongs here
+- [**Projects**](projects.md) — the actual CAD designs;
+- [**Libraries**](libraries.md) — reusable geometry and reference models used by projects;
+- [**Tooling and templates**](tooling.md) — the shared repositories used to set up, build and verify SCAD projects;
+- [**Technical architecture**](architecture.md) — the more detailed explanation of current versus classic project setups and how the pieces fit together.
 
-The SCAD landscape includes:
+## The basic picture
 
-- generic repository/bootstrap tooling used by SCAD projects;
-- SCAD-specific project/build tooling;
-- shared OpenSCAD/PythonSCAD runtime infrastructure;
-- templates and reference consumers;
-- reusable `lib.scad.*` libraries;
-- current structured CAD projects;
-- classic CAD projects that still use earlier infrastructure.
-
-See [architecture.md](architecture.md) for the durable architecture and migration-scope rules.
-
-## Two useful views
-
-The portfolio deliberately keeps two different views without maintaining two separate catalog repositories:
+The SCAD/CAD repositories have three main roles:
 
 ```text
-broad portfolio view
-    repositories/catalog.yml + domains/scad/
-    all relevant public current/classic SCAD/CAD repositories
+projects
+    actual designs
 
-controlled integration view
-    a smaller representative set used when shared SCAD tooling is evolved or qualified
+libraries
+    reusable design knowledge
+
+tooling
+    shared build/project infrastructure
 ```
 
-The controlled integration set is a testing/coordination concept, not a second repository inventory. New cross-project qualification or migration work is planned under [`../../migrations/`](../../migrations/) and implemented in the owning repositories.
+A project can use one or more libraries and the shared tooling, but it still owns its own design and documentation.
 
-## Source-of-truth boundaries
+For example, the current HUB75 display-frame project uses shared SCAD tooling and can reuse panel geometry from `lib.scad.hub75`, while the frame design itself stays in the project repository.
 
-`brainboxemb.meta` owns:
+## Current and classic projects
 
-- the public repository catalog and stable classification;
-- portfolio-level SCAD architecture and navigation;
-- cross-project migration coordination.
+The collection contains both newer projects using the current shared project setup and older projects using the earlier setup.
 
-Individual repositories own their source/geometry, configuration and actual dependency versions, releases/tags, tests and verification, generated evidence, and project-specific design documentation.
+We call the older setup **classic**. That label is descriptive, not a judgement: a classic project can still be perfectly usable and does not need to be migrated unless there is a reason to do so.
 
-A normal project depends directly on the tooling and libraries it needs. `brainboxemb.meta` is an information and coordination layer, not a runtime dependency.
+See [Projects](projects.md) for the readable list and the [repository catalog](../../repositories/README.md) for the complete public inventory.
 
-## Historical consolidation
+## Where should I make a change?
 
-The current view combines responsibilities that were previously split across `tech.scad` (broad catalog/landscape) and `meta.scad-projects` (controlled integration and cross-project planning). Those repositories may be retained privately as archive history, but current public guidance must not require access to them.
+A useful rule is:
+
+- change a **specific design** in its project repository;
+- change **reusable geometry** in the library repository that owns it;
+- change **shared build/project behaviour** in the relevant tooling repository;
+- update this section when the overview or navigation between repositories changes.
+
+`brainboxemb.meta` explains the collection; normal projects do not need this repository in order to build.
+
+## Historical note
+
+The broad SCAD overview used to live in `tech.scad`, while cross-project SCAD coordination lived in `meta.scad-projects`. Their useful public overview has been consolidated here; both older repositories are now private archives.

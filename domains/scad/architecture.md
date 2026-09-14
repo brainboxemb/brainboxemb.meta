@@ -1,32 +1,36 @@
-# SCAD landscape architecture
+# SCAD technical architecture
 
-## Overview layers
+This page is the more technical follow-up to the [SCAD overview](README.md). You only need it when you want to understand the different project setups, CAD engines and how shared tooling changes are scoped.
 
-The portfolio needs two different views of the SCAD ecosystem, but they do not need separate catalog repositories.
+For a simple list of projects, libraries or tools, use the overview pages instead.
 
-### Broad portfolio view
+## Two ways to look at the SCAD repositories
 
-The broad view is owned by:
+There is one broad portfolio view and, when shared tooling is being changed, sometimes a smaller test set.
+
+### The full public SCAD/CAD collection
+
+The public collection is described by:
 
 ```text
 repositories/catalog.yml
-    canonical public repository membership and stable classification
+    public repository list and classification
 
 domains/scad/
-    durable SCAD-specific architecture and navigation
+    readable SCAD/CAD guide
 ```
 
-It includes both current and classic project infrastructure, reusable libraries, shared tooling and actual user CAD projects.
+This includes current and classic projects, reusable libraries and shared tooling.
 
-### Controlled integration view
+### A smaller test set for shared tooling
 
-A smaller controlled set is used to evolve and qualify the current shared SCAD stack. It may contain generic bootstrap tooling, runtime verification, SCAD project tooling, a reference consumer and representative library/real-consumer integration.
+A tooling migration does not need every CAD project as a test consumer. It can use a smaller representative set containing the relevant tool, a reference/template consumer and one or more real consumers.
 
-That controlled set must not become a second complete CAD-project inventory. Active cross-project plans and qualification evidence belong in `brainboxemb.meta/migrations/`; implementation evidence remains in the repositories that own the implementation.
+That test set is not a second repository catalog. It exists only for the migration or qualification work that needs it.
 
-## Project-infrastructure generations
+## Newer and older project setups
 
-Keep current and classic infrastructure explicit.
+The SCAD/CAD collection currently contains several generations of project setup.
 
 ```text
 classic standalone
@@ -34,93 +38,69 @@ classic standalone
     no shared project workflow
 
 classic shared-actions
-    project CAD source
+    project source
         -> brainboxemb.github.actions
-        -> shared OpenSCAD setup/render/export workflow
 
 current
-    structured SCAD project
-        -> tool.git-project        generic bootstrap/dependency layer
-        -> tool.scad-project       SCAD project/build/verification layer
-        -> docker.scad-toolchain   OpenSCAD/PythonSCAD runtime
+    structured project
+        -> tool.git-project
+        -> tool.scad-project
+        -> docker.scad-toolchain
 ```
 
-`brainboxemb.github.actions` remains relevant while classic consumers still use it. Classic describes the project generation; it does not mean the tooling or project can be removed.
+**Classic** describes an older setup. It does not mean the project or tooling can simply be removed.
 
-The current-generation diagram describes the intended ownership boundary. Actual adoption is repository-specific: inspect the repository before claiming that it has migrated to a particular bootstrap/tooling contract.
+The current diagram describes the intended shared setup. A repository itself remains the best place to check exactly which tool versions it currently uses.
 
-## Engine and infrastructure are separate
+## CAD engine and project setup are different things
 
-Do not conflate the CAD engine with project infrastructure.
+The CAD engine tells you what actually evaluates the design:
 
-```text
-engine
-    OpenSCAD
-    PythonSCAD
-    both
+- OpenSCAD;
+- PythonSCAD;
+- or both.
 
-project infrastructure
-    classic standalone
-    classic shared-actions
-    current tool.scad-project generation
-```
+The project setup tells you how the repository is organised and built:
 
-A repository name such as `.cad.` is not evidence of an engine.
+- classic standalone;
+- classic shared-actions;
+- current shared project tooling.
 
-For OpenSCAD, actual `.scad` project source or an OpenSCAD build invocation is direct evidence. For PythonSCAD, a generic `.py` file is insufficient; use PythonSCAD-specific source/API usage, explicit project configuration or build/render invocation.
+Do not infer the engine only from a repository name. Actual source or build configuration is better evidence.
 
-## Dependency rule
+## Projects use their dependencies directly
 
-A project depends directly on the tooling and libraries it needs.
+A project includes the tools and libraries it actually needs. It does not use `brainboxemb.meta` as a runtime dependency.
 
-Conceptually, a current consumer looks like:
+Conceptually:
 
 ```text
 project
-    ├── tools/tool.git-project
-    ├── tools/tool.scad-project
-    └── dsg/.../ext/lib.scad.*
+    ├── shared project tooling
+    └── reusable libraries it needs
 ```
 
-It must not depend on `brainboxemb.meta` or a catalog repository to obtain those dependencies.
+For example, a HUB75 project can use `lib.scad.hub75` directly without going through this meta repository.
 
-Classic projects may continue to use `brainboxemb.github.actions` directly until an explicit project-specific migration is chosen.
+## Choosing which projects a tooling change affects
 
-## Migration-scope rule
+When a change is specifically about the current shared SCAD stack, start from repositories classified as current-generation projects in the public catalog.
 
-For generic current-stack migrations, start from the canonical catalog and repositories classified with:
+Classic projects are not automatically included. Migrating one of them should be an explicit project decision, not a side effect of a generic tooling change.
 
-```yaml
-project_infrastructure:
-  generation: current
-```
+A migration may still test a smaller representative subset rather than every current project.
 
-Do not infer that every CAD repository participates merely from its name or language.
+## Where information should live
 
-Repositories classified as `classic` remain outside a generic current-stack migration unless a separate project-specific migration explicitly includes them.
+Use this rule of thumb:
 
-A controlled integration/qualification set may be smaller than the broad current-generation candidate set. That is intentional.
+- **project repository** — the actual design, dimensions, project configuration and project-specific documentation;
+- **library repository** — reusable geometry/API, library tests and releases;
+- **tool repository** — shared build/project behaviour implemented by that tool;
+- **brainboxemb.meta** — overview, navigation, common explanations and cross-project migration records.
 
-## Source-of-truth boundaries
+This keeps the meta repository useful as a guide without turning it into a copy of every project's documentation.
 
-`brainboxemb.meta` owns:
+## Historical note
 
-- public repository membership and stable portfolio classification;
-- broad SCAD architecture and navigation;
-- repository-spanning migration plans and retained cross-project evidence.
-
-Individual repositories own:
-
-- source code and geometry;
-- project configuration;
-- actual dependency pins/adoption state;
-- releases/tags;
-- tests and verification;
-- detailed technical/design documentation;
-- generated artifacts/evidence.
-
-Shared tool repositories own their implementation contracts. The meta layer describes boundaries and coordinates migration; it does not absorb tool implementation.
-
-## Historical origin
-
-The current architecture consolidates ideas that were previously maintained in separate public `tech.scad` and `meta.scad-projects` repositories. Their useful rules and current status have been transferred here; those old repositories can therefore become private archives without being required for current public understanding.
+The broad SCAD overview was originally kept in `tech.scad`, while a smaller current-stack integration view was coordinated through `meta.scad-projects`. Those useful concepts have been consolidated here; both older repositories are now private archives.

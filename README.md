@@ -1,91 +1,68 @@
 # brainboxemb.meta
 
-`brainboxemb.meta` is the landing page and technical guide for the public brainboxemb repositories.
+This repository is the **map of the public brainboxemb repositories**.
 
-If you arrive here without knowing the repository structure yet, this is the place to discover **what exists, how projects are organised, which shared tools they use, where generated output goes, and what cross-project changes are currently being worked on**.
+Use it when you want to understand what projects and tools exist, how they relate to each other, and where to look for more detail.
 
-The individual repositories remain the source of truth for their own implementation. This repository connects them and explains the common model.
+You do not need this repository to build a project. Each project, library and tool still lives in its own repository.
 
-## Where do I start?
+## What are you looking for?
 
-### I want to see the projects and tools
+### Projects and repositories
 
-Start with the [public repository catalog](repositories/README.md). It groups the public repositories by role and records stable information such as domain, lifecycle and whether a project uses the current or classic infrastructure generation.
+Start with the [repository overview](repositories/README.md) or the live [dashboard](dashboard/README.md).
 
-For live operational information such as workflow health, pull requests and recent activity, use the [dashboard](dashboard/README.md). The dashboard reads current state from GitHub rather than duplicating it in maintained documentation.
+The repository overview explains the stable roles of projects, tools, libraries, templates and experiments. The dashboard shows changing GitHub information such as workflow health and pull requests.
 
-### I want to understand how a normal project works
+### SCAD / CAD
+
+Go to [SCAD and CAD](domains/scad/README.md).
+
+There you can browse separately through:
+
+- [projects](domains/scad/projects.md);
+- [reusable libraries](domains/scad/libraries.md);
+- [tooling and templates](domains/scad/tooling.md).
+
+### How projects are organised
 
 Read [How brainboxemb projects are organised](docs/working-model/projects.md).
 
-That page explains the current project model in practical terms: what belongs in a project repository, what is provided by shared tooling, how dependencies are pinned, and why generated build/verification output is kept separate from source.
+That page explains the common project structure in practical terms and points to the reference projects for SCAD and Java.
 
-The small reference projects are useful concrete examples:
+### Shared tooling
 
-- [`template.scad-project`](https://github.com/brainboxemb/template.scad-project) for current SCAD/CAD projects;
-- [`template.java-project`](https://github.com/brainboxemb/template.java-project) for current Java projects.
+Use the [technical guide](docs/README.md) when you want to understand how shared tooling, generated output, versions and releases work.
 
-Older projects can still use the classic infrastructure. “Classic” means not yet migrated to the current shared project stack; it does not mean the project is invalid or automatically scheduled for migration.
+The implementation details stay in the tool repositories themselves.
 
-### I want to understand the shared tooling
-
-The [technical guide](docs/README.md) explains the common infrastructure without requiring you to read the implementation repositories first.
-
-Useful entry points are:
-
-- [Repository tooling boundaries](docs/architecture/repository-tooling.md) — what `tool.git-project`, domain tools and project repositories each own;
-- [Generated output and publication](docs/working-model/generated-output.md) — how review, production and release output is published without mixing generated files into source;
-- [Versioning and releases](docs/working-model/versioning-and-releases.md) — how independently versioned repositories consume released tooling and exact dependency locks.
-
-The generic repository layer is provided by `tool.git-project`. Domain-specific behaviour stays in domain tools such as `tool.scad-project`, `tool.java-project` and `tool.eng-docs`.
-
-### I want domain-specific information
-
-Use the [`domains/`](domains/) area. The SCAD section currently contains the most developed domain overview and explains the current SCAD ecosystem, current-versus-classic infrastructure and the relationship between projects, libraries and tooling.
-
-Domain documentation here is intentionally broader than one project. Detailed component design or implementation documentation remains in the repository that owns it.
-
-### I want to know what is changing now
+### Current cross-project work
 
 Read [STATUS.md](STATUS.md).
 
-That page is about **current cross-project work**, not about the whole purpose of this repository. It separates completed foundations, active work, deferred improvements and proposed migrations.
+This is intentionally separate from the general documentation. It tells you whether a repository-spanning migration is active, what is deferred, and which plans are only proposals.
 
-Repository-spanning changes that need coordinated work live under [migrations/](migrations/README.md). A migration can be documented before it is activated; a plan marked **proposed / inactive** must not start automatically.
+### Experiments
 
-### I want to understand why a technical choice was made
+The [experiments section](experiments/README.md) explains which separate experiment repositories were used to investigate technical choices.
 
-Experiments stay in their own repositories so evidence and temporary test code do not become production dependencies. The [`experiments/`](experiments/README.md) section records what those experiments investigated and which decisions they support.
+## How the collection is organised
 
-## How the repository collection fits together
+Most repositories have one clear role:
 
-The public repositories broadly fall into a few roles:
+- **projects** contain the actual product or design work;
+- **libraries** contain reusable components or geometry;
+- **tools** provide shared build or repository behaviour;
+- **templates** show the intended setup for a new project;
+- **experiments** test an idea without becoming a normal project dependency;
+- **brainboxemb.meta** provides the overview, shared guidance, dashboard and cross-project migration records.
 
-- **projects** contain the actual CAD, software or other product work;
-- **libraries** provide reusable domain components;
-- **tools** provide shared repository or domain behaviour;
-- **templates** are small reference consumers that demonstrate the intended current setup;
-- **experiments** test architectural or tooling choices without becoming normal dependencies;
-- **brainboxemb.meta** provides the overview, common technical guidance, catalog, dashboard and cross-project migration coordination.
+If you want to change a specific project, start in that project's own repository. If you want to change shared behaviour, start in the tool or library that owns it.
 
-This separation is deliberate. A project should not need `brainboxemb.meta` to build, and this repository should not absorb implementation details merely because several projects use the same tool.
+## Public scope
 
-## Generated output is part of the workflow
+This repository describes the **public** brainboxemb repository collection.
 
-Many repositories publish generated results separately from their source branches. A pull request can have review output under `dev/pr-N/...`, the current main revision under `prod/...`, and releases under `rel/vX.Y.Z/...`.
+The machine-readable list is [`repositories/catalog.yml`](repositories/catalog.yml). It feeds the dashboard and is kept separate from changing GitHub status.
 
-This makes renders, binaries, verification evidence and assembled documentation inspectable without committing generated files into normal source history. The detailed model is described in [Generated output and publication](docs/working-model/generated-output.md).
-
-## Repository catalog and dashboard
-
-[`repositories/catalog.yml`](repositories/catalog.yml) is the canonical catalog for the public repository set. It stores stable classification and intent.
-
-Live state is deliberately not copied into that file. The dashboard obtains changing information directly from GitHub and uses the central catalog only to know which repositories and classifications to present.
-
-## Scope
-
-This repository covers the **public** brainboxemb repository collection.
-
-Individual repositories remain authoritative for their own code, releases, project-specific architecture, tests and local plans. `brainboxemb.meta` provides the map and the common technical context around them.
-
-For maintenance/agent guidance, see [AGENTS.md](AGENTS.md).
+For automated-agent maintenance instructions, see [AGENTS.md](AGENTS.md).

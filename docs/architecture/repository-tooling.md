@@ -1,164 +1,71 @@
-# Repository tooling boundaries
+# How the shared tools fit together
 
-## Purpose
+Several brainboxemb projects use the same repository and build tooling. The tools are split up so a SCAD project, a Java project and an engineering-document project can share generic behaviour without all using the same build system.
 
-Public brainboxemb repositories use multiple layers because generic repository lifecycle, domain execution and project implementation have different owners.
+## The short version
 
-The key rule is:
+There are three practical layers:
 
-> Generic repository concerns belong in generic repository tooling; domain semantics stay with domain tooling; project-specific behavior stays with the project.
-
-`brainboxemb.meta` coordinates those boundaries but is not a runtime dependency of normal consumers.
-
-## Ownership model
+1. **generic repository tooling** — things that are useful for many project types;
+2. **domain tooling** — behaviour specific to SCAD, Java, documents, or another domain;
+3. **the project itself** — the actual product/design source and project-specific choices.
 
 ```text
-brainboxemb.meta
-    cross-project architecture
-    repository catalog/classification
-    migration coordination/evidence
-    shared working conventions
-
-        ↓ describes / coordinates
-
-tool.git-project
-    generic Git/bootstrap/dependency lifecycle
-    optional Moon repository orchestration integration
-    generic generated-output publication/cleanup
-    generic repository lifecycle evidence where domain-neutral
-
-        ↓ dispatches / composes
-
-domain tooling
-    tool.scad-project
-    tool.java-project
-    tool.eng-docs
-    ...
-
-        ↓ owns domain semantics
-
-consumer repository
-    product/project source
-    project-specific configuration
-    project-specific verification/release details
-    exact dependency locks
+project
+    ├── generic repository tooling
+    └── domain-specific tooling
 ```
 
-## `tool.git-project`
+`brainboxemb.meta` only explains and connects these repositories. A normal project does not need this meta repository to build.
 
-`tool.git-project` is the generic repository-infrastructure owner for current-generation repositories.
+## Generic repository tooling
 
-It owns concerns that are not specific to CAD, Java or documents, including where adopted:
+[`tool.git-project`](https://github.com/brainboxemb/tool.git-project) provides common repository behaviour such as project setup, dependency handling and shared repository tasks.
 
-- bootstrap of the generic tooling gitlink;
-- generic `project.yml` validation;
-- dependency/submodule registration, status and intentional updates;
-- exact committed gitlink restoration;
-- optional Moon runtime/bootstrap integration;
-- high-level repository task invocation boundaries;
-- generated-output lifecycle namespaces;
-- publication/cleanup mechanics that are domain-neutral.
+It should stay useful across different project types. It therefore does not need to understand how OpenSCAD targets, Maven modules or document assembly work internally.
 
-Its Git bootstrap/status/update core must stay usable without requiring domain tooling.
+## Domain-specific tools
 
-It must not learn domain semantics such as Maven reactor behavior, SCons target decisions or engineering-document producer logic.
-
-## Domain tooling
-
-Domain owners keep concrete execution semantics.
+Domain tools contain the behaviour that really is specific to that type of project.
 
 Examples:
 
-```text
-tool.scad-project
-    SCAD configuration
-    SCons target discovery/execution
-    build/design/verification semantics
-    structured target-decision evidence
+| Tool | What it is for |
+| --- | --- |
+| [`tool.scad-project`](https://github.com/brainboxemb/tool.scad-project) | SCAD project configuration, builds, renders, exports and verification. |
+| [`tool.java-project`](https://github.com/brainboxemb/tool.java-project) | Java/Maven build and test behaviour. |
+| [`tool.eng-docs`](https://github.com/brainboxemb/tool.eng-docs) | Engineering-document assembly. |
 
-tool.java-project
-    Java/Maven execution
-    test/build evidence
-    Java-specific version/build behavior
+This split keeps shared repository tasks reusable while leaving specialist behaviour with the tool that understands it.
 
-tool.eng-docs
-    generic engineering-document manifest/assembly behavior
-    document-specific producer/assembly contracts
-```
+## What stays in the project?
 
-Moon or another repository-level orchestrator may decide whether a meaningful high-level domain stage executes or is hydrated, but it does not replace the domain engine.
+The project repository owns the things that are specific to that project, including:
 
-## Consumer ownership
+- product/design source;
+- project configuration;
+- project-specific tests or verification;
+- project documentation;
+- the exact dependency versions currently accepted by the project.
 
-A consumer repository owns:
+If a change only matters to one project, it normally belongs there rather than in a central tool.
 
-- authored product/project source;
-- project-specific architecture and plans;
-- exact dependency locks committed in the repository;
-- project-specific configuration;
-- project-specific verification semantics not provided by a reusable domain owner;
-- product-specific release metadata/assets when needed.
+## Libraries are separate again
 
-Cross-project migration work must not move this implementation detail into `brainboxemb.meta`.
+A reusable library is neither generic tooling nor a project. It contains reusable design or software components that a project can consume directly.
 
-## Direct dependency rule
+For the SCAD examples, see [Reusable SCAD libraries](../../domains/scad/libraries.md).
 
-A repository initializes and manages its **direct dependencies**. Consuming a library does not imply recursively materializing every development-only dependency of that library.
+## Current and classic projects
 
-Conceptually:
+Newer repositories use the current shared project setup. Older CAD repositories can still use the previous GitHub Actions setup or be completely standalone.
 
-```text
-project standalone
-    restores its direct tooling/libraries
+We call those older setups **classic**. Classic projects remain valid and are not automatically migrated just because newer tooling exists.
 
-library consumed by project
-    is consumed at its committed interface
-    does not automatically pull its standalone development toolchain
+The [repository overview](../../repositories/README.md) records which setup a repository uses where that classification is known.
 
-library standalone
-    restores its own direct development/tooling dependencies
-```
+## More detail
 
-This keeps normal consumers smaller while preserving standalone reproducibility.
+For the practical project layout, see [How brainboxemb projects are organised](../working-model/projects.md).
 
-## Dependency policy versus exact lock
-
-Current-generation repositories distinguish intent from the exact accepted commit:
-
-```text
-project.yml ref
-    policy used by an intentional dependency update
-
-Git submodule gitlink
-    exact commit used by normal clone/bootstrap/build
-```
-
-A normal bootstrap restores committed locks. It must not silently advance a dependency merely because its configured policy points to a newer tag/branch.
-
-## Current and classic project infrastructure
-
-Do not infer migration scope from repository names or from the CAD engine used.
-
-The canonical classification is in `repositories/catalog.yml`, including where applicable:
-
-```yaml
-project_infrastructure:
-  generation: current
-  provider: tool.scad-project
-```
-
-or:
-
-```yaml
-project_infrastructure:
-  generation: classic
-  provider: brainboxemb.github.actions
-```
-
-A classic project is still a valid project. Shared-stack work does not automatically migrate it.
-
-## Meta boundary
-
-`brainboxemb.meta` is a coordination and observation layer.
-
-It may define shared architecture, migration ordering and evidence requirements, but normal project execution must not require checking out `brainboxemb.meta` as a runtime dependency.
+For generated output and the `dev/`, `prod/` and `rel/` locations, see [Generated output and publication](../working-model/generated-output.md).
