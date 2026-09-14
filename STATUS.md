@@ -6,23 +6,27 @@ It is not the general overview of the brainboxemb repository collection. For tha
 
 ## Active now
 
-### Migration 001 — consolidate public portfolio context into `brainboxemb.meta`
+There is currently **no active cross-project migration**.
 
-**Status: final qualification pending.**
+### Migration 001 — public portfolio consolidation
 
-The substantive consolidation is complete:
+**Status: complete.**
 
-- the dashboard is a sub-capability of `brainboxemb.meta`;
-- `repositories/catalog.yml` is the canonical public repository catalog;
-- durable SCAD landscape knowledge formerly owned by `tech.scad` lives under `domains/scad/`;
-- durable cross-project project/tooling conventions formerly coordinated through `meta.scad-projects` live under `docs/` and the migration records here;
-- relevant open work was completed, transferred or explicitly deferred;
-- `tech.scad` and `meta.scad-projects` are now both **private and archived**;
-- both private repositories have been removed from the public-only catalog in the current closeout change.
+Migration 001 established `brainboxemb.meta` as the public landing page, technical guide, canonical public repository catalog, domain overview, migration/evidence location and dashboard host.
 
-The only remaining Migration-001 gate is to qualify the dashboard/Pages output against the resulting **27-public-repository** catalog and record that exact-main evidence.
+Final qualification evidence:
 
-Tracking: issues #11, #25 and #32.
+- exact main commit: `e0104cb4e558c0fc10d7c20f6f4140a71f32cde8`;
+- Deploy run: `34863909122`;
+- 28 dashboard tests: success;
+- runtime config: `27 repositories in 6 groups`;
+- dashboard generation: 27 repositories;
+- Pages artifact upload: success;
+- Pages deployment: success.
+
+The two superseded source repositories, `tech.scad` and `meta.scad-projects`, are both private and archived and are no longer part of the public catalog.
+
+See [`migrations/001-brainboxemb-meta/`](migrations/001-brainboxemb-meta/) for retained migration evidence.
 
 ## Recently completed foundations
 
@@ -41,7 +45,7 @@ The old phrase **“Step 2.5 core complete” is intentionally not used as curre
 
 ## Deferred, not blocking
 
-These remain valid follow-ups and are independent from Migration 001:
+These remain valid follow-ups and are not active migrations:
 
 - **Physical-verification document bundles** — issue #18.
 - **Explicit cross-project release request/version preparation** — issue #20.
@@ -57,6 +61,6 @@ Purpose: add a post-build audit in `tool.scad-project` that checks whether obser
 
 It does not redesign SCons, implement physical-verification document bundles, introduce a second build engine or broadly migrate consumers.
 
-Migration 002 does **not** activate automatically when Migration 001 closes. Its assumptions must first be rechecked against the then-current `tool.scad-project` implementation and it requires an explicit activation decision.
+Migration 002 requires an explicit activation decision. Before activation, its assumptions must be rechecked against the current `tool.scad-project` implementation.
 
 See [`migrations/002-scad-build-decision-audit/README.md`](migrations/002-scad-build-decision-audit/README.md) and activation-gate issue #26.
