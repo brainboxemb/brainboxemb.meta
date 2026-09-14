@@ -15,9 +15,9 @@ repositories:
   - repository: brainboxemb/tech.scad
     category: ecosystem-engineering
     domain: scad
-    lifecycle: current
+    lifecycle: superseded
     dashboard_group: Coordination
-    role: Broad SCAD landscape/catalog source being consolidated into brainboxemb.meta.
+    role: Historical SCAD landscape/catalog source; current catalog and SCAD domain knowledge are owned by brainboxemb.meta.
 
   - repository: brainboxemb/meta.scad-projects
     category: ecosystem-engineering
