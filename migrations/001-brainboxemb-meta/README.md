@@ -1,6 +1,6 @@
 # Migration 001 — Consolidate public coordination into brainboxemb.meta
 
-Status: **active — Phase 5B durable coordination conventions**
+Status: **active — final archival/private closeout**
 
 Tracking issue: [#11](https://github.com/brainboxemb/brainboxemb.meta/issues/11)
 
@@ -8,11 +8,13 @@ Phase-5 umbrella: [#25](https://github.com/brainboxemb/brainboxemb.meta/issues/2
 
 Evidence: [evidence.md](evidence.md)
 
+Phase-5 closeout summary: [phase5-meta-scad-closeout.md](phase5-meta-scad-closeout.md)
+
 Current plain-language status: [`../../STATUS.md`](../../STATUS.md)
 
 ## Goal
 
-Turn `brainboxemb.meta` into the portfolio-level coordination and overview source for public brainboxemb repositories while preserving productive operation throughout the migration.
+Turn `brainboxemb.meta` into the portfolio-level landing page, technical guide, repository overview and coordination source for public brainboxemb repositories while preserving productive operation throughout the migration.
 
 The migration consolidates responsibilities originally split across:
 
@@ -22,15 +24,15 @@ tech.scad               broad SCAD catalog and landscape documentation
 meta.scad-projects      SCAD cross-project architecture and migration coordination
 ```
 
-The result should reduce duplicated sources without turning `brainboxemb.meta` into the implementation owner of every project.
+The result reduces duplicated sources without turning `brainboxemb.meta` into the implementation owner of every project.
 
 ## Non-goals
 
-This migration does **not** migrate private repositories, rewrite individual project plans into meta, modernize every legacy project, implement deferred SCAD/tooling improvements, absorb experiment code, or resume old roadmap steps merely because they remain in historical documentation.
+This migration does **not** migrate private projects, rewrite individual project plans into meta, modernize every legacy project, implement deferred SCAD/tooling improvements, absorb experiment code, or resume old roadmap steps merely because they remain in historical documentation.
 
 ## Ownership boundary
 
-`brainboxemb.meta` owns public catalog/classification, cross-project architecture/conventions, repository-spanning migration coordination/evidence, domain overview and dashboard/status presentation.
+`brainboxemb.meta` owns the public landing page, repository catalog/classification, shared technical guidance, domain-level overviews, repository-spanning migration coordination/evidence and dashboard/status presentation.
 
 Individual repositories continue to own implementation, project-specific plans/issues, releases, tests and detailed technical design.
 
@@ -91,9 +93,9 @@ Evidence:
 
 ## Phase 5 — Transfer meta.scad-projects coordination
 
-Status: **active, split into bounded slices**
+Status: **coordination transfer complete; final visibility/catalog closeout remains**
 
-The repository-build transition in the old meta repository is already complete. Phase 5 therefore does **not** copy its old roadmaps wholesale or present completed work as still active.
+The repository-build transition in the old meta repository was already complete. Phase 5 therefore did not copy old roadmaps wholesale or present completed work as still active.
 
 ### 5A — readable current status
 
@@ -101,43 +103,49 @@ Status: **complete** — issue #27 / PR #35.
 
 Result:
 
-- `STATUS.md` is now the primary current-work entry point;
-- completed, deferred and proposed work are separated explicitly;
-- “Step 2.5 core complete” is no longer the current headline;
-- Migration 002 exists as a proposed/inactive plan with an explicit activation gate.
+- `STATUS.md` became the current-change status entry point;
+- completed, deferred and proposed work were separated explicitly;
+- “Step 2.5 core complete” was retired as current headline wording;
+- Migration 002 was created as a proposed/inactive plan with an explicit activation gate.
 
-### 5B — durable SCAD coordination conventions
+### 5B — durable technical conventions
 
-Status: **active** — issue #30.
+Status: **complete** — issue #30 / PR #36, followed by reader-oriented landing-page correction PR #37.
 
-Move only cross-project rules that are still current.
+Current public guidance now covers:
 
-Current destination structure:
+- how projects are organised;
+- repository/tool/domain ownership boundaries;
+- `tool.git-project` generic responsibilities;
+- current/classic project-infrastructure classification;
+- generated-output publication namespaces;
+- producer/materialization/publication evidence separation;
+- version/release interface rules.
 
-```text
-docs/architecture/repository-tooling.md
-docs/working-model/generated-output.md
-docs/working-model/versioning-and-releases.md
-domains/scad/
-repositories/catalog.yml
-```
-
-This captures ownership boundaries, `tool.git-project` responsibilities, current/classic migration scope, generated-output publication namespaces, evidence identity separation and stable version/release interface rules without copying historical plans wholesale.
+The root README now treats migration coordination as one part of the repository rather than its entire purpose.
 
 ### 5C — active issue transfer and source redirect
 
-Status: **planned** — issue #31.
+Status: **complete** — issue #31.
 
-- finish transferring still-relevant coordination issues with origin links;
-- close source issues whose work is complete or superseded;
-- update `meta.scad-projects` README/agent guidance to point current coordination here;
-- retain detailed historical documents/evidence until archival.
+- all old open coordination issues were completed, superseded or recreated as current/deferred work in `brainboxemb.meta`;
+- `meta.scad-projects` PR #44 redirected README/AGENTS to the new owner;
+- old repository redirect merge: `6071b21c247359e5fd40b610020494d82b5699ab`;
+- essential public current-state/evidence summary is retained in [phase5-meta-scad-closeout.md](phase5-meta-scad-closeout.md), so public readers do not need access to the old repository after it becomes private.
 
-### 5D — consolidation closeout / archival readiness
+### 5D — archival/private closeout
 
-Status: **planned** — issue #32.
+Status: **active — waiting for owner visibility action** — issue #32.
 
-Verify no current coordination responsibility still depends on the old meta repositories, then complete Migration 001 and prepare superseded repositories for archival.
+The owner intends to archive and make `meta.scad-projects` private.
+
+After that external GitHub setting change:
+
+1. remove `meta.scad-projects` from `repositories/catalog.yml` because the catalog is public-only;
+2. regenerate/qualify the dashboard against the remaining public repository set;
+3. verify no public current documentation depends on the private source;
+4. close Migration 001;
+5. leave Migration 002 proposed/inactive until explicitly activated.
 
 ## Proposed next work after Migration 001
 
@@ -151,10 +159,10 @@ Physical-verification document bundle integration is a separate deferred follow-
 
 Migration 001 is complete when:
 
-- `brainboxemb.meta` is the clear entry point for public cross-project coordination;
+- `brainboxemb.meta` is the clear public landing page and technical guide;
 - one canonical public repository catalog drives the overview/dashboard;
 - dashboard functionality and Pages publication remain healthy;
-- durable SCAD domain architecture/conventions have a current owner here;
+- durable shared architecture/conventions have a current owner here;
 - active repository-spanning work has been classified and either transferred, deferred or closed;
-- `meta.scad-projects` no longer owns current coordination work;
-- superseded source repositories can be archived without losing current responsibility or important evidence.
+- `meta.scad-projects` no longer owns current coordination work and is removed from the public catalog after becoming private;
+- superseded-source visibility changes do not break public documentation or dashboard operation.
