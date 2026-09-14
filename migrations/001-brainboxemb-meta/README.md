@@ -1,8 +1,10 @@
 # Migration 001 — Consolidate public coordination into brainboxemb.meta
 
-Status: **active — Phase 1 foundation**
+Status: **active — Phase 2 catalog reassessment**
 
 Tracking issue: [#11](https://github.com/brainboxemb/brainboxemb.meta/issues/11)
+
+Evidence: [evidence.md](evidence.md)
 
 ## Goal
 
@@ -58,7 +60,7 @@ Do not start a later phase just because it exists in this document. Each phase h
 
 ## Phase 1 — Establish the meta foundation
 
-Status: **in progress**
+Status: **complete**
 
 Purpose:
 
@@ -69,14 +71,21 @@ Purpose:
 - correct rename-sensitive dashboard configuration;
 - preserve the working dashboard at its current paths.
 
-Must-have evidence:
+Completion evidence:
 
-- dashboard unit tests still pass;
-- Deploy workflow still runs successfully after merge;
-- root documentation no longer describes the repository as only a dashboard;
-- dashboard-specific guidance remains available under `dashboard/`.
+- PR #12 qualified the exact Phase-1 change set;
+- merge commit `62df26489e84dedc9cbd11c7cdf7186e0b78261d` is on `main`;
+- Deploy run `34853241040` passed on that exact commit;
+- dashboard unit tests passed in the Deploy build job;
+- dashboard generation passed;
+- Pages artifact upload and Pages deployment both passed;
+- root documentation now describes the portfolio-level meta role;
+- dashboard-specific documentation and agent guidance are preserved under `dashboard/`;
+- dashboard implementation paths were deliberately not moved.
 
-Explicitly deferred:
+See [evidence.md](evidence.md) for retained Phase-1 evidence.
+
+Explicitly deferred by Phase 1:
 
 - moving `src/`, `site/`, `tests/`, `dashboard.yml` or workflows;
 - creating the final canonical catalog;
@@ -84,7 +93,7 @@ Explicitly deferred:
 
 ## Phase 2 — Canonical public repository catalog
 
-Status: **planned; revalidate before execution**
+Status: **next candidate; reassessment in progress**
 
 Goal:
 
@@ -101,6 +110,8 @@ The catalog should own stable facts such as:
 Live workflow status, releases, branch protection, PR counts and similar changing facts should continue to come from GitHub.
 
 Then adapt the dashboard to consume the canonical catalog instead of maintaining a second repository inventory.
+
+Initial reassessment after Phase 1 shows that the existing dashboard collector already consumes a simple `groups[].repositories` structure before reading all live status from GitHub. Therefore Phase 2 should prefer a thin catalog-to-groups input transformation rather than redesigning the status engine.
 
 Completion requires dashboard-equivalent coverage plus tests proving catalog parsing/grouping.
 
