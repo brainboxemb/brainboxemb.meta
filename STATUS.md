@@ -8,7 +8,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### Migration 004 — SCAD repository execution model
 
-**Active.**
+**Active — reflection gate after Step 6.**
 
 The migration aligns current SCAD projects and libraries on one understandable production lifecycle:
 
@@ -50,10 +50,22 @@ Reference-library evidence:
 
 The first released v0.13.1 clamps run `34970821889` was also green but had a ~43.7 s GHCR pull outlier; producer work and publication remained short. The repeated final-head sample demonstrates that the earlier v0.13.0 ~64–65 s regression was caused by serial GitHub job boundaries and is no longer structural.
 
-The next valid cross-project work is therefore:
+Step 6 is **complete and released**: `lib.scad.hub75` PR #23 reconstructed the repository-specific graph instead of copying clamps mechanically. HUB75 retains three real producer domains — `scad.build` for standalone presentation renders, `scad.docs` for generated design documentation and `scad.verify` for API plus physical-verification output — while the physical SQ/testcase content itself remains unchanged.
 
-1. **Next — Step 6 / `lib.scad.hub75`:** re-evaluate its actual repository graph, verification responsibilities, publication/release setup and current pins, then roll out the released single-host production model only where the owner boundaries still fit.
-2. Requalify the HUB75 frame only if the shared/library change materially affects it.
+Second-library evidence:
+
+- final candidate `3f44c90afe8419ff56c76bdc9806c9887c46f387` passed normal production run `34975967199` with one host job, one explicit SCAD Docker process, current materialization and both PR publications;
+- README-only proof PR #24 / run `34976305647` — `affected=false`; image pull, Docker, staging and publication all skipped;
+- Build-only proof PR #25 / run `34976316887` — direct producer impact only on `scad.build`;
+- docs-only proof PR #26 / run `34976333875` — direct producer impact only on `scad.docs`;
+- Verify-only proof PR #27 / run `34976347095` — direct producer impact only on `scad.verify`;
+- PR #23 merged as exact qualified main `5f2ed2ae3e6901e10c1b14efeed5285bdde779da`;
+- exact-main production run `34976840416` passed and `prod/build` plus `prod/verification` both record that exact source and `tool.scad-project v0.13.1`;
+- release-closeout PR #28 was changelog-only and run `34977045560` proved zero-container behavior;
+- `lib.scad.hub75 v0.1.4` release source is exact main `2eaaa540e3658bd3821eb6ec0f2d0352cbefff48`;
+- release run `34977125016` passed exact-source Build, Verify and finalization; annotated tag `v0.1.4`, immutable `rel/v0.1.4/build` and `rel/v0.1.4/verification`, GitHub Release assets and release-request cleanup all exist.
+
+**Reflection gate:** do not mechanically continue to the HUB75-frame requalification. Before any further Migration 004 rollout, review whether the current Moon task graph and execution/publication model are still proportionate, whether every task boundary has a clear human-readable purpose, and whether the architectural motivation can be reconstructed by a maintainer without relying on agent/chat history. Simplify or document the model before continuing if that test fails.
 
 Tracking issue: #49. Completed performance experiment: #53. See [Migration 004](migrations/004-scad-repository-execution-model/README.md), its [qualification evidence](migrations/004-scad-repository-execution-model/evidence.md), and the retained [Step-5 performance evidence](migrations/004-scad-repository-execution-model/performance-evidence.md).
 

@@ -1,6 +1,6 @@
 # Migration 004 — SCAD repository execution model
 
-Status: **active**
+Status: **active — reflection gate after Step 6**
 
 Tracking issue: [#49](https://github.com/brainboxemb/brainboxemb.meta/issues/49)
 
@@ -24,6 +24,8 @@ The migration uses:
 - publication outside the SCAD container process boundary and only after that process exits.
 
 A key completion criterion is that a README-only or otherwise unaffected change does **not** start the SCAD toolchain container.
+
+A second completion criterion is now explicit after the second-library rollout: the resulting task graph and execution model must be understandable and maintainable by a human without reconstructing design intent from agent/chat history. Migration 004 pauses after Step 6 until that proportionality and documentation review is complete.
 
 ## Progress
 
@@ -138,25 +140,52 @@ See [performance-evidence.md](performance-evidence.md) for the full runtime/life
 
 ### Step 6 — second library qualification
 
-**Next; re-evaluation required before implementation.** Owner candidate: `lib.scad.hub75`.
+**Complete and released.** Owner: `lib.scad.hub75`.
 
-Before changing that repository:
+The repository was reconstructed before implementation rather than copying the clamps graph. HUB75 has three real producer domains:
 
-- inspect its current `AGENTS.md`, main head, tool/dependency pins and current open PRs;
-- reconstruct its actual Build/Verify/documentation/release graph rather than copying clamps or template mechanically;
-- separate Migration 004 execution-model work from the ongoing physical-verification/SQ work;
-- confirm whether its verification inputs can preserve truthful producer independence;
-- identify any HUB75-library-specific outputs or release expectations that do not fit the reference-library graph;
-- retain README-only zero-container, relevant one-container, logical-independence and publication evidence on the released v0.13.1 interface.
+- `scad.build` — standalone front/rear presentation renders under `bld/png`;
+- `scad.docs` — generated design documentation under `bld/design`;
+- `scad.verify` — API verification plus generated physical-verification fixtures and plan images under `vrf/out`.
 
-Do not start the HUB75 frame requalification unless Step 6 shows the shared/library change materially affects that consumer.
+The migration changed repository execution/orchestration only. Existing physical SQ/testcase content and procedures remain library-owned and unchanged.
+
+Qualification evidence:
+
+- final candidate `3f44c90afe8419ff56c76bdc9806c9887c46f387` / run `34975967199` — one host job, one explicit Docker process, all three producer domains, materialization and both publications green;
+- README-only PR #24 / run `34976305647` — zero-container path;
+- Build-only PR #25 / run `34976316887` — direct impact only on `scad.build`;
+- docs-only PR #26 / run `34976333875` — direct impact only on `scad.docs`;
+- Verify-only PR #27 / run `34976347095` — direct impact only on `scad.verify`;
+- PR #23 merge/exact qualified main `5f2ed2ae3e6901e10c1b14efeed5285bdde779da`;
+- exact-main production run `34976840416` — passed; `prod/build` and `prod/verification` both record that exact source and `tool.scad-project v0.13.1`;
+- release-closeout PR #28 / run `34977045560` — changelog-only zero-container path;
+- v0.1.4 exact release source `2eaaa540e3658bd3821eb6ec0f2d0352cbefff48`;
+- release run `34977125016` — exact-source Build and Verify green, immutable release branches, annotated `v0.1.4` tag, GitHub Release assets and release-request cleanup all green.
+
+### Reflection gate — human maintainability and proportionality
+
+**Current next activity; no rollout implementation until complete.**
+
+The migration has accumulated a non-trivial Moon graph and several orchestration/publication concepts. Before deciding whether the HUB75 frame needs requalification, review the current model from a human maintainer's perspective:
+
+- can every Moon task be explained in one short sentence, including why it is separate from its neighbours;
+- is the distinction between producer tasks, source-impact gate, indexes/provenance and publication-ready aggregate documented rather than merely encoded in YAML;
+- are the reasons for Moon versus SCons, preflight versus aggregate execution, and host versus container publication easy to find;
+- are task names and dependency arrows sufficient for a maintainer to predict which tasks are affected by a file change;
+- is any task boundary now historical/accidental complexity that can be collapsed without losing a qualified invariant;
+- can a new maintainer reconstruct the model using repository documentation only, without old chat or agent reasoning.
+
+If the answer is no, simplify or improve the documentation before continuing Migration 004.
+
+Do not start HUB75-frame requalification merely because it was the next numbered item.
 
 ## Reference repositories
 
 - `template.scad-project` — reference project;
-- `lib.scad.clamps` — reference library, Step 5 complete;
-- `lib.scad.hub75` — second library qualification, Step 6 next;
-- `2026-009-01.cad.HUB75-display-frame` — realistic project requalification if needed.
+- `lib.scad.clamps` — reference library, Step 5 complete/released;
+- `lib.scad.hub75` — second library qualification, Step 6 complete/released as v0.1.4;
+- `2026-009-01.cad.HUB75-display-frame` — realistic project requalification only if still justified after the reflection gate.
 
 ## Owner sequence
 
@@ -164,12 +193,12 @@ Do not start the HUB75 frame requalification unless Step 6 shows the shared/libr
 2. `template.scad-project` — correct the Build/Verify task graph — complete;
 3. `tool.scad-project` — initial reusable SCAD production workflow — complete, released as v0.13.0;
 4. `template.scad-project` — qualify the released shared workflow and pre-container skip — complete;
-5. `lib.scad.clamps` — reference library rollout — **complete**;
+5. `lib.scad.clamps` — reference library rollout — complete/released;
    - `tool.git-project` same-job publisher — complete/released as v0.2.7;
    - `tool.scad-project` single-host lifecycle — complete/released as v0.13.1;
-   - clamps released-interface qualification and exact-main publication — complete;
-6. `lib.scad.hub75` — **next**;
-7. HUB75 frame — requalify only when Step 6 shows it is needed.
+6. `lib.scad.hub75` — complete/released as v0.1.4;
+7. **Reflection gate — current.** Decide whether the model is proportionate and human-understandable before any further consumer rollout;
+8. HUB75 frame — requalify only if the reflection and Step-6 impact assessment show it is needed.
 
 Each step must be re-evaluated before implementation. Do not continue merely because it appears in this sequence.
 
