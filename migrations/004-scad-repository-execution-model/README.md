@@ -26,7 +26,7 @@ A key completion criterion is that a README-only or otherwise unaffected change 
 
 ### Step 1 — generic Moon affected preflight
 
-**Complete.** `tool.git-project v0.2.5` provides the released host-side affected decision used before expensive domain jobs. Exact released source: `ce7c81c39ebc70933b4150028aa74d928a53c2ba`.
+**Complete.** `tool.git-project v0.2.5` introduced the released host-side affected decision used before expensive domain jobs. During Step 3 integration, aggregate/upstream affected propagation was found to be incomplete in v0.2.5; that generic correction was qualified and released as `tool.git-project v0.2.6` from `5e004f0cee53648d6b6284b014b26bed502d2da2`.
 
 ### Step 2 — reference task-graph correction
 
@@ -34,9 +34,28 @@ A key completion criterion is that a README-only or otherwise unaffected change 
 
 ### Step 3 — shared SCAD production workflow
 
-**Next.** Owner: `tool.scad-project`.
+**Complete.** Owner: `tool.scad-project`.
 
-Extract the reusable production workflow with a host-side Moon preflight, a conditional single SCAD container job and lightweight publication jobs. Before fixing the checkout contract, qualify Moon 2.5.4 `changed-files --base <sha> --head <sha>` with only the exact base and head commits locally present. The current template is blobless but uses `fetch-depth: 0`; that broad history fetch must not be copied into the new preflight unless the focused qualification proves it is necessary.
+The reusable production workflow is released as `tool.scad-project v0.13.0` from exact main `da57820fdadd7d203091b6818984991f1548408f`.
+
+The final workflow provides:
+
+- a host-side shallow/blobless Moon affected preflight;
+- exact shallow BASE fetching without `fetch-depth: 0`;
+- an optional source-impact `affected_task` separate from the publication-ready execution `aggregate_task`;
+- one conditional SCAD container job;
+- explicit production `MOON_BASE` / `MOON_HEAD` context and conservative missing-base fallback;
+- separate normal and verification SCons caches;
+- generic Moon materialization validation;
+- lightweight Build and Verification publication outside the SCAD container.
+
+Release run `34938168129` and released-tag Test run `34938179069` passed. The reference template qualification proved README-only no-container, representative SCAD-source impact, Verify-only impact and conservative missing-base execution before release.
+
+### Step 4 — released workflow in the reference template
+
+**Next.** Owner: `template.scad-project`.
+
+Start from current template `main`, consume released `tool.scad-project v0.13.0` and qualify the released interface rather than merging the temporary PR-SHA qualification branch. Required evidence still includes cold relevant execution, README-only no-container, Build/Verify independence, representative Build/Verify impact, aggregate production and lightweight publication.
 
 ## Reference repositories
 
@@ -49,8 +68,8 @@ Extract the reusable production workflow with a host-side Moon preflight, a cond
 
 1. `tool.git-project` — generic Moon affected/preflight capability — complete;
 2. `template.scad-project` — correct the Build/Verify task graph — complete;
-3. `tool.scad-project` — reusable SCAD production workflow — next;
-4. `template.scad-project` — qualify the released shared workflow and pre-container skip;
+3. `tool.scad-project` — reusable SCAD production workflow — complete, released as v0.13.0;
+4. `template.scad-project` — qualify the released shared workflow and pre-container skip — next;
 5. `lib.scad.clamps` — reference library rollout and rationale;
 6. `lib.scad.hub75` — second library rollout;
 7. HUB75 frame — requalify when shared changes affect it.
