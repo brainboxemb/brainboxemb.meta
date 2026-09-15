@@ -1,15 +1,17 @@
 # Migration 005 — architecture alternatives and decision
 
-Status: **alternatives evaluated — provisional target selected**
+Status: **historical decision record — selected direction later validated**
 
-The complete target is described in [target-architecture.md](target-architecture.md). This document records which alternatives were considered and why the current direction was selected.
+## Why this document exists
+
+This document records which architecture alternatives were considered and why the shared-policy + coarse-capability model was selected. Read it when you need the decision rationale or want to understand which approaches were explicitly rejected. For the architecture being migrated to, use [05 — Validated target architecture](05-target-architecture.md).
 
 Related:
 
 - [Migration 005 README](README.md)
-- [Architecture reflection](architecture-reflection.md)
-- [Measured evidence](measurements.md)
-- [Resource-efficiency criteria](resource-efficiency.md)
+- [03 — Architecture reflection](03-architecture-reflection.md)
+- [10 — Measured evidence](10-measurements.md)
+- [11 — Resource-efficiency criteria](11-resource-efficiency.md)
 
 ## Starting point
 
@@ -53,7 +55,7 @@ Moon  -> whole capability / cross-run reuse
 SCons -> individual targets inside a SCons-enabled capability
 ```
 
-Migration 005 now has direct evidence that this can work:
+Migration 005 has direct evidence that this can work:
 
 - Moon change-impact analysis correctly avoids the SCAD runtime for unrelated changes;
 - once generated `.pyc` files were removed from task identity, Moon restored a complete documentation capability on a fresh VM with the same stable task hash;
@@ -89,7 +91,7 @@ Those runtime optimizations are valuable but do not solve the human-maintainabil
 
 ## Selected combination: A + B
 
-The provisional target combines the strongest parts of A and B:
+The selected direction combines the strongest parts of A and B:
 
 1. Moon remains the repository-level capability/change/reuse layer.
 2. Moon tasks visible to normal maintainers correspond to real capabilities, not finishing mechanics.
@@ -140,16 +142,16 @@ Migration 005 therefore does not select architecture by stopwatch alone. Candida
 
 Prefer eliminating work over duplicating runners.
 
-## Remaining validation before implementation
+## Validation gate at decision time
 
-The target is provisional until these checks complete:
+The selected target remained provisional until these checks completed:
 
-1. measure warm SCons reuse on a real SCons-enabled HUB75 capability;
-2. measure SCAD image size/layers and realistic image-distribution alternatives;
-3. decide normal-CI retained artifact policy;
-4. test safe concurrent or combined Build/Verification branch publication;
-5. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
-6. show the resulting consumer configuration for clamps and HUB75 and apply the human-understandability test;
-7. estimate both latency and total runner/resource use for the resulting lifecycle.
+1. warm SCons reuse on a real SCons-enabled HUB75 capability;
+2. SCAD image size/layers and realistic image-distribution alternatives;
+3. normal-CI retained artifact policy;
+4. safe concurrent or combined Build/Verification branch publication;
+5. inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
+6. resulting consumer configuration for clamps and HUB75 plus the human-understandability test;
+7. latency and total runner/resource budget.
 
-If these checks do not expose a fundamental contradiction, [target-architecture.md](target-architecture.md) becomes the basis for the implementation plan.
+All of those checks are now complete and retained in the numbered evidence set. Their result is the architecture in [05 — Validated target architecture](05-target-architecture.md).
