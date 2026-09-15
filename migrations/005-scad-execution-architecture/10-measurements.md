@@ -2,15 +2,17 @@
 
 Status: **validation baseline complete; implementation must remeasure final end-to-end results**
 
-This document records measured facts used to select the Migration-005 target. Detailed individual experiments remain in the linked validation documents.
+## Why this document exists
+
+This is the consolidated measurement baseline behind the Migration-005 architecture decision. Read it when you need the actual timings, byte counts, cache behaviour or comparison points used to justify the selected design. Individual experiments remain in the linked validation documents.
 
 Related:
 
-- [SCons warm-cache validation](scons-cache-validation.md)
-- [Runtime image validation](runtime-image-validation.md)
-- [Publication concurrency validation](publication-concurrency-validation.md)
-- [Moon inheritance validation](moon-inheritance-validation.md)
-- [Target resource budget](target-resource-budget.md)
+- [12 — SCons warm-cache validation](12-scons-cache-validation.md)
+- [14 — Runtime image validation](14-runtime-image-validation.md)
+- [16 — Publication concurrency validation](16-publication-concurrency-validation.md)
+- [18 — Moon inheritance validation](18-moon-inheritance-validation.md)
+- [20 — Target resource budget](20-target-resource-budget.md)
 - [Migration 004 performance evidence](../004-scad-repository-execution-model/performance-evidence.md)
 
 ## 1. Migration-004 execution baseline
@@ -239,4 +241,4 @@ Implementation must now remeasure the complete lifecycle on the two canaries:
 1. clamps — full/dual runtime + direct engine;
 2. HUB75 — OpenSCAD-focused runtime + SCons.
 
-Those measurements determine whether the final implementation meets [target-resource-budget.md](target-resource-budget.md) and whether any validated assumption needs correction before downstream migration.
+Those measurements determine whether the final implementation meets [20 — Target resource budget](20-target-resource-budget.md) and whether any validated assumption needs correction before downstream migration.
