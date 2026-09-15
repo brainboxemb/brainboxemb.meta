@@ -13,6 +13,7 @@ Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
 - [Measured evidence](measurements.md)
 - [Architecture alternatives and decision](target-variants.md)
 - [Provisional target architecture](target-architecture.md)
+- [SCons warm-cache validation](scons-cache-validation.md)
 - [Normal publication-path analysis](publication-analysis.md)
 - [Resource-efficiency and compute-cost criteria](resource-efficiency.md)
 
@@ -53,12 +54,30 @@ Therefore Migration 005 treats **feedback latency and total compute/resource use
 
 The original warm-cache failure was caused by our integration: `tools/tool.scad-project/**` included generated Python `__pycache__/*.pyc`, so identical source produced different task hashes on different runners. With bytecode excluded from task identity, Moon kept a stable hash and reported a cached task in about 2 ms.
 
-### SCons is optional, not universal
+### SCons is optional and its target-level reuse is now validated
 
 - clamps uses the default direct engine and does not create a SCons object cache;
-- HUB75 explicitly selects `build_engine: scons` and does populate its normal SCons cache.
+- HUB75 explicitly selects `build_engine: scons`;
+- a controlled exact-source HUB75 rerun restored the ~222 KB normal SCons cache on a fresh hosted VM;
+- both presentation-render targets were restored from SCons cache;
+- all 26 design-documentation targets were restored from SCons cache;
+- presentation Build dropped from about 2.0 s to **0.430 s**;
+- design documentation dropped from about 8.07 s to **0.602 s**;
+- the complete Moon graph dropped from about 8.805 s to **5.071 s**, with Verification (~4.403 s) becoming the remaining real-work critical path.
 
-The lifecycle should therefore restore/save SCons cache only where the configured capability can use it.
+The separate Verification SCons cache was not populated or restored. Cache handling must therefore follow the actual configured engine/capability rather than being enabled generically for every repository.
+
+This validates the intended boundary:
+
+```text
+Moon
+  whole-capability change/reuse decision
+
+SCons, only where configured
+  individual target dependency/reuse inside an executing capability
+```
+
+See [SCons warm-cache validation](scons-cache-validation.md) for the exact run/job evidence.
 
 ### Current consumer Moon configuration exposes too much machinery
 
@@ -158,14 +177,17 @@ If that cannot be answered, the architecture is not finished.
 
 Do **not** migrate the HUB75 frame yet.
 
-Before deriving the implementation plan:
+Completed validation:
 
-1. measure warm SCons reuse on a real HUB75 SCons capability;
-2. measure SCAD image size/layer/distribution options;
-3. decide normal-CI retained artifact policy;
-4. test safe concurrent or combined Build/Verification publication;
-5. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
-6. show the resulting consumer configuration for clamps and HUB75 and run the human-understandability test;
-7. estimate both feedback latency and total runner/resource use for the resulting lifecycle.
+- **warm SCons reuse on a real HUB75 SCons capability — passed.** Target-level reuse is measurable and inexpensive to transfer; generic SCons cache handling for non-SCons capabilities is not justified.
+
+Still required before deriving the implementation plan:
+
+1. measure SCAD image size/layer/distribution options;
+2. decide normal-CI retained artifact policy;
+3. test safe concurrent or combined Build/Verification publication;
+4. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
+5. show the resulting consumer configuration for clamps and HUB75 and run the human-understandability test;
+6. estimate both feedback latency and total runner/resource use for the resulting lifecycle.
 
 If these validations do not reveal a fundamental flaw, the provisional target becomes the implementation architecture and Migration 005 can be broken into owner-specific implementation steps.
