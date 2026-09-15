@@ -70,7 +70,7 @@ Cold run `34938849331` built all reference targets; the later final run restored
 
 ### Step 5 — reference library qualification
 
-**Active; functionally qualified, paused for shared tooling correction.** Owner: `lib.scad.clamps`.
+**Active; functionally qualified, paused for the second shared tooling correction.** Owner: `lib.scad.clamps`.
 
 Draft PR #7 proved the common execution semantics are suitable for the reference library without inventing a dummy Build task. Candidate `bb071329e1d6c764d09f87ecd2cc78d42ac73679` uses released `tool.scad-project v0.13.0`, library-specific `scad.docs` and `scad.verify` producers, one affected gate and one aggregate materialization boundary.
 
@@ -87,7 +87,7 @@ The required before/after measurement exposed a material relevant-change latency
 - released v0.13.0 lifecycle: about **64–65 s** with **one** SCAD container;
 - README-only remains a short host preflight with **zero** SCAD containers.
 
-Experiment #53 is now **complete**. It separated the runtime question from the GitHub workflow-topology question.
+Experiment #53 is **complete**. It separated the runtime question from the GitHub workflow-topology question.
 
 Runtime result:
 
@@ -114,12 +114,18 @@ one host job
 
 The gain comes from removing serial GitHub job/artifact handoffs, **not** from replacing Docker.
 
-Before PR #7 may continue, two shared-owner prerequisites are required:
+The first shared-owner prerequisite is now complete:
 
-1. `tool.git-project` must expose its existing generated-output publication safety contract as a reusable same-job action/script while retaining the current reusable publisher workflow as a thin wrapper, then release it;
-2. `tool.scad-project` must consume that released primitive and release the one-host-job lifecycle with conditional Docker execution, exact-source/materialization validation and the existing conservative fallback.
+- `tool.git-project` PR #24 introduced the reusable same-job generated-output publisher while retaining the artifact-based reusable workflow as a compatibility wrapper;
+- exact main/release source: `6234b7437b0dc0115642468f74d1f4a2c2214bef`;
+- release: `tool.git-project v0.2.7`;
+- release run `34960768652` — passed;
+- tagged same-job verification run `34960782984` — Linux contract, Linux sequential publication and native Windows publication all passed;
+- annotated tag object `6afaa504ae68d2e774eb74e17fb0b27d44d455ef` resolves to the exact release source.
 
-After those releases, Step 5 resumes in `lib.scad.clamps` PR #7 and repeats the retained functional/performance qualification. Step 6 must not start before that is complete.
+The next prerequisite is owned by `tool.scad-project`: consume released v0.2.7 and release the one-host-job lifecycle with conditional Docker execution, exact-source/materialization validation, same-job Build/Verification publication and the existing conservative fallback.
+
+After that release, Step 5 resumes in `lib.scad.clamps` PR #7 and repeats the retained functional/performance qualification. Step 6 must not start before that is complete.
 
 See [performance-evidence.md](performance-evidence.md) for exact runtime/lifecycle measurements and the ownership rationale.
 
@@ -137,8 +143,8 @@ See [performance-evidence.md](performance-evidence.md) for exact runtime/lifecyc
 3. `tool.scad-project` — initial reusable SCAD production workflow — complete, released as v0.13.0;
 4. `template.scad-project` — qualify the released shared workflow and pre-container skip — complete;
 5. `lib.scad.clamps` — reference library rollout — active; paused on the shared single-job prerequisite;
-   - `tool.git-project` same-job generated-output publisher primitive — **next**;
-   - `tool.scad-project` single-host orchestrator workflow — follows after the released publisher primitive;
+   - `tool.git-project` same-job generated-output publisher primitive — **complete, released as v0.2.7**;
+   - `tool.scad-project` single-host orchestrator workflow — **next**;
    - then resume the clamps PR #7 qualification;
 6. `lib.scad.hub75` — blocked until Step 5 completes;
 7. HUB75 frame — requalify when shared changes affect it.
