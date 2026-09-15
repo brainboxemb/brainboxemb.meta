@@ -17,6 +17,7 @@ Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
 - [Runtime image family](runtime-image-family.md)
 - [Runtime image family validation](runtime-image-validation.md)
 - [Normal publication-path analysis](publication-analysis.md)
+- [Normal CI artifact retention policy](normal-ci-artifact-policy.md)
 - [Resource-efficiency and compute-cost criteria](resource-efficiency.md)
 
 The repository documentation is the source of truth. Issue #55 is only the tracker for progress/discussion.
@@ -94,6 +95,14 @@ A controlled two-profile candidate now proves that OpenSCAD-only work does not n
 Both profiles were externally qualified sequentially on one hosted VM. The exact evidence is in [runtime-image-validation.md](runtime-image-validation.md).
 
 Runtime choice must eventually come from the effective project capabilities, not from a repository-name allowlist. Repositories that deliberately expose PythonSCAD capability still require the full profile.
+
+### Normal CI does not need duplicate full-tree Actions artifacts
+
+The normal production workflow currently uploads complete Build and Verification trees as 14-day Actions artifacts and then publishes the same staged trees directly to generated-output branches. No downstream normal workflow was found downloading those artifacts. Release uses its own exact-source artifacts and a real cross-job download in `finalize`.
+
+Migration 005 therefore keeps compact decision/evidence artifacts by default but does not treat complete normal Build/Verification Actions artifacts as mandatory. A future non-publication/download use case should opt in explicitly rather than making every successful normal run upload duplicate output.
+
+See [normal-ci-artifact-policy.md](normal-ci-artifact-policy.md).
 
 ### Current consumer Moon configuration exposes too much machinery
 
@@ -197,13 +206,13 @@ Completed validation:
 
 - **warm SCons reuse on a real HUB75 SCons capability — passed.** Target-level reuse is measurable and inexpensive to transfer; generic SCons cache handling for non-SCons capabilities is not justified.
 - **runtime image family — passed.** The OpenSCAD-focused profile preserves the OpenSCAD contract while reducing compressed transfer by about 27%; the full image remains the tested PythonSCAD-capable superset. Runtime selection should be capability-driven.
+- **normal-CI artifact retention policy — decided.** Keep compact evidence; do not require duplicate complete Build/Verification Actions artifacts for normal successful publication. Release artifacts remain a separate required hand-off.
 
 Still required before deriving the implementation plan:
 
-1. decide normal-CI retained artifact policy;
-2. test safe concurrent or combined Build/Verification publication;
-3. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
-4. show the resulting consumer configuration for clamps and HUB75 and run the human-understandability test;
-5. estimate both feedback latency and total runner/resource use for the resulting lifecycle.
+1. test safe concurrent or combined Build/Verification publication;
+2. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
+3. show the resulting consumer configuration for clamps and HUB75 and run the human-understandability test;
+4. estimate both feedback latency and total runner/resource use for the resulting lifecycle.
 
 If these validations do not reveal a fundamental flaw, the provisional target becomes the implementation architecture and Migration 005 can be broken into owner-specific implementation steps.
