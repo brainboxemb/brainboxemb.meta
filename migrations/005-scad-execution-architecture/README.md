@@ -13,6 +13,7 @@ Working documents:
 - [Measured architecture evidence](measurements.md)
 - [Concrete target-architecture variants](target-variants.md)
 - [Normal publication-path analysis](publication-analysis.md)
+- [Resource-efficiency and compute-cost criteria](resource-efficiency.md)
 
 ## Purpose
 
@@ -58,18 +59,27 @@ Migration 005 must explain in ordinary language:
 11. where the current CI time really goes;
 12. which complexity is essential and which is accidental or historical.
 
-## Performance baseline inherited from Migration 004
+## Performance and resource-efficiency baseline inherited from Migration 004
 
-Architecture decisions must use measured performance, but container count is not a proxy for latency.
+Architecture decisions must use measured performance, but container count is not a proxy for latency and wall-clock time is not the only cost.
 
-| Situation | Relevant/unaffected wall-clock | Heavy SCAD containers | Meaning |
+| Situation | Relevant/unaffected wall-clock | Heavy SCAD runners/containers | Resource interpretation |
 | --- | ---: | ---: | --- |
-| old parallel Build + Verify | about **37 s** relevant critical path | 2 | More total compute, but expensive setup overlaps. |
-| first common v0.13.0 model | about **64–65 s** relevant | 1 | Clear serialization regression. |
-| final v0.13.1 model | about **41–45 s** relevant | 1 | Less duplicated compute, but still slower than old relevant baseline. |
-| final README-only path | about **4.4–4.8 s** | 0 | Clear win: expensive CAD runtime is never started. |
+| old parallel Build + Verify | about **37 s** relevant critical path | 2 parallel heavy jobs | Fast feedback because setup overlaps, but approximately doubles heavy VM/container setup and compute during the overlap. |
+| first common v0.13.0 model | about **64–65 s** relevant | 1 | Lower concurrency/compute duplication, but unacceptable serialization latency. |
+| final v0.13.1 model | about **41–45 s** relevant | 1 | Less duplicated compute than the old model, but still slower user feedback. |
+| final README-only path | about **4.4–4.8 s** | 0 | Strong on both axes: fast and almost no heavy CAD compute. |
 
 Representative final `lib.scad.clamps` work shows roughly 20 seconds for SCAD Docker image acquisition versus about five seconds for the Moon output graph itself. Runtime distribution and orchestration therefore deserve at least as much scrutiny as task-level optimizations.
+
+Migration 005 must score architecture options on **both**:
+
+- **latency** — how quickly a maintainer gets useful feedback;
+- **resource use** — total runner-minutes, number of simultaneous VMs/containers, duplicated setup/download/work, and avoidable execution.
+
+The old two-job design is therefore not automatically preferred merely because it was faster. Two parallel GitHub-hosted VMs doing similar setup have a real indirect infrastructure/energy cost even when open-source CI minutes are not billed directly to this project. Conversely, saving one runner is not sufficient justification for a design that substantially worsens feedback latency. The target should seek a good balance rather than optimize either metric in isolation.
+
+See [resource-efficiency.md](resource-efficiency.md) for the explicit evaluation model.
 
 ## Important finding: Docker image reuse is not currently part of the cache strategy
 
@@ -86,22 +96,46 @@ Migration 004 **proved** that Moon's impact analysis is useful:
 - README-only work can stop before Docker;
 - isolated HUB75 changes can be classified as Build-, docs- or Verify-related.
 
-Migration 005 has now also run a controlled identical rerun of the exact same clamps source. In that rerun:
+Migration 005 initially observed that an identical rerun restored the portable Moon cache archive but still generated different task hashes, causing docs and Verify to run again.
 
-- the portable Moon cache archive from the original attempt was successfully restored;
-- the exact source revision and workflow inputs were the same;
-- Moon nevertheless generated different task hashes for docs and Verify;
-- those tasks executed again instead of being restored from cache.
+A dedicated diagnostic on `lib.scad.clamps` has now identified the root cause.
 
-So the current state is stronger than “cache benefit has not yet been observed”:
+### Root cause of the unstable Moon hashes
 
-> **the current portable Moon cache integration does not provide stable task reuse for an identical rerun.**
+The consumer task input is deliberately broad:
 
-The root cause is not yet known. The next diagnostic step is to compare Moon hash manifests and identify exactly which hashed input changes between attempts.
+```text
+tools/tool.scad-project/**
+```
 
-Until that is understood, whole-task output caching is not a valid justification for keeping Moon in the heavy execution path. Moon's demonstrated impact-analysis role remains separate and valuable.
+Before Moon executes the heavy graph, the production lifecycle runs:
 
-Detailed timings and task hashes are in [measurements.md](measurements.md).
+```text
+tools/tool.scad-project/scad-project.sh tooling-check
+```
+
+That Python command creates runtime bytecode under:
+
+```text
+tools/tool.scad-project/src/scad_project/__pycache__/*.pyc
+```
+
+Moon's task hash manifest shows that those generated `.pyc` files are included in the `scad.docs` input hash. Their binary contents differ between fresh hosted runners.
+
+A controlled diagnostic reran the exact same commit `9029a9e010900029d42e444a2e8792313c72cd27` twice:
+
+- attempt 1 `scad.docs` hash: `5cdd39337e7445531c8810dcb993519cb9fc59aa04090f0c913cbca3c29528a2`;
+- attempt 2 `scad.docs` hash: `a4117e6b5ab8d07be33a0d3cac836d89343f7c2c715554949abd03d93a8b1ce8`.
+
+The checked-in source/config/tool revisions are the same. The hash manifests show different hashes for generated files such as `__init__.cpython-312.pyc`, `cli.cpython-312.pyc`, `docs.cpython-312.pyc` and the rest of the generated bytecode tree.
+
+This means the previous cache failure is now attributable to **our Moon input boundary**, not to an inherent inability of Moon to reuse outputs:
+
+> **generated Python runtime files are currently treated as source inputs, making whole-task hashes unstable across fresh runners.**
+
+The `.pyc` tree is ignored by Git, but the broad Moon task input still includes it in the task manifest. The architecture must therefore define source/tool inputs narrowly enough that generated runtime state cannot affect source-derived task identity.
+
+This finding weakens the current configuration, but it does not yet decide whether Moon output caching is valuable. The next experiment is to remove this accidental input instability and then measure a genuinely stable warm-cache run.
 
 ## Architecture properties worth preserving unless evidence says otherwise
 
@@ -111,7 +145,8 @@ Detailed timings and task hashes are in [measurements.md](measurements.md).
 - SCons remains dependency-aware for fine-grained SCAD targets unless a replacement is demonstrably better;
 - published output identifies exact source/tooling;
 - GitHub write credentials stay outside the SCAD runtime;
-- a release can be reproduced from one exact source revision.
+- a release can be reproduced from one exact source revision;
+- architecture choices should avoid unnecessary parallel VMs/containers and duplicated compute when equivalent feedback can be achieved more efficiently.
 
 These are outcomes. Their current implementation is open to change.
 
@@ -128,9 +163,10 @@ The complete reflection currently identifies several issues worth challenging:
 - Moon itself supports workspace-level task inheritance, so duplicated consumer task definitions may be avoidable without custom generation;
 - the impact check is highly valuable for unaffected changes but adds several seconds to affected changes;
 - Docker image acquisition dominates the small reference build and is not explicitly cached today;
-- the current Moon output-cache integration restores its archive but does not yield stable task hashes on an identical rerun;
+- broad Moon tool inputs currently include generated Python bytecode and make task hashes unstable across fresh runners;
 - normal full-tree workflow artifacts are not required as a hand-off to same-job publication;
-- Build and Verification branch publication appears structurally independent enough to justify a concurrency experiment.
+- Build and Verification branch publication appears structurally independent enough to justify a concurrency experiment;
+- the old parallel design's lower latency was bought with two simultaneous heavy hosted runners, so latency improvements must be compared with total compute/resource use rather than treated as free.
 
 ## Candidate directions
 
@@ -141,6 +177,8 @@ No target is selected yet. The concrete comparison is in [target-variants.md](ta
 3. **use Moon only for impact analysis** — retain the demonstrated pre-Docker benefit and let `tool.scad-project`/SCons execute only affected capabilities;
 4. **remove Moon entirely from SCAD** — control option, acceptable only if replacement impact logic is genuinely simpler and equally safe;
 5. **optimize lifecycle/runtime independently** — image distribution, normal artifact retention and publication concurrency can improve whichever structural variant wins.
+
+Every candidate must be compared on human clarity, correctness, feedback latency **and total resource use**.
 
 ## Human-understandability acceptance test
 
@@ -155,7 +193,8 @@ Without migration history or chat logs, that maintainer must be able to explain:
 - what is cached and where;
 - where generated output and source/tool information come from;
 - where most CI time is spent;
-- why the chosen architecture is worth its complexity.
+- how many heavy runners/containers are used and why;
+- why the chosen architecture is worth both its complexity and its compute cost.
 
 If that cannot be answered, the architecture is not finished.
 
@@ -165,12 +204,12 @@ Do **not** migrate the HUB75 frame yet.
 
 Next:
 
-1. diagnose the unstable Moon task hashes by comparing hash manifests from identical runs;
-2. then measure whether stable Moon output hydration provides material value;
+1. correct or isolate the accidental generated-bytecode input from Moon task hashing;
+2. demonstrate a genuinely stable warm Moon output-cache run and quantify what it saves;
 3. measure warm SCons reuse separately;
 4. measure Docker image transfer/layer/startup costs and realistic reuse options;
 5. qualify publication simplifications;
-6. compare the concrete architecture variants on clarity, correctness, latency and total compute;
+6. compare the concrete architecture variants on clarity, correctness, latency, total runner-minutes and concurrency;
 7. select the target architecture with explicit reasons;
 8. only then derive implementation steps and repository owners.
 
