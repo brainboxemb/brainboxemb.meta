@@ -11,6 +11,7 @@ Related:
 - [Architecture reflection](architecture-reflection.md)
 - [Target variants](target-variants.md)
 - [Publication-path analysis](publication-analysis.md)
+- [Resource-efficiency criteria](resource-efficiency.md)
 - [Migration 004 performance evidence](../004-scad-repository-execution-model/performance-evidence.md)
 
 ## 1. Small-reference critical path — `lib.scad.clamps`
@@ -35,6 +36,8 @@ Approximate elapsed time:
 The important ratio is that the Docker image acquisition is about four times as long as the entire reported Moon output graph on this small library.
 
 The old parallel Build + Verify topology completed the relevant-change critical path in about **37 s**. The final one-host model is about **41–45 s** under the Migration-004 comparison boundary.
+
+The old topology also used two simultaneous heavy hosted runners. Migration 005 therefore treats wall-clock latency and total compute/resource use as separate metrics rather than declaring either topology better from elapsed time alone.
 
 ## 2. Docker runtime acquisition is repeatedly cold
 
@@ -146,7 +149,7 @@ It then saves a portable Moon cache of roughly **259 KB** under the run/attempt-
 
 At this point the only safe conclusion was that output hydration had not yet been demonstrated.
 
-## 6. Controlled identical rerun: Moon archive restores, tasks still miss
+## 6. Controlled identical production rerun: Moon archive restores, tasks still miss
 
 Migration 005 reran the exact same qualified clamps job instead of changing source.
 
@@ -186,23 +189,101 @@ Despite the restored archive, Moon executes the real tasks again:
 
 Attempt-2 graph time is about **5.270 s**, almost the same as the original ~5.453 s.
 
-Therefore the current portable Moon cache integration gives us this stronger measured fact:
+Therefore the portable cache archive works mechanically, but task identity is unstable.
 
-> **The cache archive can be restored successfully while providing no task-level cache hit or output hydration for an identical workflow rerun.**
+## 7. Diagnostic proof: generated Python bytecode causes the unstable Moon hash
 
-The immediate reason is visible: task hashes are different between attempts despite the same exact source and task configuration files.
+A temporary non-merge diagnostic PR in `lib.scad.clamps` was used to inspect the full Moon hash manifest on fresh hosted runners.
 
-### Root cause is not yet proven
+Diagnostic source commit:
 
-Do **not** infer the cause from the run number alone.
+```text
+9029a9e010900029d42e444a2e8792313c72cd27
+```
 
-Moon's hash is derived from resolved task configuration, inputs, dependencies and relevant environment/toolchain information. The next diagnostic step must compare the two hash manifests and identify exactly which hashed input changed.
+Workflow run:
 
-Potential causes such as generated/ignored files, bootstrap side effects, dependency hashes or implicit environment must remain hypotheses until the manifests show the difference.
+```text
+34985150733
+```
 
-This is now a Migration-005 architecture blocker for treating Moon whole-task caching as a benefit. A cache layer whose key is unstable for an identical source rerun cannot justify extra consumer/runtime complexity until understood and corrected.
+The same diagnostic job was executed twice against that exact same commit:
 
-## 7. SCons cache value is also not established by these runs
+- attempt 1 job: `104435229590`;
+- attempt 2 job: `104435489526`.
+
+### What happens before Moon hashes the task
+
+The production lifecycle runs the Python-based tooling check before executing the Moon aggregate graph:
+
+```text
+bash tools/tool.scad-project/scad-project.sh tooling-check
+```
+
+On a fresh checkout there is initially no Python bytecode tree. Immediately after `tooling-check`, Git reports the ignored runtime directory:
+
+```text
+!! src/scad_project/__pycache__/
+```
+
+and multiple files such as:
+
+```text
+tools/tool.scad-project/src/scad_project/__pycache__/cli.cpython-312.pyc
+tools/tool.scad-project/src/scad_project/__pycache__/docs.cpython-312.pyc
+tools/tool.scad-project/src/scad_project/__pycache__/verification.cpython-312.pyc
+```
+
+### Moon includes those generated files in the task hash
+
+The consumer `scad.docs` task has this broad input:
+
+```text
+tools/tool.scad-project/**
+```
+
+Moon's generated task-hash manifest explicitly contains the `.pyc` files under that glob, even though they are ignored by Git.
+
+For example, the attempt-1 manifest includes bytecode hashes such as:
+
+```text
+__init__.cpython-312.pyc = 0848357a...
+cli.cpython-312.pyc      = 2e01662c...
+docs.cpython-312.pyc     = 9c448452...
+```
+
+The exact same source on attempt 2 produces different runtime bytecode hashes:
+
+```text
+__init__.cpython-312.pyc = e3c26e8c...
+cli.cpython-312.pyc      = 4669ea53...
+docs.cpython-312.pyc     = 870aab63...
+```
+
+All checked-in `.py`, SCAD, project and Moon configuration inputs remain the same.
+
+### Resulting task hashes
+
+The full `scad.docs` task hash changes solely under this otherwise identical fresh-runner setup:
+
+| Diagnostic attempt | Exact source | `scad.docs` task hash |
+| --- | --- | --- |
+| 1 | `9029a9e...` | `5cdd39337e7445531c8810dcb993519cb9fc59aa04090f0c913cbca3c29528a2` |
+| 2 | `9029a9e...` | `a4117e6b5ab8d07be33a0d3cac836d89343f7c2c715554949abd03d93a8b1ce8` |
+
+The workspace-graph hash remains stable (`d3de481f...`), which further localizes the instability to task inputs rather than the Moon workspace definition itself.
+
+### Proven conclusion
+
+The root cause is now established:
+
+> **Generated Python bytecode created before Moon execution is captured by the broad `tools/tool.scad-project/**` task input and makes source-derived Moon task hashes unstable across fresh runners.**
+
+This is an integration/configuration defect, not evidence that Moon is inherently unable to hydrate outputs.
+
+The next experiment must remove this accidental runtime state from task identity—for example by preventing bytecode creation before hashing or by defining a source-only tool input boundary—and then repeat a genuinely warm output-cache run.
+
+## 8. SCons cache value is also not established by these runs
 
 The same exact-main and controlled rerun show normal and verification SCons cache misses. Consequently they do not prove normal cross-run SCons object-cache savings either.
 
@@ -212,11 +293,11 @@ Migration 005 should therefore separately measure:
 
 1. SCons as a dependency engine inside one execution;
 2. SCons object-cache reuse across hosted runs;
-3. Moon whole-task output hydration across hosted runs.
+3. Moon whole-task output hydration across hosted runs after task identity is stabilized.
 
 These are three different benefits.
 
-## 8. Publication cost
+## 9. Publication cost
 
 Representative clamps final run `34971400621` spends roughly 4.4 seconds publishing Build and Verification sequentially after production.
 
@@ -231,25 +312,29 @@ Before those publications, the workflow also uploads retained Build and Verifica
 
 The separate [publication analysis](publication-analysis.md) shows that these normal artifacts are not used as a hand-off to the subsequent same-job branch publications. Release has its own separate artifact hand-off lifecycle.
 
-## 9. Current measured conclusions
+## 10. Current measured conclusions
 
 What is already supported by evidence:
 
-- zero-container unrelated changes are a substantial win;
+- zero-container unrelated changes are a substantial win in both latency and heavy-compute avoidance;
 - Moon impact detection is a real useful capability;
 - image acquisition is the dominant single small-repository cost;
-- reducing two containers to one reduces duplicated compute but did not improve relevant-change latency;
+- reducing two containers/runners to one reduces duplicated compute but did not improve relevant-change latency;
+- the old parallel topology's ~37 s result therefore must be evaluated against its higher total runner/VM use, not treated as a free speed baseline;
 - current consumer Moon graphs expose much more than the few domain capabilities maintainers naturally think about;
-- the current Moon archive is restorable across an identical rerun but **does not yield stable task hashes or hydration** in that controlled case;
+- the Moon portable archive can restore correctly;
+- current whole-task reuse failed because broad task inputs include generated `.pyc` runtime files and produce unstable hashes across fresh runners;
+- this hash problem is an integration defect and can now be isolated for a corrected warm-cache experiment;
 - current SCons cross-run cache benefit is also not demonstrated by the retained qualification/rerun evidence;
 - normal full-tree workflow artifacts are retention policy, not a technical same-job publication hand-off.
 
-What remains to measure or diagnose before architecture selection:
+What remains to measure before architecture selection:
 
-- **why Moon task hashes change between identical reruns** by comparing hash manifests;
+- stable Moon output hydration after removing generated runtime state from task identity;
 - exact image compressed size and per-layer composition;
 - download versus unpack/startup contribution to the ~20 s image cost;
 - explicit OCI/image-cache restore cost versus GHCR pull cost;
 - controlled warm SCons cache behavior;
 - necessity of each retained normal workflow artifact;
-- safe parallelization or combination of generated-output publication.
+- safe parallelization or combination of generated-output publication;
+- total runner-minutes and heavy-runner concurrency for each architecture candidate, not only wall-clock latency.
