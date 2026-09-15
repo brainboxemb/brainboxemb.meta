@@ -24,9 +24,11 @@ Step 1 is complete: `tool.git-project` provides the released generic Moon affect
 
 Step 2 is complete: `template.scad-project` PR #22 removed the stale `scad.verify -> scad.build` dependency and requalified Build/Verify independence on exact main `082b0cecb47ba082899214751080adc54556e94c`.
 
-Step 3 is complete: `tool.scad-project v0.13.0` provides the reusable production workflow with shallow host preflight, optional producer-only `affected_task`, one conditional SCAD container, separate Build/Verify caches and lightweight publication. Release source is exact main `da57820fdadd7d203091b6818984991f1548408f`; release run `34938168129` and released-tag Test run `34938179069` passed. Reference-consumer qualification also proved README-only no-container, representative SCAD-source impact, Verify-only impact and conservative missing-base execution.
+Step 3 is complete: `tool.scad-project v0.13.0` provides the reusable production workflow with shallow host preflight, optional producer-only `affected_task`, one conditional SCAD container, separate Build/Verify caches and lightweight publication. Release source is exact main `da57820fdadd7d203091b6818984991f1548408f`; release run `34938168129` and released-tag Test run `34938179069` passed.
 
-Step 4 is next and is owned by `template.scad-project`: replace the temporary PR-SHA qualification setup with the released `tool.scad-project v0.13.0` interface and qualify the released workflow from a fresh branch based on current `main`. The temporary Step-3 qualification PR #23 must not be merged as the rollout itself.
+Step 4 is complete: `template.scad-project` PR #29 consumed released `tool.scad-project v0.13.0` and merged as exact main `8ac67014eb2ab7252f38b41a1137b5b0c902ef6a`. Final PR-head run `34944252421` and exact-main run `34945239139` passed. Final-head proofs demonstrated README-only no-container (`#30`, run `34944598444`), Verify-only producer impact without Build/Docs (`#31`, run `34944622039`), and Build-side impact without the Verify producer (`#33`, run `34944404186`). Cold production built all reference targets in run `34938849331`; the later warm path restored all CAD targets through SCons cache. Whole-task Moon hydration did not occur on an exact-source rerun even though the portable Moon cache restored; that remains a non-blocking generic performance observation on `tool.git-project` issue #17.
+
+Step 5 is next and is owned by `lib.scad.clamps`: re-evaluate the reference-library assumptions against its current repository, then move normal CI from separate heavy Build/Verify execution to the released common production lifecycle only if the library-specific requirements still fit the shared model proportionately.
 
 Tracking issue: #49. See [Migration 004](migrations/004-scad-repository-execution-model/README.md) and its [qualification evidence](migrations/004-scad-repository-execution-model/evidence.md).
 
@@ -78,4 +80,7 @@ Useful cross-project improvements remain parked until there is a reason to pick 
 - **Self-contained physical-verification document packages** — issue #18;
 - **One release flow for requested versions across project types** — issue #20.
 
-A generic release robustness issue discovered during Migration 004 is tracked locally in `tool.git-project` issue #22 and does not block this migration.
+Generic performance/robustness follow-ups discovered while executing Migration 004 remain owner-local and non-blocking:
+
+- `tool.git-project` issue #17 — improve safe Moon cache/materialization reuse, now including same-source SCAD evidence where the portable Moon cache restored but whole-task hydration did not occur;
+- `tool.git-project` issue #22 — generic release request idempotency.
