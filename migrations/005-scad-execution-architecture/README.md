@@ -17,6 +17,7 @@ Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
 - [Runtime image family](runtime-image-family.md)
 - [Runtime image family validation](runtime-image-validation.md)
 - [Normal publication-path analysis](publication-analysis.md)
+- [Concurrent Build/Verification publication validation](publication-concurrency-validation.md)
 - [Normal CI artifact retention policy](normal-ci-artifact-policy.md)
 - [Resource-efficiency and compute-cost criteria](resource-efficiency.md)
 
@@ -103,6 +104,14 @@ The normal production workflow currently uploads complete Build and Verification
 Migration 005 therefore keeps compact decision/evidence artifacts by default but does not treat complete normal Build/Verification Actions artifacts as mandatory. A future non-publication/download use case should opt in explicitly rather than making every successful normal run upload duplicate output.
 
 See [normal-ci-artifact-policy.md](normal-ci-artifact-policy.md).
+
+### Build and Verification publication can overlap on the same runner
+
+A controlled test executed the released `tool.git-project` publisher twice at the same time on one Ubuntu runner. The Build call took 2.089 s, Verification 2.144 s, and they overlapped for 2.089 s. Both independent generated-output trees contained the exact requested source SHA and both temporary remote branches were removed afterwards.
+
+The diagnostic trees were deliberately small, so this proves publication isolation/concurrency rather than a fixed production time saving. The important architecture result is that we can overlap the two Git publications **without adding another hosted runner or CAD runtime**.
+
+See [publication-concurrency-validation.md](publication-concurrency-validation.md).
 
 ### Current consumer Moon configuration exposes too much machinery
 
@@ -207,12 +216,12 @@ Completed validation:
 - **warm SCons reuse on a real HUB75 SCons capability — passed.** Target-level reuse is measurable and inexpensive to transfer; generic SCons cache handling for non-SCons capabilities is not justified.
 - **runtime image family — passed.** The OpenSCAD-focused profile preserves the OpenSCAD contract while reducing compressed transfer by about 27%; the full image remains the tested PythonSCAD-capable superset. Runtime selection should be capability-driven.
 - **normal-CI artifact retention policy — decided.** Keep compact evidence; do not require duplicate complete Build/Verification Actions artifacts for normal successful publication. Release artifacts remain a separate required hand-off.
+- **concurrent Build/Verification publication — passed.** Two released publisher instances can overlap safely on one runner using isolated temporary repositories and target branches; no second hosted runner is needed.
 
 Still required before deriving the implementation plan:
 
-1. test safe concurrent or combined Build/Verification publication;
-2. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
-3. show the resulting consumer configuration for clamps and HUB75 and run the human-understandability test;
-4. estimate both feedback latency and total runner/resource use for the resulting lifecycle.
+1. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
+2. show the resulting consumer configuration for clamps and HUB75 and run the human-understandability test;
+3. estimate both feedback latency and total runner/resource use for the resulting lifecycle.
 
 If these validations do not reveal a fundamental flaw, the provisional target becomes the implementation architecture and Migration 005 can be broken into owner-specific implementation steps.
