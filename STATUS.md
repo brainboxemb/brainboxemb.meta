@@ -28,9 +28,11 @@ Step 3 is complete: `tool.scad-project v0.13.0` provides the reusable production
 
 Step 4 is complete: `template.scad-project` PR #29 consumed released `tool.scad-project v0.13.0` and merged as exact main `8ac67014eb2ab7252f38b41a1137b5b0c902ef6a`. Final PR-head run `34944252421` and exact-main run `34945239139` passed. Final-head proofs demonstrated README-only no-container (`#30`, run `34944598444`), Verify-only producer impact without Build/Docs (`#31`, run `34944622039`), and Build-side impact without the Verify producer (`#33`, run `34944404186`). Cold production built all reference targets in run `34938849331`; the later warm path restored all CAD targets through SCons cache. Whole-task Moon hydration did not occur on an exact-source rerun even though the portable Moon cache restored; that remains a non-blocking generic performance observation on `tool.git-project` issue #17.
 
-Step 5 is next and is owned by `lib.scad.clamps`: re-evaluate the reference-library assumptions against its current repository, then move normal CI from separate heavy Build/Verify execution to the released common production lifecycle only if the library-specific requirements still fit the shared model proportionately.
+Step 5 is **active but paused for performance reassessment** in `lib.scad.clamps` PR #7. The common model is functionally qualified on candidate `bb071329e1d6c764d09f87ecd2cc78d42ac73679`: final candidate run `34947426305` passed with one SCAD container and host publication; proof PRs #8–#10 demonstrated README-only no-container, docs-only impact without Verify, and Verify-only impact without Docs. The required before/after measurement exposed a material relevant-change latency trade-off: old parallel Build/Verify CI had about a 37 s critical path, while two successful common-lifecycle runs measured about 64–65 s end-to-end. Heavy container starts drop from two to one and README-only drops to a short host preflight with zero containers, but relevant feedback is about 27 s slower. Per the Migration-004 stop condition, PR #7 remains draft and Step 6 (`lib.scad.hub75`) must not start yet.
 
-Tracking issue: #49. See [Migration 004](migrations/004-scad-repository-execution-model/README.md) and its [qualification evidence](migrations/004-scad-repository-execution-model/evidence.md).
+The reassessment is tracked in issue #53 and explicitly compares the current Docker model with the historical cached-host SCAD tooling and, if generic ownership remains clean, a single host-orchestrator job that conditionally runs one Docker toolchain and then publishes on the host. The old cached-tooling mechanism must be reconstructed from repository history rather than approximated from memory. The decision must use repeated cold/warm measurements of critical path, runner-seconds, setup/cache/container time, producer time and publication, together with reproducibility and maintenance trade-offs.
+
+Tracking issue: #49. Performance experiment: #53. See [Migration 004](migrations/004-scad-repository-execution-model/README.md) and its [qualification evidence](migrations/004-scad-repository-execution-model/evidence.md).
 
 ## Recently completed
 
@@ -78,9 +80,10 @@ See [Migration 001](migrations/001-brainboxemb-meta/README.md) for its history a
 Useful cross-project improvements remain parked until there is a reason to pick them up:
 
 - **Self-contained physical-verification document packages** — issue #18;
-- **One release flow for requested versions across project types** — issue #20.
+- **One release flow for requested versions across project types** — issue #20;
+- **Standardise CHANGELOG format and add a shared template** — issue #52.
 
-Generic performance/robustness follow-ups discovered while executing Migration 004 remain owner-local and non-blocking:
+Generic performance/robustness follow-ups discovered while executing Migration 004 remain owner-local and non-blocking unless explicitly promoted by the active reassessment:
 
 - `tool.git-project` issue #17 — improve safe Moon cache/materialization reuse, now including same-source SCAD evidence where the portable Moon cache restored but whole-task hydration did not occur;
 - `tool.git-project` issue #22 — generic release request idempotency.
