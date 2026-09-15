@@ -16,11 +16,11 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-There is currently **no active migration**.
+- [004 — SCAD repository execution model](004-scad-repository-execution-model/README.md) — active; Steps 1–5 are complete and Step 6 (`lib.scad.hub75`) is next.
 
 ## Proposed / inactive
 
-- [004 — SCAD repository execution model](004-scad-repository-execution-model/README.md) — review the project/library Build/Verify execution model before choosing an implementation.
+There are currently no proposed/inactive migrations.
 
 ## Complete
 
