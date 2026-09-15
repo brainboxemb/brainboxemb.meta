@@ -1,6 +1,6 @@
 # Migration 005 — simplify the SCAD execution architecture
 
-Status: **migration execution in progress — architecture/design and technical validation are complete**
+Status: **migration execution in progress — shared foundations released; consumer rollout is next**
 
 Tracking issue: [#55](https://github.com/brainboxemb/brainboxemb.meta/issues/55)
 
@@ -10,7 +10,7 @@ Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
 
 Migration 005 changes the shared SCAD execution model from a lifecycle-heavy Moon configuration into a capability-oriented model that is easier to understand and uses hosted compute more proportionately.
 
-The design phase is finished. The selected architecture and its important technical assumptions have been validated. Work in this migration is now **owner-by-owner migration and release work**. Historical design and validation documents remain here so decisions can be traced without relying on chat history.
+The design phase is finished. The selected architecture and its important technical assumptions have been validated, and the shared runtime/generic-query/SCAD-tool foundations are released. Work in this migration is now **consumer and canary migration/qualification**. Historical design and validation documents remain here so decisions can be traced without relying on chat history.
 
 ## Start here
 
@@ -61,7 +61,7 @@ Moon on host
         |
         v
 one capability-appropriate SCAD runtime
-  Moon executes or restores affected whole capabilities
+  Moon executes or restores required whole capabilities
         |
         +-- tool.scad-project capability command
                |
@@ -84,6 +84,18 @@ scad.verify  Verification
 ```
 
 Generic task commands, cache policy and standard output boundaries belong in shared `tool.scad-project` policy, not copied lifecycle topology in every consumer.
+
+One implementation refinement is important when reading “required” above: the source-affected capability set and the set that must be materialized for a complete replacement publication can differ. For example, a docs-only change may hydrate an unchanged presentation capability through Moon when both contribute to the same complete Build branch. That extra contributor stays non-affected; it exists only to keep publication correct.
+
+## Released shared foundations
+
+Migration 005 currently has these immutable shared layers available for the consumer rollout:
+
+- `docker.scad-toolchain v0.5.0` — focused OpenSCAD and full/dual runtime profiles;
+- `tool.git-project v0.2.8` — complete affected-task list from the existing single Moon query;
+- `tool.scad-project v0.14.0` — inherited SCAD capabilities, configuration consistency, runtime/cache selection and normal one-runtime lifecycle.
+
+The next owner step is `template.scad-project`; after that the clamps and HUB75 canaries qualify the two important runtime/build-engine modes before broader downstream adoption.
 
 ## Current execution phase
 
