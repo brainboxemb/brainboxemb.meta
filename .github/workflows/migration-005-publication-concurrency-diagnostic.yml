@@ -1,0 +1,195 @@
+name: Migration 005 publication concurrency diagnostic
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/migration-005-publication-concurrency-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  concurrent-publication:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout meta repository with publication credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+
+      - name: Checkout exact released generic publisher
+        uses: actions/checkout@v4
+        with:
+          repository: brainboxemb/tool.git-project
+          ref: 6234b7437b0dc0115642468f74d1f4a2c2214bef
+          path: .diagnostic/tool.git-project
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Run concurrent success and peer-failure publication probes
+        id: probe
+        shell: bash
+        env:
+          PUBLISH_TOKEN_VALUE: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          set -euo pipefail
+
+          publisher="$GITHUB_WORKSPACE/.diagnostic/tool.git-project/generated-output-publish.sh"
+          test -f "$publisher"
+
+          root="$RUNNER_TEMP/m005-publication-concurrency"
+          mkdir -p "$root/build" "$root/verification" "$root/peer-ok" "$root/peer-empty" "$root/results"
+          printf 'build\n' > "$root/build/marker.txt"
+          printf '%s\n' "$PR_HEAD_SHA" > "$root/build/source-sha.txt"
+          printf 'verification\n' > "$root/verification/marker.txt"
+          printf '%s\n' "$PR_HEAD_SHA" > "$root/verification/source-sha.txt"
+          printf 'peer-ok\n' > "$root/peer-ok/marker.txt"
+          printf '%s\n' "$PR_HEAD_SHA" > "$root/peer-ok/source-sha.txt"
+
+          build_suffix="m005-concurrent-build-${GITHUB_RUN_ID}"
+          verification_suffix="m005-concurrent-verification-${GITHUB_RUN_ID}"
+          peer_ok_suffix="m005-concurrent-peer-ok-${GITHUB_RUN_ID}"
+          peer_fail_suffix="m005-concurrent-peer-fail-${GITHUB_RUN_ID}"
+
+          run_publisher() {
+            local name="$1"
+            local source_dir="$2"
+            local suffix="$3"
+            local start end status
+
+            start="$(date +%s%3N)"
+            set +e
+            env \
+              GITHUB_OUTPUT="$root/results/${name}.outputs" \
+              PUBLISH_SOURCE_DIR="$source_dir" \
+              PUBLISH_BRANCH_SUFFIX="$suffix" \
+              PUBLISH_SOURCE_REVISION="$PR_HEAD_SHA" \
+              PUBLISH_TOKEN="$PUBLISH_TOKEN_VALUE" \
+              PUBLISH_PR_NUMBER="$PR_NUMBER" \
+              PUBLISH_PR_HEAD_REF="$PR_HEAD_REF" \
+              PUBLISH_PR_HEAD_SHA="$PR_HEAD_SHA" \
+              PUBLISH_PR_HEAD_REPOSITORY="$PR_HEAD_REPOSITORY" \
+              bash "$publisher" >"$root/results/${name}.log" 2>&1
+            status=$?
+            set -e
+            end="$(date +%s%3N)"
+            printf 'start_ms=%s\nend_ms=%s\nstatus=%s\n' "$start" "$end" "$status" > "$root/results/${name}.timing"
+            return "$status"
+          }
+
+          # Phase A: two valid publication calls start together and must both succeed.
+          set +e
+          run_publisher build "$root/build" "$build_suffix" &
+          build_pid=$!
+          run_publisher verification "$root/verification" "$verification_suffix" &
+          verification_pid=$!
+          wait "$build_pid"; build_status=$?
+          wait "$verification_pid"; verification_status=$?
+          set -e
+
+          cat "$root/results/build.log"
+          cat "$root/results/verification.log"
+          test "$build_status" -eq 0
+          test "$verification_status" -eq 0
+
+          build_start="$(sed -n 's/^start_ms=//p' "$root/results/build.timing")"
+          build_end="$(sed -n 's/^end_ms=//p' "$root/results/build.timing")"
+          verification_start="$(sed -n 's/^start_ms=//p' "$root/results/verification.timing")"
+          verification_end="$(sed -n 's/^end_ms=//p' "$root/results/verification.timing")"
+          overlap_start=$(( build_start > verification_start ? build_start : verification_start ))
+          overlap_end=$(( build_end < verification_end ? build_end : verification_end ))
+          overlap_ms=$(( overlap_end - overlap_start ))
+          if (( overlap_ms <= 0 )); then
+            echo "ERROR: publication calls did not overlap" >&2
+            exit 1
+          fi
+
+          build_branch="dev/pr-${PR_NUMBER}/${build_suffix}"
+          verification_branch="dev/pr-${PR_NUMBER}/${verification_suffix}"
+          git fetch -q origin \
+            "+refs/heads/${build_branch}:refs/remotes/origin/${build_branch}" \
+            "+refs/heads/${verification_branch}:refs/remotes/origin/${verification_branch}"
+          test "$(git show "refs/remotes/origin/${build_branch}:marker.txt")" = build
+          test "$(git show "refs/remotes/origin/${verification_branch}:marker.txt")" = verification
+          test "$(git show "refs/remotes/origin/${build_branch}:source-sha.txt")" = "$PR_HEAD_SHA"
+          test "$(git show "refs/remotes/origin/${verification_branch}:source-sha.txt")" = "$PR_HEAD_SHA"
+
+          # Phase B: one valid publication must still finish when its peer fails
+          # independently on an empty prepared tree.
+          set +e
+          run_publisher peer_ok "$root/peer-ok" "$peer_ok_suffix" &
+          peer_ok_pid=$!
+          run_publisher peer_fail "$root/peer-empty" "$peer_fail_suffix" &
+          peer_fail_pid=$!
+          wait "$peer_ok_pid"; peer_ok_status=$?
+          wait "$peer_fail_pid"; peer_fail_status=$?
+          set -e
+
+          cat "$root/results/peer-ok.log"
+          cat "$root/results/peer-fail.log"
+          test "$peer_ok_status" -eq 0
+          test "$peer_fail_status" -ne 0
+
+          peer_ok_branch="dev/pr-${PR_NUMBER}/${peer_ok_suffix}"
+          peer_fail_branch="dev/pr-${PR_NUMBER}/${peer_fail_suffix}"
+          git fetch -q origin "+refs/heads/${peer_ok_branch}:refs/remotes/origin/${peer_ok_branch}"
+          test "$(git show "refs/remotes/origin/${peer_ok_branch}:marker.txt")" = peer-ok
+          test "$(git show "refs/remotes/origin/${peer_ok_branch}:source-sha.txt")" = "$PR_HEAD_SHA"
+          if git ls-remote --exit-code --heads origin "refs/heads/${peer_fail_branch}" >/dev/null 2>&1; then
+            echo "ERROR: failing peer unexpectedly published ${peer_fail_branch}" >&2
+            exit 1
+          fi
+
+          build_ms=$(( build_end - build_start ))
+          verification_ms=$(( verification_end - verification_start ))
+          parallel_window_start=$(( build_start < verification_start ? build_start : verification_start ))
+          parallel_window_end=$(( build_end > verification_end ? build_end : verification_end ))
+          parallel_window_ms=$(( parallel_window_end - parallel_window_start ))
+          sequential_sum_ms=$(( build_ms + verification_ms ))
+
+          {
+            echo "build_ms=$build_ms"
+            echo "verification_ms=$verification_ms"
+            echo "overlap_ms=$overlap_ms"
+            echo "parallel_window_ms=$parallel_window_ms"
+            echo "sequential_sum_ms=$sequential_sum_ms"
+            echo "peer_ok_status=$peer_ok_status"
+            echo "peer_fail_status=$peer_fail_status"
+          } | tee "$root/results/summary.txt"
+
+          cat "$root/results/summary.txt" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Clean temporary generated-output branches
+        if: always()
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set +e
+          for suffix in \
+            "m005-concurrent-build-${GITHUB_RUN_ID}" \
+            "m005-concurrent-verification-${GITHUB_RUN_ID}" \
+            "m005-concurrent-peer-ok-${GITHUB_RUN_ID}" \
+            "m005-concurrent-peer-fail-${GITHUB_RUN_ID}"; do
+            branch="dev/pr-${PR_NUMBER}/${suffix}"
+            git push origin --delete "$branch" >/dev/null 2>&1 || true
+          done
+
+          for suffix in \
+            "m005-concurrent-build-${GITHUB_RUN_ID}" \
+            "m005-concurrent-verification-${GITHUB_RUN_ID}" \
+            "m005-concurrent-peer-ok-${GITHUB_RUN_ID}" \
+            "m005-concurrent-peer-fail-${GITHUB_RUN_ID}"; do
+            branch="dev/pr-${PR_NUMBER}/${suffix}"
+            if git ls-remote --exit-code --heads origin "refs/heads/${branch}" >/dev/null 2>&1; then
+              echo "ERROR: temporary branch remains after cleanup: $branch" >&2
+              exit 1
+            fi
+          done
