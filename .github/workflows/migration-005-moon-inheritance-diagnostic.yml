@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: brainboxemb/tool.scad-project
-          ref: ac0e16bfdb29334604598b6b178aca82a02a84d2
+          ref: 1303ae8c40817a98f9615a58762264b3ef19b6dd
           path: fixture/clamps/tools/tool.scad-project
           fetch-depth: 1
           persist-credentials: false
@@ -46,7 +46,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: brainboxemb/tool.scad-project
-          ref: ac0e16bfdb29334604598b6b178aca82a02a84d2
+          ref: 1303ae8c40817a98f9615a58762264b3ef19b6dd
           path: fixture/hub75/tools/tool.scad-project
           fetch-depth: 1
           persist-credentials: false
@@ -84,9 +84,6 @@ jobs:
                 - 'openscad/**'
                 - 'pythonscad/**'
                 - 'scripts/render-openscad-design.sh'
-              outputs:
-                - 'bld/design/**'
-                - 'bld/evidence/executions/scad-docs/**'
 
             scad.verify:
               inputs:
@@ -102,11 +99,6 @@ jobs:
                 - 'update-repo.ps1'
                 - '.github/workflows/**'
                 - 'tools/tool.git-project/**'
-              outputs:
-                - 'vrf/out/openscad/**'
-                - 'vrf/out/pythonscad/**'
-                - 'vrf/out/index.md'
-                - 'vrf/out/evidence/executions/scad-verify/**'
           EOF
 
           cat > fixture/hub75/.moon/tasks/scad.yml <<'EOF'
@@ -126,21 +118,11 @@ jobs:
               inputs:
                 - 'openscad/**/*.scad'
                 - 'openscad/**/design/**'
-              outputs:
-                - 'bld/design/**'
-                - 'bld/evidence/executions/scad-docs/**'
-                - 'bld/evidence/domain/last-design-build.json'
-                - '.cache/scad-project/state/last-design-build.json'
 
             scad.build:
               inputs:
                 - 'openscad/**/*.scad'
                 - 'openscad/**/render.yml'
-              outputs:
-                - 'bld/png/**/*.png'
-                - 'bld/evidence/executions/scad-build/**'
-                - 'bld/evidence/domain/last-build.json'
-                - '.cache/scad-project/state/last-build.json'
 
             scad.verify:
               inputs:
@@ -160,12 +142,6 @@ jobs:
                 - 'update-repo.ps1'
                 - '.github/workflows/**'
                 - 'tools/tool.git-project/**'
-              outputs:
-                - 'vrf/out/hub75-p5-64x32-panel-api.stl'
-                - 'vrf/out/fixtures/**'
-                - 'vrf/out/plan/**'
-                - 'vrf/out/README.md'
-                - 'vrf/out/evidence/executions/scad-verify/**'
           EOF
 
       - name: Bootstrap pinned Moon once
@@ -203,7 +179,7 @@ jobs:
 
           grep -Fq 'scad-project.sh' "$RUNNER_TEMP/m005-moon/clamps/verify.json"
           grep -Fq 'verify' "$RUNNER_TEMP/m005-moon/clamps/verify.json"
-          grep -Fq 'vrf/out/openscad' "$RUNNER_TEMP/m005-moon/clamps/verify.json"
+          grep -Fq 'vrf/out' "$RUNNER_TEMP/m005-moon/clamps/verify.json"
           grep -Fq 'tools/tool.scad-project/src' "$RUNNER_TEMP/m005-moon/clamps/verify.json"
 
           if grep -Fq 'tools/tool.scad-project/**' "$RUNNER_TEMP/m005-moon/clamps/docs.json" "$RUNNER_TEMP/m005-moon/clamps/verify.json"; then
@@ -211,10 +187,8 @@ jobs:
             exit 1
           fi
 
-          printf 'junk' > fixture/clamps/tools/tool.scad-project/src/scad_project/__pycache__/migration-005-junk.pyc 2>/dev/null || {
-            mkdir -p fixture/clamps/tools/tool.scad-project/src/scad_project/__pycache__
-            printf 'junk' > fixture/clamps/tools/tool.scad-project/src/scad_project/__pycache__/migration-005-junk.pyc
-          }
+          mkdir -p fixture/clamps/tools/tool.scad-project/src/scad_project/__pycache__
+          printf 'junk' > fixture/clamps/tools/tool.scad-project/src/scad_project/__pycache__/migration-005-junk.pyc
           (
             cd fixture/clamps
             "$MOON_BIN" task consumer:scad.docs --json > "$RUNNER_TEMP/m005-moon/clamps/docs-with-pyc.json"
@@ -248,7 +222,7 @@ jobs:
           grep -Fq 'bld/png' "$RUNNER_TEMP/m005-moon/hub75/build.json"
 
           grep -Fq 'scad-project.sh' "$RUNNER_TEMP/m005-moon/hub75/verify.json"
-          grep -Fq 'vrf/out/fixtures' "$RUNNER_TEMP/m005-moon/hub75/verify.json"
+          grep -Fq 'vrf/out' "$RUNNER_TEMP/m005-moon/hub75/verify.json"
 
           grep -Fq 'tools/tool.scad-project/src' "$RUNNER_TEMP/m005-moon/hub75/docs.json"
           grep -Fq 'tools/tool.scad-project/src' "$RUNNER_TEMP/m005-moon/hub75/build.json"
@@ -266,11 +240,11 @@ jobs:
             echo '## Migration 005 Moon inheritance prototype'
             echo ''
             echo '- Moon runtime: 2.5.4 (released tool.git-project bootstrap)'
-            echo '- shared task source: tool.scad-project@ac0e16bfdb29334604598b6b178aca82a02a84d2'
+            echo '- shared task source: tool.scad-project@1303ae8c40817a98f9615a58762264b3ef19b6dd'
             echo '- clamps effective capabilities: Design documentation, Verification'
             echo '- HUB75 effective capabilities: Presentation renders, Design documentation, Verification'
-            echo '- commands and stable tool-source inputs are inherited'
-            echo '- project-specific source-impact patterns and outputs remain local'
+            echo '- commands, standard output boundaries and stable tool-source inputs are inherited'
+            echo '- consumer Moon configuration contains capability selection plus project-specific source-impact patterns only'
             echo '- generated Python bytecode is not included by the shared tool input patterns'
             echo '- no Docker or CAD runtime was started for this configuration validation'
           } >> "$GITHUB_STEP_SUMMARY"
