@@ -49,13 +49,32 @@ The final workflow provides:
 - generic Moon materialization validation;
 - lightweight Build and Verification publication outside the SCAD container.
 
-Release run `34938168129` and released-tag Test run `34938179069` passed. The reference template qualification proved README-only no-container, representative SCAD-source impact, Verify-only impact and conservative missing-base execution before release.
+Release run `34938168129` and released-tag Test run `34938179069` passed.
 
 ### Step 4 — released workflow in the reference template
 
-**Next.** Owner: `template.scad-project`.
+**Complete.** Owner: `template.scad-project`.
 
-Start from current template `main`, consume released `tool.scad-project v0.13.0` and qualify the released interface rather than merging the temporary PR-SHA qualification branch. Required evidence still includes cold relevant execution, README-only no-container, Build/Verify independence, representative Build/Verify impact, aggregate production and lightweight publication.
+PR #29 consumed released `tool.scad-project v0.13.0` from a fresh branch based on the Step-2 template main and replaced the copied production implementation with the thin released reusable workflow caller. It also separated source-impact gating from publication-ready execution and narrowed Verify inputs to the CAD source actually consumed by the verification entrypoints so Build-only and Verify-only producer impact are representable without artificial dependencies.
+
+- final PR head: `ea99880acef81cf8f6d9aab9e0371caae63af9c6`;
+- final PR-head run `34944252421` — passed;
+- merge/exact main: `8ac67014eb2ab7252f38b41a1137b5b0c902ef6a`;
+- exact-main run `34945239139` — passed with one SCAD production container and both production publication jobs.
+
+Final-head isolated proofs:
+
+- README-only PR #30 / run `34944598444` — host preflight succeeded; production and both publication jobs skipped before any SCAD container;
+- Verify-only PR #31 / run `34944622039` — affected set contains `scad.verify` but not `scad.build` or `scad.docs`; one production job and both lightweight publication jobs passed;
+- Build-side-only PR #33 / run `34944404186` — affected set contains the Build/Docs producer branch but not `scad.verify`; one production job and both lightweight publication jobs passed.
+
+Cold baseline run `34938849331` built all reference Build, Design and Verify targets. The later warm final run restored all CAD target work through SCons cache while retaining current orchestration/materialization evidence. An exact-source rerun restored the portable Moon cache but Moon still executed the graph; this is retained as a non-blocking generic performance observation on `tool.git-project` issue #17 rather than expanding Migration 004.
+
+### Step 5 — reference library qualification
+
+**Next.** Owner: `lib.scad.clamps`.
+
+Before changing the library, re-evaluate its current workflows, Moon/task configuration, release/publication behavior and library-specific verification requirements against the now-released common production model. If the shared model still fits proportionately, move normal CI away from separate heavy Build and Verify execution and qualify the reference library with before/after evidence. If the library exposes a genuine mismatch, stop before applying the model to `lib.scad.hub75`.
 
 ## Reference repositories
 
@@ -69,8 +88,8 @@ Start from current template `main`, consume released `tool.scad-project v0.13.0`
 1. `tool.git-project` — generic Moon affected/preflight capability — complete;
 2. `template.scad-project` — correct the Build/Verify task graph — complete;
 3. `tool.scad-project` — reusable SCAD production workflow — complete, released as v0.13.0;
-4. `template.scad-project` — qualify the released shared workflow and pre-container skip — next;
-5. `lib.scad.clamps` — reference library rollout and rationale;
+4. `template.scad-project` — qualify the released shared workflow and pre-container skip — complete;
+5. `lib.scad.clamps` — reference library rollout and rationale — next;
 6. `lib.scad.hub75` — second library rollout;
 7. HUB75 frame — requalify when shared changes affect it.
 
