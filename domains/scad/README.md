@@ -6,8 +6,8 @@ You do not need to know the tooling architecture first. Start with the part you 
 
 - [**Projects**](projects.md) — the actual CAD designs;
 - [**Libraries**](libraries.md) — reusable geometry and reference models used by projects;
-- [**Tooling and templates**](tooling.md) — the shared repositories used to set up, build and verify SCAD projects;
-- [**Technical architecture**](architecture.md) — the more detailed explanation of current versus classic project setups and how the pieces fit together.
+- [**Tooling and templates**](tooling.md) — which shared repositories own project setup, builds, verification and the CAD runtime;
+- [**Technical architecture**](architecture.md) — how GitHub Actions, Moon capabilities/inheritance, SCons, runtime profiles, caches and publication fit together.
 
 ## The basic picture
 
