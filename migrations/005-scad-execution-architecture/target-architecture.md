@@ -1,30 +1,30 @@
-# Migration 005 — provisional target architecture
+# Migration 005 — validated target architecture
 
-Status: **provisional target — implementation not started**
+Status: **validated — implementation not yet complete**
 
-This is the current preferred architecture after reconstructing the Migration-004 model and measuring its main assumptions. It may still be adjusted by the remaining performance experiments, but those experiments no longer need to keep five structurally equal alternatives open.
+This is the selected SCAD execution architecture after Migration-005 validation. The remaining work belongs to owner-repository implementation and end-to-end qualification; later evidence may correct details, but there is no longer an open architecture-variant search.
 
 Related:
 
 - [Migration 005 README](README.md)
-- [Current architecture](current-architecture.md)
-- [Architecture reflection](architecture-reflection.md)
 - [Measured evidence](measurements.md)
-- [Architecture variants](target-variants.md)
-- [Resource-efficiency criteria](resource-efficiency.md)
+- [Moon inheritance validation](moon-inheritance-validation.md)
+- [Human-understandability validation](human-understandability-validation.md)
+- [Target resource budget](target-resource-budget.md)
+- [Implementation plan](implementation-plan.md)
 
-## 1. Human model first
+## 1. Maintainer model
 
-A maintainer of a SCAD repository should normally need to think about only the capabilities the repository actually has.
+A SCAD repository maintainer should normally think about only the capabilities the repository actually provides.
 
-For `lib.scad.clamps`:
+`lib.scad.clamps`:
 
 ```text
 Design documentation
 Verification
 ```
 
-For `lib.scad.hub75`:
+`lib.scad.hub75`:
 
 ```text
 Presentation renders
@@ -32,271 +32,294 @@ Design documentation
 Verification
 ```
 
-A maintainer should **not** need to understand or hand-maintain separate tasks for:
+A maintainer should not hand-maintain separate Moon tasks for Build indexes, current source/tool information, source-impact graph roots, publication graph roots, cache transport or publication staging.
 
-- writing a Build index;
-- writing current source/tool information;
-- selecting a source-impact-only graph root;
-- selecting a complete publication graph root;
-- cache transport mechanics;
-- GitHub publication staging.
-
-Those may remain implementation details when they serve a real purpose, but they are shared lifecycle mechanics rather than repository capabilities.
-
-## 2. Preferred responsibility split
+## 2. Responsibility split
 
 ```text
 GitHub Actions
-    |
-    |  event, exact source/base, credentials, hosted runner
-    v
-Moon on the host
-    |
-    |  cheap question: which SCAD capabilities are affected?
-    |  none -> stop before Docker
-    v
-one SCAD Docker runtime
-    |
-    |  Moon: coarse capability scheduling + whole-capability output reuse
-    |       |
-    |       +-- Design documentation
-    |       +-- Presentation renders (when configured)
-    |       +-- Verification
-    |                |
-    |                +-- tool.scad-project capability command
-    |                        |
-    |                        +-- direct execution, or
-    |                        +-- SCons fine-grained targets when configured
-    v
+  event, exact source/base, credentials, hosted runner
+        |
+        v
+Moon on host
+  determine affected SCAD capabilities once
+  none -> stop before CAD image/runtime
+        |
+        v
+one capability-appropriate SCAD runtime
+  Moon executes or restores affected whole capabilities
+        |
+        +-- tool.scad-project capability command
+               |
+               +-- direct execution, or
+               +-- SCons fine-grained targets when configured
+        |
+        v
 host finishing/publication
-    |
-    |  current-run information, staging, retained evidence policy,
-    |  generated-output branch publication
-    v
-published Build / Verification results
+  current source/tool/run information
+  compact retained evidence
+  Build/Verification branch publication
 ```
 
-This deliberately keeps one heavy hosted runner while still allowing independent capability work to overlap inside the single runtime where Moon can schedule it safely.
+The normal design uses one heavy hosted runner and one CAD runtime.
 
-## 3. Moon's target role
+## 3. Moon role
 
-Moon remains because two separate benefits are now demonstrated or well justified.
+Moon stays for two measured reasons.
 
-### 3.1 Change-impact selection before Docker
+### Change-impact selection
 
-This is already proven. An unrelated README-only change can finish without downloading or starting the expensive SCAD runtime.
-
-Moon should answer the human-level question:
+Before Docker, Moon answers:
 
 ```text
-Which capabilities are affected by this source change?
+Which coarse SCAD capabilities are affected by base -> source?
 ```
 
-not merely one opaque boolean when the capability list is useful later in the lifecycle.
+An unrelated change can therefore finish without acquiring the CAD image.
 
-### 3.2 Whole-capability output reuse
+The released generic affected implementation already computes the complete affected-task set. Migration-005 implementation must expose the relevant capability IDs from that same query instead of reducing all information to one boolean.
 
-Migration 005 demonstrated that Moon can restore a complete docs result on a fresh hosted VM when the task inputs contain only stable source-derived state.
+### Whole-capability reuse
 
-The current failure was caused by our broad input glob including generated Python bytecode, not by Moon's cache model itself.
+Moon may restore a complete source-derived capability result when task identity matches.
 
-Moon therefore remains useful above SCons as a **coarse** reuse layer:
+This was validated on a fresh runner. The earlier cache failure was caused by our broad `tools/tool.scad-project/**` input admitting generated `.pyc` files; it was not a Moon cache-model failure.
 
-- docs output can be reused as a complete result;
-- Verification output can be reused as a complete result;
-- presentation Build output can be reused as a complete result;
-- unaffected capabilities do not have to execute merely because another capability changed.
+Shared policy therefore uses explicit source-controlled tool inputs.
 
-The input boundary must be source-only. Generated runtime state such as `__pycache__`, current CI run identifiers or publication context must never define the identity of a source-derived capability.
+## 4. Shared Moon policy ownership
 
-## 4. Moon configuration ownership
+Standard SCAD tasks live in pinned `tool.scad-project` and are inherited through Moon's native workspace task inheritance.
 
-Standard SCAD tasks should be defined once in shared tooling and inherited by consumer repositories.
-
-Moon v2 supports workspace-level task inheritance through `.moon/tasks/**`, and those task files can extend a relative file-system path. Because `tool.scad-project` is already pinned by exact Git submodule revision, the shared Moon policy can be pinned by the same repository/tool revision rather than copied into every consumer.
-
-Conceptually:
+Validated shared capabilities:
 
 ```text
-tool.scad-project
-  shared Moon task policy
-      |
-      v
-consumer .moon/tasks/scad.yml
-  extends pinned shared policy
-      |
-      v
-consumer project-specific capability inputs / overrides only
+scad.docs
+scad.build
+scad.verify
 ```
 
-The exact file layout is an implementation decision, but the ownership rule is not:
+Shared policy owns:
 
-> **Shared lifecycle mechanics are owned by shared tooling; consumer repositories declare only their actual capabilities and project-specific change-impact exceptions.**
+- capability command;
+- common stable config/tool inputs;
+- standard output boundary;
+- Moon cache policy.
 
-The effective task graph must remain inspectable. Moon already exposes task details (`moon task <target>` and JSON output); shared tooling should add a plain-language explanation if that remains too technical for normal maintainers.
+Consumer repositories declare only:
 
-## 5. Consumer configuration target
+1. which capabilities they expose;
+2. project-specific source-impact patterns;
+3. exceptional output overrides only when they intentionally depart from the standard lifecycle roots.
 
-`project.scad.yml` remains the source for SCAD project intent it already knows, including:
+The validated inheritance form is a single link such as:
 
-- Build output root;
-- optional standalone render root;
+```yaml
+extends: '../../tools/tool.scad-project/moon/tasks/scad.yml'
+```
+
+No custom YAML generator is required.
+
+## 5. Project intent and consistency
+
+`project.scad.yml` remains the SCAD-domain project model. It already describes items such as:
+
+- Build/output roots;
+- presentation render root;
 - Verification commands/output root;
-- publication policy;
-- selected build engine (`direct` or `scons`).
+- OpenSCAD/PythonSCAD configuration;
+- selected build engine;
+- publication branches/policy.
 
-The Moon-facing consumer configuration should add only source-impact information that cannot be derived safely from that model.
+The reduced Moon model complements that with the visible capability set and source-impact boundaries.
 
-Illustrative clamps intent:
+Shared validation must reject contradictions between the two representations. At minimum:
 
-```text
-Design documentation
-  affected by project CAD/design source
+- presentation/render configuration and `scad.build` agree;
+- Verification configuration and `scad.verify` agree;
+- PythonSCAD configuration implies the full/dual runtime;
+- OpenSCAD-only configuration permits the focused runtime;
+- `build_engine: scons` controls applicable SCons-cache handling;
+- non-standard output roots provide compatible Moon output overrides.
 
-Verification
-  affected by CAD/API/test/verification source
-```
+## 6. Runtime image family
 
-Illustrative HUB75 intent:
+One `docker.scad-toolchain` repository owns one related image family from one multi-stage source.
 
-```text
-Presentation renders
-  affected by panel/render source
+### OpenSCAD-focused profile
 
-Design documentation
-  affected by CAD/design source
+Contains the normal OpenSCAD production contract, including:
 
-Verification
-  affected by API/fixture/testcase/verification source
-```
+- OpenSCAD;
+- BOSL2;
+- documentation tooling;
+- Pillow/watermark support;
+- SCons;
+- required system/runtime tools.
 
-The final syntax is not selected here. The important point is that a consumer no longer declares seven/eight lifecycle steps.
+### Full/dual profile
 
-## 6. `tool.scad-project` role
+Is the OpenSCAD profile plus:
 
-`tool.scad-project` owns complete capability commands and SCAD-domain policy.
+- PythonSCAD;
+- pybosl2;
+- Shapely;
+- related PythonSCAD dependencies.
 
-It should present commands at the same level as the human model, for example conceptually:
+Validated compressed sizes:
 
-```text
-build documentation
-build presentation renders
-run verification
-```
+- OpenSCAD-focused: 328,098,501 bytes;
+- full/dual: 449,516,893 bytes.
 
-Existing commands such as `produce-build` / `produce-verification` are useful evidence that this coarse boundary already partly exists, but their exact current composition must not dictate the new API if Build renders and Build documentation need to remain independently affected capabilities.
+OpenSCAD-only work therefore avoids about 121 MB / 27% of full-image compressed distribution.
 
-Index generation and source/tool information belong to the capability/lifecycle implementation, not to consumer-authored Moon topology.
+Runtime selection is derived from effective project capabilities/configuration, never a repository-name allowlist.
 
 ## 7. SCons role
 
-SCons remains the fine-grained dependency engine **only where the project selects it**.
-
-Evidence already distinguishes two cases:
-
-- `lib.scad.clamps` uses the default direct engine; no `.cache/scad-project/scons` is created, so generic SCons cache restore/save is wasted work;
-- `lib.scad.hub75` explicitly selects `build_engine: scons`; its qualified exact-main run populated the normal SCons cache.
-
-Therefore:
+SCons is optional fine-grained target reuse inside capabilities that explicitly select it.
 
 ```text
 Moon
   decides/reuses a whole capability
 
-SCons (optional)
-  decides/reuses individual targets inside an executing capability
+SCons, when configured
+  decides/reuses individual targets inside that capability
 ```
 
-The workflow should restore/save an SCons cache only if the effective project/capability configuration can actually use it.
+Evidence distinguishes the reference cases:
 
-A separate Verification SCons cache should exist only if Verification really has a SCons-backed target engine. The current generic empty cache slot is not itself an architectural requirement.
+- clamps: direct engine; no useful SCons cache exists;
+- HUB75: SCons engine; normal SCons cache is populated and warm reuse is effective.
 
-## 8. Current-run information must be outside source-derived cache identity
+The workflow must not restore/save SCons caches for direct projects merely because SCons support exists elsewhere in the ecosystem.
 
-The current architecture had a real reason for separating source-impact tasks from finishing tasks: publication information includes values that change per CI invocation.
+A separate Verification SCons cache exists only if a real Verification engine populates it.
 
-The target architecture preserves the **distinction**, but not necessarily the visible task count.
+## 8. Source identity versus current-run information
 
-Source-derived cached capability output must not depend on values such as:
+Source-derived cached capability output must depend only on stable source/tool/config state.
+
+Values such as these must not define Moon source identity:
 
 ```text
 GitHub run id
 PR number
-current ref/publication context
+current ref
+publication branch/context
 ```
 
-After Moon has executed or restored the source-derived capability outputs, shared lifecycle code writes the current source/tool/run information required for truthful publication.
+After capabilities are executed or restored, shared host finishing adds truthful current source/tool/run information required for publication.
 
-That gives both:
-
-- stable reusable source output;
-- truthful current publication information.
+This preserves both reusable source output and accurate current-run evidence.
 
 ## 9. GitHub Actions role
 
-GitHub Actions should remain a thin lifecycle shell around shared tooling:
+GitHub Actions is a thin lifecycle/credentials shell:
 
 1. resolve exact source and comparison base;
-2. check which SCAD capabilities changed;
-3. stop immediately when none changed;
-4. acquire one SCAD runtime when needed;
-5. restore only caches applicable to the configured project/capabilities;
-6. execute/materialise the coarse capability graph in one Docker process;
+2. ask Moon once which capabilities changed;
+3. stop when none changed;
+4. select one runtime image from effective project capability/configuration;
+5. restore only applicable caches;
+6. execute/materialise only affected capabilities in one Docker process;
 7. validate output;
 8. add current-run information;
 9. publish/retain output according to explicit policy.
 
-The reusable workflow should not contain repository-specific CAD logic.
+Repository-specific CAD logic does not belong in the reusable workflow.
 
-## 10. Resource and latency objective
+## 10. Normal artifact policy
 
-The target retains the one-heavy-runner principle from Migration 004 because two independent hosted VMs duplicate image download, checkout and runtime setup.
+Normal successful production does not need duplicate complete Build/Verification Actions artifacts because same-job publication already uses local staging trees.
 
-However, “one runner” is not sufficient success by itself.
+Default policy:
 
-The target should recover latency by:
+- retain compact impact/orchestration evidence;
+- publish generated Build/Verification branches;
+- do not upload complete normal output trees again merely for retention.
 
-- removing work rather than creating a second VM;
-- hydrating unchanged capabilities from Moon cache;
-- using SCons target reuse only where configured;
-- allowing independent capability work to overlap within one runtime when safe;
-- avoiding cache restore/save operations for unused engines;
-- reducing SCAD image distribution cost;
-- removing or making optional retained normal-CI artifacts nobody consumes;
-- overlapping or combining independent publication work when safe.
+A future manual-download/non-publication use case may opt in explicitly.
 
-Every performance comparison must report both wall-clock feedback and total hosted compute/resource use.
+Release is different: its separate Build/Verify/finalize jobs require exact-source cross-job artifact hand-off, so release artifacts remain mandatory.
 
-## 11. What this target deliberately rejects
+## 11. Publication
 
-### Current seven/eight-task consumer graph
+Build and Verification publication remain separate logical outputs, but the released publisher is isolated per call and can safely run concurrently on the same host.
 
-Rejected as a long-term consumer contract. Too much generic lifecycle detail is repeated in each repository.
+Validation proved two publications can overlap, publish correct independent branch trees and clean up without a second runner.
 
-### Moon only for the host impact check
+The target therefore allows same-runner publication overlap when useful. It does not add another hosted runner for finishing work.
 
-No longer the preferred design. Once task identity was fixed, Moon whole-output reuse demonstrably worked and avoided real render work. Removing that capability would discard a useful coarse-grained reuse layer, especially for richer repositories with independently affected Build/docs/Verification domains.
+## 12. Resource/latency objective
 
-It remains a fallback if later experiments show the shared coarse Moon model introduces disproportionate complexity.
+The architecture optimises two axes separately:
+
+- feedback latency;
+- total compute/resource demand.
+
+It prefers, in order:
+
+1. eliminate work;
+2. reuse work at the appropriate layer;
+3. reduce image distribution cost;
+4. overlap independent finishing work on the same runner;
+5. add heavyweight parallel infrastructure only if later measured requirements justify its extra resource cost.
+
+The detailed acceptance budget is in [target-resource-budget.md](target-resource-budget.md).
+
+## 13. Human-understandability result
+
+The selected model passes the Migration-005 inspection test.
+
+With a consumer repository plus this architecture page, a maintainer can identify:
+
+- repository capabilities;
+- change-impact boundaries;
+- why Moon exists;
+- when SCons exists;
+- runtime profile choice;
+- cache scopes;
+- why current-run information is outside cached source identity;
+- why publication stays outside Docker;
+- where latency/resource cost is concentrated.
+
+See [human-understandability-validation.md](human-understandability-validation.md).
+
+## 14. Deliberately rejected long-term models
+
+### Seven/eight lifecycle tasks copied into every consumer
+
+Rejected. Generic finishing mechanics are not repository capabilities.
+
+### Moon only as a boolean pre-Docker gate
+
+Rejected as the preferred model. Stable Moon whole-capability reuse is proven and the affected query already knows more than one boolean.
 
 ### Remove Moon entirely
 
-Not preferred. The impact-analysis value is proven and replacing it would require us to invent and maintain equivalent dependency/affected logic.
+Rejected. Change-impact value and whole-capability reuse are both measured.
 
-### Return to two heavy hosted jobs merely for latency
+### Return to two heavy hosted jobs merely to regain latency
 
-Not preferred. The old ~37-second result came partly from overlapping two expensive VM/container initialisations. Migration 005 should first remove the dominant single-runner overhead and exploit in-runtime concurrency before paying for duplicated hosted infrastructure again.
+Rejected as the default. It duplicates runner/image/runtime setup. Migration 005 first removes work and uses same-runner/internal overlap.
 
-## 12. Remaining validation before implementation plan
+## 15. Validation outcome
 
-This target is provisional until the following are completed:
+Architecture validation is complete:
 
-1. measure warm SCons reuse on a real SCons-enabled HUB75 capability;
-2. measure SCAD image size/layers and compare realistic image-distribution improvements;
-3. decide normal-CI artifact retention policy explicitly;
-4. test safe concurrent/combined Build + Verification branch publication;
-5. prototype Moon inherited shared tasks from the pinned `tool.scad-project` path;
-6. sketch the resulting consumer configuration for both clamps and HUB75 and apply the human-understandability test;
-7. estimate latency and total runner time for the resulting lifecycle.
+- Moon change-impact value — passed;
+- stable Moon whole-capability cache — passed;
+- SCons optional/fine-grained boundary — passed;
+- warm HUB75 SCons reuse — passed;
+- two-profile runtime image family — passed;
+- normal artifact retention decision — complete;
+- same-runner concurrent publication — passed;
+- native shared Moon task inheritance — passed;
+- concrete clamps/HUB75 reduced consumer model — passed;
+- human-understandability inspection — passed;
+- latency/resource budget — established.
 
-If those checks do not expose a fundamental contradiction, this document becomes the basis for the Migration-005 implementation steps.
+The next work is the owner-specific implementation sequence in [implementation-plan.md](implementation-plan.md).
+
+`2026-009-01.cad.HUB75-display-frame` remains intentionally deferred until the shared tools and both reference canaries are released and qualified.
