@@ -39,9 +39,9 @@ A key completion criterion is that a README-only or otherwise unaffected change 
 
 **Complete.** Owner: `tool.scad-project`.
 
-The first reusable production workflow is released as `tool.scad-project v0.13.0` from exact main `da57820fdadd7d203091b6818984991f1548408f`.
+The first reusable production workflow was released as `tool.scad-project v0.13.0` from exact main `da57820fdadd7d203091b6818984991f1548408f`.
 
-Its qualified contract provides:
+Its qualified contract introduced:
 
 - host-side shallow/blobless Moon affected preflight;
 - exact shallow BASE fetching without `fetch-depth: 0`;
@@ -70,70 +70,92 @@ Cold run `34938849331` built all reference targets; the later final run restored
 
 ### Step 5 — reference library qualification
 
-**Active; functionally qualified, paused for the second shared tooling correction.** Owner: `lib.scad.clamps`.
+**Complete.** Owner: `lib.scad.clamps`.
 
-Draft PR #7 proved the common execution semantics are suitable for the reference library without inventing a dummy Build task. Candidate `bb071329e1d6c764d09f87ecd2cc78d42ac73679` uses released `tool.scad-project v0.13.0`, library-specific `scad.docs` and `scad.verify` producers, one affected gate and one aggregate materialization boundary.
+The first v0.13.0 library qualification proved the task semantics but exposed a material performance regression: relevant feedback rose from an old ~37 s parallel Build/Verify critical path with two containers to ~64–65 s with one container because preflight, production and publication had become serial GitHub jobs.
 
-Functional evidence is green:
+The migration stop condition triggered the dedicated performance experiment tracked in issue #53 and retained in `exp.2026-003.scad-ci-performance`.
 
-- candidate run `34947426305` — one SCAD container, library-specific OpenSCAD/PythonSCAD design and consumer verification, aggregate materialization and both host publication jobs passed;
-- proof PR #8 / run `34947599096` — README-only returns `affected=false`; no SCAD container starts;
-- proof PR #9 / run `34947625311` — docs/design-only input affects `scad.docs` but not `scad.verify`;
-- proof PR #10 / run `34947539588` — Verify-only input affects `scad.verify` but not `scad.docs`.
-
-The required before/after measurement exposed a material relevant-change latency regression:
-
-- old parallel Build/Verify CI: about **37 s** critical path with **two** SCAD containers;
-- released v0.13.0 lifecycle: about **64–65 s** with **one** SCAD container;
-- README-only remains a short host preflight with **zero** SCAD containers.
-
-Experiment #53 is **complete**. It separated the runtime question from the GitHub workflow-topology question.
+#### Performance decision and shared correction
 
 Runtime result:
 
 - keep `ghcr.io/brainboxemb/scad-toolchain:v0.4.1` as the immutable SCAD execution environment;
-- historical/cached host OpenSCAD and an exact-binary host bundle did not reproduce the Docker EGL/output behavior reliably;
-- explicit Docker execution preserves the qualified runtime and byte-identical reference output.
+- cached-host variants did not reproduce the qualified Docker EGL/output behavior reliably;
+- the latency problem came from GitHub job/artifact boundaries, not from the Docker runtime itself.
 
-Workflow-topology result on the exact Step-5 clamps candidate:
-
-- one-host-job variant C, run `34955615827`: **41.024 s** measured relevant lifecycle;
-- second variant-C run `34955904779`: **45.169 s** measured relevant lifecycle;
-- README-only controls: **4.369 s** and **4.819 s**, both with zero container starts;
-- both relevant runs used one SCAD container, successful current-source `consumer:scad.ci` materialization and two real host publications after the Docker process exited.
-
-The selected direction is therefore:
+Selected topology:
 
 ```text
 one host job
   -> Moon affected preflight
-  -> if affected: docker run exact SCAD toolchain
+  -> if affected: one explicit docker run of the exact SCAD image
   -> validate/stage after container exit
   -> host publication in the same job
 ```
 
-The gain comes from removing serial GitHub job/artifact handoffs, **not** from replacing Docker.
+Shared prerequisites were implemented by their owners:
 
-The first shared-owner prerequisite is now complete:
+- `tool.git-project v0.2.7` — same-job generated-output publication, exact source `6234b7437b0dc0115642468f74d1f4a2c2214bef`; release run `34960768652`; tagged Linux/Windows verification run `34960782984`;
+- `tool.scad-project v0.13.1` — one-host-job production lifecycle, exact source `28661fc040c4994e9c1d391285b7425c7a55252b`; exact-main Test `34970279362`; release run `34970379930`; tagged Test `34970393104`.
 
-- `tool.git-project` PR #24 introduced the reusable same-job generated-output publisher while retaining the artifact-based reusable workflow as a compatibility wrapper;
-- exact main/release source: `6234b7437b0dc0115642468f74d1f4a2c2214bef`;
-- release: `tool.git-project v0.2.7`;
-- release run `34960768652` — passed;
-- tagged same-job verification run `34960782984` — Linux contract, Linux sequential publication and native Windows publication all passed;
-- annotated tag object `6afaa504ae68d2e774eb74e17fb0b27d44d455ef` resolves to the exact release source.
+Reference-template pre-release qualification of the v0.13.1 topology retained:
 
-The next prerequisite is owned by `tool.scad-project`: consume released v0.2.7 and release the one-host-job lifecycle with conditional Docker execution, exact-source/materialization validation, same-job Build/Verification publication and the existing conservative fallback.
+- relevant one-host/one-Docker run `34967002612`;
+- README-only zero-container run `34967121183`;
+- conservative missing-base proof with forced aggregate execution.
 
-After that release, Step 5 resumes in `lib.scad.clamps` PR #7 and repeats the retained functional/performance qualification. Step 6 must not start before that is complete.
+#### Released reference-library rollout
 
-See [performance-evidence.md](performance-evidence.md) for exact runtime/lifecycle measurements and the ownership rationale.
+`lib.scad.clamps` PR #7 adopted released v0.13.1 and merged as exact main:
+
+```text
+c5732944c8c2ba840a3f0f2f0a0638430a796cfd
+```
+
+The library graph remains intentionally library-specific:
+
+- `scad.docs` — generated OpenSCAD + PythonSCAD design documentation;
+- `scad.verify` — OpenSCAD + PythonSCAD public-consumer PNG/STL verification;
+- no artificial `scad.build` task because this repository has no normal configured render/export targets;
+- `scad.production-impact` — source-impact gate;
+- `scad.ci` — publication-ready aggregate.
+
+Final released-interface evidence:
+
+- final PR-head run `34971400621` — one host orchestrator job, one explicit Docker process, design + verification + current materialization + both host publications green; about **45 s** from reusable-workflow start through second publication with a ~20 s image pull;
+- README-only proof PR #11 / run `34971644925` — `affected=false`, reason `target-and-upstream-unaffected`; no SCAD image pull/container/publication;
+- docs-only proof PR #12 / run `34971733730` — retained preflight artifact `10397796125` contains `scad.docs` in the affected route and excludes `scad.verify`;
+- Verify-only proof PR #13 / run `34971800074` — retained preflight artifact `10397512803` contains `scad.verify` and excludes `scad.docs`;
+- exact-main production run `34972350665` — passed with one host job/one Docker and both production publications;
+- `prod/build` and `prod/verification` both record exact source `c5732944c8c2ba840a3f0f2f0a0638430a796cfd` and `tool.scad-project v0.13.1`.
+
+A first released v0.13.1 clamps run `34970821889` was also fully green but encountered a ~43.7 s GHCR pull outlier. The repeated final-head run demonstrates that the old ~64–65 s latency was structural to the v0.13.0 job topology and is no longer structural in v0.13.1.
+
+Step 5 therefore satisfies both the functional and proportionality acceptance criteria.
+
+See [performance-evidence.md](performance-evidence.md) for the full runtime/lifecycle comparison.
+
+### Step 6 — second library qualification
+
+**Next; re-evaluation required before implementation.** Owner candidate: `lib.scad.hub75`.
+
+Before changing that repository:
+
+- inspect its current `AGENTS.md`, main head, tool/dependency pins and current open PRs;
+- reconstruct its actual Build/Verify/documentation/release graph rather than copying clamps or template mechanically;
+- separate Migration 004 execution-model work from the ongoing physical-verification/SQ work;
+- confirm whether its verification inputs can preserve truthful producer independence;
+- identify any HUB75-library-specific outputs or release expectations that do not fit the reference-library graph;
+- retain README-only zero-container, relevant one-container, logical-independence and publication evidence on the released v0.13.1 interface.
+
+Do not start the HUB75 frame requalification unless Step 6 shows the shared/library change materially affects that consumer.
 
 ## Reference repositories
 
 - `template.scad-project` — reference project;
-- `lib.scad.clamps` — reference library;
-- `lib.scad.hub75` — second library qualification;
+- `lib.scad.clamps` — reference library, Step 5 complete;
+- `lib.scad.hub75` — second library qualification, Step 6 next;
 - `2026-009-01.cad.HUB75-display-frame` — realistic project requalification if needed.
 
 ## Owner sequence
@@ -142,12 +164,12 @@ See [performance-evidence.md](performance-evidence.md) for exact runtime/lifecyc
 2. `template.scad-project` — correct the Build/Verify task graph — complete;
 3. `tool.scad-project` — initial reusable SCAD production workflow — complete, released as v0.13.0;
 4. `template.scad-project` — qualify the released shared workflow and pre-container skip — complete;
-5. `lib.scad.clamps` — reference library rollout — active; paused on the shared single-job prerequisite;
-   - `tool.git-project` same-job generated-output publisher primitive — **complete, released as v0.2.7**;
-   - `tool.scad-project` single-host orchestrator workflow — **next**;
-   - then resume the clamps PR #7 qualification;
-6. `lib.scad.hub75` — blocked until Step 5 completes;
-7. HUB75 frame — requalify when shared changes affect it.
+5. `lib.scad.clamps` — reference library rollout — **complete**;
+   - `tool.git-project` same-job publisher — complete/released as v0.2.7;
+   - `tool.scad-project` single-host lifecycle — complete/released as v0.13.1;
+   - clamps released-interface qualification and exact-main publication — complete;
+6. `lib.scad.hub75` — **next**;
+7. HUB75 frame — requalify only when Step 6 shows it is needed.
 
 Each step must be re-evaluated before implementation. Do not continue merely because it appears in this sequence.
 
