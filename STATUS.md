@@ -1,92 +1,65 @@
 # Current cross-project changes
 
-This page only answers: **what repository-spanning work is active or waiting to be picked up?**
+This page answers: **what repository-spanning work is active or waiting to be picked up?**
 
 For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 004 — SCAD repository execution model
+### Migration 005 — simplify the SCAD execution architecture
 
-**Active — reflection gate after Step 6.**
+**Active — architecture definition first.**
 
-The migration aligns current SCAD projects and libraries on one understandable production lifecycle:
+Migration 004 proved and released a working common SCAD execution model, but its final human-maintainability review found that the visible Moon/task model had become too difficult to understand from a normal consumer repository.
 
-- Moon as repository-level orchestration and affected/preflight layer;
-- SCons retained as the qualified fine-grained SCAD target engine;
-- Build and Verify remain logically independent;
-- README-only or otherwise unaffected changes start no SCAD container;
-- affected normal CI uses one immutable SCAD Docker execution environment;
-- preflight, conditional Docker production, validation and publication share one host orchestrator job;
-- publication remains outside the SCAD container process and happens after that process exits.
+Migration 005 therefore starts with architecture, not rollout.
 
-Step 1 is complete: `tool.git-project` provides the released generic Moon affected preflight. Aggregate/upstream affected propagation discovered during Step 3 qualification was corrected generically and released as v0.2.6.
+Current goal:
 
-Step 2 is complete: `template.scad-project` PR #22 removed the stale `scad.verify -> scad.build` dependency and requalified Build/Verify independence on exact main `082b0cecb47ba082899214751080adc54556e94c`.
+- describe the existing SCAD CI/execution flow in ordinary language;
+- identify which visible task boundaries are essential and which are accidental/historical complexity;
+- compare simpler target variants before implementing them;
+- retain the useful Migration-004 properties where justified: unrelated changes should not start the SCAD runtime, Build and Verification remain independently meaningful, exact-source evidence remains trustworthy, and GitHub write credentials remain outside the SCAD runtime;
+- use measured performance rather than vague claims when evaluating simplification.
 
-Step 3 is complete: `tool.scad-project v0.13.0` provided the first reusable production workflow. Release source was exact main `da57820fdadd7d203091b6818984991f1548408f`.
+Performance baseline inherited from Migration 004:
 
-Step 4 is complete: `template.scad-project` PR #29 consumed released v0.13.0 and merged as exact main `8ac67014eb2ab7252f38b41a1137b5b0c902ef6a`. Final-head proofs retained README-only no-container, Verify-only impact without Build/Docs, and Build-side impact without Verify.
+- old parallel relevant-change baseline: about **37 s** wall-clock, two heavy SCAD containers and roughly **68–70 runner-seconds**;
+- first common v0.13.0 topology: **64–65 s** — a regression caused by serial GitHub job/artifact boundaries;
+- final v0.13.1 topology: about **41–45 s**, one heavy SCAD container;
+- repeated README-only controls: about **4.4–4.8 s**, **zero SCAD containers**;
+- old job-level SCAD-container startup alone was observed around **17–30 s before checkout**.
 
-The Step-5 performance stop condition was fully evaluated in completed experiment #53. The resulting shared correction is complete:
+The important conclusion is not “all builds became faster”. The large gain is avoiding the heavy SCAD path entirely when it is unnecessary and reducing duplicated heavy setup when it is necessary.
 
-- keep the immutable Docker SCAD runtime;
-- `tool.git-project v0.2.7` exposes same-job generated-output publication from exact source `6234b7437b0dc0115642468f74d1f4a2c2214bef`;
-- `tool.scad-project v0.13.1` provides one host orchestrator job around Moon preflight, conditional explicit Docker production, validation/staging and same-job host publication from exact source `28661fc040c4994e9c1d391285b7425c7a55252b`;
-- relevant lifecycle measurements returned to about **41–45 s** in the experiment while keeping one SCAD container; README-only controls remained about **4–5 s** with zero containers.
+The first Migration-005 deliverable is a plain-language current architecture plus at least two simpler target variants. Do not migrate the HUB75 frame before that target architecture is selected.
 
-Step 5 is **complete and released**: `lib.scad.clamps` PR #7 adopted released `tool.scad-project v0.13.1` and merged as exact qualified main `c5732944c8c2ba840a3f0f2f0a0638430a796cfd`. A missed release-closeout was corrected immediately afterwards: PR #14 recorded the existing qualified changes as `v0.1.3`, merged as exact release source `f0dbb82b477201646fc3e2173ccba96d70fb8920`, and release run `34974674991` passed Build, Verify and finalization. Annotated tag `v0.1.3` resolves to that exact source; immutable `rel/v0.1.3/build` and `rel/v0.1.3/verification` branches and GitHub Release assets exist.
-
-Reference-library evidence:
-
-- final PR-head relevant run `34971400621` — one host job, one explicit SCAD Docker process, OpenSCAD + PythonSCAD design/verification, current materialization and both host publications green; measured lifecycle about **45 s** with a ~20 s GHCR pull;
-- README-only proof PR #11 / run `34971644925` — `affected=false`, reason `target-and-upstream-unaffected`; no image pull, Docker, staging or publication;
-- docs-only proof PR #12 / run `34971733730` — retained affected-task evidence contains `scad.docs` and excludes `scad.verify`;
-- Verify-only proof PR #13 / run `34971800074` — retained affected-task evidence contains `scad.verify` and excludes `scad.docs`;
-- exact-main run `34972350665` — one host job/one Docker and both production publications green;
-- `prod/build` and `prod/verification` both record exact qualified source `c5732944c8c2ba840a3f0f2f0a0638430a796cfd` and `tool.scad-project v0.13.1`;
-- release-closeout PR #14 / run `34974591518` — changelog-only change correctly stopped after Moon preflight with zero SCAD containers;
-- `v0.1.3` release run `34974674991` — exact-source Build and Verify green, immutable release branches published, annotated tag and GitHub Release/assets created from `f0dbb82b477201646fc3e2173ccba96d70fb8920`.
-
-The first released v0.13.1 clamps run `34970821889` was also green but had a ~43.7 s GHCR pull outlier; producer work and publication remained short. The repeated final-head sample demonstrates that the earlier v0.13.0 ~64–65 s regression was caused by serial GitHub job boundaries and is no longer structural.
-
-Step 6 is **complete and released**: `lib.scad.hub75` PR #23 reconstructed the repository-specific graph instead of copying clamps mechanically. HUB75 retains three real producer domains — `scad.build` for standalone presentation renders, `scad.docs` for generated design documentation and `scad.verify` for API plus physical-verification output — while the physical SQ/testcase content itself remains unchanged.
-
-Second-library evidence:
-
-- final candidate `3f44c90afe8419ff56c76bdc9806c9887c46f387` passed normal production run `34975967199` with one host job, one explicit SCAD Docker process, current materialization and both PR publications;
-- README-only proof PR #24 / run `34976305647` — `affected=false`; image pull, Docker, staging and publication all skipped;
-- Build-only proof PR #25 / run `34976316887` — direct producer impact only on `scad.build`;
-- docs-only proof PR #26 / run `34976333875` — direct producer impact only on `scad.docs`;
-- Verify-only proof PR #27 / run `34976347095` — direct producer impact only on `scad.verify`;
-- PR #23 merged as exact qualified main `5f2ed2ae3e6901e10c1b14efeed5285bdde779da`;
-- exact-main production run `34976840416` passed and `prod/build` plus `prod/verification` both record that exact source and `tool.scad-project v0.13.1`;
-- release-closeout PR #28 was changelog-only and run `34977045560` proved zero-container behavior;
-- `lib.scad.hub75 v0.1.4` release source is exact main `2eaaa540e3658bd3821eb6ec0f2d0352cbefff48`;
-- release run `34977125016` passed exact-source Build, Verify and finalization; annotated tag `v0.1.4`, immutable `rel/v0.1.4/build` and `rel/v0.1.4/verification`, GitHub Release assets and release-request cleanup all exist.
-
-**Reflection gate:** do not mechanically continue to the HUB75-frame requalification. Before any further Migration 004 rollout, review whether the current Moon task graph and execution/publication model are still proportionate, whether every task boundary has a clear human-readable purpose, and whether the architectural motivation can be reconstructed by a maintainer without relying on agent/chat history. Simplify or document the model before continuing if that test fails.
-
-Tracking issue: #49. Completed performance experiment: #53. See [Migration 004](migrations/004-scad-repository-execution-model/README.md), its [qualification evidence](migrations/004-scad-repository-execution-model/evidence.md), and the retained [Step-5 performance evidence](migrations/004-scad-repository-execution-model/performance-evidence.md).
+Tracking issue: #55. Canonical scope: [Migration 005](migrations/005-scad-execution-architecture/README.md).
 
 ## Recently completed
+
+### Migration 004 — SCAD repository execution model
+
+**Complete.**
+
+Migration 004 qualified the conditional-SCAD execution model through:
+
+- `template.scad-project`;
+- `lib.scad.clamps v0.1.3`;
+- `lib.scad.hub75 v0.1.4`;
+- shared `tool.git-project v0.2.7` and `tool.scad-project v0.13.1`.
+
+It proved README-only zero-container behavior, one-container affected production, Build/Verification independence, conservative execution when comparison context is uncertain, and host-side publication after the SCAD process exits.
+
+The real HUB75 frame was deliberately **not** migrated to the new model after the final maintainability review. It remains on `tool.scad-project v0.12.0` and `lib.scad.hub75 v0.1.3`; its eventual update belongs to Migration 005 after the architecture is simplified/clarified.
+
+See [Migration 004](migrations/004-scad-repository-execution-model/README.md), [qualification evidence](migrations/004-scad-repository-execution-model/evidence.md), [performance evidence](migrations/004-scad-repository-execution-model/performance-evidence.md) and the retained [reflection](migrations/004-scad-repository-execution-model/reflection.md).
 
 ### Migration 003 — roll out `tool.scad-project v0.12.0` through SCAD consumers
 
 **Complete.**
 
-The released SCAD tool was qualified through the template, both reusable SCAD libraries, and finally the real HUB75 frame project.
-
-Current qualified versions include:
-
-- `tool.scad-project v0.12.0`;
-- `lib.scad.clamps v0.1.2`;
-- `lib.scad.hub75 v0.1.3`;
-- `2026-009-01.cad.HUB75-display-frame` on tool v0.12.0 + HUB75 library v0.1.3.
-
-The separate physical-verification work in `lib.scad.hub75` is project-local work, not a continuation of this migration.
-
-See [Migration 003](migrations/003-scad-v0.12-rollout/README.md) and its [qualification evidence](migrations/003-scad-v0.12-rollout/evidence.md).
+The released SCAD tool was qualified through the template, both SCAD libraries and finally the real HUB75 frame project.
 
 ### Migration 002 — check build decisions after a SCAD build
 
@@ -94,21 +67,15 @@ See [Migration 003](migrations/003-scad-v0.12-rollout/README.md) and its [qualif
 
 `tool.scad-project` provides an explicit post-build audit that compares changed paths with dependency evidence already recorded for each SCons target.
 
-See [Migration 002](migrations/002-scad-build-decision-audit/README.md) and its [qualification evidence](migrations/002-scad-build-decision-audit/evidence.md).
-
 ### Migration 001 — consolidate the public portfolio overview
 
 **Complete.**
 
 `brainboxemb.meta` contains the public repository overview, dashboard, shared guidance and SCAD/CAD navigation that had previously been split across several repositories.
 
-`tech.scad` and `meta.scad-projects` are private archives.
-
-See [Migration 001](migrations/001-brainboxemb-meta/README.md) for its history and evidence.
-
 ## Parked experiment
 
-- **Moon as SCAD target engine** — issue #51. This is explicitly outside Migration 004; SCons remains the target engine during the execution-model migration.
+- **Moon as SCAD target engine** — issue #51. This remains separate; Migration 005 may reconsider visible orchestration boundaries, but it must not silently turn this parked engine-replacement question into an assumption.
 
 ## Other follow-ups
 
@@ -118,7 +85,7 @@ Useful cross-project improvements remain parked until there is a reason to pick 
 - **One release flow for requested versions across project types** — issue #20;
 - **Standardise CHANGELOG format and add a shared template** — issue #52.
 
-Generic performance/robustness follow-ups discovered while executing Migration 004 remain owner-local and non-blocking unless explicitly promoted by the active migration:
+Generic performance/robustness follow-ups remain owner-local unless explicitly promoted:
 
 - `tool.git-project` issue #17 — improve safe Moon cache/materialization reuse;
 - `tool.git-project` issue #22 — generic release request idempotency.
