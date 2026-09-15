@@ -10,6 +10,7 @@ Working documents:
 
 - [Current architecture in plain language](current-architecture.md)
 - [Complete architecture reflection and candidate directions](architecture-reflection.md)
+- [Measured architecture evidence](measurements.md)
 
 ## Purpose
 
@@ -55,7 +56,7 @@ Migration 005 must explain in ordinary language:
 11. where the current CI time really goes;
 12. which complexity is essential and which is accidental or historical.
 
-The detailed reconstruction starts in [current-architecture.md](current-architecture.md) and the assessment/candidate improvements are kept in [architecture-reflection.md](architecture-reflection.md).
+The detailed reconstruction starts in [current-architecture.md](current-architecture.md), the assessment/candidate improvements are kept in [architecture-reflection.md](architecture-reflection.md), and measured claims are collected separately in [measurements.md](measurements.md).
 
 ## Performance baseline inherited from Migration 004
 
@@ -92,6 +93,19 @@ The workflow explicitly caches Moon state and SCons object state. It does **not*
 
 Migration 005 must measure whether image acquisition can be reduced or reused economically on disposable GitHub-hosted runners. An explicit image cache is not automatically better: cache transfer/storage can itself cost more than pulling from GHCR, so this must be measured rather than assumed.
 
+## Important current finding: distinguish Moon impact analysis from Moon output caching
+
+Migration 004 **did prove** that Moon's impact analysis is useful: README-only work can stop before Docker, and isolated HUB75 changes are correctly classified as Build-, docs- or Verify-related.
+
+The retained qualification runs do **not yet prove** a practical cross-run benefit from Moon's portable output cache. Build-only, docs-only and exact-main HUB75 runs inspected so far all had Moon output-cache misses and therefore executed the full aggregate graph once Docker started. The exact-main clamps run also had a Moon output-cache miss.
+
+That does not prove that Moon output hydration is ineffective; PR/main cache scope, run ordering and concurrent proof runs can explain the misses. It does mean the architecture must not treat two separate claims as one:
+
+1. **Moon as impact engine** — demonstrated value;
+2. **Moon as whole-task output cache** — value still to be demonstrated and measured.
+
+A controlled warm-cache experiment belongs in this migration before that second responsibility is used to justify architecture complexity. Detailed evidence is in [measurements.md](measurements.md).
+
 ## Architecture properties worth preserving unless evidence says otherwise
 
 - an unrelated change should not start the expensive SCAD runtime;
@@ -116,6 +130,7 @@ The complete reflection currently identifies several issues worth challenging:
 - common inputs/configuration are repeated through many tasks;
 - the impact check is highly valuable for unaffected changes but adds several seconds to affected changes;
 - Docker image acquisition dominates the small reference build and is not explicitly cached today;
+- Moon output-cache benefit has not yet been demonstrated by the retained qualification runs;
 - same-job workflow-artifact upload and sequential publication may contain avoidable overhead.
 
 See [architecture-reflection.md](architecture-reflection.md) for the complete assessment.
@@ -133,7 +148,7 @@ No target is selected yet. At minimum Migration 005 will compare:
 
 - Docker image transfer/layer/unpack/startup costs;
 - Moon impact-check sub-costs;
-- actual value/hit rate of Moon output hydration versus SCons caching;
+- controlled warm-cache value/hit behavior of Moon output hydration versus SCons caching;
 - bootstrap/tool-submodule overhead;
 - artifact staging/upload overhead;
 - Build/Verification publication cost and possible safe overlap;
@@ -163,7 +178,7 @@ Do **not** migrate the HUB75 frame yet.
 First:
 
 1. finish the current-architecture reconstruction and performance breakdown;
-2. measure Moon cache value and Docker/runtime costs;
+2. measure Moon impact/cache value and Docker/runtime costs separately;
 3. create concrete simpler configurations for the simple clamps and richer HUB75 cases;
 4. compare the candidate architectures on clarity, correctness, latency and total compute;
 5. select the target architecture with explicit reasons;
