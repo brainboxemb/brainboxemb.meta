@@ -1,0 +1,276 @@
+name: Migration 005 Moon inheritance diagnostic
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/migration-005-moon-inheritance-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-inheritance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact clamps reference
+        uses: actions/checkout@v4
+        with:
+          repository: brainboxemb/lib.scad.clamps
+          ref: f0dbb82b477201646fc3e2173ccba96d70fb8920
+          path: fixture/clamps
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: false
+
+      - name: Checkout exact HUB75 reference
+        uses: actions/checkout@v4
+        with:
+          repository: brainboxemb/lib.scad.hub75
+          ref: 2eaaa540e3658bd3821eb6ec0f2d0352cbefff48
+          path: fixture/hub75
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: false
+
+      - name: Checkout shared-task prototype into clamps tool path
+        uses: actions/checkout@v4
+        with:
+          repository: brainboxemb/tool.scad-project
+          ref: ac0e16bfdb29334604598b6b178aca82a02a84d2
+          path: fixture/clamps/tools/tool.scad-project
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Checkout shared-task prototype into HUB75 tool path
+        uses: actions/checkout@v4
+        with:
+          repository: brainboxemb/tool.scad-project
+          ref: ac0e16bfdb29334604598b6b178aca82a02a84d2
+          path: fixture/hub75/tools/tool.scad-project
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Checkout exact released Moon runtime owner
+        uses: actions/checkout@v4
+        with:
+          repository: brainboxemb/tool.git-project
+          ref: 6234b7437b0dc0115642468f74d1f4a2c2214bef
+          path: fixture/tool.git-project
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Install consumer-only Moon task configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p fixture/clamps/.moon/tasks fixture/hub75/.moon/tasks
+
+          cat > fixture/clamps/.moon/tasks/scad.yml <<'EOF'
+          extends: '../../tools/tool.scad-project/moon/tasks/scad.yml'
+          EOF
+
+          cat > fixture/clamps/moon.yml <<'EOF'
+          workspace:
+            inheritedTasks:
+              include:
+                - 'scad.docs'
+                - 'scad.verify'
+
+          tasks:
+            scad.docs:
+              inputs:
+                - 'openscad/**'
+                - 'pythonscad/**'
+                - 'scripts/render-openscad-design.sh'
+              outputs:
+                - 'bld/design/**'
+                - 'bld/evidence/executions/scad-docs/**'
+
+            scad.verify:
+              inputs:
+                - 'openscad/**'
+                - 'pythonscad/**'
+                - 'test/**'
+                - 'vrf/README.md'
+                - 'scripts/run-verification.sh'
+                - 'scripts/build-verification-index.sh'
+                - 'bootstrap.sh'
+                - 'bootstrap.ps1'
+                - 'update-repo.sh'
+                - 'update-repo.ps1'
+                - '.github/workflows/**'
+                - 'tools/tool.git-project/**'
+              outputs:
+                - 'vrf/out/openscad/**'
+                - 'vrf/out/pythonscad/**'
+                - 'vrf/out/index.md'
+                - 'vrf/out/evidence/executions/scad-verify/**'
+          EOF
+
+          cat > fixture/hub75/.moon/tasks/scad.yml <<'EOF'
+          extends: '../../tools/tool.scad-project/moon/tasks/scad.yml'
+          EOF
+
+          cat > fixture/hub75/moon.yml <<'EOF'
+          workspace:
+            inheritedTasks:
+              include:
+                - 'scad.docs'
+                - 'scad.build'
+                - 'scad.verify'
+
+          tasks:
+            scad.docs:
+              inputs:
+                - 'openscad/**/*.scad'
+                - 'openscad/**/design/**'
+              outputs:
+                - 'bld/design/**'
+                - 'bld/evidence/executions/scad-docs/**'
+                - 'bld/evidence/domain/last-design-build.json'
+                - '.cache/scad-project/state/last-design-build.json'
+
+            scad.build:
+              inputs:
+                - 'openscad/**/*.scad'
+                - 'openscad/**/render.yml'
+              outputs:
+                - 'bld/png/**/*.png'
+                - 'bld/evidence/executions/scad-build/**'
+                - 'bld/evidence/domain/last-build.json'
+                - '.cache/scad-project/state/last-build.json'
+
+            scad.verify:
+              inputs:
+                - 'openscad/p5-64x32-panel/hub75_p5_64x32_panel.scad'
+                - 'test/**'
+                - 'vrf/README.md'
+                - 'vrf/fixtures/**'
+                - 'vrf/top-left/**'
+                - 'vrf/measurement-catalog.yml'
+                - 'vrf/physical-panel-validation.md'
+                - 'vrf/test-case-template.md'
+                - 'scripts/run-verification.sh'
+                - 'scripts/build-verification-index.sh'
+                - 'bootstrap.sh'
+                - 'bootstrap.ps1'
+                - 'update-repo.sh'
+                - 'update-repo.ps1'
+                - '.github/workflows/**'
+                - 'tools/tool.git-project/**'
+              outputs:
+                - 'vrf/out/hub75-p5-64x32-panel-api.stl'
+                - 'vrf/out/fixtures/**'
+                - 'vrf/out/plan/**'
+                - 'vrf/out/README.md'
+                - 'vrf/out/evidence/executions/scad-verify/**'
+          EOF
+
+      - name: Bootstrap pinned Moon once
+        id: moon
+        shell: bash
+        run: |
+          set -euo pipefail
+          moon_bin="$(bash fixture/tool.git-project/moon-project.sh bootstrap --install-root "$RUNNER_TEMP/moon")"
+          echo "bin=$moon_bin" >> "$GITHUB_OUTPUT"
+          "$moon_bin" --version
+
+      - name: Validate effective clamps capability tasks
+        shell: bash
+        env:
+          MOON_BIN: ${{ steps.moon.outputs.bin }}
+        run: |
+          set -euo pipefail
+          bash fixture/tool.git-project/moon-project.sh validate --repo fixture/clamps --install-root "$RUNNER_TEMP/moon"
+
+          mkdir -p "$RUNNER_TEMP/m005-moon/clamps"
+          (
+            cd fixture/clamps
+            "$MOON_BIN" task consumer:scad.docs --json > "$RUNNER_TEMP/m005-moon/clamps/docs.json"
+            "$MOON_BIN" task consumer:scad.verify --json > "$RUNNER_TEMP/m005-moon/clamps/verify.json"
+            if "$MOON_BIN" task consumer:scad.build --json > "$RUNNER_TEMP/m005-moon/clamps/build.json" 2>&1; then
+              echo 'ERROR: clamps unexpectedly inherited scad.build' >&2
+              exit 1
+            fi
+          )
+
+          grep -Fq 'design-build' "$RUNNER_TEMP/m005-moon/clamps/docs.json"
+          grep -Fq 'scripts/render-openscad-design.sh' "$RUNNER_TEMP/m005-moon/clamps/docs.json"
+          grep -Fq 'bld/design' "$RUNNER_TEMP/m005-moon/clamps/docs.json"
+          grep -Fq 'tools/tool.scad-project/src' "$RUNNER_TEMP/m005-moon/clamps/docs.json"
+
+          grep -Fq 'scad-project.sh' "$RUNNER_TEMP/m005-moon/clamps/verify.json"
+          grep -Fq 'verify' "$RUNNER_TEMP/m005-moon/clamps/verify.json"
+          grep -Fq 'vrf/out/openscad' "$RUNNER_TEMP/m005-moon/clamps/verify.json"
+          grep -Fq 'tools/tool.scad-project/src' "$RUNNER_TEMP/m005-moon/clamps/verify.json"
+
+          if grep -Fq 'tools/tool.scad-project/**' "$RUNNER_TEMP/m005-moon/clamps/docs.json" "$RUNNER_TEMP/m005-moon/clamps/verify.json"; then
+            echo 'ERROR: broad tool subtree input leaked back into clamps effective task' >&2
+            exit 1
+          fi
+
+          printf 'junk' > fixture/clamps/tools/tool.scad-project/src/scad_project/__pycache__/migration-005-junk.pyc 2>/dev/null || {
+            mkdir -p fixture/clamps/tools/tool.scad-project/src/scad_project/__pycache__
+            printf 'junk' > fixture/clamps/tools/tool.scad-project/src/scad_project/__pycache__/migration-005-junk.pyc
+          }
+          (
+            cd fixture/clamps
+            "$MOON_BIN" task consumer:scad.docs --json > "$RUNNER_TEMP/m005-moon/clamps/docs-with-pyc.json"
+          )
+          if grep -Fq 'migration-005-junk.pyc' "$RUNNER_TEMP/m005-moon/clamps/docs-with-pyc.json"; then
+            echo 'ERROR: generated Python bytecode is part of the effective docs task inputs' >&2
+            exit 1
+          fi
+
+      - name: Validate effective HUB75 capability tasks
+        shell: bash
+        env:
+          MOON_BIN: ${{ steps.moon.outputs.bin }}
+        run: |
+          set -euo pipefail
+          bash fixture/tool.git-project/moon-project.sh validate --repo fixture/hub75 --install-root "$RUNNER_TEMP/moon"
+
+          mkdir -p "$RUNNER_TEMP/m005-moon/hub75"
+          (
+            cd fixture/hub75
+            "$MOON_BIN" task consumer:scad.docs --json > "$RUNNER_TEMP/m005-moon/hub75/docs.json"
+            "$MOON_BIN" task consumer:scad.build --json > "$RUNNER_TEMP/m005-moon/hub75/build.json"
+            "$MOON_BIN" task consumer:scad.verify --json > "$RUNNER_TEMP/m005-moon/hub75/verify.json"
+          )
+
+          grep -Fq 'design-build' "$RUNNER_TEMP/m005-moon/hub75/docs.json"
+          grep -Fq 'openscad/**/design' "$RUNNER_TEMP/m005-moon/hub75/docs.json"
+          grep -Fq 'bld/design' "$RUNNER_TEMP/m005-moon/hub75/docs.json"
+
+          grep -Fq 'scad-project.sh' "$RUNNER_TEMP/m005-moon/hub75/build.json"
+          grep -Fq 'bld/png' "$RUNNER_TEMP/m005-moon/hub75/build.json"
+
+          grep -Fq 'scad-project.sh' "$RUNNER_TEMP/m005-moon/hub75/verify.json"
+          grep -Fq 'vrf/out/fixtures' "$RUNNER_TEMP/m005-moon/hub75/verify.json"
+
+          grep -Fq 'tools/tool.scad-project/src' "$RUNNER_TEMP/m005-moon/hub75/docs.json"
+          grep -Fq 'tools/tool.scad-project/src' "$RUNNER_TEMP/m005-moon/hub75/build.json"
+          grep -Fq 'tools/tool.scad-project/src' "$RUNNER_TEMP/m005-moon/hub75/verify.json"
+
+          if grep -Fq 'tools/tool.scad-project/**' "$RUNNER_TEMP/m005-moon/hub75/"*.json; then
+            echo 'ERROR: broad tool subtree input leaked back into HUB75 effective task' >&2
+            exit 1
+          fi
+
+      - name: Summarise human-visible capability model
+        shell: bash
+        run: |
+          {
+            echo '## Migration 005 Moon inheritance prototype'
+            echo ''
+            echo '- Moon runtime: 2.5.4 (released tool.git-project bootstrap)'
+            echo '- shared task source: tool.scad-project@ac0e16bfdb29334604598b6b178aca82a02a84d2'
+            echo '- clamps effective capabilities: Design documentation, Verification'
+            echo '- HUB75 effective capabilities: Presentation renders, Design documentation, Verification'
+            echo '- commands and stable tool-source inputs are inherited'
+            echo '- project-specific source-impact patterns and outputs remain local'
+            echo '- generated Python bytecode is not included by the shared tool input patterns'
+            echo '- no Docker or CAD runtime was started for this configuration validation'
+          } >> "$GITHUB_STEP_SUMMARY"
