@@ -14,6 +14,8 @@ Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
 - [Architecture alternatives and decision](target-variants.md)
 - [Provisional target architecture](target-architecture.md)
 - [SCons warm-cache validation](scons-cache-validation.md)
+- [Runtime image family](runtime-image-family.md)
+- [Runtime image family validation](runtime-image-validation.md)
 - [Normal publication-path analysis](publication-analysis.md)
 - [Resource-efficiency and compute-cost criteria](resource-efficiency.md)
 
@@ -78,6 +80,20 @@ SCons, only where configured
 ```
 
 See [SCons warm-cache validation](scons-cache-validation.md) for the exact run/job evidence.
+
+### The runtime can be split by effective capability
+
+A controlled two-profile candidate now proves that OpenSCAD-only work does not need to pull the PythonSCAD-specific runtime layers:
+
+- OpenSCAD profile: **328,098,501 compressed bytes**, 961,779,232 unpacked bytes, 13.211 s cold pull in the controlled sample;
+- full profile: **449,516,893 compressed bytes**, 1,313,898,129 unpacked bytes, 15.464 s cold pull;
+- OpenSCAD-only work therefore avoids **121,418,392 compressed bytes**, about **27.0%** of the full-image transfer;
+- both profiles passed the same OpenSCAD production contract;
+- the full image also passed PythonSCAD/pybosl2 tests and retained the documented interoperability XFAILs.
+
+Both profiles were externally qualified sequentially on one hosted VM. The exact evidence is in [runtime-image-validation.md](runtime-image-validation.md).
+
+Runtime choice must eventually come from the effective project capabilities, not from a repository-name allowlist. Repositories that deliberately expose PythonSCAD capability still require the full profile.
 
 ### Current consumer Moon configuration exposes too much machinery
 
@@ -180,14 +196,14 @@ Do **not** migrate the HUB75 frame yet.
 Completed validation:
 
 - **warm SCons reuse on a real HUB75 SCons capability — passed.** Target-level reuse is measurable and inexpensive to transfer; generic SCons cache handling for non-SCons capabilities is not justified.
+- **runtime image family — passed.** The OpenSCAD-focused profile preserves the OpenSCAD contract while reducing compressed transfer by about 27%; the full image remains the tested PythonSCAD-capable superset. Runtime selection should be capability-driven.
 
 Still required before deriving the implementation plan:
 
-1. measure SCAD image size/layer/distribution options;
-2. decide normal-CI retained artifact policy;
-3. test safe concurrent or combined Build/Verification publication;
-4. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
-5. show the resulting consumer configuration for clamps and HUB75 and run the human-understandability test;
-6. estimate both feedback latency and total runner/resource use for the resulting lifecycle.
+1. decide normal-CI retained artifact policy;
+2. test safe concurrent or combined Build/Verification publication;
+3. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
+4. show the resulting consumer configuration for clamps and HUB75 and run the human-understandability test;
+5. estimate both feedback latency and total runner/resource use for the resulting lifecycle.
 
 If these validations do not reveal a fundamental flaw, the provisional target becomes the implementation architecture and Migration 005 can be broken into owner-specific implementation steps.
