@@ -126,7 +126,7 @@ Final workflow contract:
 
 ### Reference-consumer qualification against exact PR head
 
-Temporary qualification branch: `template.scad-project` PR #23. This PR exists only as pre-release integration evidence and must not be merged as Step 4.
+Temporary qualification branch: `template.scad-project` PR #23. This PR was retained only as pre-release integration evidence and later closed without merge after the released rollout started.
 
 Corrected qualification baseline:
 
@@ -169,17 +169,110 @@ Step 3 acceptance is therefore satisfied with a released shared interface rather
 
 ## Step 4 — released workflow in reference template
 
-Status: **next**
+Status: **complete**
 
 Owner: `brainboxemb/template.scad-project`.
 
-Start from current template `main`, not from temporary qualification PR #23. Consume released `tool.scad-project v0.13.0` and requalify the released interface. Required scenarios remain:
+### Rollout implementation
 
-- cold relevant production;
-- unchanged/rehydration path;
-- README-only PR with no SCAD container startup;
-- Build-only source impact where representable by the reference graph;
-- Verify-only source impact;
-- explicit Build/Verify logical independence;
-- aggregate production/materialization;
-- lightweight publication outside the SCAD container.
+- PR #29 — `Qualify released SCAD production workflow`;
+- final PR head `ea99880acef81cf8f6d9aab9e0371caae63af9c6`;
+- released dependency policy: `tool.scad-project v0.13.0`;
+- exact tool gitlink / Production workflow / Release workflow pin: `da57820fdadd7d203091b6818984991f1548408f`;
+- copied SCAD production mechanics replaced by the thin released `project-production.yml` caller;
+- `scad.production-impact` added as the source-impact gate while `scad.ci` remains the publication-ready aggregate execution root;
+- `scad.verify` inputs narrowed from coarse `dsg/**` to the CAD source actually consumed by the two template verification entrypoints plus their clamp dependency and the existing verification/configuration/tooling inputs.
+
+That Verify-input correction was necessary to make the Step-4 Build-only and Verify-only scenario matrix truthful rather than merely asserting logical independence while every design change also marked Verify affected.
+
+### Final PR-head qualification
+
+Run `34944252421` on exact final head — passed:
+
+- host preflight succeeded;
+- exactly one SCAD production container ran;
+- exact shallow production source/base range succeeded;
+- exact dependencies bootstrapped successfully;
+- aggregate `consumer:scad.ci` execution and generic materialization validation succeeded;
+- Build and Verification publication trees were staged/uploaded by the heavy job;
+- both lightweight publication jobs succeeded outside the SCAD container.
+
+### Final isolated scenario proofs
+
+README-only/no-container:
+
+- proof PR #30;
+- final run `34944598444` — passed;
+- only the README proof file changed;
+- preflight succeeded;
+- SCAD production, Build publication and Verification publication were all skipped;
+- therefore no SCAD container started.
+
+Verify-only producer impact:
+
+- proof PR #31;
+- final run `34944622039` — passed;
+- only `vrf/README.md` changed;
+- retained affected-task evidence contains `scad.verify` but not `scad.build` and not `scad.docs`;
+- exactly one production job ran;
+- aggregate materialization and both lightweight publication jobs passed.
+
+Build-side-only producer impact:
+
+- proof PR #33;
+- run `34944404186` — passed;
+- only `dsg/openscad/render/tube-holder-assembly.scad` changed;
+- retained affected-task evidence contains the Build/Docs producer branch but not `scad.verify`;
+- exactly one production job ran;
+- aggregate materialization and both lightweight publication jobs passed.
+
+The older generic source-impact proof PR #32 was superseded by final-head Build-only proof #33 and closed without merge. All temporary Step-4 proof PRs were closed without merge after their evidence was retained.
+
+### Cold and warm execution
+
+First released-interface baseline run `34938849331` was cold at the SCons target layer:
+
+- Build: 2 targets built, 0 cache-restored;
+- Design: 16 targets built, 0 cache-restored;
+- Verify: 2 targets built, 0 cache-restored.
+
+Final PR-head run `34944252421` demonstrated warm target reuse:
+
+- Build: 0 built, 2 cache-restored;
+- Design: 0 built, 16 cache-restored;
+- Verify: 0 built, 2 cache-restored;
+- current Moon materialization evidence remained tied to exact source `ea99880acef81cf8f6d9aab9e0371caae63af9c6`.
+
+A second attempt of the exact same production job restored the portable Moon Actions cache and both SCons caches from attempt 1. Moon still executed the seven-task graph rather than whole-task hydrating it, while SCons again restored all CAD targets. This is a performance observation, not a correctness failure: no stale producer evidence was presented as current materialization. The same-source observation was added to existing generic `tool.git-project` issue #17 instead of enlarging Migration 004.
+
+### Merge / exact-main qualification
+
+- PR #29 merge/exact main `8ac67014eb2ab7252f38b41a1137b5b0c902ef6a`;
+- exact-main SCAD production run `34945239139` — passed;
+- host preflight correctly requested production for the rollout merge;
+- exactly one heavy SCAD production job passed;
+- aggregate materialization validation passed;
+- lightweight `prod/build` and `prod/verification` publication jobs both passed.
+
+Step 4 acceptance is therefore satisfied on the released workflow and exact template main.
+
+## Step 5 — reference library qualification
+
+Status: **next; re-evaluation required before implementation**
+
+Owner: `brainboxemb/lib.scad.clamps`.
+
+Before editing the library, inspect its current owner guidance, normal/release workflows, current `tool.scad-project` and `tool.git-project` pins, Build/Verify semantics, publication behavior, Moon/task configuration if any, and current CI evidence. Re-check whether the common project-qualified production model remains proportionate for this small reusable library.
+
+If the model still fits, Step 5 should retain before/after evidence for:
+
+- normal heavy GitHub job count;
+- SCAD container count;
+- container initialization and checkout/bootstrap overhead;
+- producer/orchestration time;
+- cold and warm cache/materialization behavior;
+- Build/Verify evidence and publication;
+- consumer workflow/configuration size;
+- the library-specific responsibilities that remain distinct from projects.
+
+If clamps exposes a material mismatch or requires artificial configuration solely to satisfy the shared model, pause before Step 6 and reconsider the migration design instead of mechanically applying it to `lib.scad.hub75`.
