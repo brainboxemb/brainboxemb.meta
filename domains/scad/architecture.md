@@ -1,6 +1,6 @@
 # SCAD technical architecture
 
-Status: **current shared architecture — Migration 005 rollout is still in progress**
+Status: **current shared architecture — Migration 005 consumer rollout is still in progress**
 
 ## Why this page exists
 
@@ -23,7 +23,7 @@ Moon on host
         |
         v
 one capability-appropriate SCAD runtime
-  Moon executes or restores affected whole capabilities
+  Moon executes or restores required whole capabilities
         |
         +-- tool.scad-project capability command
                |
@@ -90,7 +90,9 @@ verification-only source change
 
 The generic query belongs to `tool.git-project`. SCAD capability naming and lifecycle policy belong to `tool.scad-project`.
 
-The affected calculation is performed once. The lifecycle should expose the relevant capability IDs from that one result rather than rerunning Moon separately for every capability.
+The affected calculation is performed once. `tool.git-project v0.2.8` exposes the complete affected-task list from that one result; `tool.scad-project v0.14.0` maps the relevant SCAD task IDs to its capability policy.
+
+The v0.2.8 action still needs one existing task as a query anchor. The complete affected-task list is not limited to that task. The first current-generation reference consumers all expose `scad.docs`, so the v0.14.0 production workflow uses `consumer:scad.docs` as the current anchor. This can be simplified later if a repository without docs needs the lifecycle; it should not be solved by introducing a second change-impact calculation.
 
 When impact cannot be determined safely, the system fails conservative: required CAD work runs instead of being silently skipped.
 
@@ -108,7 +110,35 @@ In particular, avoid broad inputs such as:
 tools/tool.scad-project/**
 ```
 
-because generated Python `__pycache__/*.pyc` files can appear below that tree and make identical source produce different task hashes. Shared policy uses explicit source-controlled tool inputs instead.
+because generated Python `__pycache__/*.pyc` files can appear below that tree and make identical source produce different task hashes. Shared policy uses explicit source-controlled tool inputs instead. Current production also sets `PYTHONDONTWRITEBYTECODE=1` as a runtime safeguard.
+
+## Affected work and complete publication are different questions
+
+A source-impact decision answers **what changed**. Publication also needs to answer **what must exist locally to replace a complete generated-output tree safely**.
+
+This matters because `scad.docs` and `scad.build` can both contribute to the same complete Build publication. Suppose only documentation changed on a fresh runner:
+
+```text
+affected
+  scad.docs
+
+complete Build publication needs locally
+  scad.docs
+  scad.build
+```
+
+If only `bld/design` were materialized and that partial tree replaced the Build branch, unchanged presentation output would disappear.
+
+The lifecycle therefore keeps two explicit sets:
+
+- **affected capabilities** — capabilities whose source inputs actually changed;
+- **materialization capabilities** — affected capabilities plus any unchanged contributors needed to publish a complete changed output family.
+
+An unchanged contributor is normally hydrated from Moon's whole-capability cache. If that cache entry is unavailable, Moon may reproduce it. It is still not reported as source-affected.
+
+Verification is its own publication family, so a Build-family change does not pull in Verification merely for completeness.
+
+This distinction is also important for performance measurements: publication-safe hydration is correctness work and its cache-hit/rebuild cost must be counted rather than hidden.
 
 ## Shared Moon task inheritance
 
@@ -178,12 +208,14 @@ The reduced Moon configuration describes:
 - which project-specific sources affect each capability;
 - exceptional output overrides when the project intentionally departs from shared defaults.
 
-Shared validation should reject contradictions instead of allowing the two views to drift. Examples:
+Shared validation rejects contradictions instead of allowing the two views to drift. Examples:
 
 - configured presentation renders should agree with `scad.build`;
 - configured Verification should agree with `scad.verify`;
 - PythonSCAD configuration requires the full/dual runtime;
-- `build_engine: scons` controls whether SCons cache handling is applicable;
+- `build_engine: scons` controls whether normal SCons cache handling is applicable;
+- direct projects do not transport SCons caches;
+- separate Verification-SCons transport is used only when SCons plus real verification render/export targets populate it;
 - non-standard output roots need compatible Moon output ownership.
 
 ## Moon versus SCons
@@ -205,6 +237,8 @@ SCons is therefore optional.
 A direct project such as the current clamps reference should not restore or save SCons object caches merely because the ecosystem supports SCons elsewhere.
 
 A SCons-enabled project such as HUB75 can use target-level reuse inside an executing capability. If Moon restores the entire capability, SCons does not need to run for that capability at all.
+
+Verification has a separate SCons cache only when verification render/export targets actually use the SCons engine. Command-only verification does not justify transporting that cache.
 
 ## SCAD runtime profiles
 
@@ -296,6 +330,8 @@ Generated-output publication needs GitHub credentials and current repository con
 
 Therefore publication happens on the host after CAD work. Build and Verification remain separate logical outputs. Their publisher instances use isolated temporary Git repositories, so they may overlap on the same runner when useful without adding another hosted VM.
 
+Only a publication family whose source-affected capabilities changed is republished. Hydrating an unchanged contributor to make that family complete does not independently mark some other publication family as changed.
+
 ## Repository ownership boundaries
 
 | Repository/layer | Responsibility |
@@ -361,7 +397,15 @@ For example, a HUB75 project can use `lib.scad.hub75` directly without going thr
 
 ## Migration and implementation status
 
-The architecture described above is the validated target of [Migration 005](../../migrations/005-scad-execution-architecture/README.md). The runtime image family is already released; shared tooling and consumer repositories are being migrated owner by owner.
+The architecture described above is the validated target of [Migration 005](../../migrations/005-scad-execution-architecture/README.md).
+
+The shared foundations are now released:
+
+- runtime image family `docker.scad-toolchain v0.5.0`;
+- generic affected-list contract `tool.git-project v0.2.8`;
+- shared SCAD lifecycle `tool.scad-project v0.14.0`.
+
+Consumer repositories are still being migrated owner by owner, starting with the template/reference consumer and then the dual/direct and OpenSCAD/SCons canaries.
 
 Use the migration folder only when you need the change request, historical reasoning, validation evidence or rollout status. This page is the durable architecture reference.
 
