@@ -35,7 +35,7 @@ The Step-5 performance stop condition was fully evaluated in completed experimen
 - `tool.scad-project v0.13.1` provides one host orchestrator job around Moon preflight, conditional explicit Docker production, validation/staging and same-job host publication from exact source `28661fc040c4994e9c1d391285b7425c7a55252b`;
 - relevant lifecycle measurements returned to about **41–45 s** in the experiment while keeping one SCAD container; README-only controls remained about **4–5 s** with zero containers.
 
-Step 5 is **complete**: `lib.scad.clamps` PR #7 adopted released `tool.scad-project v0.13.1` and merged as exact main `c5732944c8c2ba840a3f0f2f0a0638430a796cfd`.
+Step 5 is **complete and released**: `lib.scad.clamps` PR #7 adopted released `tool.scad-project v0.13.1` and merged as exact qualified main `c5732944c8c2ba840a3f0f2f0a0638430a796cfd`. A missed release-closeout was corrected immediately afterwards: PR #14 recorded the existing qualified changes as `v0.1.3`, merged as exact release source `f0dbb82b477201646fc3e2173ccba96d70fb8920`, and release run `34974674991` passed Build, Verify and finalization. Annotated tag `v0.1.3` resolves to that exact source; immutable `rel/v0.1.3/build` and `rel/v0.1.3/verification` branches and GitHub Release assets exist.
 
 Reference-library evidence:
 
@@ -44,7 +44,9 @@ Reference-library evidence:
 - docs-only proof PR #12 / run `34971733730` — retained affected-task evidence contains `scad.docs` and excludes `scad.verify`;
 - Verify-only proof PR #13 / run `34971800074` — retained affected-task evidence contains `scad.verify` and excludes `scad.docs`;
 - exact-main run `34972350665` — one host job/one Docker and both production publications green;
-- `prod/build` and `prod/verification` both record exact source `c5732944c8c2ba840a3f0f2f0a0638430a796cfd` and `tool.scad-project v0.13.1`.
+- `prod/build` and `prod/verification` both record exact qualified source `c5732944c8c2ba840a3f0f2f0a0638430a796cfd` and `tool.scad-project v0.13.1`;
+- release-closeout PR #14 / run `34974591518` — changelog-only change correctly stopped after Moon preflight with zero SCAD containers;
+- `v0.1.3` release run `34974674991` — exact-source Build and Verify green, immutable release branches published, annotated tag and GitHub Release/assets created from `f0dbb82b477201646fc3e2173ccba96d70fb8920`.
 
 The first released v0.13.1 clamps run `34970821889` was also green but had a ~43.7 s GHCR pull outlier; producer work and publication remained short. The repeated final-head sample demonstrates that the earlier v0.13.0 ~64–65 s regression was caused by serial GitHub job boundaries and is no longer structural.
 
