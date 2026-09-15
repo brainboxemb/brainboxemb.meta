@@ -72,9 +72,32 @@ Cold baseline run `34938849331` built all reference Build, Design and Verify tar
 
 ### Step 5 — reference library qualification
 
-**Next.** Owner: `lib.scad.clamps`.
+**Active, paused for performance reassessment.** Owner: `lib.scad.clamps`.
 
-Before changing the library, re-evaluate its current workflows, Moon/task configuration, release/publication behavior and library-specific verification requirements against the now-released common production model. If the shared model still fits proportionately, move normal CI away from separate heavy Build and Verify execution and qualify the reference library with before/after evidence. If the library exposes a genuine mismatch, stop before applying the model to `lib.scad.hub75`.
+Draft PR #7 has already proven that the common execution model is functionally suitable for the reference library without inventing a dummy Build task. Candidate `bb071329e1d6c764d09f87ecd2cc78d42ac73679` uses released `tool.scad-project v0.13.0`, one producer-impact preflight, one heavy SCAD production job, library-specific `scad.docs` and `scad.verify` producers, and lightweight Build/Verification publication.
+
+Functional evidence is green:
+
+- final candidate run `34947426305` — one SCAD container, library-specific OpenSCAD/PythonSCAD design and consumer verification, aggregate materialization and both host publication jobs passed;
+- proof PR #8 / run `34947599096` — README-only returns `affected=false`; production and both publication jobs are skipped before container startup;
+- proof PR #9 / run `34947625311` — docs-only input affects `scad.docs` but not `scad.verify`;
+- proof PR #10 / run `34947539588` — Verify-only input affects `scad.verify` but not `scad.docs`.
+
+The required before/after measurement exposed a stop-condition trade-off:
+
+- old parallel Build/Verify CI: about **37 s** critical path with **two** SCAD-container startups and roughly 69 heavy-runner seconds;
+- common lifecycle, two successful representative runs: about **64–65 s** end-to-end with **one** SCAD-container startup and roughly comparable total runner-seconds;
+- README-only improves strongly to a short host preflight with **zero** SCAD containers.
+
+Relevant-change feedback is therefore about 27 s slower even though heavy setup is consolidated. This is material enough to trigger the migration's explicit reassessment rule. PR #7 remains draft; do not start Step 6 yet.
+
+Performance experiment [#53](https://github.com/brainboxemb/brainboxemb.meta/issues/53) now compares, using repeated measurements:
+
+1. the released job-level Docker lifecycle;
+2. the actual historical cached-host SCAD tooling mechanism reconstructed from repository history, with cold and warm cache behavior;
+3. if ownership remains generic, one host-orchestrator job that performs preflight, conditionally executes exactly one Docker SCAD toolchain, and then publishes on the host without extra GitHub job transitions.
+
+The experiment must compare critical path, runner-seconds, toolchain setup/cache/container startup, producer time, publication, evidence correctness, reproducibility and maintenance cost. Continue Step 5 only after the experiment yields a documented recommendation and any required shared-tooling change has been implemented/released in the correct owner repository.
 
 ## Reference repositories
 
@@ -89,8 +112,8 @@ Before changing the library, re-evaluate its current workflows, Moon/task config
 2. `template.scad-project` — correct the Build/Verify task graph — complete;
 3. `tool.scad-project` — reusable SCAD production workflow — complete, released as v0.13.0;
 4. `template.scad-project` — qualify the released shared workflow and pre-container skip — complete;
-5. `lib.scad.clamps` — reference library rollout and rationale — next;
-6. `lib.scad.hub75` — second library rollout;
+5. `lib.scad.clamps` — reference library rollout and rationale — active, paused on performance experiment #53;
+6. `lib.scad.hub75` — second library rollout — blocked by Step 5 decision;
 7. HUB75 frame — requalify when shared changes affect it.
 
 Each step must be re-evaluated before implementation. Do not continue merely because it appears in this sequence.
