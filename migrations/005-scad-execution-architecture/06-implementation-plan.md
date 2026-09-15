@@ -1,10 +1,20 @@
 # Migration 005 — implementation plan
 
-Status: **ready for owner-repository implementation after architecture validation merge**
+Status: **active migration execution — architecture/design validation is complete**
 
-This plan starts only after the validated Migration-005 architecture/evidence is merged in `brainboxemb.meta`.
+## Why this document exists
+
+This is the operational plan for carrying the validated Migration-005 architecture through the owner repositories. Read it to determine **which repository changes next, what that step must migrate, and what gate must be satisfied before moving on**.
+
+This is no longer a design plan. The architecture is fixed in [05 — Validated target architecture](05-target-architecture.md). New architecture work is only justified if implementation uncovers evidence that one of those fixed assumptions is false.
 
 The plan deliberately separates owner repositories. Do not bundle unrelated owner changes into one repository just to reduce the number of pull requests.
+
+## Current progress
+
+- **Step 1 — runtime image family:** implementation merged and `docker.scad-toolchain v0.5.0` released from exact source `a56a3aae4b9e0494e6625e75002d96b0a55986a3`; both immutable image profiles passed external `v0.5.0` qualification in run `34999654405`. The external testsuite verification-record/default-version housekeeping remains to be closed before Step 1 is marked fully complete.
+- **Step 2 — affected capability list:** next implementation owner after Step-1 closeout.
+- **Steps 3–8:** waiting on their preceding released owner dependencies.
 
 ## Step 1 — finalise and release the runtime image family
 
@@ -15,33 +25,27 @@ Owner repositories:
 
 Starting evidence:
 
-- toolchain PR #6, exact qualified source `eeb40e7eff98e98d754baf8ddb52376a17ecef18`;
-- external-test PR #6, exact qualified source `89c5b45ecb8fa48b7bd6ff660aa0c67a7713aaaa`;
+- toolchain PR #6, exact qualified candidate source `eeb40e7eff98e98d754baf8ddb52376a17ecef18`;
+- external-test PR #6, qualified candidate source;
 - controlled cold-vs-cold qualification run `34992630534`;
 - normal resource-proportional qualification run `34993290359`.
 
-Implementation goal:
+Implemented result:
 
-- keep one multi-stage Dockerfile/source family;
-- preserve `ghcr.io/brainboxemb/scad-toolchain:<version>` as the full/dual compatibility image;
-- publish `ghcr.io/brainboxemb/scad-toolchain-openscad:<version>` as the OpenSCAD-focused profile;
-- keep shared layers identical where practical;
-- make profile identity visible through image metadata and `scad-toolchain-info`;
-- keep the external test suite as the release gate for both profiles.
+- one multi-stage Dockerfile/source family;
+- `ghcr.io/brainboxemb/scad-toolchain:v0.5.0` remains the full/dual compatibility image;
+- `ghcr.io/brainboxemb/scad-toolchain-openscad:v0.5.0` is the OpenSCAD-focused profile;
+- shared layers are reused between the profiles;
+- profile identity is exposed by the runtime tooling;
+- one external test suite qualifies both profiles.
 
-Before merge/release:
-
-- remove diagnostic-only branch triggers from the production workflow;
-- update PR descriptions so they describe the actual multi-stage implementation rather than the earlier throwaway experiment;
-- ensure normal tests reuse shared local layers rather than deliberately forcing a second cold pull;
-- keep the independent cold-pull benchmark as historical evidence, not routine CI;
-- verify release/tag metadata produces immutable version tags for both packages;
-- verify the full profile remains a tested superset of the OpenSCAD contract.
+Step-1 closeout still requires the permanent external testsuite verification record/default version to point at the released `v0.5.0` pair rather than the earlier candidate SHA.
 
 Gate to Step 2/3:
 
-- released immutable image-family version exists;
-- external qualification is green against that exact version.
+- released immutable image-family version exists — **met (`v0.5.0`)**;
+- external qualification is green against that exact version — **met (`34999654405`)**;
+- external testsuite release/default-pin housekeeping completed — **pending**.
 
 ## Step 2 — expose affected SCAD capabilities from the existing Moon query
 
