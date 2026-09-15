@@ -51,7 +51,7 @@ Build and Verification branch publication then takes roughly **4.4 seconds combi
 
 For HUB75 exact-main run `34976840416`, the branch publication steps are also sequential, roughly around 3 seconds for Build and around 2 seconds for Verification in that sample.
 
-## Architecture interpretation
+## Normal workflow artifacts are retention policy, not a same-job hand-off
 
 The normal workflow-artifact uploads appear to be **retention/user-download evidence**, not an internal data-transfer requirement of the one-host architecture.
 
@@ -68,20 +68,43 @@ Possible answers include:
 
 This decision is independent of whether Moon is kept or simplified.
 
-## Publication concurrency
+## Publication implementations are more independent than the workflow suggests
 
-Build and Verification generated-output branches are independent namespaces. The current host workflow publishes them one after the other.
+The generic `tool.git-project/generated-output-publish.sh` does not publish directly from the consumer's main working tree.
 
-Migration 005 should test whether the two publication operations can overlap safely while preserving:
+For each invocation it:
 
-- exact source revision checks;
-- independent branch histories;
-- clear failure reporting;
-- no shared temporary Git worktree/config collision.
+1. creates a new temporary credential file;
+2. creates a new temporary publication repository with `mktemp -d`;
+3. initializes/fetches the destination generated-output branch in that isolated repository;
+4. copies only the supplied staging tree into that temporary repository;
+5. creates the publication commit;
+6. rechecks that the exact source revision still matches the requested source;
+7. force-pushes only the requested generated-output branch;
+8. removes its temporary repository and credentials.
 
-The current generic publish action appears to create a temporary publication branch/worktree state, so concurrency must be tested rather than assumed safe in the same working directory.
+Build and Verification calls also use different source staging directories and different target branch suffixes.
 
-An alternative is a shared publication primitive that can publish both trees in one operation while keeping branch outputs independent.
+So there is no obvious shared Git worktree whose mutation requires the two publications to be serialized.
+
+This makes **parallel publication a concrete candidate**, not merely a theoretical idea.
+
+It must still be qualified because two concurrent pushes can expose other concerns:
+
+- simultaneous token/auth use;
+- clear combined failure reporting;
+- GitHub API/network contention;
+- ensuring one failed publication cannot hide success/failure of the other.
+
+But the current implementation provides strong evidence that the two calls are structurally isolated enough to justify a real concurrency experiment.
+
+## Potential latency effect
+
+Current sequential publication is roughly the sum of the two independent pushes.
+
+If safe concurrency is confirmed, the critical path should tend toward approximately the slower publication rather than their sum. On the observed small samples this is a possible saving of roughly 1.5–2.5 seconds, not a transformational change.
+
+That is useful, but Migration 005 should not add architectural complexity merely for a tiny saving. The ideal improvement would be simpler **and** faster, for example a shared helper that starts two already-independent publications and reports both outcomes cleanly.
 
 ## Current conclusion
 
@@ -89,4 +112,9 @@ The release artifact hand-off is justified by job boundaries.
 
 The normal production artifact uploads are **not required to move data between current normal-CI steps**. They are a policy choice for retained evidence/downloadability and should be justified as such.
 
-This makes normal artifact retention and sequential publication legitimate Migration-005 simplification/performance candidates, but neither should be removed until its actual consumers and failure semantics are checked.
+The two normal generated-output publications are currently serialized, but the generic publication script gives each invocation isolated temporary repository and credential state. Parallel publication therefore deserves qualification and appears lower risk than the workflow shape initially suggested.
+
+Both changes remain policy/qualification questions rather than automatic deletions:
+
+- decide what normal downloadable artifacts are actually required;
+- test publication concurrency and failure semantics before adopting it.
