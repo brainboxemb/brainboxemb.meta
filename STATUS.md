@@ -28,9 +28,9 @@ Step 3 is complete: `tool.scad-project v0.13.0` provides the first reusable prod
 
 Step 4 is complete: `template.scad-project` PR #29 consumed released v0.13.0 and merged as exact main `8ac67014eb2ab7252f38b41a1137b5b0c902ef6a`. Final-head proofs retained README-only no-container, Verify-only impact without Build/Docs, and Build-side impact without Verify.
 
-Step 5 is **active but paused for a shared tooling correction** in `lib.scad.clamps` PR #7. Candidate `bb071329e1d6c764d09f87ecd2cc78d42ac73679` is functionally green: one SCAD container, library-specific docs/verification, current aggregate materialization and host publication; isolated proofs retain README-only, docs-only and Verify-only affected semantics.
+Step 5 is **active but paused for the second shared tooling correction** in `lib.scad.clamps` PR #7. Candidate `bb071329e1d6c764d09f87ecd2cc78d42ac73679` is functionally green: one SCAD container, library-specific docs/verification, current aggregate materialization and host publication; isolated proofs retain README-only, docs-only and Verify-only affected semantics.
 
-The Step-5 performance stop condition has now been fully evaluated in completed experiment #53. The decision is:
+The Step-5 performance stop condition was fully evaluated in completed experiment #53. The decision is:
 
 - keep the immutable Docker SCAD runtime;
 - reject cached-host OpenSCAD as the production runtime;
@@ -43,12 +43,13 @@ Repeated exact-candidate lifecycle measurements:
 - README-only controls: **4.369 s** and **4.819 s**, both with zero container starts;
 - old parallel Build/Verify baseline: about 37 s, but with two heavy containers.
 
-The next valid cross-project work is therefore not in `lib.scad.clamps` itself:
+The first shared prerequisite is now complete. `tool.git-project` PR #24 introduced the domain-neutral same-job generated-output publisher and released it as **v0.2.7** from exact main `6234b7437b0dc0115642468f74d1f4a2c2214bef`. Release run `34960768652` passed; tagged same-job verification run `34960782984` passed on Linux and Windows; annotated tag object `6afaa504ae68d2e774eb74e17fb0b27d44d455ef` resolves to that exact main commit.
 
-1. **Next — `tool.git-project`:** factor the existing generated-output publication safety contract into a reusable same-job action/script; keep the existing reusable publication workflow as a thin wrapper; qualify and release the capability.
-2. **Then — `tool.scad-project`:** consume the released publisher primitive and release the one-host-job SCAD lifecycle with conditional Docker execution, exact-source/materialization checks and conservative missing-base fallback.
-3. **Then resume Step 5 — `lib.scad.clamps`:** update PR #7 to the released topology and repeat the retained functional/performance qualification.
-4. Step 6 (`lib.scad.hub75`) remains blocked until Step 5 completes.
+The next valid cross-project work is therefore:
+
+1. **Next — `tool.scad-project`:** consume released `tool.git-project v0.2.7` and release the one-host-job SCAD lifecycle with conditional Docker execution, exact-source/materialization checks, same-job Build/Verification publication and conservative missing-base fallback.
+2. **Then resume Step 5 — `lib.scad.clamps`:** update PR #7 to the released topology and repeat the retained functional/performance qualification.
+3. Step 6 (`lib.scad.hub75`) remains blocked until Step 5 completes.
 
 Tracking issue: #49. Completed performance experiment: #53. See [Migration 004](migrations/004-scad-repository-execution-model/README.md), its [qualification evidence](migrations/004-scad-repository-execution-model/evidence.md), and the retained [Step-5 performance evidence](migrations/004-scad-repository-execution-model/performance-evidence.md).
 
