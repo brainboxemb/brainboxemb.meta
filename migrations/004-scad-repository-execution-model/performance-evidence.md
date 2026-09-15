@@ -1,6 +1,6 @@
 # Migration 004 Step-5 performance evidence
 
-Status: **decision complete; shared tooling correction required**
+Status: **decision complete; first shared prerequisite released; SCAD orchestrator prerequisite active**
 
 Tracking:
 
@@ -138,18 +138,20 @@ The topology does not create a second affected engine; it reuses the released `t
 
 ## Ownership finding
 
-The experiment prototype contained local same-job publication code only to measure the topology. That code is **not** an acceptable production implementation.
+The experiment prototype contained local same-job publication code only to measure the topology. That code is **not** the production implementation.
 
-`tool.git-project v0.2.6` owns generated-output safety today in `reusable-generated-output-publish.yml`:
+The missing generic publication primitive has now been implemented by its owner. `tool.git-project v0.2.7` exposes the existing safety contract as `generated-output/publish` while retaining `reusable-generated-output-publish.yml` as a compatibility wrapper.
 
-- allowed PR/main/release publication contexts;
-- branch-suffix validation;
-- exact source-revision validation;
-- stale-source checks before staging and immediately before force-push;
-- generated branch naming;
-- publication credentials and commit identity.
+Released prerequisite evidence:
 
-That contract is not yet exposed as a same-job action/script. Therefore the next valid Migration-004 work is a generic owner prerequisite, not a clamps-specific optimization.
+- owner PR #24 final candidate `085fbacbb44a19159a13dc1237b8cf36bae2d766` — all seven owner workflows green;
+- merge/release source `6234b7437b0dc0115642468f74d1f4a2c2214bef` — all seven exact-main workflows green;
+- release run `34960768652` — passed;
+- tagged same-job verification `34960782984` — Linux contract, Linux two-publication same-job path and native Windows publication passed;
+- annotated tag `v0.2.7` object `6afaa504ae68d2e774eb74e17fb0b27d44d455ef` points to exact release source `6234b7437b0dc0115642468f74d1f4a2c2214bef`;
+- GitHub Release `v0.2.7` was published and the release-request branch was removed.
+
+The next ownership boundary is therefore `tool.scad-project`: it must compose the released generic preflight and same-job publisher around exactly one conditional SCAD Docker process. SCAD-specific staging/materialization validation remains with that owner.
 
 ## Decision
 
@@ -157,8 +159,8 @@ Adopt **variant C at the workflow-topology level**, while retaining the immutabl
 
 Required sequence:
 
-1. `tool.git-project` — factor generated-output publication into a callable same-job primitive and keep the existing reusable workflow as a thin wrapper; release it.
-2. `tool.scad-project` — consume the released primitive and collapse preflight + conditional Docker production + host publication into one orchestrator job; retain exact-source/materialization checks and conservative fallback; release it.
+1. `tool.git-project` — factor generated-output publication into a callable same-job primitive and keep the existing reusable workflow as a thin wrapper; **complete and released as v0.2.7**.
+2. `tool.scad-project` — consume released v0.2.7 and collapse preflight + conditional Docker production + host publication into one orchestrator job; retain exact-source/materialization checks and conservative fallback; **next**.
 3. `lib.scad.clamps` — update PR #7 to the released topology and repeat functional/performance qualification.
 4. `lib.scad.hub75` remains blocked until Step 5 is complete.
 
@@ -170,4 +172,4 @@ Qualitative rationale:
 - **maintenance:** one generic publisher owner, no consumer-specific copy;
 - **portability:** inputs remain generic task/output/publication concepts applicable to projects and libraries.
 
-Experiment #53 is complete. This file is the retained cross-project evidence for the Step-5 performance decision.
+Experiment #53 is complete. This file is the retained cross-project evidence for the Step-5 performance decision and its first shared-owner prerequisite.
