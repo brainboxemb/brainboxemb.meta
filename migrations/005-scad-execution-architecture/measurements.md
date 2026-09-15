@@ -9,19 +9,20 @@ Related:
 - [Migration 005 README](README.md)
 - [Current architecture](current-architecture.md)
 - [Architecture reflection](architecture-reflection.md)
+- [Target variants](target-variants.md)
+- [Publication-path analysis](publication-analysis.md)
+- [Resource-efficiency criteria](resource-efficiency.md)
 - [Migration 004 performance evidence](../004-scad-repository-execution-model/performance-evidence.md)
 
 ## 1. Small-reference critical path — `lib.scad.clamps`
 
 Representative final Migration-004 candidate run: `34971400621`.
 
-Approximate elapsed time:
-
 | Phase | Approx. time |
 | --- | ---: |
 | hosted-runner/action preparation | 1.9 s |
 | source/base preparation | 1.9 s |
-| Moon impact check + retained decision evidence | 4.7 s |
+| Moon change-impact check + retained decision evidence | 4.7 s |
 | Moon/SCons cache + range preparation | 1.9 s |
 | SCAD Docker image pull | **20.0 s** |
 | container bootstrap + validation + output graph | 9.4 s |
@@ -30,13 +31,13 @@ Approximate elapsed time:
 | Build + Verification publication | 4.4 s |
 | post-job cache/cleanup | ~1.4 s |
 
-The important ratio is that the Docker image acquisition is about four times as long as the entire reported Moon output graph on this small library.
+The Docker image acquisition is about four times as long as the complete reported Moon output graph on this small library.
 
-The old parallel Build + Verify topology completed the relevant-change critical path in about **37 s**. The final one-host model is about **41–45 s** under the Migration-004 comparison boundary.
+The old parallel Build + Verify topology completed the relevant-change critical path in about **37 s**. The final one-host model is about **41–45 s**. The old topology used two simultaneous heavy hosted runners, so Migration 005 treats elapsed feedback time and total compute/resource use as separate metrics.
 
 ## 2. Docker runtime acquisition is repeatedly cold
 
-The reusable v0.13.1 production workflow explicitly runs:
+The reusable v0.13.1 workflow explicitly performs:
 
 ```text
 docker login ghcr.io
@@ -44,158 +45,253 @@ docker pull ghcr.io/brainboxemb/scad-toolchain:v0.4.1
 docker run ...
 ```
 
-It explicitly restores caches for:
+It restores Moon and SCons cache state but does not restore an OCI image or Docker layer store.
 
-- Moon task hashes/outputs;
-- normal SCons object state;
-- verification SCons object state.
-
-It does **not** explicitly restore a Docker image, OCI archive or Docker layer store.
-
-### Clamps
-
-Run `34971400621` pulls all 11 image layers and ends with:
+Observed affected runs repeatedly pull all 11 image layers and report:
 
 ```text
 Status: Downloaded newer image for ghcr.io/brainboxemb/scad-toolchain:v0.4.1
 ```
 
-The pull step is about 20 seconds.
+Representative image-acquisition times:
 
-Exact-main clamps run `34972350665` behaves the same way: all 11 layers are pulled again and Docker again reports `Downloaded newer image`. The pull occupies roughly 17 seconds between beginning the pull and image availability, with login/registry setup around it.
+- final clamps Migration-004 sample: about 20 s;
+- clamps exact-main and controlled reruns: roughly 15–20 s;
+- HUB75 exact-main: roughly 19–20 s;
+- toolchain repository smoke test after a Buildx push with `load: false`: roughly 23 s.
 
-### HUB75 library
+Runtime distribution is therefore a first-order cost, not a one-off anomaly.
 
-Exact-main run `34976840416` also pulls all 11 layers and reports `Downloaded newer image`; the image acquisition is again roughly 19–20 seconds.
+## 3. Moon runtime and change-impact cost
 
-### Toolchain repository itself
+The pinned Moon runtime cache is about **20.9 MB** in observed logs.
 
-`brainboxemb/docker.scad-toolchain` release build run `34459109789` uses Buildx with image push and `load: false`. Its later smoke test cannot find the just-built image in the normal Docker image store and pulls the published image again. That pull is roughly 23 seconds.
+A warm clamps measurement shows approximately:
 
-This corroborates that runtime distribution is a first-order cost, not a one-off anomaly in a consumer workflow.
+- restore/extract Moon runtime: ~1.2–1.6 s;
+- Moon change-impact query: ~1.7–1.9 s;
+- compact decision-evidence handling/upload adds additional lifecycle time.
 
-## 3. Moon runtime itself also has a transfer cost
+The current pre-container change-impact path is therefore material relative to a 4–5 second README-only workflow, but still far smaller than the SCAD image pull that it avoids.
 
-The pinned Moon runtime cache is about **20.9 MB** in the observed logs.
+## 4. Moon change-impact analysis has proven value
 
-When present, restoring/extracting it has been around 1–2 seconds. When absent, the workflow installs/downloads Moon and saves this cache at the end of the run.
+Migration 004 isolated input classes in `lib.scad.hub75`:
 
-This cost is much smaller than the SCAD Docker image pull, but it is material relative to a 4–5 second unaffected path and must be included when evaluating the impact check.
+- Build-only proof `34976316887`: Build directly affected;
+- docs-only proof `34976333875`: design documentation directly affected;
+- Verify-only proof `34976347095`: Verification directly affected;
+- README-only proof `34976305647`: `affected=false`, no SCAD image/container path.
 
-## 4. Impact detection value is proven
+This is concrete evidence for Moon as a cheap repository-level change-impact engine.
 
-Migration 004 isolated input classes and demonstrated that Moon can distinguish which high-level domain is directly affected.
+## 5. Why the original Moon output-cache qualification appeared ineffective
 
-Examples from `lib.scad.hub75`:
+The Migration-004 qualification runs did not demonstrate warm whole-task reuse. A controlled rerun of exact clamps production run `34972350665` made the problem reproducible:
 
-- Build-only proof run `34976316887`: direct source impact on `scad.build`, not direct docs/verify source impact;
-- docs-only proof run `34976333875`: direct source impact on `scad.docs`;
-- Verify-only proof run `34976347095`: direct source impact on `scad.verify`;
-- README-only proof run `34976305647`: `affected=false` and no SCAD image/container path.
+- attempt 2 restored the Moon cache archive saved by attempt 1 (~259 KB);
+- nevertheless docs and Verify executed again;
+- task hashes changed between the two attempts despite identical source.
 
-This is concrete evidence for Moon’s **impact-analysis role**.
+Examples:
 
-## 5. Moon output-cache value is not yet demonstrated by the qualification runs
+| Task | Attempt 1 | Attempt 2 |
+| --- | --- | --- |
+| docs | `879c5882` | `c764aedd` |
+| Verify | `dc7f4445` | `78925029` |
+| full root | `51af155f` | `d263a5f9` |
 
-This must be kept separate from impact detection.
+So the cache transport worked but task identity was unstable.
 
-### HUB75 Build-only proof
+## 6. Root cause: generated Python bytecode polluted Moon task identity
 
-Run `34976316887` correctly identifies Build as the direct changed domain before Docker starts.
+A temporary non-merge diagnostic PR in `lib.scad.clamps` inspected Moon's full task-hash manifests on fresh hosted runners.
 
-However, the portable Moon cache is a miss. Once the aggregate `scad.ci` graph runs, docs and Verify are executed as well because no reusable Moon output is available for them.
+Diagnostic source commit:
 
-### HUB75 docs-only proof
+```text
+9029a9e010900029d42e444a2e8792313c72cd27
+```
 
-Run `34976333875` correctly identifies docs as the direct changed domain.
+Workflow run `34985150733` executed the same diagnostic twice:
 
-Again the portable Moon output cache is a miss. The aggregate graph therefore also executes Build and the full physical/API verification path.
+- attempt 1 job `104435229590`;
+- attempt 2 job `104435489526`.
 
-### HUB75 exact main
+Before Moon executes the heavy graph, production runs the Python command:
 
-Run `34976840416` again reports no portable Moon cache entry and no SCons cache entries for the relevant namespaces. It executes all three real domains:
+```text
+bash tools/tool.scad-project/scad-project.sh tooling-check
+```
 
-- `scad.build`: about 2.0 s;
-- `scad.verify`: about 5.15 s;
-- `scad.docs`: about 8.07 s;
-- total Moon graph: about 8.805 s because work overlaps inside the graph.
+That creates:
 
-It then saves a portable Moon task/output cache of roughly **730 KB**.
+```text
+tools/tool.scad-project/src/scad_project/__pycache__/*.pyc
+```
 
-### Clamps exact main
+Consumer tasks use a broad input:
 
-Run `34972350665` also reports a portable Moon cache miss and both SCons cache misses. It re-executes:
+```text
+tools/tool.scad-project/**
+```
 
-- Verify: about 2.4 s;
-- docs: about 4.7 s;
-- complete Moon graph: about 5.45 s.
+Moon's task-hash manifest includes those generated `.pyc` files even though Git ignores them. Their binary hashes differ between fresh runners, while checked-in source/config/tool revisions remain identical.
 
-It then saves a portable Moon cache of roughly **259 KB**.
+The same exact diagnostic source therefore produced two different full docs-task hashes:
+
+- attempt 1: `5cdd39337e7445531c8810dcb993519cb9fc59aa04090f0c913cbca3c29528a2`;
+- attempt 2: `a4117e6b5ab8d07be33a0d3cac836d89343f7c2c715554949abd03d93a8b1ce8`.
+
+The Moon workspace hash remained stable, localising the instability to task inputs.
+
+**Conclusion:** generated runtime state was accidentally treated as source. This is an integration/configuration defect, not an inherent failure of Moon caching.
+
+## 7. Stable Moon warm-cache experiment succeeds
+
+The diagnostic workflow was then changed so Python does not create bytecode before Moon hashes the source tree (`PYTHONDONTWRITEBYTECODE=1`). It ran docs only, saved Moon's task/output cache, and then reran the exact same job on a fresh hosted VM.
+
+Controlled source:
+
+```text
+eb996a8a80ff4fb5dab60f5d30d53c13c6964c27
+```
+
+Workflow run:
+
+```text
+34985629638
+```
+
+Attempt 1 created the docs output and saved a ~146 KB portable Moon cache. The stable `scad.docs` hash was:
+
+```text
+d068e1adefa7bd425fe41debef031902248baee77eb9da41ee06fe46055a6633
+```
+
+Attempt 2 restored attempt 1's cache on another hosted runner and retained that exact same hash. Moon reported:
+
+```text
+consumer:scad.docs (cached, 2ms, d068e1ad)
+Tasks: 1 completed (1 cached)
+Time: 32ms
+```
+
+The `moon-project.sh` wrapper, including Moon startup/materialisation bookkeeping, took about **1.322 s** on the cached attempt. The cold attempt had required roughly **4 s** for the docs task itself and about **5.3 s** through the wrapper.
+
+The render command output visible in the cached Moon log is replayed cached task output; Moon's own result (`cached`, 2 ms, one cached task) confirms that the render commands were not executed again.
 
 ### Interpretation
 
-The qualification evidence therefore proves:
+Moon whole-task output reuse is now **demonstrated**, not theoretical.
 
-- Moon affected analysis can avoid the whole expensive runtime when nothing relevant changed;
-- Moon can identify the directly affected domain.
+For this small clamps docs capability it avoids roughly four seconds of actual render work. That is useful compute avoidance, but it is still secondary to the 15–20 second fresh-runner Docker image pull. Because pull-time variance alone can exceed the ~4-second render saving, the end-to-end job stopwatch does not reliably show the cache benefit on this small project.
 
-It does **not yet prove**, from these observed runs, that Moon output hydration materially reduces a later affected run.
+This is exactly why Migration 005 must measure both:
 
-That does not establish that Moon caching is ineffective. The proof PRs ran close together and GitHub Actions cache availability/scope can prevent a just-created cache from being usable by another concurrent/PR/main context. Exact-main also crossed PR/main cache context boundaries.
+- work/compute avoided;
+- wall-clock feedback latency.
 
-The correct status for Migration 005 is therefore:
+## 8. SCons is not a universal SCAD cache layer
 
-> **Moon output-cache benefit is currently unproven in retained Migration-004 evidence and must be measured separately.**
+The reusable production workflow currently attempts to restore two SCons cache directories for every affected SCAD repository:
 
-The architecture must not cite output hydration as a practical benefit until a controlled warm-cache experiment demonstrates it and quantifies the gain.
+```text
+.cache/scad-project/scons
+.cache/scad-project/verification-scons
+```
 
-## 6. SCons cache value is also not established by these cold qualification runs
+Whether they can have value depends on the project's selected execution engine.
 
-The same observed exact-main runs show SCons cache misses. Consequently they do not prove normal cross-run SCons cache savings either.
+### Clamps: direct engine, no SCons cache exists
 
-Unlike Moon, SCons has already demonstrated value as the in-run fine-grained target engine: its manifests identify individual render/export targets and current/built/cache-restored states.
+`lib.scad.clamps` has no `build_engine` configuration. `tool.scad-project` therefore selects its default `direct` engine.
 
-Migration 005 should therefore separately measure:
+A dedicated diagnostic run `34986143350` executed a complete successful clamps `design-build` directly through `tool.scad-project`. Result:
 
-1. SCons as a dependency engine inside one execution;
-2. SCons object-cache reuse across hosted runs;
-3. Moon whole-task output hydration across hosted runs.
+```text
+cache directory absent
+```
 
-These are three different benefits.
+After the build, `.cache/scad-project/scons` still did not exist. GitHub's cache action consequently reported:
 
-## 7. Publication cost
+```text
+Path Validation Error: Path(s) specified in the action for caching do(es) not exist, hence no cache is being saved.
+```
 
-Representative clamps final run `34971400621` spends roughly 4.4 seconds publishing Build and Verification sequentially after production.
+This matches the earlier normal production rerun where both SCons save steps were skipped.
 
-HUB75 exact-main run `34976840416` shows approximately:
+For clamps, generic SCons cache restore/save handling is therefore lifecycle overhead with no functional benefit.
 
-- Build generated-branch publication: ~3.0 s;
-- Verification publication: ~2.2 s;
+### HUB75: SCons is explicitly configured and its cache is populated
 
-They are currently serialized.
+`lib.scad.hub75` explicitly declares:
 
-Before those publications, the workflow also uploads retained Build and Verification workflow artifacts from the same host job.
+```yaml
+build_engine:
+  engine: scons
+```
 
-Migration 005 must identify which of these transfers are required for user/release evidence and which exist only because of an earlier multi-job design.
+Its exact-main production run `34976840416` completed `Save normal SCons object cache` successfully. The Verification SCons cache save remained skipped because that Verification path does not populate the separate verification cache directory.
 
-## 8. Current measured conclusions
+So SCons itself is not dead architecture. It is a project/capability-level choice whose cache handling should be activated only where the effective project configuration says it is used.
 
-What is already supported by evidence:
+### Architecture implication
 
-- zero-container unrelated changes are a substantial win;
-- impact detection is a real useful capability;
-- image acquisition is the dominant single small-repository cost;
-- reducing two containers to one reduces duplicated compute but did not improve relevant-change latency;
-- current consumer Moon graphs expose much more than the few domain capabilities maintainers naturally think about;
-- current qualification evidence does not demonstrate warm Moon output hydration or warm SCons cross-run reuse.
+Do not model “Moon cache + normal SCons cache + Verification SCons cache” as three unconditional standard layers.
 
-What remains to measure before architecture selection:
+Instead:
 
-- exact image compressed size and per-layer composition;
-- download versus unpack/startup contribution to the ~20 s image cost;
-- explicit OCI/image-cache restore cost versus GHCR pull cost;
-- controlled warm Moon output-cache behavior and resulting producer skips;
-- controlled warm SCons cache behavior;
-- Moon impact-check sub-costs with warm and cold Moon runtime;
-- necessity of each retained workflow artifact;
-- safe parallelization or combination of generated-output publication.
+- Moon may cache complete source-derived capabilities;
+- SCons may provide fine-grained target reuse **inside capabilities configured to use SCons**;
+- direct capabilities should not pay SCons cache restore/save overhead;
+- each cache must have one clear scope and measurable reason to exist.
+
+A controlled warm HUB75 SCons reuse measurement is still useful before final architecture selection, but the ownership boundary is already clear.
+
+## 9. Publication cost and artifact retention
+
+Representative clamps final run `34971400621` spends roughly 4.4 s publishing Build and Verification sequentially after production.
+
+HUB75 exact-main `34976840416` shows roughly:
+
+- Build generated-branch publication: ~3 s;
+- Verification publication: ~2 s.
+
+The normal workflow also uploads full Build and Verification workflow artifacts before branch publication. Those artifacts are **not** downloaded for the same-job publications. Release uses a separate cross-job artifact lifecycle.
+
+Normal full-tree artifacts are therefore retention/download policy, not a technical data-transfer requirement of current normal CI.
+
+## 10. Resource-efficiency interpretation
+
+The old ~37-second parallel topology and the current ~41–45-second one-runner topology optimize different metrics:
+
+- old: lower wall-clock latency, two simultaneous heavy hosted runners and duplicated image/setup work;
+- current: one heavy runner and less duplicated infrastructure, but somewhat slower relevant feedback;
+- README-only current path: best on both axes because expensive work is removed entirely.
+
+Migration 005 therefore records total runner-minutes, maximum heavy-runner concurrency, repeated image/setup work and avoidable execution alongside elapsed feedback time.
+
+## 11. Current measured conclusions
+
+Supported by evidence:
+
+- README-only zero-container handling is a substantial latency and resource win;
+- Moon change-impact analysis is useful;
+- Moon whole-task output hydration **does work** once task identity contains only stable source-derived inputs;
+- broad tool globs currently admit generated `.pyc` state and must be corrected;
+- on small clamps, Moon avoids about four seconds of docs rendering but Docker image distribution still dominates the lifecycle;
+- SCons is meaningful for SCons-enabled capabilities, but clamps uses the direct engine and should not pay generic SCons-cache overhead;
+- HUB75 does use SCons and successfully populated the normal SCons cache in qualified production;
+- reducing two runners to one reduces duplicated compute but did not improve relevant-change latency;
+- normal full-tree workflow artifacts are a retention choice rather than a current same-job hand-off requirement;
+- current consumer Moon graphs expose more lifecycle mechanics than maintainers need to author directly.
+
+Remaining measurements before selecting/finalising the target architecture:
+
+- controlled warm HUB75 SCons reuse and its real saving;
+- SCAD image compressed/layer composition and realistic image-reuse alternatives;
+- necessity/policy for normal retained full-tree artifacts;
+- safe overlap or combination of Build/Verification branch publication;
+- configuration size and human readability of the leading architecture variants;
+- total runner-minutes and concurrency for each candidate, not only wall-clock latency.

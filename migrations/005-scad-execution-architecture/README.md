@@ -1,187 +1,171 @@
 # Migration 005 — understand, document and simplify the SCAD execution architecture
 
-Status: **active — architecture reflection first**
+Status: **active — provisional target selected, validation in progress**
 
 Tracking issue: [#55](https://github.com/brainboxemb/brainboxemb.meta/issues/55)
 
 Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
 
-Working documents:
+## Durable working set
 
 - [Current architecture in plain language](current-architecture.md)
-- [Complete architecture reflection and candidate directions](architecture-reflection.md)
-- [Measured architecture evidence](measurements.md)
+- [Architecture reflection](architecture-reflection.md)
+- [Measured evidence](measurements.md)
+- [Architecture alternatives and decision](target-variants.md)
+- [Provisional target architecture](target-architecture.md)
+- [Normal publication-path analysis](publication-analysis.md)
+- [Resource-efficiency and compute-cost criteria](resource-efficiency.md)
+
+The repository documentation is the source of truth. Issue #55 is only the tracker for progress/discussion.
 
 ## Purpose
 
-Migration 005 is a **complete architecture reflection of the SCAD/Moon integration**.
+Migration 005 is a complete architecture reflection and improvement track for the SCAD/Moon integration.
 
-It is not just a Docker-performance exercise and it is not just a cleanup of `moon.yml`.
+It exists because Migration 004 proved that the execution model can work, but also exposed two problems:
 
-Migration 004 proved that the current shared model works, but it also showed that a normal maintainer now has to understand too many interacting concepts across:
+1. the model became too difficult for a normal maintainer to understand from a consumer repository;
+2. its performance/resource trade-offs were not good enough to accept the implementation as the final architecture without further review.
 
-- GitHub Actions;
-- Moon;
-- `tool.git-project`;
-- `tool.scad-project`;
-- SCons;
-- the SCAD Docker toolchain;
-- generated-output publication;
-- repository-local Moon configuration and evidence.
+The goal is not merely to make `moon.yml` shorter or Docker faster. It is to make the complete lifecycle understandable, correct, efficient and proportionate.
 
-The reasons for those boundaries exist, but they are spread across several repositories and historical decisions. At the same time, the final relevant-change path on the small `lib.scad.clamps` reference is slightly slower than the old parallel model even though it uses less total compute.
+## What Migration 004 handed over
 
-The goal is therefore to understand the whole architecture, document it coherently for a human, challenge every visible layer/boundary, and then simplify or improve it where justified.
+Measured reference points:
 
-## Central architecture question
-
-> What role should Moon have in a SCAD repository, which responsibilities belong around it, and how small can the resulting consumer-facing model become while remaining correct, understandable and efficient?
-
-Performance is one acceptance dimension of that question, not the whole question.
-
-## What must be reconstructed before implementation
-
-Migration 005 must explain in ordinary language:
-
-1. why Moon was introduced at all;
-2. what Moon does that GitHub Actions and SCons do not already do;
-3. what SCons remains responsible for;
-4. why the host performs an impact check before starting the SCAD runtime;
-5. why current consumers expose separate docs/build/verification/finishing/root Moon tasks;
-6. why both `scad.production-impact` and `scad.ci` exist;
-7. how Moon caching and SCons caching differ and whether both provide measurable value;
-8. why generated-output evidence is split into producer, current-run and publication information;
-9. why publication is a host responsibility rather than a container responsibility;
-10. what a consumer project actually needs to configure versus what should be inherited from shared tooling;
-11. where the current CI time really goes;
-12. which complexity is essential and which is accidental or historical.
-
-The detailed reconstruction starts in [current-architecture.md](current-architecture.md), the assessment/candidate improvements are kept in [architecture-reflection.md](architecture-reflection.md), and measured claims are collected separately in [measurements.md](measurements.md).
-
-## Performance baseline inherited from Migration 004
-
-Architecture decisions must use measured performance, but container count is not a proxy for latency.
-
-| Situation | Relevant/unaffected wall-clock | Heavy SCAD containers | Meaning |
+| Situation | Feedback time | Heavy hosted work | Interpretation |
 | --- | ---: | ---: | --- |
-| old parallel Build + Verify | about **37 s** relevant critical path | 2 | More total compute, but expensive setup overlaps. |
-| first common v0.13.0 model | about **64–65 s** relevant | 1 | Clear serialization regression. |
-| final v0.13.1 model | about **41–45 s** relevant | 1 | Less duplicated compute, but still slower than old relevant baseline. |
-| final README-only path | about **4.4–4.8 s** | 0 | Clear win: expensive CAD runtime is never started. |
+| old parallel Build + Verify | ~37 s relevant | 2 simultaneous heavy jobs | faster feedback, but duplicated VM/image/setup work |
+| first one-runner v0.13.0 | ~64–65 s | 1 | too much serialization |
+| final v0.13.1 | ~41–45 s | 1 | less duplicated compute, but still slower feedback than old baseline |
+| README-only final path | ~4.4–4.8 s | 0 | clear win on both speed and resource use |
 
-Representative final `lib.scad.clamps` run `34971400621` shows roughly:
+On the small clamps reference, the actual Moon/CAD output graph is only around five seconds while SCAD Docker image acquisition is commonly around 15–20 seconds.
 
-| Phase | Approx. time |
-| --- | ---: |
-| source/base preparation | 1.9 s |
-| Moon impact check + evidence | 4.7 s |
-| cache/range preparation | 1.9 s |
-| **SCAD Docker image pull** | **20.0 s** |
-| container bootstrap + validation + production | 9.4 s |
-| of which Moon output graph itself | **5.132 s** |
-| staging + workflow-artifact upload | 2.6 s |
-| sequential Build + Verification publication | 4.4 s |
-| post-job cache/cleanup | ~1.4 s |
+Therefore Migration 005 treats **feedback latency and total compute/resource use as different metrics**. Neither “fastest” nor “fewest containers” wins by itself.
 
-The actual output graph is therefore only a small part of the lifecycle. Runtime distribution and orchestration deserve at least as much scrutiny as task-level optimizations.
+## Architecture findings now established
 
-## Important current finding: Docker image reuse
+### Moon has two demonstrated uses
 
-The current reusable workflow explicitly runs `docker pull ghcr.io/brainboxemb/scad-toolchain:v0.4.1` for an affected change.
+1. **Change-impact selection before Docker.** Unrelated changes can avoid the expensive runtime completely.
+2. **Complete capability output reuse.** A controlled fresh-runner test showed that a stable documentation task can be restored from Moon cache instead of rerendered.
 
-The workflow explicitly caches Moon state and SCons object state. It does **not** explicitly cache the Docker/OCI image or Docker layer store. In representative affected evidence Docker downloads the image layers again and reports `Downloaded newer image`.
+The original warm-cache failure was caused by our integration: `tools/tool.scad-project/**` included generated Python `__pycache__/*.pyc`, so identical source produced different task hashes on different runners. With bytecode excluded from task identity, Moon kept a stable hash and reported a cached task in about 2 ms.
 
-Migration 005 must measure whether image acquisition can be reduced or reused economically on disposable GitHub-hosted runners. An explicit image cache is not automatically better: cache transfer/storage can itself cost more than pulling from GHCR, so this must be measured rather than assumed.
+### SCons is optional, not universal
 
-## Important current finding: distinguish Moon impact analysis from Moon output caching
+- clamps uses the default direct engine and does not create a SCons object cache;
+- HUB75 explicitly selects `build_engine: scons` and does populate its normal SCons cache.
 
-Migration 004 **did prove** that Moon's impact analysis is useful: README-only work can stop before Docker, and isolated HUB75 changes are correctly classified as Build-, docs- or Verify-related.
+The lifecycle should therefore restore/save SCons cache only where the configured capability can use it.
 
-The retained qualification runs do **not yet prove** a practical cross-run benefit from Moon's portable output cache. Build-only, docs-only and exact-main HUB75 runs inspected so far all had Moon output-cache misses and therefore executed the full aggregate graph once Docker started. The exact-main clamps run also had a Moon output-cache miss.
+### Current consumer Moon configuration exposes too much machinery
 
-That does not prove that Moon output hydration is ineffective; PR/main cache scope, run ordering and concurrent proof runs can explain the misses. It does mean the architecture must not treat two separate claims as one:
+Clamps currently exposes seven Moon tasks and HUB75 eight. Maintainers actually need to think in terms of only a few real capabilities:
 
-1. **Moon as impact engine** — demonstrated value;
-2. **Moon as whole-task output cache** — value still to be demonstrated and measured.
+Clamps:
 
-A controlled warm-cache experiment belongs in this migration before that second responsibility is used to justify architecture complexity. Detailed evidence is in [measurements.md](measurements.md).
+```text
+Design documentation
+Verification
+```
 
-## Architecture properties worth preserving unless evidence says otherwise
+HUB75:
 
-- an unrelated change should not start the expensive SCAD runtime;
-- uncertainty must run safely rather than incorrectly skip required work;
-- Build and Verification remain independently meaningful capabilities;
-- SCons remains dependency-aware for fine-grained SCAD targets unless a replacement is demonstrably better;
-- published output identifies exact source/tooling;
-- GitHub write credentials stay outside the SCAD runtime;
-- a release can be reproduced from one exact source revision.
+```text
+Presentation renders
+Design documentation
+Verification
+```
 
-These are outcomes. Their current implementation is open to change.
+Build indexes, current source/tool information, synthetic roots, cache transport and publication staging are shared lifecycle mechanics and should not be hand-authored in every repository.
 
-## First architecture findings
+### Moon can share standard task policy natively
 
-The complete reflection currently identifies several issues worth challenging:
+Moon supports inherited workspace task configuration. This makes it plausible for `tool.scad-project` to own the standard SCAD capability policy while a consumer declares only project-specific capability inputs/overrides. A custom Moon YAML generator is not the preferred solution.
 
-- consumer `moon.yml` files expose seven/eight tasks even though maintainers naturally think in terms of only a few domain capabilities;
-- `tool.scad-project` already has complete `produce-build` / `produce-verification` commands while Moon consumers separately expose finishing tasks, so the stable boundary is ambiguous;
-- evidence distinctions are correct but may be shaping too much visible build architecture;
-- Moon and SCons both make reuse decisions and need a clearer coarse-versus-fine boundary;
-- two synthetic Moon roots encode a real source-impact versus publication-context distinction, but that distinction may not need to be visible in every consumer;
-- common inputs/configuration are repeated through many tasks;
-- the impact check is highly valuable for unaffected changes but adds several seconds to affected changes;
-- Docker image acquisition dominates the small reference build and is not explicitly cached today;
-- Moon output-cache benefit has not yet been demonstrated by the retained qualification runs;
-- same-job workflow-artifact upload and sequential publication may contain avoidable overhead.
+## Provisional target architecture
 
-See [architecture-reflection.md](architecture-reflection.md) for the complete assessment.
+The current target combines two earlier ideas:
 
-## Candidate directions
+- **inherit shared SCAD Moon policy** from pinned shared tooling;
+- **make Moon model coarse real capabilities**, not finishing mechanics.
 
-No target is selected yet. At minimum Migration 005 will compare:
+The intended responsibility split is:
 
-1. **keep Moon but shrink the consumer contract** — standard SCAD Moon policy lives in `tool.scad-project`, consumers declare only project-specific capabilities/inputs;
-2. **use coarser Moon capability tasks** — align Moon more closely with complete Build/Verification producers and hide finishing mechanics;
-3. **remove Moon from the SCAD consumer surface** — considered as a control, but only acceptable if affected selection/output reuse can be replaced without inventing worse custom orchestration;
-4. **retain the current responsibility model but optimize runtime/lifecycle** — useful as a low-risk comparison, though it would not solve consumer complexity by itself.
+```text
+GitHub Actions
+  exact source/base, hosted lifecycle, credentials
+        |
+        v
+Moon on host
+  which SCAD capabilities changed?
+  none -> stop before Docker
+        |
+        v
+one SCAD runtime
+  Moon -> execute or restore whole capabilities
+            |
+            +-- tool.scad-project
+                    |
+                    +-- direct execution, or
+                    +-- SCons fine-grained targets when configured
+        |
+        v
+host finishing/publication
+  current source/tool/run information + publication policy
+```
 
-## Required measurements before selecting a target
+Source-derived capability output must have stable source-only identity. Current run/ref/PR/publication information is added after execution/restoration and must not invalidate reusable source output.
 
-- Docker image transfer/layer/unpack/startup costs;
-- Moon impact-check sub-costs;
-- controlled warm-cache value/hit behavior of Moon output hydration versus SCons caching;
-- bootstrap/tool-submodule overhead;
-- artifact staging/upload overhead;
-- Build/Verification publication cost and possible safe overlap;
-- configuration complexity for both simple clamps and richer HUB75 examples.
+See [target-architecture.md](target-architecture.md) for the full model.
+
+## Resource-efficiency requirement
+
+Architecture experiments and implementation acceptance must report, where practical:
+
+- wall-clock feedback time;
+- total runner-seconds/minutes;
+- maximum simultaneous heavy runners;
+- container/runtime starts;
+- duplicated image/tool downloads;
+- productive CAD work;
+- work avoided through change selection/cache reuse;
+- cache/artifact transfer overhead.
+
+This avoids “winning” by using two VMs merely to hide duplicated setup, while also avoiding excessive serialization simply to reduce runner count.
 
 ## Human-understandability acceptance test
 
-Give a maintainer a normal consumer repository plus one linked current-architecture page.
+Give a maintainer a normal consumer repository plus one linked architecture page.
 
 Without migration history or chat logs, that maintainer must be able to explain:
 
-- what happens after README-only, CAD-source, Build-only and Verification-only changes;
+- which SCAD capabilities the repository has;
+- what happens after README-only, CAD-source, Build/docs-only and Verification-only changes;
 - why Moon exists;
-- what Moon decides versus what SCons decides;
-- why each consumer-visible task/capability is separate;
+- when SCons exists and when it does not;
 - what is cached and where;
-- where generated output and source/tool information come from;
-- where most CI time is spent;
-- why the chosen architecture is worth its complexity.
+- why current-run information is separate from reusable source output;
+- why publication is outside Docker;
+- where most CI latency and compute go;
+- why the architecture is worth its complexity and resource cost.
 
 If that cannot be answered, the architecture is not finished.
 
-## First phase
+## Current validation phase
 
 Do **not** migrate the HUB75 frame yet.
 
-First:
+Before deriving the implementation plan:
 
-1. finish the current-architecture reconstruction and performance breakdown;
-2. measure Moon impact/cache value and Docker/runtime costs separately;
-3. create concrete simpler configurations for the simple clamps and richer HUB75 cases;
-4. compare the candidate architectures on clarity, correctness, latency and total compute;
-5. select the target architecture with explicit reasons;
-6. only then derive implementation steps and repository owners.
+1. measure warm SCons reuse on a real HUB75 SCons capability;
+2. measure SCAD image size/layer/distribution options;
+3. decide normal-CI retained artifact policy;
+4. test safe concurrent or combined Build/Verification publication;
+5. prototype inherited shared Moon capability tasks from the pinned `tool.scad-project` path;
+6. show the resulting consumer configuration for clamps and HUB75 and run the human-understandability test;
+7. estimate both feedback latency and total runner/resource use for the resulting lifecycle.
 
-The HUB75 frame remains on its previous qualified `tool.scad-project v0.12.0` / `lib.scad.hub75 v0.1.3` setup until that decision is made.
+If these validations do not reveal a fundamental flaw, the provisional target becomes the implementation architecture and Migration 005 can be broken into owner-specific implementation steps.
