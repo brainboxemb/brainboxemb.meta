@@ -1,17 +1,19 @@
 # Migration 005 — validated target architecture
 
-Status: **validated — implementation not yet complete**
+Status: **validated — migration implementation in progress**
 
-This is the selected SCAD execution architecture after Migration-005 validation. The remaining work belongs to owner-repository implementation and end-to-end qualification; later evidence may correct details, but there is no longer an open architecture-variant search.
+## Why this document exists
 
-Related:
+This is the primary technical design for Migration 005. Read this when you need to understand **how the target SCAD execution architecture is intended to work**: Moon responsibilities, inherited capabilities, the SCons boundary, runtime selection, cache identity, GitHub Actions and publication.
 
-- [Migration 005 README](README.md)
-- [Measured evidence](measurements.md)
-- [Moon inheritance validation](moon-inheritance-validation.md)
-- [Human-understandability validation](human-understandability-validation.md)
-- [Target resource budget](target-resource-budget.md)
-- [Implementation plan](implementation-plan.md)
+You do not need the earlier design history to use this document. The reasoning that led here is kept separately in [03 — Architecture reflection](03-architecture-reflection.md) and [04 — Alternatives and decision](04-architecture-decision.md). The active owner-by-owner rollout is in [06 — Implementation plan](06-implementation-plan.md).
+
+Related evidence:
+
+- [10 — Measured evidence](10-measurements.md)
+- [18 — Moon inheritance validation](18-moon-inheritance-validation.md)
+- [19 — Human-understandability validation](19-human-understandability-validation.md)
+- [20 — Target resource budget](20-target-resource-budget.md)
 
 ## 1. Maintainer model
 
@@ -266,7 +268,7 @@ It prefers, in order:
 4. overlap independent finishing work on the same runner;
 5. add heavyweight parallel infrastructure only if later measured requirements justify its extra resource cost.
 
-The detailed acceptance budget is in [target-resource-budget.md](target-resource-budget.md).
+The detailed acceptance budget is in [20 — Target resource budget](20-target-resource-budget.md).
 
 ## 13. Human-understandability result
 
@@ -284,7 +286,7 @@ With a consumer repository plus this architecture page, a maintainer can identif
 - why publication stays outside Docker;
 - where latency/resource cost is concentrated.
 
-See [human-understandability-validation.md](human-understandability-validation.md).
+See [19 — Human-understandability validation](19-human-understandability-validation.md).
 
 ## 14. Deliberately rejected long-term models
 
@@ -320,6 +322,6 @@ Architecture validation is complete:
 - human-understandability inspection — passed;
 - latency/resource budget — established.
 
-The next work is the owner-specific implementation sequence in [implementation-plan.md](implementation-plan.md).
+The remaining work is the owner-specific migration sequence in [06 — Implementation plan](06-implementation-plan.md).
 
 `2026-009-01.cad.HUB75-display-frame` remains intentionally deferred until the shared tools and both reference canaries are released and qualified.

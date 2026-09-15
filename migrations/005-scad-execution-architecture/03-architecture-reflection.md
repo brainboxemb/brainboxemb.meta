@@ -1,8 +1,12 @@
 # Migration 005 — architecture reflection
 
-Status: **reflection concluded — provisional target selected**
+Status: **historical reflection record — conclusions incorporated into the validated target**
 
-This document records the architectural conclusions from reconstructing and measuring the complete SCAD/Moon integration. The selected direction is described in [target-architecture.md](target-architecture.md); detailed measurements remain in [measurements.md](measurements.md).
+## Why this document exists
+
+This document records the reasoning that followed reconstruction and measurement of the Migration-004 SCAD/Moon model. Read it when you need to understand **why** the architecture changed. For the architecture that is actually being migrated to, use [05 — Validated target architecture](05-target-architecture.md); for measured evidence, use [10 — Measurements](10-measurements.md).
+
+The text below deliberately retains the reasoning sequence from the design phase. References to a provisional target or remaining validation describe the state at that time; those validation gates were later completed.
 
 ## 1. The current architecture solves real problems
 
@@ -171,7 +175,7 @@ The preferred ownership boundary is now:
 tool.git-project
   generic Moon runtime and generic repository primitives
 
- tool.scad-project
+tool.scad-project
   standard SCAD capability policy, inherited Moon task definitions,
   capability commands and SCAD-specific lifecycle behavior
 
@@ -182,9 +186,9 @@ consumer repository
 
 `tool.git-project` should not learn SCAD domain rules, and consumer repositories should not copy generic SCAD orchestration policy.
 
-## 8. Provisional architecture decision
+## 8. Provisional architecture decision at this stage
 
-The reflection selects a combination of the earlier A and B alternatives:
+The reflection selected a combination of the earlier A and B alternatives:
 
 - **inherit shared policy** rather than hand-copying it in consumers;
 - **model coarse real capabilities** rather than exposing finishing mechanics as the consumer contract.
@@ -193,11 +197,11 @@ Moon remains because both its change-impact and complete-output reuse value are 
 
 Moon-only-change-impact remains a fallback. Removing Moon entirely is not justified by current evidence. Keeping the existing seven/eight-task consumer graph is not accepted as the long-term human interface.
 
-See [target-architecture.md](target-architecture.md) for the resulting model and [target-variants.md](target-variants.md) for the decision record.
+See [05 — Validated target architecture](05-target-architecture.md) for the final selected model and [04 — Alternatives and decision](04-architecture-decision.md) for the decision record.
 
 ## 9. Human acceptance test
 
-The architecture is ready for rollout only when a maintainer can take a normal consumer repository plus one linked architecture page and explain, without migration history or chat logs:
+The architecture was considered ready for rollout only when a maintainer could take a normal consumer repository plus one linked architecture page and explain, without migration history or chat logs:
 
 - which human-level SCAD capabilities exist;
 - what happens for README-only, CAD-source, Build-only/docs-only and Verification-only changes;
@@ -209,11 +213,11 @@ The architecture is ready for rollout only when a maintainer can take a normal c
 - where most CI time and compute go;
 - why the architecture is worth its complexity.
 
-## 10. Remaining validation gate
+That check was later completed in [19 — Human-understandability validation](19-human-understandability-validation.md).
 
-Do **not** migrate the HUB75 frame yet.
+## 10. Validation gate at the time
 
-Before converting this provisional target into an implementation plan, complete these checks:
+At this stage the following checks still had to be completed before implementation planning:
 
 1. warm SCons reuse on a real SCons-enabled HUB75 capability;
 2. Docker image distribution/layer/reuse options;
@@ -223,4 +227,4 @@ Before converting this provisional target into an implementation plan, complete 
 6. concrete resulting consumer configuration for clamps and HUB75;
 7. latency and total-runner/resource estimate for that resulting lifecycle.
 
-Those validations may refine the target, but a major change in direction now requires new evidence rather than reopening all alternatives by default.
+Those checks are now recorded in the numbered evidence documents [12](12-scons-cache-validation.md) through [20](20-target-resource-budget.md). Architecture validation is complete; this section remains as the historical gate that led to those tests.
