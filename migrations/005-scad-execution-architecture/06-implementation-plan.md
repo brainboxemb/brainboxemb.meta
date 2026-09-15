@@ -12,9 +12,11 @@ The plan deliberately separates owner repositories. Do not bundle unrelated owne
 
 ## Current progress
 
-- **Step 1 — runtime image family:** implementation merged and `docker.scad-toolchain v0.5.0` released from exact source `a56a3aae4b9e0494e6625e75002d96b0a55986a3`; both immutable image profiles passed external `v0.5.0` qualification in run `34999654405`. The external testsuite verification-record/default-version housekeeping remains to be closed before Step 1 is marked fully complete.
-- **Step 2 — affected capability list:** next implementation owner after Step-1 closeout.
-- **Steps 3–8:** waiting on their preceding released owner dependencies.
+- **Step 1 — runtime image family:** implementation merged and `docker.scad-toolchain v0.5.0` released from exact source `a56a3aae4b9e0494e6625e75002d96b0a55986a3`; both immutable image profiles passed external `v0.5.0` qualification in run `34999654405`. The external testsuite default now points at `v0.5.0`; any remaining verification-record housekeeping is a closeout detail rather than a dependency for later released steps.
+- **Step 2 — affected capability list:** **complete**. `tool.git-project v0.2.8` is released from exact source `7c43f37e7b07cfb57638a1d1dad2501de09ba7eb` with the complete affected-task list exposed from the existing single Moon query.
+- **Step 3 — shared SCAD capability lifecycle:** **complete**. `tool.scad-project v0.14.0` is released from exact source `3178a42453a5cb7439c11a6416fc9596477ac304`; exact-main Test `35011412444`, release run `35011532281` and tagged Test `35011547837` are green.
+- **Step 4 — template/reference consumer model:** **next owner step**. It must pin the released Step-2/3 dependencies rather than an unreleased tool branch.
+- **Steps 5–8:** waiting on their preceding released owner dependencies and canary evidence.
 
 ## Step 1 — finalise and release the runtime image family
 
@@ -39,13 +41,13 @@ Implemented result:
 - profile identity is exposed by the runtime tooling;
 - one external test suite qualifies both profiles.
 
-Step-1 closeout still requires the permanent external testsuite verification record/default version to point at the released `v0.5.0` pair rather than the earlier candidate SHA.
+The external testsuite default now points at the released `v0.5.0` pair. Keep any remaining historical verification-record cleanup separate from the blocking rollout path unless it reveals contradictory evidence.
 
 Gate to Step 2/3:
 
 - released immutable image-family version exists — **met (`v0.5.0`)**;
 - external qualification is green against that exact version — **met (`34999654405`)**;
-- external testsuite release/default-pin housekeeping completed — **pending**.
+- external testsuite default version points at the release — **met (`v0.5.0`)**.
 
 ## Step 2 — expose affected SCAD capabilities from the existing Moon query
 
@@ -53,27 +55,27 @@ Owner repository:
 
 - `brainboxemb/tool.git-project`
 
-Current released baseline:
+Released result:
 
-- v0.2.7 / `6234b7437b0dc0115642468f74d1f4a2c2214bef`.
+- `v0.2.8` / `7c43f37e7b07cfb57638a1d1dad2501de09ba7eb`.
 
-Implementation goal:
+Implementation result:
 
-The released affected query already computes and stores the complete Moon affected-task set in `affected-tasks.json`. Extend its public action/script contract so consumers can obtain the relevant affected capability IDs in addition to the current compatibility boolean.
+The affected action/script keeps the compatibility boolean and exposes the complete Moon affected-task set from the **same Moon query** as machine-readable output.
 
-Requirements:
+The released contract:
 
-- keep the current conservative `affected=true/false` behaviour for compatibility;
-- expose a stable machine-readable list of affected requested/SCAD capability tasks from the **same Moon query**;
-- do not invoke Moon once per capability;
-- keep exact base/head evidence;
-- preserve fail-conservative behaviour if Moon/config/revision resolution fails;
-- add contract tests for zero, one and multiple affected capabilities;
-- keep the generic tool independent of SCAD-specific source semantics where possible: generic query mechanics belong here, capability naming/policy belongs in `tool.scad-project`.
+- keeps conservative `affected=true/false` compatibility behaviour;
+- exposes the stable affected-task list without invoking Moon once per capability;
+- keeps exact base/head evidence;
+- fails conservatively if Moon/config/revision resolution fails;
+- is generic: SCAD capability naming/policy remains in `tool.scad-project`.
+
+Current interface note: v0.2.8 still requires one existing task as a query anchor. The complete affected-task list itself is repository-wide and is not limited to that anchor. The Step-3 workflow currently anchors on `consumer:scad.docs`; the planned template, clamps and HUB75 reference migrations all expose that capability. Removing the anchor requirement can be a later generic improvement if repositories without docs need this lifecycle; it is not a reason to create a second changed-path model.
 
 Gate:
 
-- release a new immutable `tool.git-project` version/ref with the list-output contract.
+- release a new immutable `tool.git-project` version/ref with the list-output contract — **met (`v0.2.8`)**.
 
 ## Step 3 — implement the shared SCAD capability lifecycle
 
@@ -81,22 +83,25 @@ Owner repository:
 
 - `brainboxemb/tool.scad-project`
 
-Current released baseline:
+Released result:
 
-- v0.13.1 / `28661fc040c4994e9c1d391285b7425c7a55252b`.
+- `v0.14.0` / `3178a42453a5cb7439c11a6416fc9596477ac304`;
+- owner implementation/change request: `tool.scad-project#55`;
+- final owner candidate before merge: `e88e865b8219302a50a9b3c454c3def9c4fec6de`, Test `35011128956`;
+- exact-main Test: `35011412444`;
+- release workflow: `35011532281`;
+- tagged Test on `v0.14.0`: `35011547837`.
 
 Prototype evidence:
 
 - shared Moon task prototype `1303ae8c40817a98f9615a58762264b3ef19b6dd`;
 - inheritance qualification run `34997339916`.
 
-Implementation goal:
-
-Make the validated target architecture the reusable SCAD workflow contract.
+Implemented result:
 
 ### Shared Moon policy
 
-Add shared inherited capability tasks for:
+Shared inherited capability tasks now cover:
 
 - `scad.docs` — design documentation;
 - `scad.build` — presentation renders;
@@ -109,73 +114,74 @@ Shared policy owns:
 - standard output boundaries;
 - Moon cache policy.
 
-Do not reintroduce `tools/tool.scad-project/**` as a source input.
+Broad `tools/tool.scad-project/**` source identity is not used, avoiding generated Python bytecode in Moon hashes.
 
 ### Configuration consistency
 
-Validate `project.scad.yml` and the visible capability selection together.
+`project.scad.yml` and visible capability selection are validated together.
 
-At minimum:
+The released planner covers:
 
-- presentation/render configuration and `scad.build` must agree;
-- Verification configuration and `scad.verify` must agree;
-- PythonSCAD configuration selects the full/dual runtime;
-- OpenSCAD-only configuration permits the focused runtime;
-- `build_engine: scons` controls applicable SCons cache handling;
-- direct-engine projects do not restore/save SCons caches;
-- non-standard output roots require explicit compatible output overrides.
+- presentation/render configuration and `scad.build` agreement;
+- Verification configuration and `scad.verify` agreement;
+- PythonSCAD -> full/dual runtime;
+- OpenSCAD-only -> focused runtime;
+- normal SCons cache handling only for SCons-configured Build/docs work;
+- no normal SCons restore/save for direct-engine projects;
+- separate Verification-SCons transport only when real Verification render/export targets exist;
+- explicit compatible Moon output overrides for non-standard output roots.
 
 ### Runtime selection
 
-Select the runtime image from effective project capability/configuration, not repository name.
+Runtime image selection is derived from effective project configuration rather than repository name and pins released `docker.scad-toolchain v0.5.0` profiles.
 
 For the current references:
 
 - clamps -> full/dual;
 - HUB75 -> OpenSCAD-focused.
 
-Pin immutable released image versions.
-
 ### One-runner execution
 
-Keep one heavy hosted runner and one CAD runtime.
+Normal production keeps one hosted runner and at most one CAD runtime.
 
-Use the affected capability list from Step 2 so the one Docker invocation executes/materialises only the required coarse capabilities.
+The affected capability list from Step 2 drives the source-affected capability set. Moon remains the whole-capability cache/reuse layer; SCons remains optional fine-grained target reuse inside SCons-configured capabilities.
 
-Moon remains the whole-capability cache/reuse layer. SCons remains optional fine-grained target reuse inside SCons-configured capabilities.
+One correctness refinement was discovered during implementation: **source-affected capability selection is not always identical to publication-safe materialization**. When `scad.docs` and `scad.build` both contribute to one complete Build publication tree, a docs-only change may still need the unchanged Build contributor hydrated from Moon so publishing the complete replacement tree cannot delete unchanged presentation output. That contributor remains explicitly non-affected; hydration/reproduction exists only to make the publication family complete.
+
+Verification is a separate publication family and is not pulled into Build for that reason.
 
 ### Current-run finishing
 
-Keep current PR/ref/run/publication information outside Moon source-derived cache identity. Add it after execution/restoration on the host.
+Current PR/ref/run/publication information remains outside Moon source-derived cache identity and is added after execution/restoration on the host.
 
 ### Normal retained artifacts
 
-Do not upload complete normal Build/Verification trees as Actions artifacts by default. Keep compact impact/orchestration evidence. If a real non-publication/manual-download use case needs full artifacts, make that an explicit opt-in policy.
+Normal CI keeps compact impact/orchestration evidence rather than uploading duplicate complete Build/Verification trees as Actions artifacts.
 
-Release remains a separate cross-job artifact hand-off and must not be broken by this change.
+Release remains a separate cross-job artifact hand-off and retains complete Build/Verification artifacts.
 
 ### Publication
 
-Publish Build and Verification from isolated same-runner publisher instances and allow them to overlap. Do not create another hosted runner for publication.
+Build and Verification publish from isolated same-runner publisher instances and may overlap. No second hosted runner is added for publication.
 
 ### Acceptance
 
-Test at least:
+Owner tests and the prior architecture qualification cover:
 
-- unrelated/README-only -> zero CAD image/runtime;
-- one affected capability;
-- multiple affected capabilities;
+- unrelated/non-SCAD -> zero CAD image/runtime;
+- one and multiple affected capabilities;
+- conservative full configured scope;
 - Moon warm capability hydration;
 - direct project -> no SCons transport;
-- SCons project -> useful SCons restore/save only;
-- full runtime selection;
-- OpenSCAD-focused runtime selection;
-- normal publication with no duplicate full Actions artifacts;
-- release workflow remains correct.
+- SCons project -> applicable cache transport only;
+- full and focused runtime selection;
+- normal publication without duplicate full Actions artifacts;
+- release runtime/cache planning and cross-job artifact hand-off;
+- publication-safe Build-family hydration.
 
 Gate:
 
-- release a new immutable `tool.scad-project` version/ref.
+- release a new immutable `tool.scad-project` version/ref — **met (`v0.14.0`)**.
 
 ## Step 4 — update the template/reference consumer model
 
@@ -194,7 +200,8 @@ Requirements:
 - retain intentional OpenSCAD + PythonSCAD example capability, so the template exercises the full runtime where appropriate;
 - document how a project becomes OpenSCAD-only versus dual-runtime;
 - document direct versus SCons choice;
-- keep generated output/publication conventions aligned with shared tooling.
+- keep generated output/publication conventions aligned with shared tooling;
+- pin released `tool.git-project v0.2.8`, `tool.scad-project v0.14.0` and the released runtime-family contract rather than unreleased owner branches.
 
 Gate:
 
