@@ -1,10 +1,12 @@
 # Migration 005 — runtime image family workstream
 
-Status: **validation/implementation prototype**
+Status: **architecture validation passed; production adoption not started**
 
 This workstream is part of Migration 005, not a separate migration.
 
 It exists because runtime selection is part of the SCAD execution architecture: projects should only pay for the CAD runtimes and libraries they actually require, while repositories that deliberately support both OpenSCAD and PythonSCAD must keep that capability.
+
+Detailed evidence: [runtime-image-validation.md](runtime-image-validation.md).
 
 ## Active change requests
 
@@ -14,7 +16,7 @@ The work is deliberately split by owner while remaining one Migration-005 workst
 - image-family implementation: `brainboxemb/docker.scad-toolchain#6`;
 - external two-profile qualification: `brainboxemb/docker.scad-toolchain.test#6`.
 
-These are draft change requests. Production consumers do not move until the qualification gate below is satisfied.
+These remain draft change requests. Production consumers do not move merely because the architecture experiment passed.
 
 ## Why this belongs in Migration 005
 
@@ -42,7 +44,7 @@ Examples:
 
 Therefore the target must **not** remove PythonSCAD globally.
 
-## Provisional image family
+## Validated image family
 
 Keep one owner repository: `brainboxemb/docker.scad-toolchain`.
 
@@ -67,11 +69,47 @@ Full / dual runtime
 
 The prototype keeps the existing `ghcr.io/brainboxemb/scad-toolchain` package as the full/dual runtime for compatibility and introduces `ghcr.io/brainboxemb/scad-toolchain-openscad` for the OpenSCAD-focused profile. This avoids forcing existing dual-runtime consumers to migrate merely to perform the architecture experiment.
 
-The exact package boundary remains subject to measurement. The first prototype deliberately removes only clearly PythonSCAD-specific content so size/pull differences remain attributable.
+The externally qualified candidate came from exact Docker source:
+
+```text
+eeb40e7eff98e98d754baf8ddb52376a17ecef18
+```
+
+and was tested as:
+
+```text
+ghcr.io/brainboxemb/scad-toolchain-openscad:sha-eeb40e7
+ghcr.io/brainboxemb/scad-toolchain:sha-eeb40e7
+```
+
+## Qualification result
+
+External run `34992630534`, job `104460840663`, qualified both profiles sequentially on one `ubuntu-24.04` hosted VM.
+
+| Profile | Compressed OCI bytes | Unpacked bytes | Controlled cold pull |
+| --- | ---: | ---: | ---: |
+| OpenSCAD | 328,098,501 | 961,779,232 | 13.211 s |
+| Full | 449,516,893 | 1,313,898,129 | 15.464 s |
+
+For an OpenSCAD-only capability this removes:
+
+- 121,418,392 compressed bytes, about **27.0%** of full-image registry transfer;
+- 352,118,897 unpacked bytes, about **26.8%** of local image size.
+
+The one controlled timing sample was 2.253 s faster for the smaller image. That timing is supporting evidence only because network variance is significant; the exact byte reduction is the stronger resource-cost signal.
+
+Functionally:
+
+- the OpenSCAD image passed OpenSCAD PNG/STL, BOSL2, SCons, documentation generation, watermark/Pillow and Git/tooling tests;
+- the full image passed that same shared contract;
+- the full image additionally passed PythonSCAD PNG/STL, define/path probes and pybosl2 tests;
+- the documented PythonSCAD interoperability XFAILs still matched their intended failure boundaries.
+
+The full profile is therefore a tested functional superset rather than merely a larger package.
 
 ## Runtime selection model
 
-Runtime selection should eventually derive from the effective project capabilities rather than hand-written GitHub workflow knowledge.
+Runtime selection should derive from the effective project capabilities rather than hand-written GitHub workflow knowledge.
 
 Conceptually:
 
@@ -106,43 +144,30 @@ Do not split it into separate repositories. Instead qualify the family as a matr
 | pybosl2 | not required | required |
 | PythonSCAD interoperability/XFAIL probes | not required | required |
 
-The full image must therefore remain a functional superset of the OpenSCAD capability contract.
+The full image must remain a functional superset of the OpenSCAD capability contract.
 
-The prototype qualification deliberately uses one hosted test runner for both profiles. It pulls/tests them sequentially so the superset proof does not require two simultaneous VMs. Image pull time, compressed OCI bytes and local unpacked size are recorded per profile.
+Routine qualification should still use one hosted test runner for both profiles. Unlike the one-time benchmark, it should allow shared Docker layers to stay local instead of deleting and redownloading them merely to simulate two independent cold pulls.
 
-## Validation evidence required before adoption
-
-For both images measure:
-
-- compressed image/layer bytes;
-- local unpacked image size;
-- fresh hosted-runner pull time;
-- container startup time;
-- functional qualification status;
-- total runner-seconds used for qualification;
-- shared versus unique image layers.
-
-Then test at least:
-
-1. an OpenSCAD-only consumer such as the HUB75 library;
-2. a dual-runtime consumer such as clamps/template behavior.
+Cold-pull benchmarking can remain an explicit diagnostic. The validation run's broad `docker system prune -af` cost about 16 s and removed 1.88 GB of mostly unrelated hosted-runner images, so it is not an appropriate normal-CI step.
 
 ## Owners
 
 - cross-project architecture/evidence: `brainboxemb/brainboxemb.meta`;
 - image implementation/release: `brainboxemb/docker.scad-toolchain`;
 - external image-family qualification: `brainboxemb/docker.scad-toolchain.test`;
-- later runtime selection/lifecycle integration: likely `brainboxemb/tool.scad-project`, after the image family is qualified.
+- runtime selection/lifecycle integration: `brainboxemb/tool.scad-project` after the image family is adopted.
 
 ## Adoption gate
 
-Do not change production SCAD consumers merely because the prototype image is smaller.
+Architecture validation of the image family has passed, but production adoption still requires the integration path to be explicit.
 
-Adoption requires:
+Before consumers move:
 
-- both image profiles independently green;
-- full image still proves the existing PythonSCAD-supported routes;
-- OpenSCAD image proves all normal OpenSCAD production routes;
-- measured pull/compute benefit is material;
-- runtime selection can be expressed clearly from project capabilities;
-- release/version semantics for the two images are explicit and understandable.
+- retain one understandable release/version relationship for both profiles;
+- make `tool.scad-project` select the runtime from effective project capabilities;
+- prove at least one OpenSCAD-only consumer through the smaller image;
+- prove a dual-runtime consumer such as clamps/template through the full image;
+- avoid adding repository-specific image selection to GitHub workflow files;
+- keep routine external qualification resource-proportionate.
+
+No production consumer is changed by this document or by the current draft PRs.
