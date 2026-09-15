@@ -1,26 +1,34 @@
 # Migration 005 — runtime image family workstream
 
-Status: **architecture validation passed; production adoption not started**
+Status: **validated and released as `docker.scad-toolchain v0.5.0`; consumer rollout is part of later migration steps**
 
-This workstream is part of Migration 005, not a separate migration.
+## Why this document exists
 
-It exists because runtime selection is part of the SCAD execution architecture: projects should only pay for the CAD runtimes and libraries they actually require, while repositories that deliberately support both OpenSCAD and PythonSCAD must keep that capability.
+This document records the runtime-profile part of Migration 005: why one shared Docker source now produces an OpenSCAD-focused image and a full OpenSCAD + PythonSCAD image, how that family is qualified, and which later migration step selects a profile for a consumer.
 
-Detailed evidence: [runtime-image-validation.md](runtime-image-validation.md).
+Detailed controlled evidence is in [14 — Runtime image validation](14-runtime-image-validation.md).
 
-## Active change requests
+## Owner implementation result
 
-The work is deliberately split by owner while remaining one Migration-005 workstream:
+The work is split by owner while remaining one Migration-005 workstream:
 
-- architecture/evidence: `brainboxemb/brainboxemb.meta#59`;
-- image-family implementation: `brainboxemb/docker.scad-toolchain#6`;
-- external two-profile qualification: `brainboxemb/docker.scad-toolchain.test#6`.
+- cross-project architecture/evidence: `brainboxemb/brainboxemb.meta`;
+- image-family implementation/release: `brainboxemb/docker.scad-toolchain` PR #6;
+- external two-profile qualification: `brainboxemb/docker.scad-toolchain.test` PR #6.
 
-These remain draft change requests. Production consumers do not move merely because the architecture experiment passed.
+Both owner implementation PRs have been merged. `docker.scad-toolchain v0.5.0` was released from exact source:
+
+```text
+a56a3aae4b9e0494e6625e75002d96b0a55986a3
+```
+
+The immutable `v0.5.0` image pair passed external qualification in workflow run `34999654405`.
+
+This does **not** mean every production consumer has already moved to the new profile-selection model. Runtime selection is integrated later through `tool.scad-project` and the canary migrations.
 
 ## Why this belongs in Migration 005
 
-Migration 005 already evaluates:
+Migration 005 evaluates:
 
 - feedback latency;
 - total hosted-runner/compute use;
@@ -29,9 +37,9 @@ Migration 005 already evaluates:
 - SCons versus direct execution;
 - human-understandability of the lifecycle.
 
-The container image is currently the largest individual latency cost on affected small-project runs. Splitting runtime capabilities is therefore an execution-architecture decision rather than an independent migration.
+The container image was the largest individual latency cost on affected small-project runs. Splitting runtime capabilities is therefore an execution-architecture decision rather than an independent migration.
 
-## Current product reality
+## Product reality
 
 The ecosystem is not uniformly OpenSCAD-only.
 
@@ -42,13 +50,11 @@ Examples:
 - `template.scad-project` also carries OpenSCAD and PythonSCAD project support;
 - the external toolchain qualification keeps PythonSCAD as an alternative/experimental runtime and records known interoperability XFAILs rather than pretending it is equivalent to OpenSCAD.
 
-Therefore the target must **not** remove PythonSCAD globally.
+Therefore the target does **not** remove PythonSCAD globally.
 
-## Validated image family
+## Released image family
 
-Keep one owner repository: `brainboxemb/docker.scad-toolchain`.
-
-Build two related runtime images from the same source/version:
+One owner repository, `brainboxemb/docker.scad-toolchain`, builds two related runtime images from the same source/version:
 
 ```text
 OpenSCAD runtime
@@ -67,15 +73,25 @@ Full / dual runtime
     + PythonSCAD-specific runtime dependencies
 ```
 
-The prototype keeps the existing `ghcr.io/brainboxemb/scad-toolchain` package as the full/dual runtime for compatibility and introduces `ghcr.io/brainboxemb/scad-toolchain-openscad` for the OpenSCAD-focused profile. This avoids forcing existing dual-runtime consumers to migrate merely to perform the architecture experiment.
+The existing package remains the full/dual compatibility image:
 
-The externally qualified candidate came from exact Docker source:
+```text
+ghcr.io/brainboxemb/scad-toolchain:v0.5.0
+```
+
+The focused package is:
+
+```text
+ghcr.io/brainboxemb/scad-toolchain-openscad:v0.5.0
+```
+
+The earlier architecture candidate came from exact Docker source:
 
 ```text
 eeb40e7eff98e98d754baf8ddb52376a17ecef18
 ```
 
-and was tested as:
+and was qualified as immutable candidate tags before the production release:
 
 ```text
 ghcr.io/brainboxemb/scad-toolchain-openscad:sha-eeb40e7
@@ -84,7 +100,7 @@ ghcr.io/brainboxemb/scad-toolchain:sha-eeb40e7
 
 ## Qualification result
 
-External run `34992630534`, job `104460840663`, qualified both profiles sequentially on one `ubuntu-24.04` hosted VM.
+Controlled external run `34992630534`, job `104460840663`, qualified both candidate profiles sequentially on one `ubuntu-24.04` hosted VM.
 
 | Profile | Compressed OCI bytes | Unpacked bytes | Controlled cold pull |
 | --- | ---: | ---: | ---: |
@@ -107,9 +123,11 @@ Functionally:
 
 The full profile is therefore a tested functional superset rather than merely a larger package.
 
+The released `v0.5.0` pair was subsequently qualified again by the external test repository, so the production release is not relying only on the candidate-SHA experiment.
+
 ## Runtime selection model
 
-Runtime selection should derive from the effective project capabilities rather than hand-written GitHub workflow knowledge.
+Runtime selection derives from the effective project capabilities rather than hand-written GitHub workflow knowledge.
 
 Conceptually:
 
@@ -123,13 +141,13 @@ OpenSCAD + PythonSCAD project/capabilities
 
 A repository such as `lib.scad.clamps` must not silently lose PythonSCAD validation merely because the primary reusable-library direction is OpenSCAD.
 
-This is a capability rule, not a repository-name allowlist. The eventual integration in `tool.scad-project` should derive the required runtime from the effective project model so a repository can change capability without editing GitHub orchestration by hand.
+This is a capability rule, not a repository-name allowlist. The integration owner is `tool.scad-project`, which should derive the required runtime from the effective project model so a repository can change capability without editing GitHub orchestration by hand.
 
 ## Qualification model
 
 Keep one external qualification repository: `brainboxemb/docker.scad-toolchain.test`.
 
-Do not split it into separate repositories. Instead qualify the family as a matrix:
+Do not split it into separate repositories. Qualify the family as one contract:
 
 | Capability | OpenSCAD image | Full image |
 | --- | ---: | ---: |
@@ -146,28 +164,16 @@ Do not split it into separate repositories. Instead qualify the family as a matr
 
 The full image must remain a functional superset of the OpenSCAD capability contract.
 
-Routine qualification should still use one hosted test runner for both profiles. Unlike the one-time benchmark, it should allow shared Docker layers to stay local instead of deleting and redownloading them merely to simulate two independent cold pulls.
+Routine qualification uses one hosted test runner for both profiles and permits shared Docker layers to remain local. The one-time independent cold-pull benchmark deliberately cleared Docker state between profiles; its broad `docker system prune -af` cost about 16 s and removed 1.88 GB of mostly unrelated hosted-runner images, so that behaviour is **not** normal CI policy.
 
-Cold-pull benchmarking can remain an explicit diagnostic. The validation run's broad `docker system prune -af` cost about 16 s and removed 1.88 GB of mostly unrelated hosted-runner images, so it is not an appropriate normal-CI step.
+## Remaining adoption work
 
-## Owners
+The image-family implementation itself is released. Consumer adoption still requires the later Migration-005 layers to:
 
-- cross-project architecture/evidence: `brainboxemb/brainboxemb.meta`;
-- image implementation/release: `brainboxemb/docker.scad-toolchain`;
-- external image-family qualification: `brainboxemb/docker.scad-toolchain.test`;
-- runtime selection/lifecycle integration: `brainboxemb/tool.scad-project` after the image family is adopted.
-
-## Adoption gate
-
-Architecture validation of the image family has passed, but production adoption still requires the integration path to be explicit.
-
-Before consumers move:
-
-- retain one understandable release/version relationship for both profiles;
 - make `tool.scad-project` select the runtime from effective project capabilities;
-- prove at least one OpenSCAD-only consumer through the smaller image;
+- prove an OpenSCAD-only consumer through the focused image;
 - prove a dual-runtime consumer such as clamps/template through the full image;
 - avoid adding repository-specific image selection to GitHub workflow files;
-- keep routine external qualification resource-proportionate.
+- record the resulting end-to-end runner/resource measurements.
 
-No production consumer is changed by this document or by the current draft PRs.
+Those tasks are tracked in [06 — Implementation plan](06-implementation-plan.md).
