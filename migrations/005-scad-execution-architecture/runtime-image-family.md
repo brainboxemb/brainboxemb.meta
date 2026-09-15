@@ -6,6 +6,16 @@ This workstream is part of Migration 005, not a separate migration.
 
 It exists because runtime selection is part of the SCAD execution architecture: projects should only pay for the CAD runtimes and libraries they actually require, while repositories that deliberately support both OpenSCAD and PythonSCAD must keep that capability.
 
+## Active change requests
+
+The work is deliberately split by owner while remaining one Migration-005 workstream:
+
+- architecture/evidence: `brainboxemb/brainboxemb.meta#59`;
+- image-family implementation: `brainboxemb/docker.scad-toolchain#6`;
+- external two-profile qualification: `brainboxemb/docker.scad-toolchain.test#6`.
+
+These are draft change requests. Production consumers do not move until the qualification gate below is satisfied.
+
 ## Why this belongs in Migration 005
 
 Migration 005 already evaluates:
@@ -55,6 +65,8 @@ Full / dual runtime
     + PythonSCAD-specific runtime dependencies
 ```
 
+The prototype keeps the existing `ghcr.io/brainboxemb/scad-toolchain` package as the full/dual runtime for compatibility and introduces `ghcr.io/brainboxemb/scad-toolchain-openscad` for the OpenSCAD-focused profile. This avoids forcing existing dual-runtime consumers to migrate merely to perform the architecture experiment.
+
 The exact package boundary remains subject to measurement. The first prototype deliberately removes only clearly PythonSCAD-specific content so size/pull differences remain attributable.
 
 ## Runtime selection model
@@ -72,6 +84,8 @@ OpenSCAD + PythonSCAD project/capabilities
 ```
 
 A repository such as `lib.scad.clamps` must not silently lose PythonSCAD validation merely because the primary reusable-library direction is OpenSCAD.
+
+This is a capability rule, not a repository-name allowlist. The eventual integration in `tool.scad-project` should derive the required runtime from the effective project model so a repository can change capability without editing GitHub orchestration by hand.
 
 ## Qualification model
 
@@ -93,6 +107,8 @@ Do not split it into separate repositories. Instead qualify the family as a matr
 | PythonSCAD interoperability/XFAIL probes | not required | required |
 
 The full image must therefore remain a functional superset of the OpenSCAD capability contract.
+
+The prototype qualification deliberately uses one hosted test runner for both profiles. It pulls/tests them sequentially so the superset proof does not require two simultaneous VMs. Image pull time, compressed OCI bytes and local unpacked size are recorded per profile.
 
 ## Validation evidence required before adoption
 
