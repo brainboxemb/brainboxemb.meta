@@ -4,13 +4,11 @@ Status: **proposed / inactive**
 
 Working draft: [#65](https://github.com/brainboxemb/brainboxemb.meta/pull/65)
 
-Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — complete.
+Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — active final library alignment.
 
 ## Current status
 
-Migration 006 is intentionally recorded on `main` before the design is finished. Migration 005 is now complete, so there is no longer a predecessor blocker, but Migration 006 is **not automatically active**. Activation requires an explicit decision after the current Java repositories have been revalidated and the working hypotheses below have been turned into a concrete target architecture, owner sequence and qualification plan.
-
-The current investigation is useful enough to retain as cross-project status, but it is **not yet an implementation plan** and does not authorize Java owner-repository changes.
+Migration 006 is intentionally being elaborated on `main` while Migration 005 finishes its final SCAD library rollout. This parallel work is planning/documentation only: it does **not** authorize Java owner-repository implementation yet.
 
 The current Java chain is:
 
@@ -28,40 +26,54 @@ template.java-project
   real downstream consumer
 ```
 
-## What is currently known
+## Current evidence
 
 The existing Java tooling already has a strong domain baseline: exact Temurin/Maven/Maven-Wrapper versions, a canonical Linux Maven producer, persistent execution/test evidence, reusable Windows compatibility and real downstream releases.
 
 The main problem is repository-level orchestration. The template and downstream project still own substantial duplicated lifecycle logic: checkout/bootstrap, Java setup, Moon invocation, evidence staging, artifact hand-off, Windows coordination and generated-output publication.
 
-Representative current runs show that this is not mainly a Maven-performance problem:
+Current repository inspection confirms:
 
-- `template.java-project` normal main execution uses six hosted jobs and roughly 72–76 seconds wall-clock;
-- `2026-010-02.java.event-timing-framework` uses seven executing jobs on an ordinary main push and roughly 94 seconds wall-clock;
+- `template.java-project` keeps its normal Java lifecycle in one consumer-owned workflow of roughly 8.4 kB, including Windows bootstrap, Linux canonical execution, publication staging, evidence re-check, Windows compatibility and publication;
+- `2026-010-02.java.event-timing-framework` repeats and expands that pattern in a roughly 19.4 kB workflow with additional product release semantics;
+- consumers currently use released `tool.java-project v0.2.0` / exact source `9c147850adb9c0c270d852166feae5f08f56c2d6`;
 - there is no early generic unrelated-change gate before JDK/Maven/Windows work;
-- full-history checkout and several artifact/job boundaries are still used where newer shared repository tooling may allow a simpler model.
+- several hosted-job/artifact boundaries exist to re-check or republish evidence rather than because a Java correctness boundary requires them.
 
-These measurements are research inputs only. They must be refreshed against the then-current repositories before Migration 006 is activated.
+Earlier representative runs suggested roughly 72–76 seconds wall-clock for the template and roughly 94 seconds for the real downstream on ordinary main execution. Those measurements remain research inputs and must be refreshed at activation.
 
-## Current preferred direction
+## Preferred direction
 
-These are working hypotheses to verify when Migration 006 is activated, not final decisions:
+The working direction is now documented more concretely in:
 
-1. Keep **Maven as the Java build/test authority**. Moon should initially be treated as affected-selection/orchestration/materialization infrastructure, not as a replacement Java build engine.
-2. Add an **early generic base→head affected preflight** so unrelated changes can finish before JDK/Maven and Windows work where correctness allows.
-3. Move generic Java production orchestration toward **`tool.java-project` ownership**, leaving consumers with thin triggers, permissions and project-specific configuration.
-4. Prefer the existing **native pinned JDK/Maven model** over introducing a Java container unless measurements show a real benefit. Independent native Windows validation remains required in any case.
-5. Reconsider **Windows cadence**. Full Windows rebuild and exact Linux-artifact smoke should not automatically run for every main push; PR qualification plus release qualification is the leading option to evaluate.
-6. Remove hosted-job/artifact boundaries that exist only because consumers currently stage and re-check publication evidence themselves. Keep boundaries that represent real isolation, especially Linux→Windows artifact verification.
-7. Move consumers toward the same general dependency identity principle used successfully elsewhere: readable released workflow/tool refs plus exact committed source identity where applicable.
-8. Add durable workflow timing/provenance evidence so wall-clock and total hosted-compute effects can be compared before and after migration.
+- [05 — Draft target architecture](05-target-architecture.md);
+- [06 — Draft implementation and qualification plan](06-implementation-plan.md).
+
+The key choices are:
+
+1. keep **Maven as Java build/test authority**;
+2. add an **early generic exact base→head affected preflight** before JDK/Maven/Windows allocation;
+3. move generic Java lifecycle orchestration into **`tool.java-project`** and leave consumers thin;
+4. retain the **native pinned JDK/Maven model** unless measurements justify a container;
+5. keep **independent Windows compatibility**, but make cadence an explicit policy to qualify rather than automatically running it on every main push;
+6. remove duplicate evidence-verification/artifact boundaries that do not represent a real isolation boundary;
+7. keep generated-output publication as a repository side effect outside Moon's cacheable task graph;
+8. retain product-specific release/version metadata in the real project unless a genuinely generic contract is separately proven;
+9. record durable phase timing and hosted-job evidence before and after the migration.
 
 ## Explicitly parked research
 
-**Moon fine-grained Java/Maven incrementality is not an activation blocker.** It should be investigated separately before exposing Maven modules as Moon tasks or relying on module-level portable cache reuse. The initial migration should stay conservative and use Maven as the canonical build authority.
+**Moon fine-grained Java/Maven incrementality is not an activation blocker.** The first migration remains conservative: Maven owns build/test semantics; Moon/tool.git-project supply affected selection and orchestration/materialization support.
 
-## Before activation
+GitHub Actions dependency-update automation also stays out of this migration and belongs to Migration 007.
 
-Reverify `tool.git-project`, `tool.java-project`, `template.java-project` and the real Java downstream consumer against their current `main` branches. Then turn the hypotheses above into a concrete target architecture and owner-by-owner qualification sequence, with explicit evidence for unrelated changes, normal Linux build/test, Windows compatibility, publication/provenance, releases and hosted-compute effects.
+## Activation gate
 
-The draft material in PR #65 can be used as research input, but `main` is the authority for this migration's status.
+When Migration 005 closes:
+
+1. refresh exact repository revisions and current successful baseline runs;
+2. confirm branch/merge policy where it affects the Windows cadence decision;
+3. review the target architecture and implementation plan against that current state;
+4. explicitly mark Migration 006 active in `STATUS.md` and `migrations/README.md` before any Java owner implementation.
+
+Draft PR #65 remains research input; `main` is the status/design authority.
