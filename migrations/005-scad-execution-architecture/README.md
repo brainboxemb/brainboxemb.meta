@@ -4,13 +4,13 @@
 
 The SCAD repositories had accumulated overlapping GitHub Actions, Moon, SCons, runtime, cache and publication responsibilities. Migration 005 established one understandable shared execution architecture and proved it through the shared tool, reference template, reusable libraries and a real HUB75 project.
 
-The migration was reopened after completion when persistent generated-output branch names were found to conflict with the compact technical namespace already used inside current-generation SCAD repositories. The v0.14.9 runtime/default/test correction and all consumer releases now prove `bld` / `vrf`, but final durable review found one remaining released-owner inconsistency: `tool.scad-project v0.14.9` `AGENTS.md` still tells agents to use legacy `build` / `verification` branches.
+The migration was reopened twice for narrow closeout corrections without redesigning that architecture: first to align persistent generated-output namespaces with the compact technical `dsg` / `bld` / `vrf` convention, and finally to correct released owner guidance that still showed legacy `build` / `verification` branch examples.
 
-Use this record when checking the final SCAD execution model, its rollout evidence, or the last correction required before the migration can close for good.
+Use this record when checking the final SCAD execution model, its rollout evidence, or why later Java work may rely on the same technical namespace convention.
 
-Status: **active — final released owner-guidance correction**
+Status: **complete**
 
-Tracking issue: [#55](https://github.com/brainboxemb/brainboxemb.meta/issues/55) — remains open until released/pinned guidance matches the qualified runtime contract.
+Tracking issue: [#55](https://github.com/brainboxemb/brainboxemb.meta/issues/55) — closed after the released guidance correction was externally qualified.
 
 Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
 
@@ -27,7 +27,7 @@ Verification
 Documentation
 ```
 
-Stable technical path/branch identifiers use the canonical compact identifiers where defined:
+Stable technical path/branch identifiers use compact canonical identifiers where defined:
 
 ```text
 Design        -> dsg
@@ -53,42 +53,30 @@ Historical already-published `build` / `verification` branches and releases rema
 
 ## Qualified execution/publication baseline
 
-The runtime/publication correction itself is fully proven on:
+The runtime/publication namespace correction is fully proven on:
 
 - `docker.scad-toolchain v0.5.0`;
 - `tool.git-project v0.2.8` / exact `7c43f37e7b07cfb57638a1d1dad2501de09ba7eb`;
 - `tool.scad-project v0.14.9` / exact `a140b22858ac1899e7f2fa71b679639a70d819c3`;
-- `template.scad-project v0.0.6` / exact source `b8a0cc9113084f56c074b7dc61b160105c615b71`;
+- `template.scad-project v0.0.6` / exact release source `b8a0cc9113084f56c074b7dc61b160105c615b71`;
 - `lib.scad.clamps v0.1.6` / exact source `021eed7bba76ca77825bd6f6c850e1ebd2916283`;
 - `lib.scad.hub75 v0.1.7` / exact source `1390cd322b31b119779c41743119c85e0e984314`;
 - `2026-009-01.cad.HUB75-display-frame v0.0.3` / exact source `9ff354260276e325d571c82af67bc23e9815744d`.
 
-All four consumers have qualified mutable `prod/{bld,vrf}` and immutable `rel/vX.Y.Z/{bld,vrf}` output with exact source/tool provenance.
+Those consumers prove mutable `prod/{bld,vrf}` and immutable `rel/vX.Y.Z/{bld,vrf}` output with exact source/tool provenance. Detailed runs and release evidence remain in [30 — Final closeout evidence](30-closeout-evidence.md).
 
-## Final blocker discovered during durable review
+## Final released-guidance correction
 
-Consumers explicitly tell agents to read the pinned `tools/tool.scad-project/AGENTS.md`. In released v0.14.9 that file still says:
+Durable review after the v0.14.9 rollout found that released `tool.scad-project` agent guidance still named legacy branch suffixes even though workflows, tests and consumers already used `bld` / `vrf`.
 
-```text
-dev/pr-N/build
-dev/pr-N/verification
-prod/build
-prod/verification
-```
+That mismatch was corrected without changing execution semantics:
 
-That guidance conflicts with the released workflow defaults, tests and consumer evidence. A main-only documentation edit would not fix consumers because they pin the tool commit. Therefore this is a small but real release blocker.
+- `tool.scad-project v0.14.10` -> exact source `3ad040b2d9c26b8c482853157baeb99a8d9b36db`;
+- `template.scad-project` pinned the corrected release on exact main source `637906c49b90308ebba7e4477fa2e5036d9543da`;
+- exact-main Production run `35140381160` -> green;
+- that run resolves `tool.scad-project/.github/workflows/project-production.yml@v0.14.10` to exact `3ad040b2d9c26b8c482853157baeb99a8d9b36db`.
 
-## Remaining closeout sequence
-
-Use the shortest safe path:
-
-1. `tool.scad-project` — change only released owner guidance/examples from legacy `build` / `verification` branch names to `bld` / `vrf`; add/retain a regression check if useful;
-2. patch-release the owner without changing execution semantics;
-3. update current-generation consumers to the corrected owner pin so their embedded/pinned guidance is no longer stale;
-4. perform the minimum qualification needed to prove the pin update did not change runtime/publication behaviour, and create immutable consumer releases where the repository's release baseline requires it;
-5. verify new release provenance and close Migration 005.
-
-Migration 006 owner implementation may remain merged and qualified in parallel, but its owner release/consumer rollout stays gated until this final released-guidance baseline is stable.
+The final correction was guidance-only. It therefore did not require a new template semantic release merely to re-prove unchanged runtime behaviour. The existing immutable consumer releases remain the execution/publication evidence; the exact-main template run proves that current pinned guidance now matches that contract.
 
 ## Final architecture
 
@@ -126,10 +114,10 @@ Maintainer-facing capabilities remain deliberately small: `scad.docs`, `scad.bui
 | [06 — Implementation plan](06-implementation-plan.md) | Historical owner-by-owner architecture rollout record. |
 | [10 — Measurements](10-measurements.md) | Baseline and implementation measurements. |
 | [20 — Target resource budget](20-target-resource-budget.md) | Target-versus-result resource review. |
-| [30 — Final closeout evidence](30-closeout-evidence.md) | Exact historical and namespace-correction release/provenance evidence; final owner-guidance patch is appended before closure. |
+| [30 — Final closeout evidence](30-closeout-evidence.md) | Exact release/provenance evidence plus the final v0.14.10 guidance closeout. |
 
 The durable architecture lives under [`domains/scad/architecture.md`](../../domains/scad/architecture.md). This migration directory remains the historical change/evidence record.
 
 ## Completion decision
 
-Migration 005 returns to **complete** only when runtime/publication behavior **and the released owner guidance consumed by pinned repositories** use the same technical namespace. No execution-architecture redesign is required.
+Migration 005 is complete because the runtime/publication contract **and** the released owner guidance consumed by current repositories now use the same technical namespace. No later template patch tag is required for this guidance-only final gate, and no execution-architecture redesign remains open.
