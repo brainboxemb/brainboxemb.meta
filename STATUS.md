@@ -6,23 +6,9 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 005 — simplify the SCAD execution architecture
-
-**Reopened — final generated-output namespace normalization and release qualification.**
-
-The Migration-005 execution architecture and prior release evidence remain valid. A final naming inconsistency was found while aligning Migration 006: current-generation SCAD workspaces already use compact technical identifiers (`dsg`, `bld`, `vrf`), while persistent generated-output branches were standardized as `build` and `verification`.
-
-The durable portfolio rule is defined in [`docs/working-model/generated-output.md`](docs/working-model/generated-output.md): human-facing lifecycle names remain readable (**Build**, **Verification**, **Design**, **Documentation**), while stable technical path/branch identifiers use the canonical compact identifiers `bld`, `vrf`, `dsg`, and `docs` where those concepts apply.
-
-Migration 005 must normalize current-generation SCAD publication to `dev/pr-N/{bld,vrf}`, `prod/{bld,vrf}` and `rel/vX.Y.Z/{bld,vrf}`, qualify the shared tool and consumers, and then close again. Historical already-published branches/releases remain historical evidence and are not rewritten.
-
-`tool.scad-project v0.14.9` is released from exact main commit `a140b22858ac1899e7f2fa71b679639a70d819c3`. The reference template is on v0.14.9 and its final production-namespace configuration canary is being qualified before the library and project consumers roll forward.
-
-Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md).
-
 ### Migration 006 — simplify the Java execution architecture
 
-**Owner implementation merged and exact-main qualified in parallel with Migration 005; release/consumer rollout remains gated.**
+**Primary active cross-project migration. Owner implementation is merged and exact-main qualified; release and consumer rollout are now unblocked.**
 
 The shared Java execution lifecycle is merged in `tool.java-project` main as `c7ed36ceaf21874b908a1dd01fa54bc60d420d9c`. Exact-main owner evidence is green for both the affected-policy test and the full Java toolchain self-test.
 
@@ -37,18 +23,11 @@ The qualified owner contract includes:
 - canonical Java generated-output publication under technical `bld` naming;
 - engineering-documentation assembly kept outside Java ownership.
 
-The parallelism rule remains:
-
-1. 005 continues through SCAD consumer qualification/release and closeout;
-2. 006 owner implementation may remain merged and qualified on `tool.java-project/main`;
-3. do **not** release the new Java owner contract or modify Java consumers until 005 closes again;
-4. discoveries that affect the shared cross-domain contract must be resolved in meta before either migration invents a local variant.
-
-After the 005 gate, the intended Java sequence is:
+Migration 005 has now closed again on the durable `bld` / `vrf` namespace convention, so the next Java sequence is:
 
 1. prepare and release the already-qualified `tool.java-project` owner revision;
 2. `template.java-project` — reference canary for thin-caller, unrelated zero-Java and selective Windows behaviour;
-3. decide/refine the normal Windows qualification policy from canary evidence if needed;
+3. refine the normal Windows qualification policy only if canary evidence requires it;
 4. `2026-010-02.java.event-timing-framework` — real downstream rollout and release qualification.
 
 The Java scope deliberately excludes project-family planning/architecture documentation. The generic project-family and engineering-documentation model remains technology-neutral.
@@ -63,12 +42,30 @@ Canonical record: [Migration 006](migrations/006-java-execution-architecture/REA
 
 ## Recently completed
 
+### Migration 005 — simplify the SCAD execution architecture
+
+**Complete — final namespace correction released and qualified.**
+
+The durable portfolio rule remains: human-facing lifecycle names are readable (**Build**, **Verification**, **Design**, **Documentation**), while stable technical path/branch identifiers use `bld`, `vrf`, `dsg`, and `docs` where those concepts apply.
+
+Final corrected SCAD baseline:
+
+- `tool.scad-project v0.14.9` / exact `a140b22858ac1899e7f2fa71b679639a70d819c3`;
+- `template.scad-project v0.0.6`;
+- `lib.scad.clamps v0.1.6`;
+- `lib.scad.hub75 v0.1.7`;
+- `2026-009-01.cad.HUB75-display-frame v0.0.3`.
+
+All current-generation consumers now qualify `dev/pr-N/{bld,vrf}`, `prod/{bld,vrf}` and immutable `rel/vX.Y.Z/{bld,vrf}` publication. Historical `build` / `verification` branches remain historical evidence and were not rewritten.
+
+Canonical evidence: [Migration 005](migrations/005-scad-execution-architecture/README.md) and [final closeout evidence](migrations/005-scad-execution-architecture/30-closeout-evidence.md).
+
+Other completed migrations:
+
 - [Migration 004 — SCAD repository execution model](migrations/004-scad-repository-execution-model/README.md) — complete.
 - [Migration 003 — SCAD v0.12 rollout](migrations/003-scad-v0.12-rollout/README.md) — complete.
 - [Migration 002 — SCAD build-decision audit](migrations/002-scad-build-decision-audit/README.md) — complete.
 - [Migration 001 — consolidate public portfolio context](migrations/001-brainboxemb-meta/README.md) — complete.
-
-Migration 005 had reached a complete v0.14.8 rollout, but is intentionally reopened only for the final `bld`/`vrf` namespace correction.
 
 ## Parked / follow-up
 
