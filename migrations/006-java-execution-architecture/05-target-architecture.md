@@ -4,6 +4,8 @@ Status: **proposed / inactive design authority**
 
 This document records the current preferred Java execution architecture. It is deliberately concrete enough to guide later implementation, but it does **not** activate Migration 006 while Migration 005 remains open.
 
+The generic project-family/documentation boundary is defined in [Project families, coordination and engineering documentation](../../docs/working-model/project-families-and-documentation.md). Migration 006 must stay inside that boundary.
+
 ## Design goals
 
 The target should reduce consumer-owned orchestration, hosted-job count and unrelated-change cost without changing the Java build authority or weakening independent Windows compatibility.
@@ -12,7 +14,8 @@ The important distinction is:
 
 - **Maven owns Java build and test semantics**;
 - **Moon/tool.git-project owns affected selection and portable orchestration/materialization mechanics**;
-- **tool.java-project owns reusable Java lifecycle execution and evidence**;
+- **tool.java-project owns reusable Java lifecycle execution and Java-derived evidence/artifacts**;
+- **tool.eng-docs owns generic engineering-documentation mechanisms and assembly, independently from Java**;
 - **consumer repositories own product-specific inputs, metadata and release semantics that are genuinely domain-specific**.
 
 ## Target flow
@@ -28,7 +31,7 @@ shared Java preflight (host)
   Java-impact decision
         |
         +--> unrelated
-        |      stop before JDK/Maven/Windows/publication
+        |      stop before JDK/Maven/Windows/Java publication
         |
         v
 shared Linux canonical producer
@@ -41,15 +44,17 @@ shared Linux canonical producer
         +----------------------+
         |                      |
         v                      v
-optional Windows          publication finalizer
+optional Windows          Java-output finalizer
 compatibility             repository side effect
-  independent Maven         exact-source generated output
-  exact Linux artifact      no duplicate evidence build
+  independent Maven         exact-source Java evidence/artifacts
+  exact Linux artifact      no duplicate Maven/evidence build
   smoke/compat evidence
         |
         v
 shared result / durable timing evidence
 ```
+
+Project-family engineering-documentation production remains a separate generic flow. It may consume Java-produced manifests/assets such as Javadoc or verification evidence, but it must not require `tool.java-project` to assemble the SDP/SIP/SVP/architecture document set.
 
 Release execution remains a separate path because it has stronger exact-source and immutability requirements.
 
@@ -79,9 +84,9 @@ A README-only change is the primary zero-Java canary.
 
 ### 3. Consumer workflows become thin callers
 
-Today `template.java-project` and the event-timing framework duplicate checkout/bootstrap, JDK setup, Moon invocation, evidence staging, artifact hand-off, Windows coordination and publication checks.
+Today `template.java-project` and the event-timing framework duplicate checkout/bootstrap, JDK setup, Moon invocation, evidence staging, artifact hand-off, Windows coordination and Java-output publication checks.
 
-The target moves generic lifecycle ownership into released reusable workflows in `tool.java-project`.
+The target moves generic Java lifecycle ownership into released reusable workflows in `tool.java-project`.
 
 A normal consumer caller should ideally contain only:
 
@@ -105,14 +110,14 @@ Reasons to keep native execution as the default:
 
 ### 5. Collapse duplicate evidence verification
 
-The current consumers upload a prepared publication artifact and then start another Linux job largely to download and re-check evidence already produced by the canonical producer.
+The current consumers upload a prepared Java publication artifact and then start another Linux job largely to download and re-check evidence already produced by the canonical producer.
 
 The target keeps validation close to the producer and transports only what a real runner/permission boundary requires.
 
 Expected normal boundaries are:
 
 - Linux canonical producer → Windows, because Windows must smoke the exact Linux artifact while also performing independent compatibility work;
-- producer → publication finalizer only when a separate write-permission/side-effect boundary remains useful.
+- producer → Java-output finalizer only when a separate write-permission/side-effect boundary remains useful.
 
 A separate hosted job solely to repeat deterministic file/grep assertions should disappear.
 
@@ -129,16 +134,18 @@ The target makes Windows cadence an explicit shared policy. The leading candidat
 
 - affected pull request: Windows required;
 - release qualification: Windows required;
-- ordinary post-merge main: Linux/publication required, Windows may be skipped when repository protection and exact-source evidence make the PR qualification sufficient;
+- ordinary post-merge main: Linux/Java-output finalization required, Windows may be skipped when repository protection and exact-source evidence make the PR qualification sufficient;
 - manual/exception path: Windows can be forced.
 
 This cadence remains an **open qualification decision** until branch/release behaviour is verified in the reference template.
 
-### 7. Publication remains a side effect, not a cacheable build task
+### 7. Java-output publication remains a side effect, not a cacheable build task
 
-Generated branch publication is repository state mutation and must remain outside Moon's portable cache graph.
+Publication of generated Java evidence/artifacts is repository state mutation and must remain outside Moon's portable cache graph.
 
-`tool.java-project` should own the generic publication implementation and provenance contract. Consumers provide only names/paths/policy that are genuinely project-specific.
+`tool.java-project` may own generic publication/finalization mechanics for output it actually produces, such as Java build/test/provenance evidence or Java-derived documentation assets. Consumers provide only names/paths/policy that are genuinely product-specific.
+
+This does **not** make `tool.java-project` the owner of project-family engineering-documentation assembly or publication.
 
 ### 8. Release semantics are not broadened unnecessarily
 
@@ -162,10 +169,38 @@ At minimum record:
 - preflight duration;
 - Linux canonical producer duration;
 - Windows duration when selected;
-- publication/finalization duration;
+- Java-output finalization duration;
 - total wall-clock to required evidence;
 - number of hosted jobs/runners started;
 - unrelated-change path and whether Java/Windows work was avoided.
+
+### 10. Engineering-documentation build stays independent from Java
+
+Project planning, requirements, architecture and assembled engineering documentation are not Java build products.
+
+The event-timing meta repository already demonstrates the intended separation: its documentation workflow uses `tool.eng-docs` and generic repository/Moon tooling without needing JDK or Maven. Migration 006 should preserve and strengthen that boundary.
+
+The normal contract is:
+
+```text
+Java producer
+  -> JAR/test/provenance/Javadoc-or-other-Java-derived assets + manifest
+
+meta / engineering docs producer
+  -> Markdown/diagram/planning assets
+
+         both may feed
+              |
+              v
+       tool.eng-docs assemble
+```
+
+Consequences:
+
+- a project-documentation-only change must not start Java merely because the project also has Java repositories;
+- `tool.java-project` may produce Javadoc or other source-derived Java documentation when that genuinely needs Java;
+- generic document assembly/publication remains outside the Java execution lifecycle;
+- a future embedded producer can feed the same document set without changing the meta/docs architecture.
 
 ## Ownership boundary
 
@@ -175,9 +210,23 @@ Owns only generic repository mechanics used by Java:
 
 - exact base/head affected selection;
 - Moon invocation/materialization infrastructure;
-- generic repository validation/bootstrap primitives.
+- generic repository validation/bootstrap primitives;
+- generic generated-output publication primitives where already established.
 
 It must not gain Java/Maven semantics.
+
+### `tool.eng-docs`
+
+Existing generic documentation owner; no Java-specific expansion is intended by Migration 006.
+
+It owns reusable documentation mechanisms such as:
+
+- diagrams and schemas;
+- producer manifests;
+- document assembly;
+- documentation provenance.
+
+It consumes producer output and does not run Maven/OpenSCAD/embedded producers itself.
 
 ### `tool.java-project`
 
@@ -187,10 +236,13 @@ Primary implementation owner for Migration 006:
 - canonical Maven producer lifecycle;
 - JDK/Maven setup contract;
 - producer/test/provenance evidence;
+- Java-derived artifacts/documentation where Java tooling is genuinely required;
 - reusable Windows compatibility;
 - shared Java preflight/production orchestration;
-- generic generated-output publication;
+- Java-output finalization where appropriate;
 - durable Java workflow timing/result evidence.
+
+It does **not** own the project-family SDP/SIP/SVP/architecture build or generic engineering-documentation assembly.
 
 ### `template.java-project`
 
@@ -198,7 +250,7 @@ Reference consumer and first canary:
 
 - proves the thin-caller contract;
 - proves unrelated-change zero-Java behaviour;
-- qualifies affected Linux, Windows policy and publication;
+- qualifies affected Linux, Windows policy and Java-output publication;
 - demonstrates that consumer-local lifecycle duplication can be removed.
 
 ### `2026-010-02.java.event-timing-framework`
@@ -210,6 +262,12 @@ Real downstream consumer:
 - retains product-specific version/tag/release metadata where it is not generic;
 - should no longer duplicate the generic Java lifecycle owned by `tool.java-project`.
 
+### Project-family meta repository
+
+The coordination repository remains owner of project-wide planning/requirements/architecture/verification documentation and its independent engineering-documentation build.
+
+For event timing this is `2026-010-01.meta.event-timing-software`.
+
 ## Explicit non-goals
 
 Migration 006 does not initially:
@@ -220,14 +278,16 @@ Migration 006 does not initially:
 - solve GitHub Actions dependency maintenance (Migration 007);
 - redesign application/framework logging or domain architecture;
 - make generic release semantics out of product-specific versioning without separate evidence;
-- remove independent Windows qualification.
+- remove independent Windows qualification;
+- move project-family engineering-documentation assembly into `tool.java-project`;
+- create a Java-specific replacement for the generic meta/engineering-docs model.
 
 ## Open decisions to qualify
 
 Before implementation is considered complete, evidence must settle:
 
 1. whether the default Windows cadence can safely be PR + release rather than every main push;
-2. whether publication should be a final step in the Linux reusable workflow or a small separate write-permission job;
+2. whether Java-output finalization should be a final step in the Linux reusable workflow or a small separate write-permission job;
 3. whether the preflight can reuse the current generic Moon affected interface unchanged or needs a small `tool.git-project` extension;
 4. which Java project configuration fields are shared policy versus consumer-owned inputs;
 5. what latency/hosted-compute target is realistic after eliminating the current duplicate jobs.
