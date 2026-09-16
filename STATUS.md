@@ -6,23 +6,33 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
+### Migration 005 — simplify the SCAD execution architecture
+
+**Reopened — final generated-output namespace normalization.**
+
+The Migration-005 execution architecture and prior release evidence remain valid. A final naming inconsistency was found while aligning Migration 006: current-generation SCAD workspaces already use compact technical identifiers (`dsg`, `bld`, `vrf`), while persistent generated-output branches were standardized as `build` and `verification`.
+
+The durable portfolio rule is now defined in [`docs/working-model/generated-output.md`](docs/working-model/generated-output.md): human-facing lifecycle names remain readable (**Build**, **Verification**, **Design**, **Documentation**), while stable technical path/branch identifiers use the canonical compact identifiers `bld`, `vrf`, `dsg`, and `docs` where those concepts apply.
+
+Migration 005 must therefore normalize current-generation SCAD publication to `dev/pr-N/{bld,vrf}`, `prod/{bld,vrf}` and `rel/vX.Y.Z/{bld,vrf}`, qualify the shared tool and consumers, and then close again. Historical already-published branches/releases remain historical evidence and are not rewritten.
+
+Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md).
+
 ### Migration 006 — simplify the Java execution architecture
 
-**Active — owner implementation has started in `tool.java-project`.**
+**Active design / owner draft, temporarily paused behind the reopened Migration 005 namespace correction.**
 
-Migration 005 is now complete, including final v0.14.8 alignment and immutable releases of both reusable SCAD libraries. Migration 006 is therefore the primary active cross-project migration.
+Owner implementation has started in `tool.java-project` draft PR #26. Its architecture remains valid, including early affected preflight and selective Windows qualification, but it will not be released or rolled into `template.java-project` / `2026-010-02.java.event-timing-framework` until the shared generated-output namespace is settled by Migration 005.
 
-Current implementation sequence:
+After 005 closes again, the intended sequence is:
 
-1. `tool.java-project` — implement and qualify the shared Java execution/preflight contract; current work item is draft PR #26;
+1. finish and qualify `tool.java-project` PR #26 against the canonical technical namespace;
 2. release the qualified Java tool revision;
 3. `template.java-project` — reference canary for thin-caller, unrelated zero-Java and selective Windows behaviour;
 4. decide the normal Windows qualification policy from canary evidence;
 5. `2026-010-02.java.event-timing-framework` — real downstream rollout and release qualification.
 
-The Java scope deliberately excludes project-family planning/architecture documentation. The generic project-family and engineering-documentation model remains technology-neutral: meta/coordination owns cross-repository engineering meaning, `tool.eng-docs` owns reusable document mechanisms/assembly, and Java owns only Java-derived producers/evidence.
-
-Windows qualification is being split into explicit `none`, `smoke` and `full` execution levels. Normal callers use `windows-mode: auto`: an affected normal Java change selects the cheap exact-Linux-JAR Windows smoke; Windows-sensitive build/toolchain impact selects the full independent Windows Maven qualification. Explicit modes remain available as an escape hatch.
+The Java scope deliberately excludes project-family planning/architecture documentation. The generic project-family and engineering-documentation model remains technology-neutral.
 
 Canonical record: [Migration 006](migrations/006-java-execution-architecture/README.md).
 
@@ -34,11 +44,12 @@ Canonical record: [Migration 006](migrations/006-java-execution-architecture/REA
 
 ## Recently completed
 
-- [Migration 005 — simplify the SCAD execution architecture](migrations/005-scad-execution-architecture/README.md) — complete after final `lib.scad.clamps v0.1.5` and `lib.scad.hub75 v0.1.6` alignment/release on `tool.scad-project v0.14.8`.
 - [Migration 004 — SCAD repository execution model](migrations/004-scad-repository-execution-model/README.md) — complete.
 - [Migration 003 — SCAD v0.12 rollout](migrations/003-scad-v0.12-rollout/README.md) — complete.
 - [Migration 002 — SCAD build-decision audit](migrations/002-scad-build-decision-audit/README.md) — complete.
 - [Migration 001 — consolidate public portfolio context](migrations/001-brainboxemb-meta/README.md) — complete.
+
+Migration 005 had reached a complete v0.14.8 rollout, but is intentionally reopened only for the final `bld`/`vrf` namespace correction.
 
 ## Parked / follow-up
 
