@@ -8,25 +8,34 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### Migration 005 — simplify the SCAD execution architecture
 
-**Reopened — final generated-output namespace normalization.**
+**Reopened — final generated-output namespace normalization and release qualification.**
 
 The Migration-005 execution architecture and prior release evidence remain valid. A final naming inconsistency was found while aligning Migration 006: current-generation SCAD workspaces already use compact technical identifiers (`dsg`, `bld`, `vrf`), while persistent generated-output branches were standardized as `build` and `verification`.
 
-The durable portfolio rule is now defined in [`docs/working-model/generated-output.md`](docs/working-model/generated-output.md): human-facing lifecycle names remain readable (**Build**, **Verification**, **Design**, **Documentation**), while stable technical path/branch identifiers use the canonical compact identifiers `bld`, `vrf`, `dsg`, and `docs` where those concepts apply.
+The durable portfolio rule is defined in [`docs/working-model/generated-output.md`](docs/working-model/generated-output.md): human-facing lifecycle names remain readable (**Build**, **Verification**, **Design**, **Documentation**), while stable technical path/branch identifiers use the canonical compact identifiers `bld`, `vrf`, `dsg`, and `docs` where those concepts apply.
 
-Migration 005 must therefore normalize current-generation SCAD publication to `dev/pr-N/{bld,vrf}`, `prod/{bld,vrf}` and `rel/vX.Y.Z/{bld,vrf}`, qualify the shared tool and consumers, and then close again. Historical already-published branches/releases remain historical evidence and are not rewritten.
+Migration 005 must normalize current-generation SCAD publication to `dev/pr-N/{bld,vrf}`, `prod/{bld,vrf}` and `rel/vX.Y.Z/{bld,vrf}`, qualify the shared tool and consumers, and then close again. Historical already-published branches/releases remain historical evidence and are not rewritten.
+
+`tool.scad-project` owner PR #75 is merged and qualified on main; v0.14.9 release qualification and consumer rollout are the remaining active 005 path.
 
 Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md).
 
 ### Migration 006 — simplify the Java execution architecture
 
-**Active design / owner draft, temporarily paused behind the reopened Migration 005 namespace correction.**
+**Active owner implementation in parallel with Migration 005 qualification.**
 
-Owner implementation has started in `tool.java-project` draft PR #26. Its architecture remains valid, including early affected preflight and selective Windows qualification, but it will not be released or rolled into `template.java-project` / `2026-010-02.java.event-timing-framework` until the shared generated-output namespace is settled by Migration 005.
+Owner implementation is active in `tool.java-project` draft PR #26. Work that is confined to the Java owner boundary may proceed in parallel with the remaining SCAD release/canary work because it does not change the SCAD baseline. Java release and rollout into `template.java-project` / `2026-010-02.java.event-timing-framework` remain gated on the canonical generated-output namespace being fully requalified by Migration 005.
 
-After 005 closes again, the intended sequence is:
+The parallelism rule is therefore:
 
-1. finish and qualify `tool.java-project` PR #26 against the canonical technical namespace;
+1. 005 may continue through shared-tool release, SCAD consumer qualification and closeout;
+2. 006 may continue implementing and self-qualifying the reusable owner contract in `tool.java-project`;
+3. do not release the new Java owner contract or modify Java consumers until 005 closes again;
+4. discoveries that affect the shared cross-domain contract must be resolved in meta before either migration invents a local variant.
+
+After that shared gate, the intended Java sequence is:
+
+1. finish/reconfirm `tool.java-project` PR #26 against the canonical technical namespace;
 2. release the qualified Java tool revision;
 3. `template.java-project` — reference canary for thin-caller, unrelated zero-Java and selective Windows behaviour;
 4. decide the normal Windows qualification policy from canary evidence;
