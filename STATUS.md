@@ -10,21 +10,22 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 **Reopened for final rollout/release gates.**
 
-The architecture, shared-tool releases, canary qualification and performance/resource evidence remain valid. The first closeout was nevertheless premature because repository verification found skipped release/rollout steps, and the first corrected template-release attempt exposed one additional owner-level release blocker.
+The architecture, canary qualification and performance/resource evidence remain valid. The first closeout was nevertheless premature because repository verification found skipped release/rollout steps. The additional owner-level release blocker exposed by the corrected template release path has now been fixed and released.
 
 The current blocking order is now:
 
-1. **`tool.scad-project` release-call compatibility** — the real `template.scad-project` v0.0.5 request on final v0.14.7 consumer main (`d524060a2af096d4728255cdc5266716a00dd226`) triggered Release run `35091703762`, but GitHub rejected the cross-repository reusable workflow before any job was created (`referenced_workflows=[]`). This matches the previously observed annotated-tag limitation recorded in `tool.scad-project#24`: the nested reusable release chain resolves through an exact commit/branch ref but not through the released annotated semantic tag. Owner fix PR `tool.scad-project#72` changes future tool release tags to lightweight refs and adds regression coverage. Finish that owner fix and publish the next patch release (expected `v0.14.8`) before changing consumers.
-2. **`template.scad-project`** — after the owner patch release, move the reference consumer from v0.14.7 to that released patch, run one complete template qualification on the exact new main state, then publish immutable template release `v0.0.5` and verify its release assets plus `rel/v0.0.5/{build,verification}`. The latest published template release remains `v0.0.4` from source `601e9f6fc7c297a5012cbf2aae0c5b95de4335c9`.
-3. **`2026-009-01.cad.HUB75-display-frame`** — only after the template gate is green, advance the frame from `tool.scad-project v0.14.3` to the final released tool baseline, requalify normal/zero-runtime/provenance/release behaviour and publish the next immutable project release (expected `v0.0.2`).
+1. **`template.scad-project`** — move the reference consumer from `tool.scad-project v0.14.7` to released `v0.14.8` / exact source `85781a6b21a0f6a06d37be154fd9eb475ecaa2a4`, qualify the complete reference-consumer path, then publish immutable template release `v0.0.5` and verify its release assets plus `rel/v0.0.5/{build,verification}`. The latest published template release remains `v0.0.4` from source `601e9f6fc7c297a5012cbf2aae0c5b95de4335c9` until this gate completes.
+2. **`2026-009-01.cad.HUB75-display-frame`** — only after the template gate is green, advance the frame to the final released tool baseline, requalify normal/zero-runtime/provenance/release behaviour and publish the next immutable project release (expected `v0.0.2`).
 
-The template caller itself has already been corrected and remains thin: PR #45 merged as `d524060a2af096d4728255cdc5266716a00dd226`, splitting manual-dispatch and release-request callers without moving shared release logic into the consumer. Main Production run `35091451284` is green. A cross-repository contract probe against the owner-fix branch (`35092459250`) compiled successfully, and an exact-v0.14.7-SHA probe (`35092548535`) reached the shared `resolve` job before deliberately rejecting invalid probe inputs. The remaining defect therefore belongs to the released tool-ref/tag contract, not to consumer-local orchestration.
+The release-call blocker is resolved in the owner. `tool.scad-project` PR #72 changed future semantic tool release tags from annotated tag objects to lightweight refs so nested reusable workflows can resolve cross-repository while consumers keep readable `@vX.Y.Z` refs. PR #73 prepared patch release `v0.14.8` and was green on Test run `35096013142`; exact merged main `85781a6b21a0f6a06d37be154fd9eb475ecaa2a4` was green on Test run `35096209854`; Release run `35096353093` created `v0.14.8` successfully; the tag resolves directly to that commit (`type: commit`); and tagged Test run `35096362420` is green. The self-cleaning release-request branch was removed successfully.
 
-Final released shared foundations before this blocker are:
+The template caller itself was already corrected and remains thin: PR #45 merged as `d524060a2af096d4728255cdc5266716a00dd226`, splitting manual-dispatch and release-request callers without moving shared release logic into the consumer. Main Production run `35091451284` is green. The previous real v0.0.5 release request `35091703762` proved the annotated-v0.14.7 failure before job creation; controlled probes `35092459250` and `35092548535` isolated that failure to the released tool-ref/tag contract rather than consumer-local orchestration.
+
+Current released shared foundations are:
 
 - `docker.scad-toolchain v0.5.0` — OpenSCAD-focused and full/dual runtime profiles;
 - `tool.git-project v0.2.8` — complete affected-task list from one generic Moon query;
-- `tool.scad-project v0.14.7` / `3935e5f86fe309b8908a05554f7ada336a6d6886` — inherited capabilities, precise shallow tool-gitlink comparison, configuration/runtime/cache planning, semantic reusable-workflow refs, one-runtime normal production, durable timing/log evidence and exact host publication provenance; release-call/tag compatibility is the only newly exposed blocker on the final release path.
+- `tool.scad-project v0.14.8` / `85781a6b21a0f6a06d37be154fd9eb475ecaa2a4` — inherited capabilities, precise shallow tool-gitlink comparison, configuration/runtime/cache planning, semantic reusable-workflow refs, one-runtime normal production, durable timing/log evidence, exact host publication provenance and cross-repository release-call compatibility through lightweight semantic release tags.
 
 Already-valid qualification/evidence includes:
 
@@ -36,7 +37,7 @@ Already-valid qualification/evidence includes:
 - affected-canary latency of ~41.9 s for clamps and ~32.2 s for HUB75;
 - unrelated README-only paths of ~7.6–9.9 s with zero CAD/runtime work.
 
-The missing work is therefore release completion and final frame alignment, **not** a redesign of the selected SCAD execution architecture. The cross-repository release-call defect is a migration blocker because it prevents the required immutable consumer releases; it stays owned by `tool.scad-project` rather than being worked around in consumers.
+The missing work is therefore the final template and frame release completion, **not** a redesign of the selected SCAD execution architecture.
 
 Tracking issue: #55. Status-correction issue: #64. Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md). Durable architecture: [SCAD technical architecture](domains/scad/architecture.md).
 
