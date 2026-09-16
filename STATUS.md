@@ -41,7 +41,19 @@ The missing work is therefore the final template and frame release completion, *
 
 Tracking issue: #55. Status-correction issue: #64. Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md). Durable architecture: [SCAD technical architecture](domains/scad/architecture.md).
 
-A possible Java execution-architecture migration may be prepared in parallel as **proposed/inactive**, but it does not become active until Migration 005 is actually complete.
+## Queued / proposed
+
+These migrations are deliberately recorded on `main` so their current intent is not hidden in planning PRs. They are **inactive** and do not extend Migration 005.
+
+### Migration 006 — simplify the Java execution architecture
+
+**Proposed / inactive.** Current status and preferred direction are recorded in [Migration 006](migrations/006-java-execution-architecture/README.md). Maven remains the intended Java build authority; the leading direction is an early unrelated-change gate, thinner consumers, shared Java lifecycle ownership, deliberate Windows qualification cadence and removal of unnecessary runner/artifact boundaries. Detailed draft research may continue in #65, but `main` is the status authority. Activation waits for Migration 005 to complete.
+
+### Migration 007 — standardise GitHub Actions dependency maintenance
+
+**Proposed / inactive.** Recorded in [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) and tracked in #66. The leading direction is exact-SHA + readable-version pins for third-party actions, PR-based updates (with Dependabot as the primary candidate), `actions-up` as a normalisation/audit candidate, explicit exceptions for released brainboxemb reusable-workflow refs, and no unattended direct workflow mutation. It is intentionally sequenced **after Migration 006** unless priorities are explicitly changed.
+
+Intended sequencing: **005 → 006 → 007**.
 
 ## Recently completed
 
