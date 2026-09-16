@@ -16,7 +16,8 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-- [006 — simplify the Java execution architecture](006-java-execution-architecture/README.md) — active. Owner implementation starts in `tool.java-project`, followed by release, `template.java-project` qualification and then the real `2026-010-02.java.event-timing-framework` rollout.
+- [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — reopened for the narrow final technical namespace normalization from `build`/`verification` branch suffixes to the portfolio-standard `bld`/`vrf`; prior execution/release evidence remains valid.
+- [006 — simplify the Java execution architecture](006-java-execution-architecture/README.md) — owner draft is in progress but release/consumer rollout is temporarily paused until the reopened Migration 005 namespace correction is requalified.
 
 ## Proposed / inactive
 
@@ -24,11 +25,12 @@ Having a migration directory does not mean that work is active.
 
 ## Complete
 
-- [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — final v0.14.8 execution architecture qualified and released through the template, both reusable SCAD libraries and the real HUB75 frame.
 - [004 — SCAD repository execution model](004-scad-repository-execution-model/README.md) — qualified the common conditional-SCAD execution model through the template and both reusable SCAD libraries.
 - [003 — SCAD v0.12 rollout](003-scad-v0.12-rollout/README.md) — rolled the released tool through the template, both SCAD libraries and the real HUB75 frame.
 - [002 — SCAD build-decision audit](002-scad-build-decision-audit/README.md) — added and qualified the explicit post-build decision audit.
 - [001 — Consolidate public portfolio context into brainboxemb.meta](001-brainboxemb-meta/README.md) — completed repository/catalog/dashboard/documentation consolidation.
+
+Migration 005 had completed its v0.14.8 execution rollout before the namespace inconsistency was discovered. It returns to Complete only after current-generation SCAD tooling and consumers use the canonical technical `bld`/`vrf` publication suffixes.
 
 ## When to create a migration
 
