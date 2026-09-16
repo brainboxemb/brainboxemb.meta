@@ -8,21 +8,23 @@ Migration 006 exists to move the **generic Java execution lifecycle** into `tool
 
 Use this migration when deciding what belongs in shared Java execution tooling, which repository is next in the rollout, or what evidence is required before the shared contract can advance.
 
-Status: **active — owner implementation merged and exact-main qualified; owner release is next**
+Status: **active — owner implementation merged and exact-main qualified; owner release temporarily gated by the final Migration-005 released-guidance patch**
 
 Working/research draft: [#65](https://github.com/brainboxemb/brainboxemb.meta/pull/65)
 
 Owner implementation: [`tool.java-project` #26](https://github.com/brainboxemb/tool.java-project/pull/26) — merged to main.
 
-Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — complete on the final `bld` / `vrf` namespace baseline.
+Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — runtime/publication behavior is qualified on `bld` / `vrf`, but released `tool.scad-project v0.14.9` owner guidance still contains legacy branch examples and must be patch-released before final closure.
 
 ## Cross-domain publication baseline
 
 Migration 006 exposed a useful cross-domain naming inconsistency while Migration 005 was closing: Java already used technical `bld`, while SCAD publication still used `build` / `verification` even though current-generation SCAD workspace roots were already `dsg` / `bld` / `vrf`.
 
-That inconsistency is now resolved. The durable portfolio convention is defined in [Generated output and publication](../../docs/working-model/generated-output.md): human-facing names stay readable, while shared technical path/branch identities use canonical stable identifiers such as `dsg`, `bld`, `vrf` and `docs` where those concepts apply.
+The runtime/publication inconsistency is resolved and fully qualified. The durable portfolio convention is defined in [Generated output and publication](../../docs/working-model/generated-output.md): human-facing names stay readable, while shared technical path/branch identities use canonical stable identifiers such as `dsg`, `bld`, `vrf` and `docs` where those concepts apply.
 
-Migration 006 must use that stable convention rather than invent Java-local synonyms. Java currently has a Build publication family under `bld`; it should only introduce another publication family such as `vrf` if Java actually has an independently published Verification family, not merely for symmetry.
+One released-guidance inconsistency remains in the pinned SCAD owner documentation. Migration 006 owner implementation may stay merged and qualified in parallel, but Java release/consumer rollout waits until that final SCAD patchrelease closes Migration 005.
+
+Java must use the stable convention rather than invent Java-local synonyms. Java currently has a Build publication family under `bld`; it should only introduce another publication family such as `vrf` if Java actually has an independently published Verification family, not merely for symmetry.
 
 ## Scope
 
@@ -137,9 +139,9 @@ Equivalent naming does **not** require equivalent build mechanics. Maven remains
 
 ## Current implementation position
 
-The owner implementation phase is complete and qualified on `tool.java-project/main`. Migration 005 is closed again, so the previous release/consumer gate is removed.
+The owner implementation phase is complete and qualified on `tool.java-project/main`. The release is deliberately not cut yet because the final released SCAD guidance baseline is still being corrected.
 
-The next sequence is:
+After Migration 005 closes again, the next sequence is:
 
 1. prepare and release the already-qualified `tool.java-project` owner revision;
 2. canary the released contract in `template.java-project`;
