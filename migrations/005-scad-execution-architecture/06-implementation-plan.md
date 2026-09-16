@@ -1,6 +1,6 @@
 # Migration 005 — implementation plan
 
-Status: **active migration execution — Step 4 complete; Steps 5 and 6 are active parallel canaries**
+Status: **active migration execution — Steps 1–6 complete; Step 7 is next**
 
 ## Why this document exists
 
@@ -12,22 +12,28 @@ Do not bundle unrelated owner changes merely to reduce pull-request count. If in
 
 - **Step 1 — runtime image family:** complete. `docker.scad-toolchain v0.5.0` released from `a56a3aae4b9e0494e6625e75002d96b0a55986a3`; immutable profiles externally qualified in run `34999654405`.
 - **Step 2 — affected capability list:** complete. `tool.git-project v0.2.8` released from `7c43f37e7b07cfb57638a1d1dad2501de09ba7eb`.
-- **Step 3 — shared SCAD capability lifecycle:** complete. Initial release `v0.14.0` was followed by two integration-driven patch releases; the current released foundation for consumers is **`tool.scad-project v0.14.2` / `5712324ea9e3a7c81ba1b79013f2758f52b219cf`**.
-- **Step 4 — template/reference consumer model:** **complete**. `template.scad-project#37` merged as `cf3da65943968a42f3a0199cb682b1c74f452ee9`; full integration run `35020468894` was green on the released v0.14.2 foundation. The missing immutable template release is being closed as release follow-through and is not a dependency of either library canary.
-- **Step 5 — clamps dual-runtime/direct canary:** **active**.
-- **Step 6 — HUB75 OpenSCAD/SCons canary:** **active in parallel with Step 5**.
-- **Steps 7–8:** wait until both canary gates are met.
+- **Step 3 — shared SCAD capability lifecycle:** complete. Current consumer foundation is **`tool.scad-project v0.14.3` / `b86b2be325f64847b8d91b7f2596bfd4e4ffb7f2`**.
+- **Step 4 — template/reference consumer model:** complete. Migration implementation merged in `template.scad-project#37`; maintainable source-family impact boundaries were corrected in #39 and released as **`template.scad-project v0.0.4`** from `601e9f6fc7c297a5012cbf2aae0c5b95de4335c9`.
+- **Step 5 — clamps dual-runtime/direct canary:** complete. PR #16 merged as `a44d7bdfdb3407959b5d96bef654568367e0f43c`; migrated `main` production run `35065375255` is green; README-only zero-runtime qualification run `35065514152` is green.
+- **Step 6 — HUB75 OpenSCAD/SCons canary:** complete. PR #29 merged as `ea75cee1fa83310bc2ba2ad1ce565ef81ac7f523`; migrated `main` production run `35065383879` is green; README-only zero-runtime qualification run `35065524524` is green.
+- **Step 7 — downstream SCAD consumers:** **next**.
+- **Step 8 — close Migration 005:** waits for the intended downstream rollout and final evidence.
 
-## Parallel-canary correction
+## Shared foundation corrections learned during rollout
 
-Steps 5 and 6 exercise independent modes of the same already released foundation:
+The original Step-3 release was `tool.scad-project v0.14.0`. Integration deliberately fixed shared defects in the owner repository instead of adding consumer workarounds:
 
-- clamps proves **full/dual runtime + direct engine + no unused SCons transport**;
-- HUB75 proves **OpenSCAD-focused runtime + SCons transport/reuse**.
+1. **v0.14.1** — planner installation uses declared PEP 517 build requirements in a clean hosted Python environment (`tool.scad-project#56`).
+2. **v0.14.2** — inherited capability selection comes from project-level root `moon.yml` via `workspace.inheritedTasks.include`, matching Moon 2.5.4 (`tool.scad-project#57`).
+3. **v0.14.3** — shared Moon capability outputs no longer require optional SCons state files that do not exist for direct-engine consumers or command-only verification (`tool.scad-project#59`).
 
-There is no code, release or ownership dependency from `lib.scad.hub75` on a qualified `lib.scad.clamps` revision. The earlier Step-5 → Step-6 gate therefore serialized independent evidence unnecessarily. Both canaries may now be implemented and qualified concurrently after Steps 1–4. Step 7 remains gated on **both** canaries, because downstream migration should not start until both execution modes are proven.
+Current shared consumer foundation:
 
-If either canary exposes a defect in a shared owner (`tool.git-project`, `tool.scad-project` or `docker.scad-toolchain`), fix and release that shared owner first, then re-pin/requalify whichever canaries are affected.
+```text
+docker.scad-toolchain   v0.5.0
+tool.git-project        v0.2.8
+tool.scad-project       v0.14.3 / b86b2be325f64847b8d91b7f2596bfd4e4ffb7f2
+```
 
 ## Step 1 — runtime image family
 
@@ -49,9 +55,7 @@ Gate: **met**.
 
 Owner: `brainboxemb/tool.git-project`.
 
-Result: `v0.2.8` exposes the complete normalized affected-task list from the same generic Moon query while retaining the compatibility boolean and conservative-failure behaviour.
-
-The current action still needs one existing task as a query anchor. The result list itself is repository-wide. The current reference consumers all expose `scad.docs`, so this is not a blocker for Migration 005.
+Result: `v0.2.8` exposes the complete normalized affected-task list from one generic Moon query while retaining compatibility and conservative-failure behaviour.
 
 Gate: **met**.
 
@@ -59,165 +63,141 @@ Gate: **met**.
 
 Owner: `brainboxemb/tool.scad-project`.
 
-### Released result
-
-Current consumer foundation:
-
-- `v0.14.2` / `5712324ea9e3a7c81ba1b79013f2758f52b219cf`.
-
-The original Step-3 release was `v0.14.0`. Step-4 integration then found two owner-side defects that were deliberately corrected in the owner repository rather than worked around in the template:
-
-1. **v0.14.1** — normal production planner installation no longer assumes global `setuptools`/`wheel`; PEP 517 installs declared build requirements in a clean hosted Python environment (`tool.scad-project#56`).
-2. **v0.14.2** — inherited capability selection is read from project-level `moon.yml` (`workspace.inheritedTasks.include`), matching Moon 2.5.4; `.moon/workspace.yml` remains workspace-level configuration (`tool.scad-project#57`).
-
-### Stable lifecycle contract
-
 Shared inherited capability tasks cover:
 
 - `scad.docs` — design documentation;
 - `scad.build` — presentation renders;
 - `scad.verify` — Verification.
 
-Shared policy owns commands, stable common inputs, normal output boundaries and Moon cache policy. Consumers own capability selection and project-specific impact patterns.
+Shared policy owns commands, stable common inputs, normal output boundaries and Moon cache policy. Consumers own capability selection and project-specific source-family impact patterns.
 
 Runtime selection is configuration-driven. SCons transport is enabled only for SCons-configured work. Source-affected capabilities and publication-safe materialization remain separate concepts when complete Build replacement requires an unchanged contributor to be hydrated.
 
-Gate: **met**.
+Gate: **met on v0.14.3**.
 
 ## Step 4 — template/reference consumer model
 
 Owner: `brainboxemb/template.scad-project`.
 
-Status: **complete implementation; immutable release follow-through in progress**.
+Result:
 
-Owner PR:
+- Migration implementation PR #37 merged as `cf3da65943968a42f3a0199cb682b1c74f452ee9`;
+- full integration run `35020468894` qualified the three-capability full-runtime/SCons reference path;
+- PR #39 replaced brittle file-by-file Moon inputs with maintainable source-family boundaries;
+- immutable project release **v0.0.4** was published from `601e9f6fc7c297a5012cbf2aae0c5b95de4335c9` with Build, Verification, STL and checksum assets.
 
-- `template.scad-project#37`;
-- merged as `cf3da65943968a42f3a0199cb682b1c74f452ee9`.
+Reference model:
 
-Implemented reference model:
+- root `moon.yml` selects visible capabilities and project-specific source-family impact boundaries;
+- `.moon/tasks/scad.yml` inherits the shared implementation;
+- `.moon/workspace.yml` remains workspace-level configuration;
+- consumer-authored Migration-004 lifecycle/aggregate tasks are gone.
 
-- root `moon.yml` selects `scad.docs`, `scad.build`, `scad.verify` and contains project-specific impact inputs;
-- `.moon/tasks/scad.yml` is the single inherited-policy link;
-- `.moon/workspace.yml` is limited to valid workspace-level configuration;
-- consumer-authored Migration-004 aggregate/lifecycle tasks are gone;
-- `tool.git-project v0.2.8`, `tool.scad-project v0.14.2` and runtime-family v0.5.0 are the released foundations;
-- template intentionally remains dual-runtime and SCons-enabled so it exercises the broad reference path.
+Gate: **met**.
 
-Acceptance evidence:
-
-- full integration source before final documentation-only corrections: `d439fe6dfcf968471891974177a1773678aa3d24`;
-- run `35020468894` — green;
-- one exact base → source Moon affected query;
-- clean planner install succeeded;
-- effective capabilities: docs/build/verify;
-- selected runtime: full `ghcr.io/brainboxemb/scad-toolchain:v0.5.0`;
-- build engine: SCons;
-- normal and Verification SCons caches both applicable and restored;
-- all required capabilities materialized in one Docker process;
-- Build and Verification publication both succeeded;
-- normal Actions retention contained compact orchestration evidence, not duplicate complete output trees.
-
-The final README/AGENTS/CI-documentation corrections only aligned the documented Moon configuration location with the already released v0.14.2 owner fix; they did not change the qualified execution topology or pins.
-
-The reference consumer still needs its next immutable project release after v0.0.2. That release is Step-4 follow-through, but neither Step 5 nor Step 6 consumes `template.scad-project`, so it does not block the canaries.
-
-Gate: **implementation met; release follow-through must still be recorded**.
-
-## Step 5 — migrate and qualify `lib.scad.clamps` as the dual-runtime/direct canary
+## Step 5 — `lib.scad.clamps` dual-runtime/direct canary
 
 Owner: `brainboxemb/lib.scad.clamps`.
 
 Purpose:
 
-- intentionally supports OpenSCAD and PythonSCAD;
-- uses the direct engine;
-- therefore proves the full/dual runtime path while proving unused SCons transport is absent.
+- OpenSCAD + PythonSCAD intentionally select the full/dual runtime;
+- direct engine proves that unused normal and Verification SCons transport stays absent.
 
-Expected visible capabilities:
+Result:
 
-```text
-Design documentation
-Verification
-```
+- migration PR #16 merged as `a44d7bdfdb3407959b5d96bef654568367e0f43c`;
+- final PR qualification run `35026709686` was green on v0.14.3;
+- migrated `main` production run `35065375255` was green;
+- full/dual runtime selected;
+- direct engine selected;
+- normal SCons cache transport skipped;
+- Verification SCons cache transport skipped;
+- Build/Verification publication completed successfully;
+- normal Actions retention stayed compact;
+- temporary README-only qualification PR #17 produced run `35065514152`, where planner installation, all cache transport, runtime pull, Docker materialization, finishing and publication were all skipped; PR #17 was closed without merge after evidence capture.
 
-Required evidence:
+Gate: **met**.
 
-- README-only/unrelated → zero CAD runtime;
-- docs-only and Verify-only boundaries behave as declared;
-- full/dual image is selected from PythonSCAD configuration;
-- no normal or Verification SCons cache restore/save occurs unless the repository configuration genuinely requires it;
-- stable Moon capability hashes across fresh runners;
-- warm Moon reuse avoids actual capability work;
-- normal full-tree Actions artifacts are absent by default;
-- published Build/Verification content remains correct;
-- feedback latency and total runner/resource counts are recorded.
-
-Canary completion gate:
-
-- qualified clamps main and, if appropriate, an immutable clamps release on the Migration-005 model.
-
-This gate does **not** block Step 6. It contributes to the joint gate for Step 7.
-
-## Step 6 — migrate and qualify `lib.scad.hub75` as the OpenSCAD/SCons canary
+## Step 6 — `lib.scad.hub75` OpenSCAD/SCons canary
 
 Owner: `brainboxemb/lib.scad.hub75`.
 
-Status: **active in parallel with Step 5**.
-
 Purpose:
 
-- prove focused OpenSCAD runtime selection;
-- prove SCons cache transport remains useful and correctly scoped;
-- prove three independently affected capabilities.
+- focused OpenSCAD runtime selection;
+- normal SCons cache transport/reuse;
+- independent Build, Design documentation and Verification capabilities.
 
-Expected visible capabilities:
+Result:
+
+- migration PR #29 merged as `ea75cee1fa83310bc2ba2ad1ce565ef81ac7f523`;
+- final PR qualification run `35026885840` was green on v0.14.3;
+- migrated `main` production run `35065383879` was green;
+- OpenSCAD-focused runtime selected;
+- normal SCons transport enabled and used;
+- Verification SCons transport correctly skipped because this consumer has no verification render/export targets;
+- Build and Verification publication completed successfully;
+- normal Actions retention stayed compact;
+- temporary README-only qualification PR #30 produced run `35065524524`, where planner installation, all cache transport, runtime pull, Docker materialization, finishing and publication were all skipped; PR #30 was closed without merge after evidence capture.
+
+Gate: **met**.
+
+## Parallel hardening track — orchestration observability and upgrade preflight
+
+Owner: `brainboxemb/tool.scad-project`.
+
+Tracking item: `tool.scad-project#60`.
+
+This is **not a reopening of Steps 5–6**. The v0.14.3 library migrations are complete and their zero-runtime gates are proven on migrated `main`.
+
+The follow-up track improves two things discovered while reviewing canary evidence:
+
+1. when a future tool-upgrade PR changes the `tools/tool.scad-project` gitlink, shallow BASE/HEAD preflight should also make the exact base gitlink object available so Moon does not need a conservative fallback merely because that old tool commit is absent;
+2. generated output should expose the retained full orchestration/Moon log clearly and preserve durable timing information for major workflow phases, because GitHub Actions step timing is not a permanent evidence store.
+
+Qualification order for this hardening track:
 
 ```text
-Presentation renders
-Design documentation
-Verification
+tool.scad-project owner tests/release
+        |
+        v
+template.scad-project first integration/reference qualification
+        |
+        v
+only then decide whether/when existing libraries should adopt the patch
 ```
 
-Required evidence:
+Do not repin clamps or HUB75 to this follow-up merely because a patch exists. First prove it through the template/reference consumer. A correctness regression found there blocks rollout of that patch, but does not invalidate the already completed v0.14.3 canary migration.
 
-- README-only/unrelated → zero CAD runtime;
-- Build/docs/Verify boundaries behave as declared;
-- OpenSCAD-focused image is selected because PythonSCAD is not configured;
-- normal and Verification SCons transport occurs only where the configured targets genuinely use it;
-- warm SCons reuse is useful and correctly scoped;
-- stable Moon capability hashes across fresh runners;
-- warm Moon reuse avoids actual capability work where applicable;
-- normal full-tree Actions artifacts are absent by default;
-- published Build/Verification content remains correct;
-- feedback latency and total runner/resource counts are recorded.
-
-Canary completion gate:
-
-- qualified HUB75 main and an immutable HUB75 library release where appropriate.
-
-This gate does **not** depend on Step 5. Together with the Step-5 gate it unlocks Step 7.
-
-## Step 7 — downstream SCAD consumers, HUB75 frame later
+## Step 7 — downstream SCAD consumers
 
 Owners: each consumer repository owns its own migration.
 
-Prerequisites:
+Prerequisites now met:
 
 - Steps 1–4 complete;
-- **both Step-5 and Step-6 canary gates met**;
-- immutable released tool/image/library refs exist where required by downstream consumers;
-- both dual/direct and OpenSCAD/SCons canary modes are proven.
+- both Step-5 and Step-6 canary gates met;
+- dual/direct and OpenSCAD/SCons modes proven on migrated `main`;
+- README-only/unrelated zero-runtime path proven after migration in both canaries.
 
-`brainboxemb/2026-009-01.cad.HUB75-display-frame` remains deliberately later. Do not migrate it before both canaries qualify the released architecture.
+For each downstream consumer:
 
-For each consumer, derive capabilities from current repository intent, preserve repository-specific verification/publication semantics and record before/after latency/resource evidence.
+- derive capabilities from current repository intent;
+- keep source-family impact boundaries maintainable rather than enumerating individual component files;
+- preserve repository-specific verification/publication semantics;
+- use immutable released tool/image/library refs where the consumer requires them;
+- record useful before/after latency and resource evidence.
+
+`brainboxemb/2026-009-01.cad.HUB75-display-frame` remains deliberately later in the downstream sequence; do not infer that it must be the first Step-7 consumer.
+
+The parallel hardening track above may continue independently. It becomes a downstream prerequisite only if it exposes a correctness defect that affects the current released architecture.
 
 ## Step 8 — close Migration 005
 
 Owner: `brainboxemb/brainboxemb.meta`.
 
-Close only when the intended consumer rollout is complete and measured implementation evidence replaces provisional values. Record final immutable refs, architecture corrections learned during implementation and close tracking issue #55 when no Migration-005 implementation work remains.
+Close only when the intended downstream rollout is complete and measured implementation evidence replaces provisional values. Record final immutable refs, architecture corrections learned during implementation and close tracking issue #55 when no Migration-005 implementation work remains.
 
 ## Sequencing principle
 
@@ -226,17 +206,21 @@ runtime images + external contract       complete
         |
 generic Moon affected-list contract      complete
         |
-shared SCAD capability lifecycle          complete (current v0.14.2)
+shared SCAD capability lifecycle          complete (v0.14.3)
         |
-template/reference consumer               complete implementation
+template/reference consumer               complete (v0.0.4)
         |
         +-------------------------------+
         |                               |
         v                               v
 clamps dual/direct canary         HUB75 OpenSCAD/SCons canary
+        complete                         complete
         |                               |
         +---------------+---------------+
                         |
                         v
                  downstream consumers
+
+parallel hardening:
+tool.scad-project #60 -> template first -> optional later consumer adoption
 ```
