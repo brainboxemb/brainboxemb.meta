@@ -167,15 +167,57 @@ The assembler consumes already-produced assets and provenance. It does not silen
 
 This allows one documentation set to include material from several implementation domains without coupling the documentation workflow to all of their toolchains.
 
-## 6. Repository-count rule
+## 6. Repository topology: single repo by default, project family when justified
 
-This model does **not** require a separate documentation source repository for every project.
+This is a **hybrid mono-/multi-repository model**, not a rule that every project must become a repository family.
 
 Default preference:
 
-- keep project-family planning/requirements/architecture source in the coordination/meta repository;
+- keep a simple project in one repository while source, planning, documentation, build and release still have one clear ownership/lifecycle boundary;
+- split repositories only when there is a real boundary in ownership, reuse, access control, release cadence, implementation technology or cross-repository coordination;
+- introduce a coordination/meta repository when decisions, planning, requirements or qualification genuinely span multiple implementation repositories;
+- do not create a meta repository merely because the architecture allows one.
+
+A small CAD project can therefore remain a single CAD repository with its own project documentation. It does **not** need a sibling meta repository by default.
+
+A larger system may evolve naturally from:
+
+```text
+single implementation repository
+```
+
+to:
+
+```text
+meta / coordination
++ Java implementation
++ embedded implementation
++ CAD implementation
++ other component repositories
+```
+
+without changing the top-level ownership principles.
+
+Practical split signals include:
+
+- more than one implementation repository needs one shared plan/architecture;
+- one repository is being forced to own decisions about another repository;
+- reusable tooling or libraries develop an independent release lifecycle;
+- public/private or access-control boundaries require separation;
+- generated documentation must combine evidence from several producers;
+- one technology/runtime is being started only to build unrelated project-level documentation;
+- repository size or CI coupling becomes materially harmful.
+
+Absent such evidence, prefer the simpler single-repository shape.
+
+This model also does **not** require a separate documentation source repository for every project.
+
+Default documentation preference:
+
+- keep project-family planning/requirements/architecture source in the coordination/meta repository when such a repository exists;
+- otherwise keep that source in the owning project repository;
 - keep code-near implementation documentation in the implementation repository that owns it;
-- assemble/publish the combined engineering documentation as generated output;
+- assemble/publish combined engineering documentation as generated output when needed;
 - create a separate documentation source repository only when ownership, access control, lifecycle or repository size gives a concrete reason.
 
 A dedicated `*.docs.*` repository should therefore be an evidence-backed split, not the default architecture.
