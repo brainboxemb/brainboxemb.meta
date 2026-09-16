@@ -6,38 +6,25 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 005 — simplify the SCAD execution architecture
-
-**Active — final library alignment remains.**
-
-The architecture and the completed template/frame release gates remain valid. The closeout was corrected again after verifying that the two current-generation reusable SCAD libraries still declare `tool.scad-project v0.14.3` while the final released shared baseline is `v0.14.8` / exact `85781a6b21a0f6a06d37be154fd9eb475ecaa2a4`.
-
-Already complete and retained as evidence:
-
-- `tool.scad-project v0.14.8` is released and its semantic reusable-workflow tag resolves cross-repository;
-- `template.scad-project v0.0.5` is released from exact source `c718655cd67ff90f2d0ba2cf474c86db69cc8965` through run `35097219635`;
-- `2026-009-01.cad.HUB75-display-frame v0.0.2` is released from exact source `18f7900bed31345b8123571ade152af6914e18d6` through run `35099609270`;
-- the final frame baseline passed affected Production, merged-main Production and README-only zero-runtime qualification.
-
-Remaining blocking path:
-
-1. upgrade `lib.scad.clamps` from tool v0.14.3 to released v0.14.8 / exact tool source `85781a6b...`, qualify affected and unrelated-change behaviour, and publish the next immutable library release;
-2. upgrade `lib.scad.hub75` from tool v0.14.3 to the same v0.14.8 baseline, qualify the focused-runtime/SCons and unrelated-change paths, and publish the next immutable library release;
-3. record exact library release/provenance evidence and close Migration 005.
-
-This is a final consumer-baseline consistency pass, **not** an architecture redesign.
-
-Tracking issue: #55. Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md). Durable architecture: [SCAD technical architecture](domains/scad/architecture.md).
-
-## Parallel planning / proposed
-
-Migration 006 may be elaborated in parallel while the library Actions runs are executing, but remains **proposed / inactive** and does not authorize Java owner-repository implementation yet.
-
 ### Migration 006 — simplify the Java execution architecture
 
-**Proposed / inactive — next implementation candidate after 005.**
+**Active — owner implementation has started in `tool.java-project`.**
 
-[Migration 006](migrations/006-java-execution-architecture/README.md) records the current Java baseline and working hypotheses. Parallel work may turn these into a concrete target architecture, decisions/open questions and owner-by-owner qualification plan, using current repository state rather than the draft PR as authority.
+Migration 005 is now complete, including final v0.14.8 alignment and immutable releases of both reusable SCAD libraries. Migration 006 is therefore the primary active cross-project migration.
+
+Current implementation sequence:
+
+1. `tool.java-project` — implement and qualify the shared Java execution/preflight contract; current work item is draft PR #26;
+2. release the qualified Java tool revision;
+3. `template.java-project` — reference canary for thin-caller, unrelated zero-Java and selective Windows behaviour;
+4. decide the normal Windows qualification policy from canary evidence;
+5. `2026-010-02.java.event-timing-framework` — real downstream rollout and release qualification.
+
+The Java scope deliberately excludes project-family planning/architecture documentation. The generic project-family and engineering-documentation model remains technology-neutral: meta/coordination owns cross-repository engineering meaning, `tool.eng-docs` owns reusable document mechanisms/assembly, and Java owns only Java-derived producers/evidence.
+
+Windows qualification is being split into explicit `none`, `smoke` and `full` execution levels. Normal callers use `windows-mode: auto`: an affected normal Java change selects the cheap exact-Linux-JAR Windows smoke; Windows-sensitive build/toolchain impact selects the full independent Windows Maven qualification. Explicit modes remain available as an escape hatch.
+
+Canonical record: [Migration 006](migrations/006-java-execution-architecture/README.md).
 
 ### Migration 007 — standardise GitHub Actions dependency maintenance
 
@@ -45,10 +32,9 @@ Migration 006 may be elaborated in parallel while the library Actions runs are e
 
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation.
 
-Intended implementation sequencing remains **005 complete → 006 → 007**.
-
 ## Recently completed
 
+- [Migration 005 — simplify the SCAD execution architecture](migrations/005-scad-execution-architecture/README.md) — complete after final `lib.scad.clamps v0.1.5` and `lib.scad.hub75 v0.1.6` alignment/release on `tool.scad-project v0.14.8`.
 - [Migration 004 — SCAD repository execution model](migrations/004-scad-repository-execution-model/README.md) — complete.
 - [Migration 003 — SCAD v0.12 rollout](migrations/003-scad-v0.12-rollout/README.md) — complete.
 - [Migration 002 — SCAD build-decision audit](migrations/002-scad-build-decision-audit/README.md) — complete.
