@@ -20,7 +20,7 @@ Having a migration directory does not mean that work is active.
 
 ## Proposed / inactive
 
-There are currently no proposed/inactive migrations on `main`. A Java execution-architecture migration is being evaluated separately and must remain proposed until Migration 005 is actually complete.
+- [006 — simplify the Java execution architecture](006-java-execution-architecture/README.md) — investigate moving consumer-owned Java lifecycle orchestration into the proper shared owners, adding an early unrelated-change gate, reducing unnecessary runner/artifact boundaries, and retaining the required independent Windows compatibility path. This migration is planning-only until Migration 005 is complete.
 
 ## Complete
 
