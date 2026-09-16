@@ -6,61 +6,37 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active cross-project migration**.
-
-Migration 005 has completed its current-generation SCAD rollout and final evidence review. A new migration must be selected explicitly; proposed or owner-local follow-ups do not start automatically.
-
-## Recently completed
-
 ### Migration 005 — simplify the SCAD execution architecture
 
-**Complete.**
+**Reopened for final rollout/release gates.**
 
-Migration 005 replaced the lifecycle-heavy Migration-004 Moon topology with a capability-oriented current-generation SCAD model and qualified it through every public repository currently classified with `project_infrastructure.provider: tool.scad-project`.
+The architecture, shared-tool releases, canary qualification and performance/resource evidence remain valid. The first closeout was nevertheless premature because repository verification found two skipped release/rollout steps:
 
-Final released shared foundations:
+1. **`template.scad-project`** is fully qualified on `tool.scad-project v0.14.7` and merged as `cb1e3e50e5e56644153cdf74b54b5da1e747c8d8`, but the latest published template release is still `v0.0.4` from the earlier source `601e9f6fc7c297a5012cbf2aae0c5b95de4335c9`. A v0.0.5 release of the qualified v0.14.7 state is now required.
+2. **`2026-009-01.cad.HUB75-display-frame`** is migrated only to `tool.scad-project v0.14.3` on main commit `61da023ff0f6bc353687b55a8158e75ebd70b046`. Its Production/Release callers still use the old exact-SHA/consumer-local release orchestration and the latest project release is still `v0.0.1` from the v0.9.8 generation. The frame must first move to final `tool.scad-project v0.14.7`, then be requalified and released as a new immutable project version.
+
+Final released shared foundations remain:
 
 - `docker.scad-toolchain v0.5.0` — OpenSCAD-focused and full/dual runtime profiles;
 - `tool.git-project v0.2.8` — complete affected-task list from one generic Moon query;
 - `tool.scad-project v0.14.7` / `3935e5f86fe309b8908a05554f7ada336a6d6886` — inherited capabilities, precise shallow tool-gitlink comparison, configuration/runtime/cache planning, semantic reusable-workflow refs, one-runtime normal production, durable timing/log evidence and exact host publication provenance.
 
-Completed current-generation consumers:
+Already-valid qualification/evidence includes:
 
-1. **`template.scad-project`** — final v0.14.7 reference qualification run `35085388134`; merged as `cb1e3e50e5e56644153cdf74b54b5da1e747c8d8`; post-merge main run `35085631904`; README-only zero-runtime probe `35085786014`.
-2. **`lib.scad.clamps`** — migration PR #16 merged as `a44d7bdfdb3407959b5d96bef654568367e0f43c`; immutable v0.1.4 released; zero-runtime run `35065514152`.
-3. **`lib.scad.hub75`** — migration PR #29 merged as `ea75cee1fa83310bc2ba2ad1ce565ef81ac7f523`; immutable v0.1.5 released from `e0432a9533a08a1c0d9e87225c22f3f66b632531`; zero-runtime run `35065524524`.
-4. **`2026-009-01.cad.HUB75-display-frame`** — migration PR #33 merged as `61da023ff0f6bc353687b55a8158e75ebd70b046`; post-merge main run `35069411142`; README-only zero-runtime probe `35069504915`.
+- template v0.14.7 qualification run `35085388134`, post-merge main run `35085631904`, README-only zero-runtime probe `35085786014`;
+- `lib.scad.clamps` immutable v0.1.4 and zero-runtime run `35065514152`;
+- `lib.scad.hub75` immutable v0.1.5 and zero-runtime run `35065524524`;
+- frame Migration-005 v0.14.3 migration run `35069411142` and README-only probe `35069504915`;
+- affected-canary latency of ~41.9 s for clamps and ~32.2 s for HUB75;
+- unrelated README-only paths of ~7.6–9.9 s with zero CAD/runtime work.
 
-The canonical repository catalog classifies the remaining CAD repositories as **classic** standalone/shared-actions projects. Moving those repositories to `tool.scad-project` would be a separate project-infrastructure-generation migration, not unfinished Migration-005 rollout.
+The missing work is therefore release completion and final frame alignment, **not** a redesign of the selected SCAD execution architecture.
 
-Final resource/performance evidence is deliberately mixed rather than rounded into one success number:
+Tracking issue: #55. Status-correction issue: #64. Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md). Durable architecture: [SCAD technical architecture](domains/scad/architecture.md).
 
-| Scenario | Final observation | Budget result |
-| --- | ---: | --- |
-| clamps affected canary | ~41.9 s | meets low/mid-40 s target |
-| HUB75 warm/cached canary | ~32.2 s | meets low/mid-30 s target |
-| clamps README-only | ~9.2 s, zero CAD/runtime | structural goal met; 4–6 s latency target missed |
-| HUB75 README-only | ~7.6 s, zero CAD/runtime | structural goal met; 4–6 s latency target missed |
-| template README-only | ~9.9 s, zero CAD/runtime | structural goal met; 4–6 s latency target missed |
-| template full v0.14.7 reference path | 41.059 s to prepared snapshot | durable phase evidence retained |
+A possible Java execution-architecture migration may be prepared in parallel as **proposed/inactive**, but it does not become active until Migration 005 is actually complete.
 
-The remaining unrelated-change latency is dominated by fixed GitHub Actions setup plus the generic ~20 MB Moon-runtime restore/query path. It is a non-blocking generic preflight optimisation opportunity; it does not require another SCAD execution-architecture rewrite.
-
-The selected model now keeps:
-
-- one generic Moon affected query before CAD runtime acquisition;
-- zero CAD work for unrelated changes;
-- one hosted production job and at most one CAD runtime for normal affected work;
-- capability-appropriate focused or full runtime selection;
-- Moon for whole-capability reuse and optional SCons only for configured fine-grained target reuse;
-- no unused SCons transport for direct projects or command-only Verification;
-- no duplicate complete normal Build/Verification Actions artifacts by default;
-- Build and Verification publication allowed to overlap on the same runner;
-- current run/publication metadata outside source-derived Moon identity;
-- semantic released reusable-workflow refs plus exact checked-out gitlink identity;
-- exact PR-head source provenance in publication, run-context, materialization and producer evidence.
-
-Tracking issue: #55. Closeout issue: #63. Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md). Durable architecture: [SCAD technical architecture](domains/scad/architecture.md).
+## Recently completed
 
 ### Migration 004 — SCAD repository execution model
 
@@ -104,4 +80,4 @@ Generic performance/robustness follow-ups remain owner-local unless explicitly p
 
 - `tool.git-project` issue #17 — improve safe Moon cache/materialization reuse;
 - `tool.git-project` issue #22 — generic release request idempotency;
-- generic unrelated-change preflight latency — fixed Actions/Moon-runtime overhead remains an optimisation opportunity after Migration 005 and does not reopen it.
+- `tool.git-project` issue #26 — reduce fixed latency of unaffected Moon preflight after Migration 005.

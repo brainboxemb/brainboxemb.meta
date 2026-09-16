@@ -16,15 +16,14 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-There is currently **no active cross-project migration**.
+- [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — reopened after closeout verification found two skipped release gates: publish the qualified v0.14.7 template state and align/release the HUB75 frame on the same final tool baseline.
 
 ## Proposed / inactive
 
-There are currently no proposed/inactive migrations.
+There are currently no proposed/inactive migrations on `main`. A Java execution-architecture migration is being evaluated separately and must remain proposed until Migration 005 is actually complete.
 
 ## Complete
 
-- [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — completed the capability-oriented current-generation SCAD execution model, qualified focused/full runtime selection, optional direct/SCons reuse, exact shallow impact, durable timing/provenance evidence and rollout through every public `tool.scad-project` consumer.
 - [004 — SCAD repository execution model](004-scad-repository-execution-model/README.md) — qualified the common conditional-SCAD execution model through the template and both reusable SCAD libraries; retained measured performance evidence and handed architecture simplification/final frame rollout to Migration 005.
 - [003 — SCAD v0.12 rollout](003-scad-v0.12-rollout/README.md) — rolled the released tool through the template, both SCAD libraries and the real HUB75 frame.
 - [002 — SCAD build-decision audit](002-scad-build-decision-audit/README.md) — added and qualified the explicit post-build decision audit.
