@@ -8,21 +8,23 @@ Migration 006 exists to move the **generic Java execution lifecycle** into `tool
 
 Use this migration when deciding what belongs in shared Java execution tooling, which repository is next in the rollout, or what evidence is required before the shared contract can advance.
 
-Status: **active design / owner draft — release and consumer rollout temporarily paused behind reopened Migration 005**
+Status: **active owner implementation — running in parallel with final Migration-005 consumer requalification; Java release/consumer rollout remains gated**
 
 Working/research draft: [#65](https://github.com/brainboxemb/brainboxemb.meta/pull/65)
 
 Current owner work: [`tool.java-project` #26](https://github.com/brainboxemb/tool.java-project/pull/26)
 
-Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — reopened only for generated-output namespace normalization.
+Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — reopened only for generated-output namespace normalization and consumer requalification.
 
-## Temporary dependency on Migration 005
+## Parallel dependency on Migration 005
 
 Migration 006 exposed a cross-domain naming inconsistency: Java already publishes Build output as `bld`, while the Migration-005 SCAD branch contract used `build`/`verification` even though current-generation SCAD workspace roots are already `dsg`/`bld`/`vrf`.
 
-The durable portfolio convention is now defined in [Generated output and publication](../../docs/working-model/generated-output.md): human-facing names stay readable, while shared technical path/branch identities use canonical compact identifiers such as `bld` and `vrf`.
+The durable portfolio convention is defined in [Generated output and publication](../../docs/working-model/generated-output.md): human-facing names stay readable, while shared technical path/branch identities use canonical compact identifiers such as `bld` and `vrf`.
 
-Migration 006 owner work may remain in draft, but it must not be released or rolled into Java consumers until Migration 005 requalifies the SCAD baseline using that convention. Java should align to the settled cross-domain contract rather than create a second naming migration immediately afterward.
+Migration 005 now owns requalification of that SCAD namespace baseline. This does **not** block owner implementation in `tool.java-project`: the Java owner may continue designing, implementing and qualifying its own reusable contract in parallel. What remains gated is the **Java owner release and consumer rollout** into `template.java-project` and `2026-010-02.java.event-timing-framework` until Migration 005 closes again.
+
+This keeps the two work tracks independent where they genuinely are independent, while still preventing Java consumers from being rolled out against an unsettled cross-domain publication contract.
 
 ## Scope
 
@@ -131,8 +133,17 @@ Equivalent naming does **not** require equivalent build mechanics. Maven remains
 
 ## Current implementation position
 
-Step 1 exists in `tool.java-project` draft PR #26. Owner work already includes early affected/preflight design and selective Windows `none|smoke|full` qualification. The owner self-test has proven the existing canonical Linux + full Windows + exact Linux-artifact Windows smoke path; additional affected-classification work remains draft.
+Step 1 is active in `tool.java-project` draft PR #26 and may continue while Migration 005 performs its final SCAD consumer requalification.
 
-That draft is intentionally paused before release while Migration 005 settles and qualifies the shared `bld`/`vrf` technical namespace. After 005 closes again, resume #26, align it to the canonical namespace, complete owner evidence, release `tool.java-project`, and only then modify `template.java-project` and `2026-010-02.java.event-timing-framework`.
+Current owner evidence includes:
+
+- one released generic affected authority via `tool.git-project v0.2.8`;
+- exact-diff policy evidence for unrelated -> `none`, normal Java -> `smoke`, and build/toolchain-sensitive -> `full`;
+- canonical Linux Maven execution still green;
+- full native Windows Maven compatibility still green;
+- exact Linux-produced runnable-JAR smoke on Windows still green;
+- Java generated-output publication remains on the canonical technical `bld` namespace.
+
+Owner implementation and qualification should continue to completion. After Migration 005 closes again, the remaining sequence is: finish/merge exact owner qualification if not already complete, release the qualified `tool.java-project` revision, then canary `template.java-project`, then roll into `2026-010-02.java.event-timing-framework`.
 
 `main` in `brainboxemb.meta` is the migration status/design authority; draft PR #65 remains research history/input rather than a competing source of truth.
