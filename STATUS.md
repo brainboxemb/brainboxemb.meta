@@ -16,30 +16,40 @@ The durable portfolio rule is defined in [`docs/working-model/generated-output.m
 
 Migration 005 must normalize current-generation SCAD publication to `dev/pr-N/{bld,vrf}`, `prod/{bld,vrf}` and `rel/vX.Y.Z/{bld,vrf}`, qualify the shared tool and consumers, and then close again. Historical already-published branches/releases remain historical evidence and are not rewritten.
 
-`tool.scad-project` owner PR #75 is merged and qualified on main; v0.14.9 release qualification and consumer rollout are the remaining active 005 path.
+`tool.scad-project v0.14.9` is released from exact main commit `a140b22858ac1899e7f2fa71b679639a70d819c3`. The reference template is on v0.14.9 and its final production-namespace configuration canary is being qualified before the library and project consumers roll forward.
 
 Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md).
 
 ### Migration 006 — simplify the Java execution architecture
 
-**Active owner implementation in parallel with Migration 005 qualification.**
+**Owner implementation merged and exact-main qualified in parallel with Migration 005; release/consumer rollout remains gated.**
 
-Owner implementation is active in `tool.java-project` draft PR #26. Work that is confined to the Java owner boundary may proceed in parallel with the remaining SCAD release/canary work because it does not change the SCAD baseline. Java release and rollout into `template.java-project` / `2026-010-02.java.event-timing-framework` remain gated on the canonical generated-output namespace being fully requalified by Migration 005.
+The shared Java execution lifecycle is merged in `tool.java-project` main as `c7ed36ceaf21874b908a1dd01fa54bc60d420d9c`. Exact-main owner evidence is green for both the affected-policy test and the full Java toolchain self-test.
 
-The parallelism rule is therefore:
+The qualified owner contract includes:
 
-1. 005 may continue through shared-tool release, SCAD consumer qualification and closeout;
-2. 006 may continue implementing and self-qualifying the reusable owner contract in `tool.java-project`;
-3. do not release the new Java owner contract or modify Java consumers until 005 closes again;
+- one exact base→head generic affected query through released `tool.git-project v0.2.8`;
+- unrelated Java impact stopping before JDK/Maven/Windows allocation;
+- `windows-mode: auto|none|smoke|full`;
+- automatic normal Java impact → Windows artifact smoke;
+- automatic build/toolchain-sensitive impact → full native Windows Maven qualification plus artifact smoke;
+- exact source identity carried through preflight, Linux canonical execution, full Windows execution and provenance;
+- canonical Java generated-output publication under technical `bld` naming;
+- engineering-documentation assembly kept outside Java ownership.
+
+The parallelism rule remains:
+
+1. 005 continues through SCAD consumer qualification/release and closeout;
+2. 006 owner implementation may remain merged and qualified on `tool.java-project/main`;
+3. do **not** release the new Java owner contract or modify Java consumers until 005 closes again;
 4. discoveries that affect the shared cross-domain contract must be resolved in meta before either migration invents a local variant.
 
-After that shared gate, the intended Java sequence is:
+After the 005 gate, the intended Java sequence is:
 
-1. finish/reconfirm `tool.java-project` PR #26 against the canonical technical namespace;
-2. release the qualified Java tool revision;
-3. `template.java-project` — reference canary for thin-caller, unrelated zero-Java and selective Windows behaviour;
-4. decide the normal Windows qualification policy from canary evidence;
-5. `2026-010-02.java.event-timing-framework` — real downstream rollout and release qualification.
+1. prepare and release the already-qualified `tool.java-project` owner revision;
+2. `template.java-project` — reference canary for thin-caller, unrelated zero-Java and selective Windows behaviour;
+3. decide/refine the normal Windows qualification policy from canary evidence if needed;
+4. `2026-010-02.java.event-timing-framework` — real downstream rollout and release qualification.
 
 The Java scope deliberately excludes project-family planning/architecture documentation. The generic project-family and engineering-documentation model remains technology-neutral.
 
