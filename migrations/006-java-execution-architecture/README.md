@@ -8,23 +8,21 @@ Migration 006 exists to move the **generic Java execution lifecycle** into `tool
 
 Use this migration when deciding what belongs in shared Java execution tooling, which repository is next in the rollout, or what evidence is required before the shared contract can advance.
 
-Status: **active owner implementation — running in parallel with final Migration-005 consumer requalification; Java release/consumer rollout remains gated**
+Status: **active — owner implementation merged and exact-main qualified; owner release is next**
 
 Working/research draft: [#65](https://github.com/brainboxemb/brainboxemb.meta/pull/65)
 
-Current owner work: [`tool.java-project` #26](https://github.com/brainboxemb/tool.java-project/pull/26)
+Owner implementation: [`tool.java-project` #26](https://github.com/brainboxemb/tool.java-project/pull/26) — merged to main.
 
-Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — reopened only for generated-output namespace normalization and consumer requalification.
+Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — complete on the final `bld` / `vrf` namespace baseline.
 
-## Parallel dependency on Migration 005
+## Cross-domain publication baseline
 
-Migration 006 exposed a cross-domain naming inconsistency: Java already publishes Build output as `bld`, while the Migration-005 SCAD branch contract used `build`/`verification` even though current-generation SCAD workspace roots are already `dsg`/`bld`/`vrf`.
+Migration 006 exposed a useful cross-domain naming inconsistency while Migration 005 was closing: Java already used technical `bld`, while SCAD publication still used `build` / `verification` even though current-generation SCAD workspace roots were already `dsg` / `bld` / `vrf`.
 
-The durable portfolio convention is defined in [Generated output and publication](../../docs/working-model/generated-output.md): human-facing names stay readable, while shared technical path/branch identities use canonical compact identifiers such as `bld` and `vrf`.
+That inconsistency is now resolved. The durable portfolio convention is defined in [Generated output and publication](../../docs/working-model/generated-output.md): human-facing names stay readable, while shared technical path/branch identities use canonical stable identifiers such as `dsg`, `bld`, `vrf` and `docs` where those concepts apply.
 
-Migration 005 now owns requalification of that SCAD namespace baseline. This does **not** block owner implementation in `tool.java-project`: the Java owner may continue designing, implementing and qualifying its own reusable contract in parallel. What remains gated is the **Java owner release and consumer rollout** into `template.java-project` and `2026-010-02.java.event-timing-framework` until Migration 005 closes again.
-
-This keeps the two work tracks independent where they genuinely are independent, while still preventing Java consumers from being rolled out against an unsettled cross-domain publication contract.
+Migration 006 must use that stable convention rather than invent Java-local synonyms. Java currently has a Build publication family under `bld`; it should only introduce another publication family such as `vrf` if Java actually has an independently published Verification family, not merely for symmetry.
 
 ## Scope
 
@@ -49,21 +47,27 @@ Project-family planning/architecture documentation is intentionally **not** part
 
 ## Current evidence
 
-The existing Java tooling already provides:
+The owner implementation is merged in `tool.java-project` main as:
 
-- exact Temurin, Maven and Maven-Wrapper baselines;
-- one canonical Linux Maven producer;
-- persistent execution/test/provenance evidence;
-- reusable Windows compatibility;
-- real downstream release evidence.
+```text
+c7ed36ceaf21874b908a1dd01fa54bc60d420d9c
+```
 
-The current inefficiency is orchestration rather than Maven itself:
+Exact-main owner evidence is green for both the affected-policy test and the full Java toolchain self-test.
 
-- `template.java-project` has a consumer-owned lifecycle with Windows bootstrap, Linux canonical execution, publication staging, evidence re-check, Windows compatibility and publication;
-- `2026-010-02.java.event-timing-framework` repeats and expands that structure with product release semantics;
-- Java/Windows work starts before a generic unrelated-change decision exists;
-- several hosted-job/artifact boundaries re-check or republish evidence rather than represent a required Java correctness boundary;
-- the event-timing meta repository already builds engineering documentation independently with `tool.eng-docs`, Python and generic Moon/repository tooling, without JDK/Maven.
+The qualified owner contract includes:
+
+- released generic affected authority through `tool.git-project v0.2.8`;
+- one exact base→head affected query rather than duplicate Java/Windows policy queries;
+- unrelated impact stopping before JDK/Maven/Windows allocation;
+- exact-diff policy evidence for unrelated → `none`, normal Java → `smoke`, and build/toolchain-sensitive → `full`;
+- canonical Linux Maven execution;
+- exact Linux-produced runnable-JAR smoke on Windows;
+- full native Windows Maven compatibility when required;
+- exact source identity carried through preflight, Linux canonical execution, full Windows execution and provenance;
+- Java generated-output publication on canonical technical `bld` naming;
+- generic `tool.git-project` lifecycle refs aligned to v0.2.8;
+- engineering-documentation assembly kept outside Java ownership.
 
 Baseline measurements captured during investigation were roughly 72–76 seconds wall-clock for the template and roughly 94 seconds for the real downstream ordinary-main path. They remain comparison inputs and are refreshed during canary qualification.
 
@@ -77,8 +81,8 @@ The detailed design and rollout are in:
 The active choices are:
 
 1. keep **Maven as Java build/test authority**;
-2. add an **early exact base→head affected preflight** before JDK/Maven/Windows allocation;
-3. move generic Java lifecycle orchestration into **`tool.java-project`**;
+2. use an **early exact base→head affected preflight** before JDK/Maven/Windows allocation;
+3. keep generic Java lifecycle orchestration in **`tool.java-project`**;
 4. retain the **native pinned JDK/Maven model**;
 5. make Windows qualification **selective** rather than always paying for a full Windows Maven build;
 6. remove duplicate evidence/artifact boundaries that do not represent a real isolation boundary;
@@ -133,17 +137,15 @@ Equivalent naming does **not** require equivalent build mechanics. Maven remains
 
 ## Current implementation position
 
-Step 1 is active in `tool.java-project` draft PR #26 and may continue while Migration 005 performs its final SCAD consumer requalification.
+The owner implementation phase is complete and qualified on `tool.java-project/main`. Migration 005 is closed again, so the previous release/consumer gate is removed.
 
-Current owner evidence includes:
+The next sequence is:
 
-- one released generic affected authority via `tool.git-project v0.2.8`;
-- exact-diff policy evidence for unrelated -> `none`, normal Java -> `smoke`, and build/toolchain-sensitive -> `full`;
-- canonical Linux Maven execution still green;
-- full native Windows Maven compatibility still green;
-- exact Linux-produced runnable-JAR smoke on Windows still green;
-- Java generated-output publication remains on the canonical technical `bld` namespace.
-
-Owner implementation and qualification should continue to completion. After Migration 005 closes again, the remaining sequence is: finish/merge exact owner qualification if not already complete, release the qualified `tool.java-project` revision, then canary `template.java-project`, then roll into `2026-010-02.java.event-timing-framework`.
+1. prepare and release the already-qualified `tool.java-project` owner revision;
+2. canary the released contract in `template.java-project`;
+3. prove unrelated zero-Java behaviour plus `auto` smoke/full selection using a real thin production caller;
+4. refine Windows policy only if canary evidence exposes a real correctness or cost problem;
+5. roll the released baseline into `2026-010-02.java.event-timing-framework` and perform real downstream release qualification;
+6. close Migration 006 only after the owner, template and real downstream evidence all agree.
 
 `main` in `brainboxemb.meta` is the migration status/design authority; draft PR #65 remains research history/input rather than a competing source of truth.
