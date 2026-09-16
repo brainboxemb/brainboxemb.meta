@@ -95,6 +95,43 @@ extends: '../../tools/tool.scad-project/moon/tasks/scad.yml'
 
 Root `moon.yml` selects the capabilities the project actually exposes and adds only project-specific source-family impact rules.
 
+The exact effective inherited task can be inspected with Moon rather than inferred from several files:
+
+```text
+moon task <project>:scad.docs --json
+moon task <project>:scad.build --json
+moon task <project>:scad.verify --json
+```
+
+## `project.scad.yml` and Moon describe different things
+
+The two views are complementary.
+
+`project.scad.yml` describes SCAD-domain intent, including:
+
+- OpenSCAD and/or PythonSCAD configuration;
+- presentation render/export configuration;
+- Verification commands and output roots;
+- direct versus SCons build engine;
+- publication-related SCAD paths and policy.
+
+Moon describes repository execution boundaries:
+
+- which coarse SCAD capabilities exist;
+- which project source families affect those capabilities;
+- normal inherited output/cache behaviour;
+- exceptional project-specific output overrides when needed.
+
+Shared validation should reject contradictions rather than allow the two descriptions to drift. Examples include:
+
+- configured presentation renders should agree with `scad.build`;
+- configured Verification should agree with `scad.verify`;
+- PythonSCAD configuration requires the full/dual runtime;
+- `build_engine: scons` controls whether normal SCons transport is applicable;
+- direct projects do not transport SCons caches;
+- Verification-SCons transport exists only when real verification render/export targets use it;
+- non-standard output roots require compatible Moon output ownership.
+
 ## Moon has two jobs
 
 ### Change-impact selection before CAD
@@ -201,6 +238,36 @@ OpenSCAD-only          -> focused runtime
 OpenSCAD + PythonSCAD  -> full/dual runtime
 ```
 
+## CAD engine and project setup are different things
+
+The CAD engine says what evaluates the design:
+
+- OpenSCAD;
+- PythonSCAD;
+- or both.
+
+The project setup says how the repository is organised and built:
+
+- classic standalone;
+- classic shared-actions;
+- current shared project tooling.
+
+Do not infer the CAD engine from the repository name or from whether it is a classic/current project. Use the actual project configuration and source.
+
+## Projects use dependencies directly
+
+A project uses the tools and reusable libraries it actually needs. `brainboxemb.meta` is documentation/coordination, never a runtime dependency.
+
+Conceptually:
+
+```text
+project
+    ├── shared project tooling
+    └── reusable libraries it needs
+```
+
+For example, a HUB75 project can depend directly on `lib.scad.hub75`; it does not route that dependency through the meta repository.
+
 ## Host finishing and exact provenance
 
 Reusable source-derived output stays separate from current invocation context. After capability execution or hydration, host finishing adds current publication/index/provenance information.
@@ -272,7 +339,7 @@ Affected canary measurements were approximately:
 
 Those meet the Migration-005 affected latency envelopes while retaining one-heavy-runner resource use.
 
-The remaining unrelated-change preflight latency is a generic optimisation opportunity, not an open SCAD architecture requirement.
+The remaining unrelated-change preflight latency is tracked as generic `tool.git-project` issue #26. It is an optimisation opportunity, not an open SCAD architecture requirement.
 
 ## Repository ownership boundaries
 
