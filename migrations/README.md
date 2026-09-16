@@ -16,11 +16,14 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-- [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — reopened after closeout verification found two skipped release gates: publish the qualified v0.14.7 template state and align/release the HUB75 frame on the same final tool baseline.
+- [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — reopened for the remaining release/rollout gates: complete the qualified template release and then align/release the HUB75 frame on the final released SCAD tool baseline.
 
 ## Proposed / inactive
 
-There are currently no proposed/inactive migrations on `main`. A Java execution-architecture migration is being evaluated separately and must remain proposed until Migration 005 is actually complete.
+The intended sequencing after Migration 005 is **006 → 007** unless cross-project priorities are explicitly changed later.
+
+- [006 — simplify the Java execution architecture](006-java-execution-architecture/README.md) — current status and preferred direction for simplifying consumer-heavy Java orchestration while retaining Maven as build authority and independent Windows compatibility. Planning-only until Migration 005 is complete.
+- [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up` for PR-based maintenance and audit. Planning-only and intentionally sequenced after Migration 006.
 
 ## Complete
 
