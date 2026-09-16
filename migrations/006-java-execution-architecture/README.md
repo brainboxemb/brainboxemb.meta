@@ -8,13 +8,21 @@ Migration 006 exists to move the **generic Java execution lifecycle** into `tool
 
 Use this migration when deciding what belongs in shared Java execution tooling, which repository is next in the rollout, or what evidence is required before the shared contract can advance.
 
-Status: **active**
+Status: **active design / owner draft — release and consumer rollout temporarily paused behind reopened Migration 005**
 
 Working/research draft: [#65](https://github.com/brainboxemb/brainboxemb.meta/pull/65)
 
 Current owner work: [`tool.java-project` #26](https://github.com/brainboxemb/tool.java-project/pull/26)
 
-Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — complete.
+Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — reopened only for generated-output namespace normalization.
+
+## Temporary dependency on Migration 005
+
+Migration 006 exposed a cross-domain naming inconsistency: Java already publishes Build output as `bld`, while the Migration-005 SCAD branch contract used `build`/`verification` even though current-generation SCAD workspace roots are already `dsg`/`bld`/`vrf`.
+
+The durable portfolio convention is now defined in [Generated output and publication](../../docs/working-model/generated-output.md): human-facing names stay readable, while shared technical path/branch identities use canonical compact identifiers such as `bld` and `vrf`.
+
+Migration 006 owner work may remain in draft, but it must not be released or rolled into Java consumers until Migration 005 requalifies the SCAD baseline using that convention. Java should align to the settled cross-domain contract rather than create a second naming migration immediately afterward.
 
 ## Scope
 
@@ -75,7 +83,8 @@ The active choices are:
 7. keep Java-produced output publication outside the cacheable producer graph;
 8. keep project-family planning/architecture/document assembly independent from Java;
 9. retain product-specific release/version semantics in the real project unless a generic contract is separately proven;
-10. retain durable wall-clock and hosted-compute evidence.
+10. retain durable wall-clock and hosted-compute evidence;
+11. align shared technical publication namespaces to the durable `brainboxemb.meta` convention rather than defining Java-local synonyms.
 
 ## Selective Windows contract
 
@@ -105,7 +114,7 @@ The automatic distinction is driven by the same affected/capability model rather
 
 ## Cross-domain consistency rule
 
-Java should use the same lifecycle vocabulary and evidence shape as SCAD and later implementation domains where that helps maintainability:
+Java should use the same lifecycle vocabulary and technical namespace conventions as SCAD and later implementation domains where that helps maintainability:
 
 ```text
 affected/preflight -> execute/materialize -> verify -> finalize/publish -> release
@@ -122,14 +131,8 @@ Equivalent naming does **not** require equivalent build mechanics. Maven remains
 
 ## Current implementation position
 
-Step 1 is active in `tool.java-project` draft PR #26. The owner implementation is introducing:
+Step 1 exists in `tool.java-project` draft PR #26. Owner work already includes early affected/preflight design and selective Windows `none|smoke|full` qualification. The owner self-test has proven the existing canonical Linux + full Windows + exact Linux-artifact Windows smoke path; additional affected-classification work remains draft.
 
-- reusable Java affected/preflight orchestration;
-- one canonical Linux Maven execution path;
-- selective Windows `none|smoke|full` qualification;
-- exact source/tool evidence and timing;
-- Java-output finalization without a duplicate Maven build.
-
-`template.java-project` and `2026-010-02.java.event-timing-framework` remain unchanged until the owner contract is qualified and released.
+That draft is intentionally paused before release while Migration 005 settles and qualifies the shared `bld`/`vrf` technical namespace. After 005 closes again, resume #26, align it to the canonical namespace, complete owner evidence, release `tool.java-project`, and only then modify `template.java-project` and `2026-010-02.java.event-timing-framework`.
 
 `main` in `brainboxemb.meta` is the migration status/design authority; draft PR #65 remains research history/input rather than a competing source of truth.
