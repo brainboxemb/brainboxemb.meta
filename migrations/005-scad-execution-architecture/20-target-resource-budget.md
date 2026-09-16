@@ -1,8 +1,8 @@
 # Migration 005 — target lifecycle resource and latency budget
 
-Status: **architecture budget established; implementation must remeasure end-to-end**
+Status: **complete — final implementation measured against the budget**
 
-This document does not pretend that one network timing predicts future GitHub Actions runs. It separates measured fixed/structural savings from timing estimates that remain sensitive to hosted-runner and registry variance.
+This document separates structural/resource targets from network-sensitive wall-clock targets. The final closeout keeps that distinction explicit: the architecture/resource goals are met, the affected canary latency envelopes are met, and the unrelated-change 4–6 second wall-clock ambition is only partially met.
 
 ## Reference points
 
@@ -10,46 +10,21 @@ This document does not pretend that one network timing predicts future GitHub Ac
 
 Migration 004 measured roughly **37 s** relevant-change critical-path feedback with separate Build and Verification heavy jobs.
 
-That topology paid for:
+That path used two simultaneous heavy hosted jobs, duplicated setup/image/runtime work and therefore consumed substantially more total heavy runner time than its 37 s critical path suggested.
 
-- two hosted heavy jobs at the same time;
-- two source/runtime setup paths;
-- up to two independent cold CAD image pulls;
-- two CAD runtime starts.
+### Migration-004 one-runner references
 
-The exact total runner-seconds varied by run, but a ~37 s critical path with two overlapping heavy jobs is on the order of **70+ heavy runner-seconds**, not 37 runner-seconds.
+Representative v0.13.1 observations:
 
-### Current v0.13.1 one-runner clamps sample
+- clamps high-overhead sample `34972350665` attempt 2: ~49 s hosted job, ~19 s full-image pull, generic unused SCons handling, duplicate complete normal artifacts;
+- warm HUB75 `34976840416` attempt 2: ~37 s hosted job, ~16 s full-image pull, useful normal SCons cache, unused Verification-SCons path, duplicate complete normal artifacts;
+- README-only controls: ~4.4–4.8 s with zero CAD runtime.
 
-Controlled rerun `brainboxemb/lib.scad.clamps` run `34972350665`, attempt-2 job `104427368493`:
-
-- hosted job: about **49 s** from start to completion;
-- current full CAD image pull: about **19 s**;
-- aggregate CAD/Moon step: about **9 s** at Actions step granularity;
-- two SCons restore actions ran although clamps uses the direct engine;
-- complete normal Build/Verification Actions-artifact uploads took about **3 s** together in this sample;
-- one hosted runner and one CAD runtime.
-
-This is a useful high-overhead sample, not the only v0.13.1 timing; Migration 004 also observed relevant runs around 41–45 s.
-
-### Current v0.13.1 warm HUB75 sample
-
-`brainboxemb/lib.scad.hub75` run `34976840416`, attempt-2 job `104442409672`:
-
-- hosted job: about **37 s**;
-- current full CAD image pull: about **16 s**;
-- aggregate CAD/Moon step: about **8 s** at Actions step granularity;
-- internal warm SCons/Moon graph: about **5.071 s**;
-- complete normal Build/Verification Actions-artifact uploads took about **2 s** together;
-- normal SCons cache restore/save was useful;
-- separate Verification SCons cache remained unused;
-- one hosted runner and one CAD runtime.
-
-The corresponding cold graph had been about 8.805 s, so warm target-level SCons reuse saves real CAD work even though image acquisition remains larger.
+These were the inputs to the Migration-005 budget, not guaranteed future timings.
 
 ## Target structural budget
 
-For a normal affected run, Migration 005 targets:
+For a normal affected run:
 
 ```text
 hosted heavy runners     1
@@ -57,8 +32,8 @@ CAD image pulls          1
 CAD runtime starts       1
 Moon impact analyses     1
 full normal artifacts    0 by default
-SCons cache paths        only those actually used
-Build/Verify publication 2 isolated publishers, allowed to overlap on the same runner
+SCons cache paths        only those actually useful
+Build/Verify publication isolated publishers, allowed to overlap on the same runner
 ```
 
 For an unrelated change:
@@ -70,169 +45,140 @@ CAD runtime starts       0
 CAD work                 0
 ```
 
+### Final structural result
+
+**Met.**
+
+The released v0.14.7 production path uses one hosted job, one generic affected query, at most one CAD Docker process, capability-appropriate runtime selection and only applicable SCons transport. Normal successful production retains compact orchestration evidence rather than another complete copy of Build/Verification output. Build and Verification publication can overlap on the same runner.
+
+Three independent README-only probes prove zero CAD work for an unrelated change.
+
 ## Image-transfer budget
 
-Externally qualified candidate images:
+Externally qualified v0.5.0 runtime profiles:
 
 | Runtime profile | Compressed OCI bytes |
 | --- | ---: |
 | OpenSCAD-focused | 328,098,501 |
 | full/dual | 449,516,893 |
 
-Therefore an OpenSCAD-only affected repository avoids:
+An OpenSCAD-only affected repository therefore avoids **121,418,392 compressed bytes**, about **27.0%**, relative to the full image.
 
-```text
-121,418,392 compressed bytes per cold image acquisition
-```
+Final behaviour:
 
-or about **27.0%** relative to the current full image.
+- clamps intentionally uses the full/dual image because it supports PythonSCAD;
+- HUB75 selects the focused OpenSCAD image;
+- normal production requests only one capability-appropriate image.
 
-### Reference repository consequences
-
-**Clamps** intentionally supports PythonSCAD, so it still needs the full/dual image. Its image-transfer win versus current one-runner v0.13.1 is therefore not image slimming; its main resource wins come from keeping one runner, removing unused SCons handling, stable Moon reuse and removing duplicate normal artifacts.
-
-**HUB75** is OpenSCAD-only and can use the focused image, so it receives the ~121 MB cold-transfer reduction directly.
-
-Compared with the old two-heavy-job topology, a cold affected OpenSCAD-only run can avoid both duplication and the PythonSCAD-only layers. Two independent full pulls would represent about 899 MB of compressed image descriptors/data before registry/client reuse effects; one focused pull is about 328 MB. The exact network transfer depends on registry caching, but the architecture removes the duplicated demand by construction.
+Result: **met**.
 
 ## Cache-transfer budget
 
-### Moon
+Final policy/result:
 
-Keep Moon whole-capability cache because stable-task validation proved that it can replace real render work. A cached clamps docs capability reduced Moon execution to a cached 2 ms result and about 1.322 s through the wrapper instead of roughly 5.3 s through the cold wrapper path.
+- Moon whole-capability cache: retained and proven useful;
+- clamps/direct: no normal or Verification SCons cache transport;
+- HUB75/SCons: normal SCons transport retained and useful;
+- command-only HUB75 Verification: no Verification-SCons transport;
+- direct projects do not pay generic SCons transport merely because another project uses SCons.
 
-### SCons
-
-- clamps/direct: **no SCons cache restore/save**;
-- HUB75/SCons: normal target cache remains useful;
-- Verification SCons cache: only create/transport it if a Verification engine actually populates it.
-
-The warm HUB75 normal SCons archive was only about 222 KB, so this is a small transfer for a demonstrated target-reuse benefit.
+Result: **met**.
 
 ## Artifact-transfer budget
 
-Normal successful production currently duplicates its already-published output into 14-day Actions artifacts.
+Target: no duplicate complete normal Build/Verification Actions artifacts by default; retain compact decision/orchestration evidence. Coordinated release remains different because its separate Build/Verify/finalize jobs genuinely require complete cross-job artifacts.
 
-Representative retained compressed artifact sizes:
-
-- clamps Build + Verification: roughly **245 KB** together;
-- HUB75 Build + Verification: roughly **695 KB** together.
-
-The byte totals are not huge, but they recur on every affected run and the upload actions also consume runner time. Since same-job publication does not download them and release uses separate exact-source artifacts, the target default is zero complete normal Build/Verification artifact uploads.
-
-Compact impact/evidence artifacts remain because they answer a different audit/debugging need.
+Final result: **met**.
 
 ## Publication budget
 
-The controlled publication probe `34994181268` showed on one runner:
+Controlled probe `34994181268` proved isolated Build/Verification publishers can overlap safely on one hosted runner. The migrated consumers use same-runner publication rather than adding a second hosted VM solely for finishing.
 
-- Build publisher: 2.089 s;
-- Verification publisher: 2.144 s;
-- measured overlap: 2.089 s;
-- concurrent window: 2.144 s;
-- sequential duration sum: 4.233 s.
-
-This proves concurrency/isolation. It does **not** promise a fixed 2.089 s production saving because real output trees and GitHub network conditions differ.
-
-Architecture budget: publication may overlap on the existing runner, but must never add another hosted runner solely for this finishing work.
+Result: **met**.
 
 ## Capability-selection budget
 
-The target does not ask one opaque aggregate root to execute every visible lifecycle step.
+Target: compute one complete Moon affected-task result, map it to coarse SCAD capabilities and avoid the SCAD planner/runtime entirely when no configured SCAD capability is affected.
 
-The host impact query already computes Moon's complete affected-task set once. The implementation should expose the affected coarse capability IDs and pass only those capabilities to the single CAD runtime.
-
-Examples:
+Final v0.14.7 zero-runtime template probe `35085786014`:
 
 ```text
-README-only
-  []
-
-HUB75 render-only
-  [scad.build]
-
-HUB75 docs-only
-  [scad.docs]
-
-Verification-only
-  [scad.verify]
-
-shared API source change
-  [one or more genuinely affected capabilities]
+Moon decision           success
+affected task ids       []
+workflow affected       false
+host Python/planner     skipped
+Moon/SCons transport    skipped
+runtime pull            skipped
+Docker materialization  skipped
+host finishing          skipped
+publication             skipped
 ```
 
-This is a work-elimination mechanism, not a parallelism trick.
+Result: **met**.
 
-## Expected latency envelopes
+## Expected versus measured latency
 
-These are engineering budgets for implementation acceptance, not promises.
+The original envelopes were engineering budgets, not guarantees. Final measurements are:
 
-### Unrelated changes
+| Scenario | Target | Measured | Result |
+| --- | ---: | ---: | --- |
+| unrelated change | ~4–6 s, zero CAD | HUB75 ~7.6 s | zero-CAD met; latency partial |
+| unrelated change | ~4–6 s, zero CAD | clamps ~9.2 s | zero-CAD met; latency partial |
+| unrelated change | ~4–6 s, zero CAD | template ~9.9 s | zero-CAD met; latency partial |
+| clamps affected canary | low/mid 40 s | ~41.9 s | met |
+| HUB75 warm affected canary | low/mid 30 s | ~32.2 s | met |
 
-Keep the proven host-only path approximately in the existing **4–6 s** class and start no CAD runtime.
+The first migrated main runs were ~48.1 s for clamps and ~47.1 s for HUB75. They are intentionally not treated as steady-state selective-impact benchmarks because both were migration/tool-gitlink changes before later exact-base-gitlink hardening and included cold/conservative conditions.
 
-### Clamps affected, cold capability output
+### Why the unrelated path is still 7.6–9.9 s
 
-Clamps must still pull the full image. Therefore Migration 005 should not claim a dramatic image-based speedup for this repository.
+The heavy SCAD stages are genuinely absent. The remaining time is mostly fixed generic host-preflight overhead:
 
-Relative to the current one-runner model, expected improvements are mainly:
+- GitHub Actions job/action preparation and downloads;
+- exact shallow source/base checkout;
+- initialization of the pinned SCAD task-policy gitlink;
+- restore of the generic Moon runtime;
+- one Moon affected query;
+- compact evidence upload and job cleanup.
 
-- skip unused SCons cache actions;
-- do not upload duplicate full normal artifacts;
-- execute only affected coarse capabilities;
-- overlap independent publication when it is material.
+In template run `35085786014`, restoring the ~20 MB Moon 2.5.4 runtime alone took about **2.0 s** and the affected query about **1.2 s**. No SCAD planner, image or CAD process started.
 
-A cold all-capability clamps run should remain in roughly the **low-to-mid 40-second class** under similar registry conditions, with one heavy runner. A run with reusable Moon capability output can be lower because actual CAD work is removed.
-
-If implementation remains near 49 s on a comparable runner after removing those known costs, investigate before accepting it.
-
-### HUB75 affected with warm SCons reuse
-
-The current warm reference is about 37 s with a 16 s full-image pull.
-
-The target additionally has:
-
-- ~27% less compressed image transfer;
-- no duplicate full normal artifacts;
-- no unused Verification SCons cache handling;
-- selective coarse capability execution;
-- same-runner publication overlap when useful.
-
-A reasonable implementation acceptance envelope is approximately the **low-to-mid 30-second class** for a warm affected run under comparable registry conditions. The controlled image experiment itself improved one cold-pull sample by 2.253 s, but byte reduction is the stronger expectation than that single time difference.
-
-A cold SCons graph can add several seconds of real CAD work, so cold relevant feedback around the **mid/high 30-second class** is plausible without violating the architecture goal.
+This makes the remaining optimisation boundary clear: reduce generic preflight fixed cost without weakening exact source/base correctness or reintroducing false skips. It is not evidence that the SCAD runtime architecture should be reopened.
 
 ## Compute/resource comparison
 
-| Property | Old parallel | v0.13.1 one-host | Migration-005 target |
+| Property | Old parallel | v0.13.1 one-host | Migration-005 final |
 | --- | ---: | ---: | ---: |
 | simultaneous heavy runners | 2 | 1 | **1** |
-| CAD runtime starts | 2 | 1 | **1** |
+| CAD runtime starts | 2 | 1 | **<=1** |
 | cold image demand | duplicated full image | one full image | **one capability-appropriate image** |
 | unrelated change CAD runtime | avoidable/varied historically | 0 | **0** |
-| Moon whole-output reuse | not reliably proven | transport present, identity issue fixed experimentally | **stable source-only identity required** |
+| Moon whole-output reuse | not reliably proven | transport present | **stable source-only identity, proven reuse** |
 | SCons handling | per job/path | generic normal + Verification slots | **only configured/populated paths** |
-| normal full-tree artifact uploads | duplicated across jobs/workflows | 2 | **0 by default** |
-| Build/Verify publication | separate/sequential paths | sequential same-host | **same-host overlap allowed** |
+| normal full-tree artifact uploads | duplicated | 2 | **0 by default** |
+| Build/Verify publication | separate heavy paths | sequential same-host | **same-host overlap allowed** |
+| durable workflow timing/provenance | limited | limited | **generated snapshot timing + exact source provenance** |
 
-## Acceptance rule
+## Acceptance rule and final decision
 
-Migration 005 implementation should be rejected if it improves stopwatch latency only by reintroducing duplicated heavy runners or duplicated image/runtime setup.
+Migration 005 was not allowed to improve stopwatch latency by reintroducing duplicated heavy runners, duplicated image acquisition or duplicate CAD runtime setup.
 
-Likewise, it should be challenged if “resource efficiency” is achieved merely by serialising avoidable work and making feedback materially worse.
+The final implementation follows the intended priority order:
 
-The intended order is:
+1. eliminate unrelated CAD work;
+2. reuse whole capabilities with Moon;
+3. reuse fine-grained targets with SCons only where configured;
+4. reduce runtime distribution cost with focused/full profiles;
+5. remove duplicate normal artifacts;
+6. overlap independent finishing work on the same runner.
 
-1. eliminate work;
-2. reuse work at the correct layer;
-3. reduce runtime distribution cost;
-4. overlap independent finishing work on the same runner;
-5. add heavyweight parallel infrastructure only if measured feedback requirements still justify its extra compute cost.
+Final acceptance:
 
-## Conclusion
+- correctness/publication model: **accepted**;
+- resource model: **accepted**;
+- clamps affected envelope: **accepted**;
+- HUB75 warm affected envelope: **accepted**;
+- unrelated zero-CAD behaviour: **accepted**;
+- unrelated 4–6 s latency envelope: **not fully achieved; non-blocking generic preflight follow-up**.
 
-The provisional target has a credible resource and latency budget. It can plausibly recover much of the old parallel topology's feedback advantage for OpenSCAD/SCons projects while retaining the one-heavy-runner resource model.
-
-Clamps is intentionally a harder speed case because it needs the full dual-runtime image; its acceptance case is primarily lower duplicated/unused work and stable capability reuse, not image slimming.
-
-Final end-to-end timings must be measured during the owner-repository implementation/canary steps before broad consumer migration.
+The partial latency miss is retained as evidence rather than being used to keep a completed SCAD architecture migration artificially open.
