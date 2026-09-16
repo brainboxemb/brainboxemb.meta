@@ -4,13 +4,13 @@
 
 The SCAD repositories had accumulated overlapping GitHub Actions, Moon, SCons, runtime, cache and publication responsibilities. Migration 005 established one understandable shared execution architecture and proved it through the shared tool, reference template, reusable libraries and a real HUB75 project.
 
-The execution architecture itself is already qualified. This migration is temporarily reopened because its final persistent publication naming drifted from the technical namespace already used inside current-generation SCAD repositories.
+The migration was reopened after completion when persistent generated-output branch names were found to conflict with the compact technical namespace already used inside current-generation SCAD repositories. That final inconsistency has now been corrected and immutably qualified.
 
-Use this record when checking the final SCAD execution model, its rollout evidence, or the narrow namespace correction required before later domains align to it.
+Use this record when checking the final SCAD execution model, its rollout evidence, or why the persistent technical publication namespaces are `bld` and `vrf` rather than `build` and `verification`.
 
-Status: **active — final technical namespace alignment**
+Status: **complete — execution architecture and final technical namespace alignment qualified**
 
-Tracking issue: [#55](https://github.com/brainboxemb/brainboxemb.meta/issues/55) — reopened.
+Tracking issue: [#55](https://github.com/brainboxemb/brainboxemb.meta/issues/55).
 
 Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
 
@@ -36,9 +36,7 @@ Verification  -> vrf
 Documentation -> docs
 ```
 
-Current-generation SCAD workspaces already follow this pattern with `dsg`, `bld` and `vrf`. Migration 005 originally standardized persistent branches as `build` and `verification`, creating two technical names for the same concepts. The reopened closeout corrects that inconsistency.
-
-Target persistent namespaces:
+Current-generation SCAD workspaces and persistent publication now use the same technical identity:
 
 ```text
 dev/pr-N/bld
@@ -51,7 +49,7 @@ rel/vX.Y.Z/bld
 rel/vX.Y.Z/vrf
 ```
 
-Historical already-published `build`/`verification` branches and releases remain historical evidence; immutable history is not rewritten merely for naming.
+Historical already-published `build` / `verification` branches and releases remain historical evidence; immutable history was not rewritten merely for naming.
 
 ## Final architecture
 
@@ -80,31 +78,34 @@ host finishing/publication
 
 Maintainer-facing capabilities remain deliberately small: `scad.docs`, `scad.build` and `scad.verify`. Shared lifecycle mechanics belong to `tool.scad-project`; consumers keep project-specific configuration and source-family impact.
 
-## Previously qualified released baseline
+## Final corrected baseline
 
-The following baseline remains valid evidence for the execution architecture before the namespace correction:
+Shared foundation:
 
 - `docker.scad-toolchain v0.5.0`;
 - `tool.git-project v0.2.8` / exact `7c43f37e7b07cfb57638a1d1dad2501de09ba7eb`;
-- `tool.scad-project v0.14.8` / exact `85781a6b21a0f6a06d37be154fd9eb475ecaa2a4`;
-- `template.scad-project v0.0.5`;
-- `lib.scad.clamps v0.1.5`;
-- `lib.scad.hub75 v0.1.6`;
-- `2026-009-01.cad.HUB75-display-frame v0.0.2`.
+- `tool.scad-project v0.14.9` / exact `a140b22858ac1899e7f2fa71b679639a70d819c3`.
 
-Their affected, merged-main, unrelated zero-runtime and release evidence remains authoritative for the architecture that produced it.
+Final current-generation consumer releases:
 
-## Reopened closeout sequence
+- `template.scad-project v0.0.6` / exact source `b8a0cc9113084f56c074b7dc61b160105c615b71`;
+- `lib.scad.clamps v0.1.6` / exact source `021eed7bba76ca77825bd6f6c850e1ebd2916283`;
+- `lib.scad.hub75 v0.1.7` / exact source `1390cd322b31b119779c41743119c85e0e984314`;
+- `2026-009-01.cad.HUB75-display-frame v0.0.3` / exact source `9ff354260276e325d571c82af67bc23e9815744d`.
 
-Use the shortest safe path:
+All four consumers now have qualified mutable `prod/{bld,vrf}` output and immutable `rel/vX.Y.Z/{bld,vrf}` release output with exact source/tool provenance.
 
-1. `tool.scad-project` — change shared/default persistent publication suffixes and examples/docs from `build`/`verification` to `bld`/`vrf`; qualify and patch-release.
-2. `template.scad-project` — adopt the released tool and normalized project publication config; prove affected, unrelated zero-runtime, main and release paths.
-3. `lib.scad.clamps` and `lib.scad.hub75` — adopt the same released baseline and normalized namespace; qualify and patch-release.
-4. `2026-009-01.cad.HUB75-display-frame` — adopt the same baseline and normalized namespace; qualify and patch-release.
-5. verify new `prod/{bld,vrf}` and `rel/vX.Y.Z/{bld,vrf}` outputs/provenance; then close Migration 005 again.
+## Reopened closeout sequence — completed
 
-Do not redesign the execution architecture or rewrite historical generated branches as part of this correction.
+The targeted correction followed the shortest safe route:
+
+1. `tool.scad-project` — normalized shared/default persistent publication suffixes and released v0.14.9;
+2. `template.scad-project` — adopted v0.14.9, normalized project publication config, proved affected/main/unrelated paths and released v0.0.6;
+3. `lib.scad.clamps` and `lib.scad.hub75` — adopted the same baseline while preserving their direct/SCons execution differences and released v0.1.6 / v0.1.7;
+4. `2026-009-01.cad.HUB75-display-frame` — adopted the same baseline without changing its HUB75 geometry dependency and released v0.0.3;
+5. new `prod/{bld,vrf}` and `rel/vX.Y.Z/{bld,vrf}` output/provenance were verified in every current-generation consumer.
+
+No execution-architecture redesign and no historical branch rewrite was needed.
 
 ## Evidence and design record
 
@@ -112,13 +113,15 @@ Do not redesign the execution architecture or rewrite historical generated branc
 | --- | --- |
 | [01 — Change request](01-change-request.md) | Original scope and completion criteria. |
 | [05 — Validated target architecture](05-target-architecture.md) | Selected architecture. |
-| [06 — Implementation plan](06-implementation-plan.md) | Owner-by-owner rollout and qualification gates. |
+| [06 — Implementation plan](06-implementation-plan.md) | Historical owner-by-owner architecture rollout record. |
 | [10 — Measurements](10-measurements.md) | Baseline and implementation measurements. |
 | [20 — Target resource budget](20-target-resource-budget.md) | Target-versus-result resource review. |
-| [30 — Final closeout evidence](30-closeout-evidence.md) | Existing exact tool/template/library/frame release and provenance evidence; extend with namespace-correction evidence before final re-close. |
+| [30 — Final closeout evidence](30-closeout-evidence.md) | Exact original and namespace-correction release/provenance evidence. |
 
 The durable architecture lives under [`domains/scad/architecture.md`](../../domains/scad/architecture.md). This migration directory remains the historical change/evidence record.
 
 ## Completion decision
 
-Migration 005 returns to **complete** only when the current-generation SCAD tool and all four qualified consumers publish new output using canonical `bld`/`vrf` technical namespaces and that behavior is immutably released. The previously qualified v0.14.8 execution model does not need to be reproven beyond the normal regression gates required by the naming change.
+Migration 005 is **complete**. The execution/performance conclusions remain unchanged, and the final current-generation baseline now uses one technical namespace consistently across workspace roots and generated-output branches: `dsg`, `bld`, `vrf` and `docs` where applicable.
+
+Generic optimisation such as unaffected-path latency remains separate follow-up work and does not reopen this migration.
