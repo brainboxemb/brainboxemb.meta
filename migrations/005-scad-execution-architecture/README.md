@@ -1,16 +1,57 @@
 # Migration 005 — simplify the SCAD execution architecture
 
-## Why this migration existed
+## Why this migration exists
 
-The current SCAD repositories had accumulated overlapping GitHub Actions, Moon, SCons, runtime, cache and publication responsibilities. Migration 005 established one understandable shared execution architecture and then proved it through the shared tool, reference template, reusable libraries and a real HUB75 project.
+The SCAD repositories had accumulated overlapping GitHub Actions, Moon, SCons, runtime, cache and publication responsibilities. Migration 005 established one understandable shared execution architecture and proved it through the shared tool, reference template, reusable libraries and a real HUB75 project.
 
-Use this record when checking the final SCAD execution model, the rollout evidence behind it, or whether a later SCAD change belongs to the durable architecture versus a new migration.
+The execution architecture itself is already qualified. This migration is temporarily reopened because its final persistent publication naming drifted from the technical namespace already used inside current-generation SCAD repositories.
 
-Status: **complete**
+Use this record when checking the final SCAD execution model, its rollout evidence, or the narrow namespace correction required before later domains align to it.
 
-Tracking issue: [#55](https://github.com/brainboxemb/brainboxemb.meta/issues/55) — completed.
+Status: **active — final technical namespace alignment**
+
+Tracking issue: [#55](https://github.com/brainboxemb/brainboxemb.meta/issues/55) — reopened.
 
 Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
+
+## Durable namespace rule
+
+The portfolio-wide rule is defined in [Generated output and publication](../../docs/working-model/generated-output.md).
+
+Human-facing lifecycle names remain readable:
+
+```text
+Design
+Build
+Verification
+Documentation
+```
+
+Stable technical path/branch identifiers use the canonical compact identifiers where defined:
+
+```text
+Design        -> dsg
+Build         -> bld
+Verification  -> vrf
+Documentation -> docs
+```
+
+Current-generation SCAD workspaces already follow this pattern with `dsg`, `bld` and `vrf`. Migration 005 originally standardized persistent branches as `build` and `verification`, creating two technical names for the same concepts. The reopened closeout corrects that inconsistency.
+
+Target persistent namespaces:
+
+```text
+dev/pr-N/bld
+dev/pr-N/vrf
+
+prod/bld
+prod/vrf
+
+rel/vX.Y.Z/bld
+rel/vX.Y.Z/vrf
+```
+
+Historical already-published `build`/`verification` branches and releases remain historical evidence; immutable history is not rewritten merely for naming.
 
 ## Final architecture
 
@@ -39,57 +80,31 @@ host finishing/publication
 
 Maintainer-facing capabilities remain deliberately small: `scad.docs`, `scad.build` and `scad.verify`. Shared lifecycle mechanics belong to `tool.scad-project`; consumers keep project-specific configuration and source-family impact.
 
-## Final released shared baseline
+## Previously qualified released baseline
+
+The following baseline remains valid evidence for the execution architecture before the namespace correction:
 
 - `docker.scad-toolchain v0.5.0`;
 - `tool.git-project v0.2.8` / exact `7c43f37e7b07cfb57638a1d1dad2501de09ba7eb`;
-- `tool.scad-project v0.14.8` / exact `85781a6b21a0f6a06d37be154fd9eb475ecaa2a4`.
+- `tool.scad-project v0.14.8` / exact `85781a6b21a0f6a06d37be154fd9eb475ecaa2a4`;
+- `template.scad-project v0.0.5`;
+- `lib.scad.clamps v0.1.5`;
+- `lib.scad.hub75 v0.1.6`;
+- `2026-009-01.cad.HUB75-display-frame v0.0.2`.
 
-The v0.14.8 owner patch uses lightweight semantic tool tags for cross-repository reusable-workflow resolution while the committed tool gitlink retains exact implementation identity.
+Their affected, merged-main, unrelated zero-runtime and release evidence remains authoritative for the architecture that produced it.
 
-## Completed rollout gates
+## Reopened closeout sequence
 
-### Reference template
+Use the shortest safe path:
 
-`template.scad-project v0.0.5`
+1. `tool.scad-project` — change shared/default persistent publication suffixes and examples/docs from `build`/`verification` to `bld`/`vrf`; qualify and patch-release.
+2. `template.scad-project` — adopt the released tool and normalized project publication config; prove affected, unrelated zero-runtime, main and release paths.
+3. `lib.scad.clamps` and `lib.scad.hub75` — adopt the same released baseline and normalized namespace; qualify and patch-release.
+4. `2026-009-01.cad.HUB75-display-frame` — adopt the same baseline and normalized namespace; qualify and patch-release.
+5. verify new `prod/{bld,vrf}` and `rel/vX.Y.Z/{bld,vrf}` outputs/provenance; then close Migration 005 again.
 
-- exact source `c718655cd67ff90f2d0ba2cf474c86db69cc8965`;
-- exact-main Production `35097071003` — green;
-- Release `35097219635` — green;
-- immutable Build/Verification release output and downloadable assets/checksums verified.
-
-### Reusable clamp library
-
-`lib.scad.clamps v0.1.5`
-
-- affected PR `35101169850` — green;
-- merged main `35101626924` — green;
-- README-only zero-runtime `35101816174` — green;
-- exact release source `11f804c5087c2b5ec06af11603af4508d5c1db43`;
-- Release `35103156647` — green;
-- `rel/v0.1.5/{build,verification}` identify v0.14.8 and exact gitlink `85781a6b...`.
-
-### Reusable HUB75 library
-
-`lib.scad.hub75 v0.1.6`
-
-- affected PR `35101188447` — green;
-- merged main `35101638473` — green;
-- README-only zero-runtime `35101927430` — green;
-- exact release source `4dd285d5bced43657392d9fd6d245005f12e53eb`;
-- Release `35103198893` — green;
-- `rel/v0.1.6/{build,verification}` identify v0.14.8 and exact gitlink `85781a6b...`.
-
-### Real HUB75 frame
-
-`2026-009-01.cad.HUB75-display-frame v0.0.2`
-
-- affected PR `35098196082` — green;
-- merged main `35098642458` — green;
-- README-only zero-runtime `35099086265` — green;
-- exact release source `18f7900bed31345b8123571ade152af6914e18d6`;
-- Release `35099609270` — green;
-- immutable Build/Verification release output and downloadable assets/checksums verified.
+Do not redesign the execution architecture or rewrite historical generated branches as part of this correction.
 
 ## Evidence and design record
 
@@ -100,16 +115,10 @@ The v0.14.8 owner patch uses lightweight semantic tool tags for cross-repository
 | [06 — Implementation plan](06-implementation-plan.md) | Owner-by-owner rollout and qualification gates. |
 | [10 — Measurements](10-measurements.md) | Baseline and implementation measurements. |
 | [20 — Target resource budget](20-target-resource-budget.md) | Target-versus-result resource review. |
-| [30 — Final closeout evidence](30-closeout-evidence.md) | Exact tool/template/library/frame release and provenance evidence. |
+| [30 — Final closeout evidence](30-closeout-evidence.md) | Existing exact tool/template/library/frame release and provenance evidence; extend with namespace-correction evidence before final re-close. |
 
-The durable architecture lives under [`domains/scad/architecture.md`](../../domains/scad/architecture.md). This migration directory is the historical change/evidence record.
-
-## Performance interpretation
-
-The selected resource architecture is retained: one normal hosted job, at most one CAD runtime, one affected query, capability-appropriate runtime, SCons only where useful, compact evidence, no duplicate complete normal artifacts and zero CAD work for unrelated changes.
-
-Previously measured affected canaries (~41.9 s clamps, ~32.2 s HUB75) met their intended latency envelopes. The unrelated README-only path remained above the aspirational 4–6 seconds but correctly performs zero CAD/runtime work. Generic unaffected-path latency remains follow-up work (`tool.git-project#26`) rather than a Migration-005 blocker.
+The durable architecture lives under [`domains/scad/architecture.md`](../../domains/scad/architecture.md). This migration directory remains the historical change/evidence record.
 
 ## Completion decision
 
-Migration 005 is complete. The final shared v0.14.8 baseline is now present and immutably released through the template, both current-generation reusable libraries and the real HUB75 frame.
+Migration 005 returns to **complete** only when the current-generation SCAD tool and all four qualified consumers publish new output using canonical `bld`/`vrf` technical namespaces and that behavior is immutably released. The previously qualified v0.14.8 execution model does not need to be reproven beyond the normal regression gates required by the naming change.
