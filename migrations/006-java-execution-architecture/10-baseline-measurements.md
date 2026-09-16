@@ -85,6 +85,27 @@ Measured examples from the run:
 
 The real project therefore demonstrates both valid independent work and likely orchestration overhead. Migration 006 must distinguish the two rather than simply reducing job count.
 
+## Windows validation cadence
+
+The current workflows effectively treat Windows compatibility as part of every normal affected run. That should become an explicit policy decision rather than an inherited default.
+
+A likely resource-saving option worth measuring is:
+
+- Linux canonical build/test on every relevant affected push;
+- full Windows compatibility build and exact Linux-artifact smoke as a **pull-request qualification lane**;
+- Windows qualification again for release candidates/tags when release confidence requires it;
+- no assumption that every JAR produced by every `main` push must be re-tested on Windows.
+
+This is not yet the selected policy. The migration should compare at least:
+
+- defect-detection value of Windows-on-every-push versus PR-only + release;
+- whether merges can reach `main` without having passed the same exact source on Windows;
+- whether direct pushes to protected `main` are possible in the repository policy;
+- cost of Windows runner allocation/setup relative to Linux producer work;
+- whether the canonical-artifact smoke and independent Windows Maven build need the same cadence.
+
+The two Windows checks may have different purposes and therefore different schedules. For example, a lightweight exact-artifact smoke might justify more frequent execution than a complete independent Windows rebuild, or the reverse if the rebuild is the actual portability contract. Evidence should decide this.
+
 ## Unrelated-change baseline gap
 
 The current Java workflows do not have the newer generic `affected` preflight used by current SCAD production.
@@ -119,6 +140,31 @@ Normal Java production currently crosses multiple artifact boundaries:
 
 Some transfers are semantically required — notably Linux→Windows exact-artifact smoke. Others may only exist because orchestration is split across jobs. Migration 006 should quantify payload sizes before removing or retaining those boundaries.
 
+## Parked research — Moon incremental build behavior
+
+A separate Moon-incrementality experiment is worth doing because Java projects can grow into multi-module Maven reactors where rebuilding the complete graph for every source change may become unnecessary.
+
+For now this remains **parked research**, not a Migration-006 blocker and not a reason to redesign the Java build around Moon prematurely.
+
+The experiment should distinguish three different mechanisms that are easy to conflate:
+
+1. **affected selection** — decide from base→head which capability/module needs to run;
+2. **Moon materialization/cache reuse** — restore an earlier task result when its declared inputs match;
+3. **Maven incrementality/local repository reuse** — Maven's own reactor/compiler/dependency behavior inside a task that actually runs.
+
+Questions to measure later:
+
+- whether Moon should model the whole Maven reactor as one canonical task or expose module-level tasks;
+- whether module-level Moon outputs are stable and isolated enough for safe reuse;
+- how parent POMs, dependency-management changes and generated sources invalidate downstream modules;
+- whether a changed leaf module can safely avoid rebuilding unrelated modules while still running all required dependent tests;
+- how `target/` directories and Maven's local repository interact with reproducibility and portable Moon caches;
+- whether Moon's cache hit saves meaningful time once Maven/JDK setup is included;
+- whether cached Linux task output can or should influence independent Windows qualification;
+- what evidence proves that an incremental result is equivalent to a clean canonical release build.
+
+Until this is understood, the migration should treat Maven as the build authority and use Moon conservatively for impact selection and whole-capability reuse.
+
 ## Initial measurement questions
 
 Before target budgets are set, collect at least:
@@ -127,6 +173,7 @@ Before target budgets are set, collect at least:
 - one normal affected template run with warm Maven/Moon caches;
 - one normal affected template run with cold caches;
 - equivalent downstream framework cases;
+- pull-request behavior with the current Windows lanes;
 - release/tag path for the downstream framework;
 - Maven cache sizes and transfer times;
 - Moon cache/materialization sizes and times;
@@ -144,6 +191,7 @@ Current performance is not obviously bad because Maven itself is slow. The evide
 - consumer-owned evidence staging and validation;
 - multiple cross-job output hand-offs;
 - a separate publication runner;
+- Windows validation currently running more broadly than may be necessary;
 - genuinely independent Windows compatibility work mixed with avoidable orchestration overhead.
 
 That is sufficient evidence to justify preparing Migration 006, but not yet sufficient to choose its target architecture.
