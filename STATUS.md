@@ -8,17 +8,27 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### Migration 005 — simplify the SCAD execution architecture
 
-**Active — shared foundations and template/reference migration complete; clamps canary is next.**
+**Active — template and both representative canaries are complete; downstream consumer rollout is next.**
 
-Migration 004 proved and released a working common SCAD execution model, but its final review found that the visible Moon/task model had become too difficult to understand from a normal consumer repository and that the latency/resource trade-off was not yet good enough to accept as the final architecture.
+Migration 005 replaces the lifecycle-heavy Migration-004 Moon topology with a capability-oriented model. The shared foundations, reference consumer and both intended canary execution modes are now proven on migrated repositories.
 
-Migration 005 has completed architecture/design validation and released the shared foundations for the replacement model:
+Current released foundations:
 
 - `docker.scad-toolchain v0.5.0` — OpenSCAD-focused and full/dual runtime profiles;
 - `tool.git-project v0.2.8` — complete affected-task list from one generic Moon query;
-- `tool.scad-project v0.14.2` — inherited SCAD capabilities, project/config consistency, runtime/cache selection, one-runtime normal production and host finishing/publication, including the Step-4 integration fixes for clean planner installation and Moon inherited-task configuration.
+- `tool.scad-project v0.14.3` / `b86b2be325f64847b8d91b7f2596bfd4e4ffb7f2` — inherited SCAD capabilities, configuration/runtime/cache planning, one-runtime normal production and stable optional Moon output handling.
 
-The template/reference consumer has also completed Migration-005 Step 4. `template.scad-project` PR #37 merged as `cf3da65943968a42f3a0199cb682b1c74f452ee9`. Its full integration run `35020468894` was green on the released `tool.scad-project v0.14.2` pin and proved the three-capability full-runtime/SCons reference path, both applicable SCons transports, one Docker runtime, concurrent Build/Verification publication and compact-only normal Actions evidence.
+Reference consumer:
+
+- `template.scad-project` Migration implementation merged in PR #37;
+- full reference integration run `35020468894` green;
+- source-family Moon impact boundaries corrected in PR #39;
+- immutable **v0.0.4** released from `601e9f6fc7c297a5012cbf2aae0c5b95de4335c9` with Build, Verification, STL and checksum assets.
+
+Representative canaries:
+
+- **`lib.scad.clamps` — full/dual runtime + direct engine:** PR #16 merged as `a44d7bdfdb3407959b5d96bef654568367e0f43c`; migrated `main` run `35065375255` green; README-only zero-runtime run `35065514152` green with planner setup, caches, runtime pull, Docker materialization, finishing and publication all skipped.
+- **`lib.scad.hub75` — OpenSCAD-focused runtime + SCons:** PR #29 merged as `ea75cee1fa83310bc2ba2ad1ce565ef81ac7f523`; migrated `main` run `35065383879` green; README-only zero-runtime run `35065524524` green with the same heavy stages skipped.
 
 The selected model keeps:
 
@@ -29,35 +39,29 @@ The selected model keeps:
 - current-run/publication information outside reusable source-derived task identity;
 - one heavy hosted runner as the normal default, while latency **and** total runner/compute use remain separate acceptance criteria.
 
-An implementation refinement from Step 3 is now part of the architecture: source-affected capabilities and publication-safe materialization are not always identical. If documentation and presentation output both belong to one complete Build publication tree, a docs-only change may hydrate the unchanged presentation capability through Moon so replacing the Build branch cannot delete unchanged files. That hydration remains non-affected work and its cost must be counted in canary measurements.
-
-Step-4 integration also exposed two owner-side defects in the original `tool.scad-project v0.14.0` foundation. They were corrected in the owner repository rather than worked around in the template:
-
-- v0.14.1 fixed clean hosted-Python planner installation by using declared PEP 517 build requirements;
-- v0.14.2 fixed inherited capability selection to read `workspace.inheritedTasks.include` from project-level `moon.yml`, matching Moon 2.5.4.
+Source-affected capabilities and publication-safe materialization are not always identical. If documentation and presentation output both belong to one complete Build publication tree, a docs-only change may hydrate an unchanged contributor through Moon so replacing the Build branch cannot delete unchanged files. That hydration remains non-affected work and its cost must be counted separately.
 
 Important measured findings behind the design include:
 
 - old parallel relevant-change baseline: about **37 s** wall-clock with two simultaneous heavy jobs;
 - final Migration-004 v0.13.1 topology: about **41–45 s** with one heavy job;
-- repeated README-only controls: about **4.4–4.8 s**, zero SCAD containers;
-- affected SCAD image acquisition commonly costs about **15–20 s** while the small clamps Moon/CAD graph is only around **5 s**;
-- the original Moon warm-cache misses were caused by generated Python `__pycache__/*.pyc` entering broad tool inputs;
-- after stabilising task inputs, Moon restored a complete clamps documentation result on a fresh runner (`cached, 2ms`) instead of rerendering for roughly four seconds;
-- clamps uses the direct build engine and therefore creates no SCons object cache, while HUB75 explicitly uses SCons and does populate its normal SCons cache;
-- the OpenSCAD-focused runtime avoids about **121 MB / 27%** of compressed full-image distribution in the measured image pair;
+- README-only controls remain able to stop before CAD runtime entirely;
+- affected SCAD image acquisition commonly costs about **15–20 s** while a small Moon/CAD graph may take only a few seconds;
+- broad generated Python inputs previously destabilised Moon hashes; source-family/stable shared inputs are therefore important;
+- clamps proves direct execution without unused SCons transport;
+- HUB75 proves the focused OpenSCAD image plus useful normal SCons transport;
+- the focused runtime avoids about **121 MB / 27%** of compressed full-image distribution in the measured image pair;
 - Build and Verification publishers can overlap on one runner without introducing another hosted VM.
-
-Resource efficiency remains first-class. A faster design is not automatically better if it requires two simultaneous hosted VMs and duplicated image/setup work; a one-runner design is also not acceptable merely because it consumes less compute if it creates a large feedback regression.
 
 Current rollout order:
 
-1. **template.scad-project** — complete; reference consumer merged on released v0.2.8 / v0.14.2 / v0.5.0 foundations;
-2. **lib.scad.clamps** — next: full/dual runtime + direct-engine canary;
-3. **lib.scad.hub75** — OpenSCAD-focused + SCons canary;
-4. downstream consumers only after both canary modes are proven, with the real HUB75 display-frame project deliberately later.
+1. **template.scad-project** — complete and released as v0.0.4;
+2. **lib.scad.clamps** — complete on v0.14.3;
+3. **lib.scad.hub75** — complete on v0.14.3;
+4. **downstream SCAD consumers** — next; each repository owns its migration and evidence;
+5. the real HUB75 display-frame project remains deliberately later in the downstream sequence.
 
-Do not migrate the HUB75 frame before both canaries have qualified the released architecture.
+A parallel hardening track is open as `tool.scad-project#60`. It addresses future tool-gitlink upgrade preflight plus durable orchestration/log/timing visibility. This work **does not reopen the completed library canaries**. It must be qualified through `template.scad-project` first before existing libraries are considered for any repin.
 
 Tracking issue: #55. Canonical scope: [Migration 005](migrations/005-scad-execution-architecture/README.md). Selected design: [validated target architecture](migrations/005-scad-execution-architecture/05-target-architecture.md). Active order: [implementation plan](migrations/005-scad-execution-architecture/06-implementation-plan.md).
 
