@@ -1,15 +1,17 @@
-# Migration 006 — draft implementation and qualification plan
+# Migration 006 — implementation and qualification plan
 
-Status: **proposed / inactive planning authority**
+## Why this document exists
 
-This plan is intentionally prepared while Migration 005 library CI completes. It does not activate Java owner-repository implementation yet.
+The target architecture defines the desired end state, but Migration 006 spans several repositories and cannot safely be changed everywhere at once. This document defines **the owner order, qualification gates and evidence needed to advance from one repository to the next**.
 
-The target architecture is defined in [05-target-architecture.md](05-target-architecture.md).
-The generic project-family/documentation boundary is defined in [Project families, coordination and engineering documentation](../../docs/working-model/project-families-and-documentation.md).
+Use it to decide what work is allowed now, what must be released before a consumer changes, and what evidence closes each step. It is not a substitute for implementation detail in the owner repository.
 
-## Working baseline
+Status: **active planning authority**
 
-Current public chain:
+Target architecture: [05 — Target architecture](05-target-architecture.md).
+Generic project-family/documentation boundary: [Project families, coordination and engineering documentation](../../docs/working-model/project-families-and-documentation.md).
+
+## Working chain
 
 ```text
 tool.git-project
@@ -21,225 +23,238 @@ template.java-project
 2026-010-02.java.event-timing-framework
 ```
 
-Project-family planning/architecture documentation remains a parallel generic capability owned by the meta repository plus `tool.eng-docs`; it is not part of this Java implementation chain.
+Project-family planning/architecture documentation is a parallel generic capability owned by the meta repository plus `tool.eng-docs`; it is not part of this Java implementation chain.
 
-Current consumer evidence shows the main inefficiency is orchestration duplication rather than Maven itself:
+Current released Java baseline before this migration is `tool.java-project v0.2.0` / exact source `9c147850adb9c0c270d852166feae5f08f56c2d6`.
 
-- `template.java-project` has a large consumer-owned workflow with separate Windows bootstrap, Linux canonical producer, artifact staging, Windows compatibility, evidence re-check and Java-output publication jobs;
-- `2026-010-02.java.event-timing-framework` repeats that structure and adds product-specific release metadata/tag/release jobs;
-- Java setup/Windows work starts before a generic unrelated-change decision exists;
-- exact Linux artifacts are legitimately transferred to Windows, but other artifact/job boundaries mostly exist to re-check or republish already-produced Java evidence.
-
-The current released Java tooling reference used by consumers is `tool.java-project v0.2.0` / exact source `9c147850adb9c0c270d852166feae5f08f56c2d6`.
-
-The event-timing meta repository already builds its engineering documentation independently with `tool.eng-docs`, Python and generic Moon/repository tooling, without JDK/Maven. Migration 006 must preserve that separation.
-
-## Step 0 — activate only after Migration 005 closes
+## Step 0 — activate and freeze the boundary
 
 Owner: `brainboxemb.meta`
 
-Before Java code changes:
+**Status: complete.**
 
-1. re-read current `main` of all four Java-chain repositories;
-2. capture current successful template and downstream workflow runs;
-3. record job count, wall-clock, Windows usage and artifact boundaries;
-4. confirm current branch-protection/merge model where it affects Windows cadence;
-5. confirm the current independent meta/engineering-documentation path remains outside Java;
-6. mark Migration 006 active explicitly in `STATUS.md` and the migration index.
+Completed on 2026-09-16:
 
-Exit evidence:
-- dated baseline table;
-- exact repository/tool revisions;
-- documented Java-versus-engineering-docs ownership boundary;
-- activation commit in meta.
+- Migration 005 closed after final reusable-library v0.14.8 releases;
+- current Java owner/template/real-consumer baseline re-read;
+- generic project-family/meta/documentation boundary separated from Java;
+- cross-domain lifecycle-equivalence rule recorded;
+- target architecture and owner rollout plan made authoritative on `main`;
+- Migration 006 marked active before Java owner implementation.
+
+Implementation may now proceed in `tool.java-project` only.
 
 ## Step 1 — shared Java execution contract
 
 Owner: `tool.java-project`
 
-Goal: create one shared Java production contract without yet changing consumers or absorbing generic engineering documentation.
+**Status: active — draft PR #26.**
+
+Goal: create one shared Java production contract without changing consumers yet.
 
 Implement/rework reusable owner workflows so `tool.java-project` owns:
 
-- exact event/source inputs;
-- cheap affected preflight contract;
+- exact source/base preflight inputs;
+- generic affected classification through `tool.git-project`;
 - native JDK/Maven setup;
-- one canonical Maven producer;
+- one canonical Linux Maven producer;
 - producer/test/provenance evidence;
-- timing/result evidence;
-- Windows selection policy and exact Linux-artifact hand-off;
-- Java-derived artifact/evidence finalization where appropriate;
-- Javadoc or other Java-derived documentation only when Java tooling is genuinely required.
+- durable timing/job-selection evidence;
+- selective Windows qualification;
+- Java-derived output finalization without a duplicate Maven build.
 
-Keep Maven as build/test authority.
+### Windows policy
 
-Do **not** yet:
-- move product-specific release metadata into the tool;
-- introduce module-level Moon tasks;
-- introduce a Java container;
-- change consumer workflows;
-- move SDP/SIP/SVP/architecture assembly or generic documentation publication into Java tooling.
+One caller input:
 
-Required owner tests/evidence:
+```text
+windows-mode: auto | none | smoke | full
+```
 
-1. unit/static tests for workflow/config contract;
-2. self-test fixture proving affected Linux execution;
-3. unrelated fixture proving stop before JDK/Maven/Windows;
-4. Windows fixture proving independent Maven compatibility and exact Linux artifact smoke;
-5. provenance fixture proving exact source/tool identity;
-6. Java-output finalization fixture proving output can be finalized without a duplicate Maven run;
-7. durable phase timing/job-selection evidence;
-8. ownership test/documentation proving generic engineering-documentation assembly is not required by the Java lifecycle.
+Normal caller: `auto`.
 
-If the generic affected interface in `tool.git-project` is insufficient, make only the smallest owner-correct extension there and release it before continuing.
+```text
+Java unrelated           -> no Java/Windows execution
+normal Java impact       -> smoke
+Windows-sensitive impact -> full
+release                  -> full
+```
+
+`smoke` runs only the exact Linux-produced runnable JAR on Windows.
+
+`full` runs independent Windows Maven `verify` plus exact Linux-artifact smoke where configured.
+
+Explicit `none|smoke|full` values remain manual/exception overrides.
+
+### Step-1 evidence
+
+Required before release:
+
+1. workflow/config static validation;
+2. affected owner fixture proves one Linux canonical producer;
+3. unrelated probe proves stop before JDK/Maven/Windows;
+4. smoke path proves no independent Windows Maven job is allocated;
+5. full path proves independent Windows Maven compatibility plus exact Linux artifact smoke;
+6. exact source/tool provenance remains correct;
+7. Java-output finalization does not rebuild Maven output;
+8. durable timing/job-selection evidence identifies the selected path;
+9. generic engineering-documentation assembly is not required by the Java lifecycle.
+
+If `tool.git-project` affected mechanics are insufficient, change that owner only by the smallest necessary released extension. Do not duplicate change detection in Java.
 
 ## Step 2 — release the shared Java owner revision
 
 Owner: `tool.java-project`
 
-After owner tests are green:
+After Step 1 evidence is green:
 
-1. merge exact qualified owner source;
-2. run owner main qualification;
-3. create the next immutable semantic tool release;
-4. verify the released reusable workflow ref resolves to the exact qualified source;
-5. record release/source/run evidence in Migration 006.
+1. merge the exact qualified owner source;
+2. run exact-main owner qualification;
+3. perform an unrelated-change probe on the merged owner contract where needed to prove zero-Java behaviour;
+4. create the next immutable semantic tool release;
+5. verify the released reusable workflow resolves to the exact qualified source;
+6. record source/run/release evidence in this migration.
 
-Consumer branches must not pin owner `main` or an unreleased feature branch as the final migration state.
+Consumers must not end on owner `main` or a feature branch.
 
 ## Step 3 — reference template canary
 
 Owner: `template.java-project`
 
-Replace the current consumer-heavy Java workflow with the smallest viable caller/configuration for the released shared Java lifecycle.
+Replace consumer-owned Java orchestration with the smallest viable caller/configuration for the released shared lifecycle.
 
-Preserve only template-specific assertions/configuration that genuinely belong to the reference consumer.
+The template should own the **impact declaration**, not duplicate lifecycle implementation. At minimum it will expose:
 
-Qualification scenarios:
+- `java.canonical` — changes that require Java execution;
+- `java.windows-full` — the narrower impact family that escalates `auto` from smoke to full Windows Maven qualification.
 
-### A. affected PR
-- one generic affected decision;
-- one Linux canonical Maven producer;
-- correct producer/test/provenance evidence;
-- selected Windows qualification executes according to policy;
-- exact Linux-produced artifact is smoked on Windows;
-- Java-output finalization/publication is correct;
-- no duplicate Linux Maven/evidence-verification job.
+Do not make `java.windows-full` depend on `java.canonical` in a way that makes every normal Java source change escalate to full.
 
-### B. README-only PR
-- source/base + affected decision only;
-- no JDK setup;
-- no Maven execution;
+### A. normal affected Java PR
+
+- one affected/preflight decision;
+- one canonical Linux Maven producer;
+- `auto` resolves to `smoke` when only normal Java impact is present;
+- exact Linux artifact runs on Windows;
+- no independent Windows Maven build;
+- Java-output publication/finalization correct.
+
+### B. Windows-sensitive affected PR
+
+- `java.windows-full` affected;
+- `auto` resolves to `full`;
+- independent Windows Maven `verify` runs;
+- exact Linux-produced artifact also runs on Windows where configured.
+
+### C. README-only PR
+
+- affected preflight only;
+- no JDK;
+- no Maven;
 - no Windows runner;
-- no Java-output publication;
-- compact evidence records `affected=false`.
+- no Java-output publication.
 
-### C. merged main
-- exact merged source provenance;
+### D. explicit override
+
+Prove at least one deliberate `full` override path so a reviewer/manual run can request stronger evidence than automatic classification.
+
+### E. merged main and release
+
+- exact merged-source provenance;
 - normal Java-output publication correct;
-- Windows behaviour matches the selected cadence policy.
+- release qualification forces full Windows;
+- immutable release evidence uses exact release source.
 
-### D. release/reference snapshot
-- exact release source;
-- no unsafe reuse of an earlier producer when exact source is required;
-- required Windows qualification;
-- immutable Java release evidence according to template policy.
+Record before/after:
 
-Measure against the baseline:
-- workflow file size/consumer-owned lifecycle reduction;
-- hosted jobs started;
+- consumer workflow size;
+- hosted jobs/runners started;
 - wall-clock;
 - total hosted runner time;
-- unaffected path latency.
+- unrelated-path latency.
 
 Do not continue to the real project until the template demonstrates the owner boundary cleanly.
 
-## Step 4 — decide Windows cadence from template evidence
+## Step 4 — lock the Windows impact policy
 
-Owners: `brainboxemb.meta` decision, implementation in `tool.java-project`
+Owners: `brainboxemb.meta` decision; implementation in `tool.java-project` / consumer configuration.
 
-Use template evidence to select and document the shared default.
+Use template evidence to finalize:
 
-Candidate default:
+- which input families require `java.windows-full`;
+- whether `smoke` remains the normal affected-Java default;
+- whether any normal-main path needs full Windows beyond release/platform-sensitive impact;
+- how explicit `full` is exposed for reviewer/manual qualification.
 
-```text
-pull_request affected -> Windows required
-release               -> Windows required
-ordinary main          -> Windows optional/skip when qualified PR evidence is sufficient
-manual                 -> force option available
-```
-
-Reject that candidate if current merge/protection behaviour makes it impossible to associate sufficiently strong Windows evidence with the source that reaches main.
-
-Record the decision and rationale before the real-project rollout.
+The decision must be based on observed runner cost and failure coverage, not on a blanket platform matrix convention.
 
 ## Step 5 — real event-timing framework rollout
 
 Owner: `2026-010-02.java.event-timing-framework`
 
-Move generic Java orchestration to the released shared owner workflow while retaining product-owned assertions:
+Move generic Java orchestration to the released shared workflow while retaining product-owned behaviour:
 
-- Maven version/release metadata;
+- Maven/version/release metadata;
 - application/framework artifact naming;
-- logging dependency-boundary checks;
-- product-specific release/tag failure semantics where still necessary;
+- logging/dependency-boundary assertions;
+- product-specific release/tag failure semantics where necessary;
 - domain-specific smoke output.
 
-Keep project-family planning/architecture documentation in `2026-010-01.meta.event-timing-software`; Java-produced documentation/evidence may be exposed through manifests for later generic document assembly but must not make Maven the documentation assembler.
+Keep project-family planning/architecture documentation in `2026-010-01.meta.event-timing-software`.
 
 Qualification scenarios:
 
-1. affected PR with multi-module canonical producer;
-2. README-only unrelated PR with zero Java/Windows work;
-3. exact merged-main Java-output publication;
-4. release candidate/tag path built from exact release source;
-5. independent Windows Maven compatibility;
-6. exact Linux-produced app artifact smoke on Windows;
-7. generated Java evidence/publication provenance;
-8. failure path proving incomplete releases do not leave a false successful release state;
-9. documentation-boundary check proving meta/engineering-docs CI remains independently executable without Java.
-
-The real-project workflow should contain product orchestration, not a second copy of generic Java lifecycle mechanics.
+1. normal affected multi-module PR -> Linux + Windows smoke;
+2. Windows-sensitive PR -> Linux + full Windows;
+3. README-only PR -> zero Java/Windows;
+4. explicit full override;
+5. exact merged-main publication;
+6. exact release path with full Windows;
+7. exact Linux-produced app artifact smoke on Windows;
+8. generated Java evidence/publication provenance;
+9. failure path proving incomplete releases cannot appear successful;
+10. meta/engineering-docs CI remains independently executable without Java.
 
 ## Step 6 — release and closeout
 
 Owners: downstream repository + `brainboxemb.meta`
 
-After the final real-project state is qualified:
+After the real-project state is qualified:
 
-1. publish the next immutable project release when the repository's release policy requires it;
-2. verify exact release source, assets and provenance;
-3. compare final performance/resource evidence with baseline;
-4. update durable Java execution architecture documentation outside the migration folder;
-5. confirm the generic project-family/engineering-documentation model still applies unchanged to Java and remains reusable by future embedded/CAD domains;
-6. move Migration 006 to complete only when template and real downstream are both on released shared tooling.
+1. publish the required immutable downstream release;
+2. verify exact source, assets and provenance;
+3. compare final latency/hosted-compute evidence with baseline;
+4. move durable Java execution architecture outside the migration folder;
+5. confirm the generic project-family/documentation model still applies unchanged;
+6. mark Migration 006 complete only when template and real downstream both consume released shared tooling.
 
 ## Required evidence matrix
 
-| Scenario | Preflight | Linux Maven | Windows | Java-output publication | Exact source |
-| --- | --- | --- | --- | --- | --- |
-| unrelated PR | yes | no | no | no | yes |
-| affected PR | yes | yes, one canonical | policy-required | PR output | yes |
-| normal main | yes | yes if affected | selected policy | prod output | yes |
-| release | release preflight | yes, fresh exact source | yes | immutable release | yes |
+| Scenario | Preflight | Linux Maven | Windows smoke | Windows Maven | Publication | Exact source |
+| --- | --- | --- | --- | --- | --- | --- |
+| unrelated PR | yes | no | no | no | no | yes |
+| normal Java PR / auto | yes | one canonical | yes | no | PR output | yes |
+| Windows-sensitive PR / auto | yes | one canonical | yes | yes | PR output | yes |
+| explicit full | yes | one canonical | yes | yes | context-specific | yes |
+| release | release preflight | fresh exact source | yes | yes | immutable | yes |
 
 Additional invariants:
 
-- Maven remains the build/test authority;
-- no duplicate canonical Linux producer in one workflow path;
-- Windows consumes the exact Linux artifact for smoke while retaining independent Windows Maven compatibility;
-- Java-output publication does not trigger another Maven build;
-- generic engineering-documentation assembly does not require the Java lifecycle;
-- Java-derived documentation such as Javadoc is a producer asset, not the project-documentation authority;
-- durable timing evidence survives generated-output publication;
-- released reusable workflow refs and exact committed tool identity remain aligned.
+- Maven remains build/test authority;
+- no duplicate canonical Linux producer;
+- smoke always consumes the exact Linux-produced artifact;
+- full Windows remains independent native Maven qualification;
+- Java-output publication never triggers another Maven build;
+- generic engineering-documentation assembly never requires Java execution;
+- durable timing/job-selection evidence survives publication;
+- released workflow identity and exact committed tool identity remain aligned.
 
-## Blocker classification during execution
+## Blocker classification
 
 New findings are classified as:
 
-- **Migration-006 blocker** — violates correctness/ownership or prevents template/real-project qualification;
+- **Migration-006 blocker** — correctness/ownership problem preventing owner/template/real-consumer qualification;
 - **follow-up migration** — useful cross-project improvement not required for this Java architecture;
-- **owner backlog** — local cleanup/performance issue.
+- **owner backlog** — local cleanup/performance work.
 
-Only blockers extend the active migration. In particular, GitHub Actions dependency-update automation belongs to Migration 007 and must not expand Migration 006. Generic engineering-documentation improvements also stay outside Migration 006 unless the Java work exposes an actual ownership/correctness blocker.
+Only blockers extend Migration 006. GitHub Actions dependency maintenance remains Migration 007.
