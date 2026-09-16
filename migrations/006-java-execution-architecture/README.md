@@ -4,11 +4,13 @@ Status: **proposed / inactive**
 
 Working draft: [#65](https://github.com/brainboxemb/brainboxemb.meta/pull/65)
 
-Activation blocker: [Migration 005](../005-scad-execution-architecture/README.md) must be complete first.
+Predecessor: [Migration 005](../005-scad-execution-architecture/README.md) — complete.
 
 ## Current status
 
-Migration 006 is intentionally recorded on `main` before the design is finished. The current investigation is useful enough to retain as cross-project status, but it is **not yet an implementation plan** and does not authorize Java owner-repository changes.
+Migration 006 is intentionally recorded on `main` before the design is finished. Migration 005 is now complete, so there is no longer a predecessor blocker, but Migration 006 is **not automatically active**. Activation requires an explicit decision after the current Java repositories have been revalidated and the working hypotheses below have been turned into a concrete target architecture, owner sequence and qualification plan.
+
+The current investigation is useful enough to retain as cross-project status, but it is **not yet an implementation plan** and does not authorize Java owner-repository changes.
 
 The current Java chain is:
 
@@ -39,6 +41,8 @@ Representative current runs show that this is not mainly a Maven-performance pro
 - there is no early generic unrelated-change gate before JDK/Maven/Windows work;
 - full-history checkout and several artifact/job boundaries are still used where newer shared repository tooling may allow a simpler model.
 
+These measurements are research inputs only. They must be refreshed against the then-current repositories before Migration 006 is activated.
+
 ## Current preferred direction
 
 These are working hypotheses to verify when Migration 006 is activated, not final decisions:
@@ -58,4 +62,6 @@ These are working hypotheses to verify when Migration 006 is activated, not fina
 
 ## Before activation
 
-When Migration 005 is complete, reverify the Java repositories against their then-current `main` branches and turn the working hypotheses above into a concrete target architecture and owner-by-owner qualification sequence. The draft material in PR #65 can be used as research input, but `main` is the authority for this migration's status.
+Reverify `tool.git-project`, `tool.java-project`, `template.java-project` and the real Java downstream consumer against their current `main` branches. Then turn the hypotheses above into a concrete target architecture and owner-by-owner qualification sequence, with explicit evidence for unrelated changes, normal Linux build/test, Windows compatibility, publication/provenance, releases and hosted-compute effects.
+
+The draft material in PR #65 can be used as research input, but `main` is the authority for this migration's status.
