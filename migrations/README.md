@@ -16,7 +16,8 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-- [006 — simplify the Java execution architecture](006-java-execution-architecture/README.md) — primary active migration; owner implementation is merged and exact-main qualified, and the owner release plus consumer rollout are now unblocked after Migration 005 closed.
+- [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — reopened only because released `tool.scad-project v0.14.9` owner guidance still names legacy `build` / `verification` publication branches even though the runtime/default/tests and all qualified consumers use `bld` / `vrf`; fix/release the owner guidance and update pinned consumers before final closeout.
+- [006 — simplify the Java execution architecture](006-java-execution-architecture/README.md) — owner implementation is merged and exact-main qualified; release/consumer rollout waits only for the final Migration-005 released-guidance correction.
 
 ## Proposed / inactive
 
@@ -24,13 +25,12 @@ Having a migration directory does not mean that work is active.
 
 ## Complete
 
-- [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — complete after the final `bld` / `vrf` technical namespace correction was released through `tool.scad-project v0.14.9` and immutably qualified in the template, both reusable SCAD libraries and the HUB75 display-frame consumer.
 - [004 — SCAD repository execution model](004-scad-repository-execution-model/README.md) — qualified the common conditional-SCAD execution model through the template and both reusable SCAD libraries.
 - [003 — SCAD v0.12 rollout](003-scad-v0.12-rollout/README.md) — rolled the released tool through the template, both SCAD libraries and the real HUB75 frame.
 - [002 — SCAD build-decision audit](002-scad-build-decision-audit/README.md) — added and qualified the explicit post-build decision audit.
 - [001 — Consolidate public portfolio context into brainboxemb.meta](001-brainboxemb-meta/README.md) — completed repository/catalog/dashboard/documentation consolidation.
 
-Migration 005 originally completed its execution rollout on v0.14.8, was reopened when the persistent `build` / `verification` branch names were found to conflict with the existing compact SCAD technical namespace, and closed again only after `bld` / `vrf` was released and qualified across every current-generation SCAD consumer. Historical branches remain evidence and are not rewritten.
+Migration 005's v0.14.9 runtime/publication namespace rollout is already qualified and immutably released through every current-generation SCAD consumer. It returns to Complete only after the released/pinned owner guidance itself matches that `bld` / `vrf` contract. Historical branches remain evidence and are not rewritten.
 
 ## When to create a migration
 
