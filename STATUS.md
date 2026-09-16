@@ -6,35 +6,23 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 005 — simplify the SCAD execution architecture
-
-**Reopened for one final released owner-guidance correction.**
-
-The v0.14.9 runtime/default/test namespace correction is qualified across the template, both reusable libraries and the HUB75 display frame, including immutable `rel/.../{bld,vrf}` releases. During final durable-documentation review, however, the released `tool.scad-project v0.14.9` `AGENTS.md` was found to still instruct agents to use legacy `dev/pr-N/{build,verification}` and `prod/{build,verification}` branches.
-
-That is a release blocker because current-generation consumers explicitly tell agents to read the **pinned** `tools/tool.scad-project/AGENTS.md`. A main-only documentation fix would therefore leave released/pinned consumer guidance wrong.
-
-Shortest safe closeout path:
-
-1. fix owner guidance to `bld` / `vrf` without changing execution semantics;
-2. patch-release `tool.scad-project`;
-3. update current-generation consumer tool pins so their pinned guidance is correct;
-4. qualify the minimal required consumer path and immutable release evidence;
-5. then close Migration 005 again.
-
-The durable namespace rule remains unchanged in [`docs/working-model/generated-output.md`](docs/working-model/generated-output.md).
-
-Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md).
-
 ### Migration 006 — simplify the Java execution architecture
 
-**Owner implementation merged and exact-main qualified; owner release remains temporarily gated only by the final Migration-005 guidance patch.**
+**Active — released owner and reference-template canary are qualified; the real event-timing framework is next.**
 
-The shared Java execution lifecycle is merged in `tool.java-project` main as `c7ed36ceaf21874b908a1dd01fa54bc60d420d9c`. Exact-main owner evidence is green for both the affected-policy test and the full Java toolchain self-test.
+The shared Java lifecycle is released as `tool.java-project v0.3.1` at exact source `4969c1316ca7dd3e2648e4098eccf2d5e7dd37d9`. Tagged owner self-test `35145830189` is green and `rel/v0.3.1/bld` exists.
 
-The qualified owner contract includes one exact generic affected query, unrelated stop before JDK/Maven/Windows, `windows-mode: auto|none|smoke|full`, selective Windows smoke/full qualification, exact source identity through execution/provenance, canonical `bld` publication and engineering-documentation assembly outside Java ownership.
+`template.java-project` now consumes that release through a thin production caller. PR #9 merged as exact main source `f1b2a36349c6eb6d0b2806426c8b9ad6e99e5016`; exact-main run `35151495208` is green and `prod/bld/source-sha.txt` identifies that exact source.
 
-Owner implementation may remain merged and qualified. Do not release the Java owner contract or begin Java consumer rollout until the final released SCAD guidance baseline is corrected and Migration 005 closes again.
+The template canary also proves the selective execution policy:
+
+- full/sensitive path: run `35151167342` — Linux canonical Maven, native Windows Maven, exact Linux-artifact Windows smoke and publication all green;
+- ordinary Java path: run `35151251145` — Linux canonical plus Windows artifact smoke green, native Windows Maven explicitly skipped;
+- README-only path: run `35151294080` — preflight only, Java execution and publication skipped, no Windows runner allocated.
+
+The observed template policy therefore remains `auto -> smoke` for normal Java impact and `auto -> full` for build/toolchain/workflow-sensitive impact. A deliberate `workflow_dispatch` `full` input remains exposed; the full execution path itself is qualified by the runs above.
+
+Next owner: `2026-010-02.java.event-timing-framework`. Keep project-specific release/version behaviour there while moving generic Java orchestration onto the released shared lifecycle.
 
 Canonical record: [Migration 006](migrations/006-java-execution-architecture/README.md).
 
@@ -44,17 +32,19 @@ Canonical record: [Migration 006](migrations/006-java-execution-architecture/REA
 
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation.
 
-## Recently completed architecture evidence
+## Recently completed
 
-The v0.14.9 SCAD namespace execution rollout itself is fully qualified:
+### Migration 005 — simplify the SCAD execution architecture
 
-- `tool.scad-project v0.14.9` / exact `a140b22858ac1899e7f2fa71b679639a70d819c3`;
-- `template.scad-project v0.0.6`;
-- `lib.scad.clamps v0.1.6`;
-- `lib.scad.hub75 v0.1.7`;
-- `2026-009-01.cad.HUB75-display-frame v0.0.3`.
+**Complete.**
 
-Those releases prove the runtime/publication behavior. Migration 005 remains open only because the released owner guidance embedded in v0.14.9 is inconsistent with that proven behavior.
+The SCAD execution/publication architecture and compact technical namespaces are fully qualified. Runtime/publication behaviour was immutably proven on the v0.14.9 consumer rollout using `dsg`, `bld` and `vrf`. The final released-guidance inconsistency was then corrected in `tool.scad-project v0.14.10` at exact source `3ad040b2d9c26b8c482853157baeb99a8d9b36db`.
+
+`template.scad-project` pinned the released guidance on main source `637906c49b90308ebba7e4477fa2e5036d9543da`; exact-main Production run `35140381160` is green and resolves `project-production.yml@v0.14.10` to exact `3ad040b2...`.
+
+That final change was guidance-only. It did not change the already-qualified runtime/publication architecture and does not require inventing a later template patch release merely to close the migration. Existing immutable consumer releases remain the runtime evidence; the exact-main template run proves the corrected released/pinned guidance.
+
+Canonical record: [Migration 005](migrations/005-scad-execution-architecture/README.md).
 
 Other completed migrations:
 
