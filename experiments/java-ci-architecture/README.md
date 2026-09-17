@@ -1,134 +1,119 @@
-# Java CI architecture experiment
+# Java CI architecture PoP
 
-Status: **active — setup**
+Status: **active — target concept defined; PoP qualification next**
 
 Tracking issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69)
 
-Planned experiment repository: `brainboxemb/exp.2026-004.java-ci-architecture`
+Implementation/evidence repository: `brainboxemb/exp.2026-004.java-ci-architecture`
 
-Current prerequisite: **create the experiment repository**. Until that exists, implementation must not be pushed into `tool.java-project`, `template.java-project` or a product repository merely to make progress.
+## Role
 
-## Question
+This is a **design-first Proof of Principle (PoP)** and reusable qualification track for the generic Java/software CI architecture.
 
-What generic Java/software CI architecture gives correct, reproducible and understandable incremental execution while avoiding unnecessary builds and runner usage?
+The working model is:
 
-The experiment must distinguish at least:
+```text
+Concept / target architecture
+        ↓
+Proof of Principle
+        ↓
+Qualification
+        ↓
+Production migration
+```
 
-- repository-level affected selection;
-- module/task-level invalidation;
-- dependency caching;
-- build-output caching/hydration;
-- local versus cross-run/remote cache behaviour;
-- test correctness after cache reuse;
-- exact release qualification;
-- Linux/Windows execution boundaries;
-- retained machine-readable and human-readable evidence.
+The architecture is not discovered by blindly implementing every possible candidate. The target concept is designed first; the PoP proves only the assumptions that require runtime evidence.
 
-## Current baseline
+The PoP repository remains after initial rollout as a reusable qualification/regression environment. When a later migration or owner repository exposes a Java CI problem that can be represented faithfully by the fixture, prefer to reproduce it there, qualify the correction, apply the production fix through the real owner, and retain the case as regression coverage.
 
-The Migration-006 production model already provides useful orchestration:
+## Current target concept
 
-- Moon determines whether Java and full-Windows capabilities are affected;
-- unrelated changes can stop before Java execution;
-- Maven remains Java build/test authority;
-- ordinary Java PRs use exact-artifact Windows smoke;
-- sensitive PRs and releases use native full Windows qualification;
-- ordinary protected-main publication does not repeat Windows qualification.
+The intended responsibility split is:
 
-What is not yet proven generically is incremental Java build execution itself. Current Java Moon tasks are impact declarations rather than cached build tasks, and canonical execution still performs Maven `verify` when Java execution is required.
+- **GitHub Actions** — event, runner, job and artifact orchestration;
+- **Moon / generic repository tooling** — repository/capability affected selection and platform policy;
+- **Maven** — reactor, lifecycle, build and test authority;
+- **Maven-native build cache** — first PoP mechanism for module-level incremental/cache semantics;
+- **publication** — reuses canonical prepared build output and does not rebuild merely to publish.
 
-## Experiment ownership
+Maven-native build caching is the first mechanism to qualify because module-level reuse belongs naturally inside Maven semantics if it proves correct, observable and portable. Moon output caching remains an alternative/complement only when a concrete PoP result leaves a material requirement unresolved.
+
+## Existing control evidence
+
+The reusable harness/control baseline is already on experiment main:
+
+- exact source `1f2dde6629e2acc6f6b86c482939c7752939c2f6`;
+- exact-main workflow run `35233519246` — green;
+- deterministic graph `core -> feature-a/feature-b -> app`;
+- cases CI-01 through CI-05;
+- declarative TOML cases, generic harness and GitHub Actions matrix;
+- normalized machine-readable result/evidence including exact source/run/toolchain provenance.
+
+The plain-Maven control shows:
+
+- warm/no-op: no module JAR rewrite, but all Surefire reports rewritten;
+- docs-only: no module JAR rewrite, but all Surefire reports rewritten;
+- app-only: only app JAR rewritten, but all Surefire reports rewritten;
+- core change: all module JARs and Surefire reports rewritten.
+
+This is control evidence, not the architecture decision.
+
+## Minimal PoP
+
+The next step is to qualify the smallest set of principles needed to trust the target concept:
+
+1. unchanged warm module reuse;
+2. application-only selectivity;
+3. shared/core dependent invalidation;
+4. representative build-model/toolchain invalidation;
+5. fresh-runner cross-run reuse;
+6. forced-fresh execution for correctness-sensitive qualification.
+
+Correctness and observability are gates. Performance is evaluated after those pass.
+
+## Ownership
 
 `brainboxemb.meta` owns:
 
-- the research question;
-- experiment status and sequencing;
-- the cross-project decision record;
-- the handoff to any later production rollout.
+- the cross-project problem and target concept;
+- active status/sequencing;
+- architecture decision and production handoff;
+- the decision whether a later migration should start.
 
-The dedicated experiment repository owns:
+`brainboxemb/exp.2026-004.java-ci-architecture` owns:
 
-- Java fixture projects;
-- candidate CI implementations;
-- declarative test cases;
-- the generic test harness/Action;
-- GitHub workflow orchestration;
-- retained experiment results.
+- the reusable fixture;
+- declarative PoP/qualification/regression cases;
+- generic harness/Action and workflow orchestration;
+- PoP adapters/mechanisms;
+- retained experimental/qualification evidence.
 
-Production owners are only changed after the experiment supports a decision.
+Production repositories remain the implementation owners of production behaviour.
 
-## Test model
+## Reuse rule
 
-Prefer explicit declarative test cases over manual probing or case-specific shell logic.
-
-Each test case should describe:
-
-- starting fixture/revision/cache state;
-- the controlled change applied;
-- expected affected projects/tasks/modules;
-- expected executed versus reused/cached work;
-- expected tests and artifacts;
-- expected platform/Windows policy where relevant;
-- correctness assertions and evidence that must be retained.
-
-A generic harness executes one case. GitHub Actions orchestrates a matrix of test cases and candidate architectures and publishes structured results.
-
-Real GitHub event semantics that cannot be faithfully simulated inside one job may use a small separate end-to-end suite, but those cases should still be declared and automatically asserted rather than manually inspected.
-
-## Candidate architectures
-
-Compare at least:
-
-1. current Maven baseline;
-2. Maven-native build-cache/incremental capabilities;
-3. Moon task/output cache capabilities;
-4. hybrid Moon affected/orchestration plus Maven incremental/cache.
-
-Do not preselect Moon or Maven as the incremental-build authority before evidence exists.
-
-## Fixture requirements
-
-Use a deterministic multi-module dependency graph that can distinguish leaf, shared and application changes, for example:
+The PoP is not disposable. After production adoption:
 
 ```text
-        core
-       /    \
-feature-a  feature-b
-       \    /
-         app
+new migration/production CI issue
+        ↓
+minimal reproducible testcase in PoP when faithful
+        ↓
+prove failure
+        ↓
+qualify correction
+        ↓
+owner fix / migration
+        ↓
+retain testcase as regression coverage
 ```
 
-The fixture should be deliberately small enough that orchestration/cache overhead is visible, while still exercising realistic Maven reactor and test behaviour.
+Do not force product-specific behaviour into the PoP when the fixture cannot reproduce it without losing the real failure mode.
 
-## Initial testcase families
+## Production handoff
 
-Cover at least:
+Only after concept + PoP + required qualification support a decision should a production migration be created/activated. The normal rollout owner chain remains:
 
-- cold clean build;
-- identical warm rebuild;
-- unrelated documentation change;
-- leaf-module source change;
-- shared/core source change and dependent invalidation;
-- application-only change;
-- test-only change;
-- module POM change;
-- root POM change;
-- dependency/plugin/compiler/toolchain change;
-- warm cache on a fresh CI runner;
-- cache miss and cache corruption fallback;
-- artifact/test correctness after cache hydration;
-- exact release qualification where correctness must not depend on an unsafe stale cache.
-
-## Decision output
-
-The experiment should finish with a documented answer to:
-
-1. which layer decides whether Java work is affected;
-2. which layer owns module-level incremental build/test decisions;
-3. what may be cached and what must be rebuilt;
-4. how cache keys and invalidation are derived;
-5. which evidence proves execution versus hydration;
-6. what release qualification deliberately bypasses or constrains;
-7. which changes, if any, belong in `tool.java-project`, templates and consumers.
-
-Only after that decision should a cross-project migration be created for production rollout.
+```text
+tool.git-project -> tool.java-project -> template.java-project -> real consumers
+```

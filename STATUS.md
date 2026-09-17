@@ -6,23 +6,41 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Experiment — reproducible Java CI architecture
+### PoP — reusable Java CI architecture qualification
 
-**Active — setup.**
+**Active — target concept defined; PoP qualification next.**
 
-[Experiment record](experiments/java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69)
+[PoP/experiment record](experiments/java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
 
-The current cross-project work track is a generic Java/software CI experiment, not a migration and not an event-timing product task.
+The current cross-project work track is a generic Java/software CI **Proof of Principle (PoP)**, not a migration and not an event-timing product task.
 
-It investigates reproducible incremental/module-aware Java CI, build-output caching, cache hydration/correctness and CI orchestration using explicit testcases. The intended implementation owner is a dedicated experiment repository:
+The approach is design-first:
 
 ```text
-brainboxemb/exp.2026-004.java-ci-architecture
+Concept / target architecture
+        ↓
+Proof of Principle
+        ↓
+Qualification
+        ↓
+Production migration
 ```
 
-That repository does not exist yet. **Its creation is the next prerequisite.** Until it exists, do not implement experimental behaviour in `tool.java-project`, `template.java-project` or a product repository merely to make progress.
+The PoP repository remains useful after initial rollout as a repeatable qualification/regression environment. Later migration or production CI problems should preferably be reduced to declarative cases there when the fixture can represent them faithfully; fixes can then be qualified before production change and the case retained as regression coverage.
 
-The experiment should use a deterministic multi-module fixture, declarative testcases and a generic CI harness/workflow that can execute and assert cases without relying on manual log probing where automation is practical.
+The reusable harness/control baseline is now established:
+
+- experiment main `1f2dde6629e2acc6f6b86c482939c7752939c2f6`;
+- exact-main workflow run `35233519246` — green across discovery and all five baseline cases;
+- deterministic four-module fixture `core -> feature-a/feature-b -> app`;
+- declarative TOML testcases + generic harness + Actions matrix;
+- exact source/run/toolchain/evidence provenance retained.
+
+The control result shows that plain Maven already avoids rewriting unaffected module JARs in several same-worktree cases, while normal reactor `verify` rewrites all Surefire reports for warm/no-op and docs-only measured invocations. That is control evidence, not an architecture decision.
+
+The target concept keeps GitHub Actions as runner/job/event orchestration, Moon/generic tooling as repository/capability affected selection and Maven as Java reactor/lifecycle/build/test authority. The first PoP mechanism to qualify for module-level output reuse is Maven-native build caching; alternatives should only be added when a concrete principle fails or remains unresolved.
+
+The next valid work is therefore the **minimal PoP**, not implementation of every previously imagined candidate: unchanged warm reuse, application-only selectivity, shared/core invalidation, representative build-model invalidation, fresh-runner reuse and a forced-fresh path.
 
 There is currently **no active migration**.
 
@@ -32,7 +50,7 @@ There is currently **no active migration**.
 
 **Proposed / inactive.**
 
-[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the active Java CI experiment and must not start automatically.
+[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the active Java CI PoP and must not start automatically.
 
 ## Recently completed
 
