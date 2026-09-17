@@ -59,6 +59,8 @@ Keep the blocking path small. Newly discovered work should be separated into blo
 
 A track under `experiments/` can be `active`, `proposed / inactive`, `parked`, or `complete`.
 
+Experiment/PoP record directories use a stable three-digit prefix matching the experiment number where one exists, for example `experiments/004-java-ci-architecture/`. Do not renumber older records when new experiments are added. In dedicated experiment repositories, keep `README.md` as the entrypoint and number ordered supporting documents under `docs/` as `00-...`, `01-...`, `02-...`, and so on.
+
 Use **design-first PoP** when the architecture can be specified from established engineering knowledge: define the target concept first, then identify the assumptions that genuinely require runtime evidence. Do not blindly implement every possible candidate merely because multiple tools exist.
 
 The normal adoption sequence is:

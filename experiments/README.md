@@ -6,6 +6,19 @@ A PoP is normally **design-first**: start from an explicit concept/architecture,
 
 Implementation/evidence stays in an independent experiment repository. This directory records the cross-project question, target concept/status, evidence/decision and the handoff to later production work.
 
+## Naming and document order
+
+Experiment records use a three-digit prefix that matches the experiment number in the implementation/evidence repository where one exists:
+
+```text
+experiments/003-moon-scad-target-engine/
+experiments/004-java-ci-architecture/
+```
+
+Keep the directory number stable for the lifetime of the experiment/PoP. Do not renumber older experiments when a newer one is added.
+
+Within an experiment/PoP implementation repository, supporting documents under `docs/` use ordered numeric prefixes (`00-...`, `01-...`, `02-...`, ...). `README.md` remains the unnumbered entrypoint. This keeps the intended reading order explicit without numbering the entrypoint itself.
+
 ## Track states
 
 - **active** — deliberately selected as current cross-project research/PoP work;
@@ -57,7 +70,7 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ### Java CI architecture PoP
 
-[Java CI architecture PoP](java-ci-architecture/README.md) — **active — target concept defined; PoP qualification next**.
+[Java CI architecture PoP](004-java-ci-architecture/README.md) — **active — target concept defined; PoP qualification next**.
 
 Tracks generic Java/software CI incremental execution, build-output reuse, module invalidation and reproducible qualification. Meta issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69).
 
@@ -69,7 +82,7 @@ The reusable plain-Maven control harness is established on exact main `1f2dde662
 
 ### Moon as SCAD target engine
 
-[Moon as SCAD target engine](moon-scad-target-engine/README.md) — **parked**.
+[Moon as SCAD target engine](003-moon-scad-target-engine/README.md) — **parked**.
 
 Tracks whether Moon can replace all or part of the current SCons target layer without losing fine-grained OpenSCAD dependency/selective-build behaviour. Meta issue: [#51](https://github.com/brainboxemb/brainboxemb.meta/issues/51).
 
