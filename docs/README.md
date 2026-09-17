@@ -16,6 +16,12 @@ Read [How the shared tools fit together](architecture/repository-tooling.md).
 
 This gives a practical overview of `tool.git-project`, domain tools such as `tool.scad-project` and `tool.java-project`, and the project repositories that use them.
 
+## How does Java execution work?
+
+Read [Java execution model](working-model/java-execution.md).
+
+This records the durable Maven/Moon ownership boundary, selective `auto|none|smoke|full` Windows policy, generated Java evidence and the rule that ordinary protected-main publication does not repeat Windows qualification already performed on the pull request.
+
 ## Where does generated output go?
 
 Read [Generated output and publication](working-model/generated-output.md).
