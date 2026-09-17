@@ -63,7 +63,7 @@ The runtime/publication namespace correction is fully proven on:
 - `lib.scad.hub75 v0.1.7` / exact source `1390cd322b31b119779c41743119c85e0e984314`;
 - `2026-009-01.cad.HUB75-display-frame v0.0.3` / exact source `9ff354260276e325d571c82af67bc23e9815744d`.
 
-Those consumers prove mutable `prod/{bld,vrf}` and immutable `rel/vX.Y.Z/{bld,vrf}` output with exact source/tool provenance. Detailed runs and release evidence remain in [30 — Final closeout evidence](30-closeout-evidence.md).
+Those consumers prove mutable `prod/{bld,vrf}` and immutable `rel/vX.Y.Z/{bld,vrf}` output with exact source/tool provenance. Detailed runtime/release evidence remains in [30 — Final closeout evidence](30-closeout-evidence.md).
 
 ## Final released-guidance correction
 
@@ -77,6 +77,8 @@ That mismatch was corrected without changing execution semantics:
 - that run resolves `tool.scad-project/.github/workflows/project-production.yml@v0.14.10` to exact `3ad040b2d9c26b8c482853157baeb99a8d9b36db`.
 
 The final correction was guidance-only. It therefore did not require a new template semantic release merely to re-prove unchanged runtime behaviour. The existing immutable consumer releases remain the execution/publication evidence; the exact-main template run proves that current pinned guidance now matches that contract.
+
+The separate [31 — Final released-guidance closeout](31-final-guidance-closeout.md) records this final patch evidence without rewriting the v0.14.9 runtime evidence in document 30.
 
 ## Final architecture
 
@@ -114,7 +116,8 @@ Maintainer-facing capabilities remain deliberately small: `scad.docs`, `scad.bui
 | [06 — Implementation plan](06-implementation-plan.md) | Historical owner-by-owner architecture rollout record. |
 | [10 — Measurements](10-measurements.md) | Baseline and implementation measurements. |
 | [20 — Target resource budget](20-target-resource-budget.md) | Target-versus-result resource review. |
-| [30 — Final closeout evidence](30-closeout-evidence.md) | Exact release/provenance evidence plus the final v0.14.10 guidance closeout. |
+| [30 — Final closeout evidence](30-closeout-evidence.md) | Exact v0.14.9 runtime/release/provenance evidence. |
+| [31 — Final released-guidance closeout](31-final-guidance-closeout.md) | v0.14.10 guidance-only owner patch plus exact-main template qualification. |
 
 The durable architecture lives under [`domains/scad/architecture.md`](../../domains/scad/architecture.md). This migration directory remains the historical change/evidence record.
 
