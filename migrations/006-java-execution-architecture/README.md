@@ -2,14 +2,12 @@
 
 ## Why this migration exists
 
-Java repositories already had a reproducible Maven/JDK baseline, but still duplicated repository-level orchestration for affected selection, checkout/setup, Windows coordination, evidence staging and generated-output publication. That duplicated implementation spent hosted compute on unrelated work and obscured ownership.
+Java repositories had a reproducible Maven/JDK baseline but still duplicated repository-level orchestration for affected selection, setup, Windows coordination, evidence staging and generated-output publication. Migration 006 moved that generic lifecycle into `tool.java-project`, left consumers responsible for impact declarations and product-specific behaviour, and qualified the contract through both the reference template and the real multi-module event-timing framework.
 
-Migration 006 moved the generic Java execution lifecycle into `tool.java-project`, left consumers responsible for impact declarations and product-specific behaviour, and qualified the contract through both the reference template and the real multi-module event-timing framework.
-
-Status: **complete — released shared tooling, immutable reference-consumer release and real downstream main qualification agree on the same execution model**
+Status: **complete**
 
 Durable model: [Java execution model](../../docs/working-model/java-execution.md).
-Detailed rollout/evidence: [06 — Implementation and qualification plan](06-implementation-plan.md).
+Historical rollout/evidence: [06 — Implementation and qualification plan](06-implementation-plan.md).
 
 ## Final architecture
 
@@ -34,7 +32,7 @@ java.canonical
 java.windows-full
 ```
 
-and one Windows policy input:
+with one Windows policy input:
 
 ```text
 windows-mode: auto | none | smoke | full
@@ -51,22 +49,16 @@ explicit/manual stronger check       full when requested
 exact release qualification          full
 ```
 
-`smoke` executes the exact Linux-produced runnable JAR on Windows without a native Windows Maven build.
-
-`full` adds an independent native Windows Maven `verify`. That native Windows build can start after preflight in parallel with Linux; only exact Linux-artifact smoke waits for Linux completion.
+`smoke` executes the exact Linux-produced runnable JAR on Windows without a native Windows Maven build. `full` adds an independent native Windows Maven `verify`; that native Windows build can run in parallel with Linux after preflight, while exact-artifact smoke waits for the Linux producer.
 
 ## Released owner baseline
 
 `tool.java-project v0.3.2`
 
-- exact source: `c0ca2e1365a64bc626ca331a8170d13340ae0b36`;
-- exact-main self-test: `35190574150` — green;
-- release workflow: `35190849340` — green;
-- tagged self-test: `35190862089` — green;
-- reusable workflow identity resolves to the exact released source;
-- durable preflight/timing evidence is retained in generated `bld` output;
-- full native Windows qualification can run in parallel with Linux canonical work;
-- Maven cache inputs cover multi-module POM/wrapper inputs rather than only one root POM.
+- exact source `c0ca2e1365a64bc626ca331a8170d13340ae0b36`;
+- exact-main self-test `35190574150` — green;
+- release workflow `35190849340` — green;
+- tagged self-test `35190862089` — green.
 
 Supporting generic baseline:
 
@@ -76,7 +68,7 @@ Supporting generic baseline:
 
 `template.java-project v0.1.0`
 
-Exact release/main source:
+Exact release source:
 
 ```text
 2406d362f1b93c433bb561bd8d09a9f6cde13774
@@ -84,58 +76,74 @@ Exact release/main source:
 
 Evidence:
 
-- sensitive PR/full canary on owner-head: `35190324797` — green, `auto -> full`, Linux and native Windows parallel, exact Linux-artifact smoke green;
-- released-owner PR qualification: `35190926434` — green;
-- Java-only canary: `35151251145` — native Windows Maven skipped, exact Linux artifact smoke green;
-- README-only canary: `35151294080` — preflight only, no Java/Windows/publication;
-- exact-main production run: `35192557796` — green, Windows mode `none`, no Windows runner, exact `prod/bld` publication;
-- immutable release verification: `35192714047` — green, exact tag source, Linux + full Windows + exact Linux-artifact smoke and `rel/v0.1.0/bld` publication.
-
-The template immutable release proves the generic exact-tag release path independently of any product release cadence.
+- sensitive/full canary `35190324797` and released-owner qualification `35190926434` — green;
+- Java-only canary `35151251145` — `auto -> smoke`, native Windows Maven skipped;
+- README-only canary `35151294080` — preflight only, no Java/Windows/publication;
+- exact-main run `35192557796` — green, Windows mode `none`, no Windows runner, exact `prod/bld` publication;
+- immutable release verification `35192714047` — green, Linux + native full Windows + exact Linux-artifact smoke + `rel/v0.1.0/bld`.
 
 ## Real downstream qualification
 
-`2026-010-02.java.event-timing-framework` now consumes the released baseline on exact main:
+The released lifecycle first landed in `2026-010-02.java.event-timing-framework` on exact main:
 
 ```text
 9aff579d824339b191c4d99be22d738f18562ad1
 ```
 
-The real repository retained its product-owned Maven/version/release metadata, two product JAR names, embedded build identity, logging dependency-boundary assertions and failed-release semantics while removing generic Java orchestration duplication.
+The repository retained product-owned Maven/version/release metadata, app/framework artifact names, embedded build identity, logging dependency-boundary assertions and failed-release semantics while removing generic Java orchestration duplication.
+
+Qualification evidence:
+
+- final sensitive/full PR run `35193846536` — green, `auto -> full`;
+- isolated Java-only PR #35 / run `35193503922` — `auto -> smoke`, native Windows Maven skipped;
+- isolated documentation-only PR #36 / run `35193536122` — preflight only, no Java/Windows/publication;
+- exact-main run `35193989780` — green, Windows mode `none`, no Windows runner, exact `prod/bld` publication;
+- main timing capture 56 s wall / 51 hosted-runner seconds.
+
+## Immutable downstream product release
+
+After the tooling rollout, the product entered its normal release flow.
+
+The first `v0.2.0` candidate at exact source `e8066c9e33cf2ed77bb7f37ac8a68707933e28e8` passed Linux canonical Maven, independent native Windows Maven, exact Linux-produced app-JAR smoke and `rel/v0.2.0/bld` publication. Final GitHub Release packaging then failed because the product workflow attempted to archive `orchestration/**` from the pre-finalization Actions artifact instead of the finalized release branch.
+
+The repository's fail-safe behaved correctly:
+
+- normal `v0.2.0` was removed;
+- the consumed candidate was preserved as `v0.2.0-failed`;
+- version `0.2.0` was not reused.
+
+PR #38 fixed only that product-owned release packaging boundary and advanced the release to `0.2.1`.
+
+Final downstream release:
+
+```text
+2026-010-02.java.event-timing-framework v0.2.1
+exact source 0f9dbc2f5aa0beaec8f63465ada83f2bc2a83709
+annotated tag object b6d132c0f383d52975994cfcc12cfa7cc6fab2e3
+```
 
 Evidence:
 
-- final workflow/tooling-sensitive PR run `35193846536` — green, `auto -> full`, Linux canonical and native Windows Maven parallel, exact Linux-artifact smoke green;
-- final PR generated output identifies exact source `3cc8521f6533ffffba39ab2a6cb3fe3592f56f8d`; timing capture is 58 s wall / 82 hosted-runner seconds, affected decision 3 s, Maven-reported 6.912 s;
-- isolated Java-only PR #35, run `35193503922` — `auto -> smoke`, native Windows Maven skipped, exact Linux-produced app JAR smoke green;
-- isolated documentation-only PR #36, run `35193536122` — metadata + affected preflight only; Java, Windows and publication skipped;
-- exact-main run `35193989780` — green, Windows mode `none`, no Windows runner, Linux canonical + `prod/bld` publication only;
-- `prod/bld/source-sha.txt` identifies exact main `9aff579d824339b191c4d99be22d738f18562ad1`;
-- main timing capture is 56 s wall / 51 hosted-runner seconds with four Linux runners, 3 s affected decision and Maven-reported 16.532 s;
-- `prod/bld/artifacts` contains both `event-timing-app-0.2.0-SNAPSHOT.jar` and `event-timing-framework-0.2.0-SNAPSHOT.jar`.
+- release-fix PR run `35195850065` — green;
+- exact-main `0.2.1` run `35211527836` — green, ordinary main with Windows disabled and `prod/bld` publication;
+- exact-tag release run `35211641563` — green;
+- Linux canonical Maven — green;
+- independent native Windows Maven — green;
+- exact Linux-produced app-JAR Windows smoke — green;
+- `rel/v0.2.1/bld` publication — green and exact-source;
+- `rel/v0.2.1/bld/source-sha.txt` is `0f9dbc2f5aa0beaec8f63465ada83f2bc2a83709`;
+- GitHub Release `v0.2.1` published successfully with app JAR, framework JAR, SHA256 checksums and finalized evidence archive;
+- release timing capture: 81 s wall / 107 hosted-runner seconds; native Windows qualification consumed 66 s and remained the dominant hosted-compute cost.
 
-## Closeout decision on product releases
-
-The original rollout plan required a new immutable downstream product release purely as a Migration-006 closeout gate. Real rollout evidence showed that this couples shared-tooling qualification to unrelated product version cadence without adding a new generic execution proof.
-
-That requirement is therefore corrected:
-
-- the immutable generic release contract is proven by `tool.java-project v0.3.2` and `template.java-project v0.1.0`;
-- the real downstream proves the released shared tooling on PR and exact protected-main paths;
-- the real product keeps its existing release/tag/failure semantics and will exercise the exact-tag `full` path at its next normal product release;
-- Migration 006 does not change `0.2.0-SNAPSHOT` merely to manufacture a tooling evidence tag.
-
-This preserves the ownership boundary: tooling migrations define tooling behaviour; product repositories decide product versions and release timing.
+The product release provides additional immutable downstream evidence. It does not change the architectural ownership decision: Migration 006 did not need to invent a product version merely to prove generic tooling, but once the product was genuinely released its exact-tag `full` path confirmed the same contract end to end.
 
 ## Performance conclusion
 
-The retained timing evidence makes the cost split visible instead of treating total workflow wall time as build time. Across the qualified runs, the affected/Moon decision is only a few seconds and Maven itself is also a minority of some full paths; Windows runner setup, checkout/wrapper validation and native Windows Maven work can dominate.
+The retained evidence shows that affected selection and Maven are not the only relevant costs. Windows setup, checkout/wrapper validation and native Windows Maven can dominate full qualification. The selected optimisation is therefore **selective allocation**, not removal of Windows as a real platform boundary:
 
-The optimisation decision is therefore selective allocation, not removal of Windows as a real platform boundary:
-
-- zero Windows for unrelated changes;
-- cheap exact-artifact smoke for ordinary Java PRs;
-- full native Windows only for sensitive PRs, explicit stronger qualification and releases;
+- zero Windows for unrelated work;
+- exact-artifact smoke for ordinary Java PRs;
+- native full Windows for sensitive PRs, deliberate stronger checks and releases;
 - no repeated Windows qualification on ordinary protected-main publication.
 
 ## Completion
@@ -143,11 +151,12 @@ The optimisation decision is therefore selective allocation, not removal of Wind
 Migration 006 is complete because:
 
 - the generic owner contract is immutably released;
-- the reference consumer is immutably released and proves the exact release path;
-- the real downstream consumes the released shared tooling and is qualified on full, smoke, unrelated and exact-main paths;
-- generated Java evidence keeps exact source/tool provenance and durable preflight/timing evidence;
-- Maven remains Java build/test authority with no duplicate canonical Linux producer;
-- project-family/engineering-documentation assembly remains outside the Java lifecycle;
-- the durable architecture now lives in `docs/working-model/java-execution.md` rather than depending on this temporary migration folder.
+- the reference consumer is immutably released and proves the generic exact-tag release path;
+- the real downstream consumes the released shared tooling and proves full, smoke, unrelated and exact-main paths;
+- the real downstream now also has immutable `v0.2.1` release evidence for the exact-tag full-Windows path;
+- generated Java evidence retains exact source/tool provenance and durable timing evidence;
+- Maven remains build/test authority with no duplicate canonical Linux producer;
+- project-family/engineering-documentation assembly remains outside Java execution;
+- the durable architecture lives in `docs/working-model/java-execution.md` rather than this temporary migration folder.
 
-GitHub Actions dependency maintenance remains Migration 007. Product-local performance tuning or the next real event-timing release does not reopen Migration 006.
+GitHub Actions dependency maintenance remains Migration 007 and is not activated automatically by this closeout.
