@@ -16,14 +16,15 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-- [006 — simplify the Java execution architecture](006-java-execution-architecture/README.md) — `tool.java-project v0.3.1` is released and the `template.java-project` canary is qualified on exact main; the next owner is `2026-010-02.java.event-timing-framework`.
+No migration is currently active.
 
 ## Proposed / inactive
 
-- [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; intentionally after Migration 006.
+- [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; not started automatically by closing Migration 006.
 
 ## Complete
 
+- [006 — simplify the Java execution architecture](006-java-execution-architecture/README.md) — released `tool.java-project v0.3.2`, immutable `template.java-project v0.1.0`, and real event-timing exact-main qualification agree on selective PR Windows execution and Windows-free ordinary main publication; durable rules now live in [`docs/working-model/java-execution.md`](../docs/working-model/java-execution.md).
 - [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — the execution/publication architecture is qualified on `bld` / `vrf`; released owner guidance is aligned in `tool.scad-project v0.14.10` and proven by the green exact-main template run `35140381160`.
 - [004 — SCAD repository execution model](004-scad-repository-execution-model/README.md) — qualified the common conditional-SCAD execution model through the template and both reusable SCAD libraries.
 - [003 — SCAD v0.12 rollout](003-scad-v0.12-rollout/README.md) — rolled the released tool through the template, both SCAD libraries and the real HUB75 frame.
