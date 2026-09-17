@@ -30,18 +30,29 @@ The released shared Java baseline is:
 - `tool.java-project v0.3.2` / exact `c0ca2e1365a64bc626ca331a8170d13340ae0b36`;
 - owner exact-main self-test `35190574150`, release `35190849340` and tagged self-test `35190862089` — green.
 
-The immutable reference consumer is `template.java-project v0.1.0` at exact source `2406d362f1b93c433bb561bd8d09a9f6cde13774`. Its exact-main run `35192557796` proves normal protected-main publication with Windows mode `none`; tagged release verification `35192714047` proves Linux + native full Windows + exact Linux-artifact smoke and immutable `rel/v0.1.0/bld` publication.
+The immutable reference consumer is `template.java-project v0.1.0` at exact source `2406d362f1b93c433bb561bd8d09a9f6cde13774`. Its exact-main run `35192557796` proves ordinary protected-main publication with Windows mode `none`; tagged release verification `35192714047` proves Linux + native full Windows + exact Linux-artifact smoke and immutable `rel/v0.1.0/bld` publication.
 
-The real multi-module consumer `2026-010-02.java.event-timing-framework` now consumes the released baseline on exact main `9aff579d824339b191c4d99be22d738f18562ad1`:
+The real multi-module consumer `2026-010-02.java.event-timing-framework` first qualified the released lifecycle on exact main `9aff579d824339b191c4d99be22d738f18562ad1`:
 
 - sensitive PR/full: `35193846536` — green;
 - isolated Java-only smoke: `35193503922` — green, native Windows Maven skipped;
 - isolated documentation-only: `35193536122` — preflight only, no Java/Windows/publication;
 - exact main: `35193989780` — green, Windows mode `none`, no Windows runner, exact `prod/bld` publication.
 
-`prod/bld/source-sha.txt` identifies exact main `9aff579d...`; main timing capture is 56 s wall / 51 hosted-runner seconds with four Linux runners and no Windows runner.
+A subsequent normal product release exposed one product-owned packaging defect after the otherwise successful `v0.2.0` tag qualification. The fail-safe correctly archived that consumed candidate as `v0.2.0-failed`; `0.2.0` was not reused.
 
-A tooling migration does not force an unrelated product-version release. The generic immutable release path is proven by the tool and template releases; the real product retains its exact-tag/full-Windows release semantics and will exercise them at its next normal product release cadence.
+The corrected immutable downstream baseline is now:
+
+- `2026-010-02.java.event-timing-framework v0.2.1`;
+- exact source `0f9dbc2f5aa0beaec8f63465ada83f2bc2a83709`;
+- ordinary-main run `35211527836` — green, Windows disabled, Linux canonical + `prod/bld` publication;
+- exact-tag release run `35211641563` — green, Linux canonical + native full Windows Maven + exact Linux-artifact Windows smoke + `rel/v0.2.1/bld` + GitHub Release publication;
+- annotated tag `v0.2.1` points to exact source `0f9dbc2f...`;
+- `rel/v0.2.1/bld/source-sha.txt` identifies the same exact source;
+- release timing capture: 81 s wall / 107 hosted-runner seconds, with the 66 s native Windows job the dominant hosted-compute cost;
+- release assets include the app JAR, framework JAR, SHA256 checksums and finalized evidence archive.
+
+The architectural point remains unchanged: Migration 006 did not require manufacturing a product release merely for tooling proof. The product was subsequently released through its normal product-owned release flow, and `v0.2.1` now provides additional immutable downstream evidence of the same contract.
 
 Durable model: [Java execution model](docs/working-model/java-execution.md).
 Canonical migration record: [Migration 006](migrations/006-java-execution-architecture/README.md).
