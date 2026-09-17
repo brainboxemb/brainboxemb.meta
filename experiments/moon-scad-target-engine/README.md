@@ -4,9 +4,9 @@ Status: **parked**
 
 Tracking issue: [#51](https://github.com/brainboxemb/brainboxemb.meta/issues/51)
 
-Implementation owner: `tool.scad-project`
+Implementation owner when adopted: `tool.scad-project`
 
-Related migration: Migration 004 — SCAD repository execution model
+Related migration history: Migration 004 — SCAD repository execution model
 
 ## Question
 
@@ -14,28 +14,17 @@ Can Moon replace all or part of the current SCons target-execution layer in `too
 
 ## Why this is parked
 
-Migration 004 is already changing the higher-level execution model around:
-
-- one understandable SCAD production lifecycle;
-- Build/Verify aggregation;
-- affected/preflight decisions before expensive SCAD execution;
-- container startup;
-- publication placement;
-- justified differences between projects and libraries.
-
-Replacing the fine-grained target engine at the same time would make the migration too broad and would make performance/correctness evidence hard to attribute.
-
-For Migration 004, SCons therefore remains the qualified target engine.
+Migration 004 deliberately kept SCons as the qualified fine-grained target engine while the repository-level execution model was being changed. Replacing the target engine at the same time would have made performance and correctness evidence hard to attribute.
 
 ## Current baseline
 
-`tool.scad-project` already has an engine-independent OpenSCAD dependency scanner. It discovers recursive `use`/`include` dependencies and static imported assets, then the SCons driver registers those dependencies per configured PNG/STL target.
+`tool.scad-project` has an engine-independent OpenSCAD dependency scanner. It discovers recursive `use`/`include` dependencies and static imported assets, after which the current target engine registers dependencies per configured PNG/STL target.
 
 That provides selective invalidation at target level. A coarse Moon task with a repository-wide `**/*.scad` input is not equivalent.
 
 ## Experiment candidates
 
-When this experiment is activated, compare at least:
+When this experiment is reactivated, compare at least:
 
 1. Moon for repository orchestration with SCons for SCAD targets;
 2. coarse Moon tasks for Build/Verify domains;
@@ -60,4 +49,4 @@ SCons should only be replaced if the Moon-based model is at least as correct and
 
 ## Reactivation trigger
 
-Revisit after Migration 004 has settled the repository-level execution model, unless Migration 004 finds a concrete blocker that specifically requires reconsidering the target-engine boundary.
+Revisit when SCAD target-engine simplification is deliberately selected as active experiment work. Do not reactivate it merely because another experiment or migration completes.

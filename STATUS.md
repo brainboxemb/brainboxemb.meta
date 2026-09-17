@@ -6,9 +6,25 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active cross-project migration** after completion of Migration 006.
+### Experiment — reproducible Java CI architecture
 
-Do not automatically start the next proposed migration merely because the previous one closed. Select it deliberately from the proposed/inactive set.
+**Active — setup.**
+
+[Experiment record](experiments/java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69)
+
+The current cross-project work track is a generic Java/software CI experiment, not a migration and not an event-timing product task.
+
+It investigates reproducible incremental/module-aware Java CI, build-output caching, cache hydration/correctness and CI orchestration using explicit testcases. The intended implementation owner is a dedicated experiment repository:
+
+```text
+brainboxemb/exp.2026-004.java-ci-architecture
+```
+
+That repository does not exist yet. **Its creation is the next prerequisite.** Until it exists, do not implement experimental behaviour in `tool.java-project`, `template.java-project` or a product repository merely to make progress.
+
+The experiment should use a deterministic multi-module fixture, declarative testcases and a generic CI harness/workflow that can execute and assert cases without relying on manual log probing where automation is practical.
+
+There is currently **no active migration**.
 
 ## Proposed / inactive
 
@@ -16,7 +32,7 @@ Do not automatically start the next proposed migration merely because the previo
 
 **Proposed / inactive.**
 
-[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It was deliberately kept outside Migration 006.
+[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the active Java CI experiment and must not start automatically.
 
 ## Recently completed
 
@@ -78,7 +94,7 @@ Other completed migrations:
 
 ## Parked / follow-up
 
-- Moon as SCAD target engine — issue #51;
+- [Moon as SCAD target engine](experiments/moon-scad-target-engine/README.md) — parked experiment, issue #51;
 - self-contained physical-verification document packages — issue #18;
 - one release flow for requested versions across project types — issue #20;
 - standardise CHANGELOG format and add a shared template — issue #52;
