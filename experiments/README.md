@@ -1,29 +1,69 @@
-# Experiments and test repositories
+# Experiments and Proofs of Principle
 
-Cross-project experiments are a first-class work track next to migrations. They answer an architecture or tooling question with controlled, reproducible evidence before production owners are changed.
+Cross-project experiments and Proofs of Principle (PoPs) are a first-class work track next to migrations. They provide controlled, reproducible evidence before production owners are changed.
 
-Experiment implementation stays in an independent experiment repository. This directory records the question, status, evidence/decision and the handoff to later production work.
+A PoP is normally **design-first**: start from an explicit concept/architecture, then prove the runtime-sensitive principles that cannot be established confidently from design, documentation or existing evidence alone.
 
-## Experiment states
+Implementation/evidence stays in an independent experiment repository. This directory records the cross-project question, target concept/status, evidence/decision and the handoff to later production work.
 
-- **active** — deliberately selected as current cross-project research work;
+## Track states
+
+- **active** — deliberately selected as current cross-project research/PoP work;
 - **proposed / inactive** — defined but not started;
 - **parked** — intentionally paused until a reactivation condition is met;
-- **complete** — concluded with retained evidence and a documented decision.
+- **complete** — the current question/conclusion is closed with retained evidence.
 
-Completing an experiment does not automatically create or activate a migration. Production rollout is a separate decision.
+A repository may remain useful after a track is complete. In particular, a PoP repository can stay as a repeatable qualification/regression lab even after its initial production migration has finished.
+
+Completing a PoP/experiment does not automatically create or activate a migration. Production rollout is a separate decision.
+
+## Design-first PoP model
+
+Prefer this sequence when the architecture can be designed from established engineering knowledge:
+
+```text
+Concept / target architecture
+        ↓
+Proof of Principle
+        ↓
+Qualification
+        ↓
+Production migration
+```
+
+Do not turn a PoP into an open-ended tournament of candidate tools merely because alternatives exist. Implement alternatives when the target concept fails a principle or a concrete unresolved decision requires comparison.
+
+A failed PoP is valid evidence and should cause the concept/assumption to be reconsidered; do not weaken the testcase to force success.
+
+## Reusable PoP model
+
+PoP repositories are preferably repeatable and retained. Later production/migration problems that can be represented faithfully should follow this loop:
+
+```text
+problem discovered
+    ↓
+reproduce as testcase in PoP repository
+    ↓
+prove failure and qualify correction
+    ↓
+fix production owner / migration
+    ↓
+retain regression testcase
+```
+
+This turns the original PoP into a durable CI architecture qualification suite rather than a disposable prototype.
 
 ## Active
 
-### Java CI architecture
+### Java CI architecture PoP
 
-[Java CI architecture](java-ci-architecture/README.md) — **active — setup**.
+[Java CI architecture PoP](java-ci-architecture/README.md) — **active — target concept defined; PoP qualification next**.
 
-Tracks generic Java/software CI incremental execution, caching, module invalidation and reproducible testcase orchestration. Meta issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69).
+Tracks generic Java/software CI incremental execution, build-output reuse, module invalidation and reproducible qualification. Meta issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69).
 
-Planned implementation repository: `brainboxemb/exp.2026-004.java-ci-architecture`.
+Implementation/evidence repository: `brainboxemb/exp.2026-004.java-ci-architecture`.
 
-The current prerequisite is creation of that repository. Production Java tooling must not be changed just to bootstrap the experiment.
+The reusable plain-Maven control harness is established on exact main `1f2dde6629e2acc6f6b86c482939c7752939c2f6`, run `35233519246`. The next work is the minimal Maven-native build-cache PoP, not bootstrap or repository creation.
 
 ## Parked
 
@@ -33,16 +73,18 @@ The current prerequisite is creation of that repository. Production Java tooling
 
 Tracks whether Moon can replace all or part of the current SCons target layer without losing fine-grained OpenSCAD dependency/selective-build behaviour. Meta issue: [#51](https://github.com/brainboxemb/brainboxemb.meta/issues/51).
 
-## Experiment records
+## Experiment/PoP records
 
-A useful experiment record should state:
+A useful record should state:
 
-- repository or required repository when setup is not complete yet;
-- question/hypothesis tested;
+- implementation/evidence repository;
+- problem or target concept;
+- which assumptions require empirical proof;
 - fixture and testcase model;
 - evidence/result;
 - decision the result supports;
 - current state;
-- where adopted production behaviour belongs.
+- where adopted production behaviour belongs;
+- whether/how the repository remains reusable after adoption.
 
-Prefer executable/declarative testcases and retained machine-readable evidence over one-off manual probing. Manual exploration can discover a question, but experiment conclusions should be reproducible from the repository and CI where practical.
+Prefer executable/declarative testcases and retained machine-readable evidence over one-off manual probing. Manual exploration can discover a question, but conclusions should be reproducible from the repository and CI where practical.
