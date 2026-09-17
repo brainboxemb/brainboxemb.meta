@@ -10,7 +10,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 **Active — target concept defined; PoP qualification next.**
 
-[PoP/experiment record](experiments/java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
+[PoP/experiment record](experiments/004-java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
 
 The current cross-project work track is a generic Java/software CI **Proof of Principle (PoP)**, not a migration and not an event-timing product task.
 
@@ -112,7 +112,7 @@ Other completed migrations:
 
 ## Parked / follow-up
 
-- [Moon as SCAD target engine](experiments/moon-scad-target-engine/README.md) — parked experiment, issue #51;
+- [Moon as SCAD target engine](experiments/003-moon-scad-target-engine/README.md) — parked experiment, issue #51;
 - self-contained physical-verification document packages — issue #18;
 - one release flow for requested versions across project types — issue #20;
 - standardise CHANGELOG format and add a shared template — issue #52;
