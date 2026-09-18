@@ -1,6 +1,6 @@
 # Detachable SCAD clip interface PoP
 
-Status: **active — OG-01 reference qualified; AT-01 neutral coupon next**
+Status: **active — OG-01/OG-02 qualified; AT-01 neutral coupon next**
 
 Tracking issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
 
@@ -78,13 +78,21 @@ Established:
 brainboxemb/exp.2026-005.scad-detachable-clip-interface
 ```
 
-OG-01 was completed in
-[experiment PR #1](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/1)
-and merged as `ceaaaef95d3592a0d3ee5a8b1199d274bbdb8c7c`. The repository pins the fork
-below `dsg/openscad/ext/quackworks` at exact
-`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`. The qualified OG-01 reference
-produces assembled/exploded/section PNGs and separate fixed-receiver/removable-
-snap STLs. AT-01 is the next valid experiment step.
+OG-01 and OG-02 are complete in experiment PRs #1 and #2. The repository pins
+the fork below `dsg/openscad/ext/quackworks` at exact
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
+
+OG-02 adds Full/Lite comparison evidence plus separate Full/Lite receiver and
+snap profile PNGs and 1.0 mm profile-slice STLs. The upstream dimensions are:
+
+```text
+                         Full       Lite
+receiver height          6.8 mm     4.0 mm
+snap height              6.8 mm     3.4 mm
+snap footprint          24.8 mm    24.8 mm
+```
+
+Lite is selected as the primary starting reference for AT-01.
 
 It owns:
 
@@ -272,6 +280,18 @@ fatigue, material choice or printer-tolerance robustness from those renders.
 Those remain later PoP questions.
 
 Next: **AT-01 — neutral fixed/removable coupon**.
+
+## OG-02 retained result
+
+The Lite receiver is derived from the upper part of the Full receiver. The Lite
+snap keeps the same footprint but removes the lower Full-height stage and moves
+the retention/compliance geometry into the shallower body.
+
+For a top-flush Lite assembly the snap bottom sits 0.6 mm above the receiver
+bottom. This relation is retained in the PoP evidence.
+
+AT-01 should reduce the Lite relationship first, keeping Full as a control when
+the purpose of a removed feature is uncertain.
 
 ## Qualification boundary
 
