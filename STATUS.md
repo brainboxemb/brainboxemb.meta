@@ -6,9 +6,9 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Project-backed parallel PoP — detachable SCAD clip interface
+### Project-backed PoP — detachable SCAD clip interface
 
-**Active project-backed PoP, but not the primary cross-project track.**
+**Active project-backed PoP.**
 
 [PoP/experiment record](experiments/005-detachable-scad-clip-interface/README.md)
 · tracking issue [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
@@ -64,7 +64,7 @@ There is currently **no active migration**.
 
 **Proposed / inactive.**
 
-[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the active Java CI PoP and must not start automatically.
+[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the completed Java CI PoP and must not start automatically.
 
 ## Recently completed
 
@@ -74,7 +74,7 @@ There is currently **no active migration**.
 
 [PoP/experiment record](experiments/004-java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
 
-The current cross-project work track is a generic Java/software CI **Proof of Principle (PoP)**, not a migration and not an event-timing product task.
+This completed cross-project track is a generic Java/software CI **Proof of Principle (PoP)**, not a migration and not an event-timing product task.
 
 The design remains:
 
