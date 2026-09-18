@@ -8,13 +8,13 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### PoP — reusable Java CI architecture qualification
 
-**Active — target concept defined; PoP qualification next.**
+**Active — local Maven Build Cache PoP qualified; broader qualification in progress.**
 
 [PoP/experiment record](experiments/004-java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
 
 The current cross-project work track is a generic Java/software CI **Proof of Principle (PoP)**, not a migration and not an event-timing product task.
 
-The approach is design-first:
+The design remains:
 
 ```text
 Concept / target architecture
@@ -26,21 +26,25 @@ Qualification
 Production migration
 ```
 
-The PoP repository remains useful after initial rollout as a repeatable qualification/regression environment. Later migration or production CI problems should preferably be reduced to declarative cases there when the fixture can represent them faithfully; fixes can then be qualified before production change and the case retained as regression coverage.
+The PoP repository remains a repeatable qualification/regression environment after adoption. Later migration or production CI problems should preferably be reduced to declarative cases there when the fixture can represent them faithfully.
 
-The reusable harness/control baseline is now established:
+The local same-worktree Maven Build Cache PoP is now qualified:
 
-- experiment main `1f2dde6629e2acc6f6b86c482939c7752939c2f6`;
-- exact-main workflow run `35233519246` — green across discovery and all five baseline cases;
-- deterministic four-module fixture `core -> feature-a/feature-b -> app`;
-- declarative TOML testcases + generic harness + Actions matrix;
-- exact source/run/toolchain/evidence provenance retained.
+- exact experiment main `bc5d1b16da3820b72430611b65969ec7fb0588d0`;
+- exact-main workflow run `35250860673` — green across discovery plus all 14 control/cache testcase jobs;
+- seven declarative cases cover cold, unchanged warm, docs-only, app code-only, shared-core, code+unit-test and unit-test-only behaviour;
+- native Maven `cache-report*.xml` is retained and asserted as the module-level cache oracle;
+- JAR archive bytes and semantic payload are measured separately;
+- unchanged/docs-only reuse all four modules and rerun no tests;
+- app-local changes rebuild only `app` and rerun the two app test classes;
+- shared-core changes invalidate the required dependent graph;
+- a test-only change invalidates the app module/tests while preserving the production JAR payload.
 
-The control result shows that plain Maven already avoids rewriting unaffected module JARs in several same-worktree cases, while normal reactor `verify` rewrites all Surefire reports for warm/no-op and docs-only measured invocations. That is control evidence, not an architecture decision.
+The target responsibility split remains GitHub Actions for runner/event orchestration, Moon/generic tooling for repository/capability affected selection, and Maven for Java reactor/lifecycle/build/test semantics.
 
-The target concept keeps GitHub Actions as runner/job/event orchestration, Moon/generic tooling as repository/capability affected selection and Maven as Java reactor/lifecycle/build/test authority. The first PoP mechanism to qualify for module-level output reuse is Maven-native build caching; alternatives should only be added when a concrete principle fails or remains unresolved.
+Caching is an **optional optimization capability**, not a correctness dependency. The intended project-level modes are `none | local | shared`, with `none` as the safe initial/default mode and an explicit forced-fresh/cache-bypass path available regardless of the configured mode. Projects should opt into caching when build/test scale makes the extra mechanism worthwhile rather than adopting it merely because the framework supports it.
 
-The next valid work is therefore the **minimal PoP**, not implementation of every previously imagined candidate: unchanged warm reuse, application-only selectivity, shared/core invalidation, representative build-model invalidation, fresh-runner reuse and a forced-fresh path.
+The next qualification slice is build-model/configuration invalidation plus forced-fresh correctness. After that come actual toolchain/fresh-runner cross-run reuse, cache failure/fallback and repeated performance measurements.
 
 There is currently **no active migration**.
 
