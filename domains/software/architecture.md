@@ -55,6 +55,6 @@ separate production migration when adoption is justified
 
 This allows cache invalidation, fresh-runner reuse, cross-workflow behaviour and later production defects to be proven reproducibly without weakening production repositories just to experiment.
 
-Cross-workflow Maven cache persistence is now qualified; the active PoP question is whether the complete shared-cache path provides worthwhile end-to-end latency/runner savings on representative work.
+Cross-workflow Maven cache persistence and representative later-run latency value are now qualified. Six matched real-consumer samples all show lower shared-consumer latency; total producer+consumer hosted-compute reduction is not established as structural. The active PoP question is now release/canonical-artifact cache policy.
 
 See the [experiment/PoP record](../../experiments/004-java-ci-architecture/README.md) for the current cross-project qualification status.
