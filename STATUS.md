@@ -6,9 +6,71 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
+### Project-backed parallel PoP — detachable SCAD clip interface
+
+**Active project-backed PoP, but not the primary cross-project track.**
+
+[PoP/experiment record](experiments/005-detachable-scad-clip-interface/README.md)
+· tracking issue [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
+· implementation/evidence repository
+`brainboxemb/exp.2026-005.scad-detachable-clip-interface`
+· external-source fork
+`brainboxemb/fork.andylevesque.quackworks`
+
+The current HUB75 display-frame project is waiting on unfinished physical panel
+verification before its panel-facing coupler interface can be frozen. That
+physical gate does not need to block independent research into the detachable
+reinforcement attachment.
+
+The PoP therefore runs on neutral/surrogate fixed-side and removable-side
+coupons. Its current preferred mechanism reference is
+`AndyLevesque/QuackWorks` at exact main
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`, specifically the OpenGrid board
+receiver and removable snap implementation. QuackWorks' CC BY-NC-SA 4.0
+licensing and the snap file's additional provenance/licensing wording must be
+kept explicit; studying the mechanical principle is not treated as permission
+to copy the implementation into production.
+
+The generic external-fork naming rule is
+`fork.<upstream-owner>.<upstream-repository>`, normalized to lowercase. The
+QuackWorks fork now exists and GitHub confirms the upstream fork relationship.
+The experiment pins it at exact source
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
+
+OG-01 and OG-02 are complete in experiment PRs #1 and #2. OG-02 adds the
+Full/Lite comparison, including individual receiver/snap cross-section PNGs and
+1.0 mm profile-slice STLs. Lite is selected as the primary reduction reference:
+receiver 4.0 mm, snap 3.4 mm, same ~24.8 mm snap footprint, with a derived
+0.6 mm top-flush assembly offset. AT-01 is now the next experiment step: reduce
+the Lite relationship to a neutral fixed/removable coupon before adding a tube
+clamp.
+
+The intended boundary is:
+
+```text
+external-source fork
+        ↓ exact pinned reference
+detachable-interface PoP
+        ↓ qualified interface contract
+HUB75 project integration
+        ↑ only after project core-interface freeze
+```
+
+There is currently **no active migration**.
+
+## Proposed / inactive
+
+### Migration 007 — standardise GitHub Actions dependency maintenance
+
+**Proposed / inactive.**
+
+[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the active Java CI PoP and must not start automatically.
+
+## Recently completed
+
 ### PoP — reusable Java CI architecture qualification
 
-**Active — representative shared-cache latency value qualified; release/canonical-artifact policy next.**
+**Complete — initial Java CI PoP/qualification closed; retained as reusable regression lab.**
 
 [PoP/experiment record](experiments/004-java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
 
@@ -60,71 +122,12 @@ Two independent exact-main benchmark pairs were retained:
 
 Across six matched samples, every shared consumer was faster than its paired control: savings `16, 14, 4, 3, 9, 2 s`, median **6.5 s / 28.8%**. Total producer+consumer hosted compute is not structurally qualified as a saving: paired deltas were `10, 10, -1, 0, 9, -2 s`. The second run retained ~153 kB of Maven build-cache state with ~1 s median save and restore steps. Final owner evidence is on experiment main `5c3aabe2e38a7607eb3401445ee707cd244d5161`.
 
-The next valid question is **release/canonical-artifact policy**: determine when source-equivalent cached outputs may be hydrated and when canonical/release artifacts must come from an explicit cache-bypassed/empty-output build.
+CI-16 then exposed and corrected a product-provenance correctness gap on the real consumer. Baseline run `35336851477` restored both `framework` and `app` as `LOCAL` for a different Git commit with the identical source tree, leaving the producer revision embedded in the app JAR. The qualified product-scoped correction declares `../.git/HEAD` as an additional Maven Build Cache input only for the app module. Run `35337342442` then proves `framework=LOCAL`, `app=BUILD` and exact current embedded revision. The retained correction/evidence is on experiment main `e30c71c2f7404a49900c301c6dceac064abd8e5d`; final PR regression run `35358585970` was 30/30 green.
 
-### Project-backed parallel PoP — detachable SCAD clip interface
+Release/canonical-artifact policy is now closed on experiment main `2353b18ccfd90c25c9cc7fab65e1a2a8f2b73da9`, PR regression run `35359099065` — 30/30 green. Normal canonical PR/main execution may use project-selected `none | local | shared` when all material inputs participate in cache validity. Exact-tag release remains a separate trust boundary: fresh/empty module output, no Maven build-output cache read/write, dependency cache allowed, ordinary Maven lifecycle, and publication reusing prepared canonical output without rebuilding. Existing real release run `35211641563` already proves that operational shape, so no redundant CI-17 was added.
 
-**Active project-backed PoP, but not the primary cross-project track.**
+The initial Java CI PoP is therefore **complete**. It supports a later production adoption decision but does not itself activate a migration. The experiment repository remains the reusable qualification/regression lab for future Java CI architecture changes.
 
-[PoP/experiment record](experiments/005-detachable-scad-clip-interface/README.md)
-· tracking issue [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
-· implementation/evidence repository
-`brainboxemb/exp.2026-005.scad-detachable-clip-interface`
-· external-source fork
-`brainboxemb/fork.andylevesque.quackworks`
-
-The current HUB75 display-frame project is waiting on unfinished physical panel
-verification before its panel-facing coupler interface can be frozen. That
-physical gate does not need to block independent research into the detachable
-reinforcement attachment.
-
-The PoP therefore runs on neutral/surrogate fixed-side and removable-side
-coupons. Its current preferred mechanism reference is
-`AndyLevesque/QuackWorks` at exact main
-`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`, specifically the OpenGrid board
-receiver and removable snap implementation. QuackWorks' CC BY-NC-SA 4.0
-licensing and the snap file's additional provenance/licensing wording must be
-kept explicit; studying the mechanical principle is not treated as permission
-to copy the implementation into production.
-
-The generic external-fork naming rule is
-`fork.<upstream-owner>.<upstream-repository>`, normalized to lowercase. The
-QuackWorks fork now exists and GitHub confirms the upstream fork relationship.
-The experiment pins it at exact source
-`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
-
-OG-01 and OG-02 are complete in experiment PRs #1 and #2. OG-02 adds the
-Full/Lite comparison, including individual receiver/snap cross-section PNGs and
-1.0 mm profile-slice STLs. Lite is selected as the primary reduction reference:
-receiver 4.0 mm, snap 3.4 mm, same ~24.8 mm snap footprint, with a derived
-0.6 mm top-flush assembly offset. AT-01 is now the next experiment step: reduce
-the Lite relationship to a neutral fixed/removable coupon before adding a tube
-clamp.
-
-The intended boundary is:
-
-```text
-external-source fork
-        ↓ exact pinned reference
-detachable-interface PoP
-        ↓ qualified interface contract
-HUB75 project integration
-        ↑ only after project core-interface freeze
-```
-
-The Java CI architecture PoP remains the primary repository-spanning work track.
-
-There is currently **no active migration**.
-
-## Proposed / inactive
-
-### Migration 007 — standardise GitHub Actions dependency maintenance
-
-**Proposed / inactive.**
-
-[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the active Java CI PoP and must not start automatically.
-
-## Recently completed
 
 ### Migration 006 — simplify the Java execution architecture
 
