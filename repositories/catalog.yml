@@ -259,3 +259,17 @@ repositories:
     lifecycle: current
     dashboard_group: Sites & experiments
     role: Experiment comparing repository capability-graph and orchestration approaches, including Moon.
+
+  - repository: brainboxemb/exp.2026-003.scad-ci-performance
+    category: experiment
+    domain: scad
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Controlled SCAD CI execution-boundary and startup/restore performance benchmark.
+
+  - repository: brainboxemb/exp.2026-004.java-ci-architecture
+    category: experiment
+    domain: java
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Reusable Java CI architecture Proof of Principle and qualification/regression environment.
