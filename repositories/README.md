@@ -11,8 +11,7 @@ For live information such as workflow status, open pull requests and recent acti
 Projects contain the actual design or software work.
 
 - SCAD/CAD projects → [SCAD projects](../domains/scad/projects.md)
-- event-timing software planning → [`2026-010-01.meta.event-timing-software`](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software)
-- Java event-timing framework → [`2026-010-02.java.event-timing-framework`](https://github.com/brainboxemb/2026-010-02.java.event-timing-framework)
+- software projects → [Software projects](../domains/software/projects.md)
 
 ### Reusable libraries
 
@@ -26,12 +25,14 @@ Tool repositories provide shared project or build behaviour. Templates are small
 
 - SCAD tooling → [SCAD tooling and templates](../domains/scad/tooling.md)
 - generic repository tooling → [`tool.git-project`](https://github.com/brainboxemb/tool.git-project)
-- Java project tooling → [`tool.java-project`](https://github.com/brainboxemb/tool.java-project)
+- software/Java tooling → [Software tooling and templates](../domains/software/tooling.md)
 - engineering-document tooling → [`tool.eng-docs`](https://github.com/brainboxemb/tool.eng-docs)
 
 ### Sites and experiments
 
 Site repositories contain published web content or site experiments. Experiment repositories investigate technical choices without becoming normal project dependencies.
+
+The maintained cross-project experiment/PoP records are under [experiments/](../experiments/README.md). The public experiment repositories themselves are listed canonically in `catalog.yml`, including the SCAD CI performance experiment and reusable Java CI architecture PoP.
 
 See the [dashboard](../dashboard/README.md) for the complete current public set and live status.
 
