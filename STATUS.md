@@ -8,7 +8,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### PoP — reusable Java CI architecture qualification
 
-**Active — local + build-model/cache-independent qualification complete; cross-run qualification next.**
+**Active — runtime + fresh-runner cache qualification complete; production-value qualification next.**
 
 [PoP/experiment record](experiments/004-java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
 
@@ -44,7 +44,13 @@ The target responsibility split remains GitHub Actions for runner/event orchestr
 
 Caching is an **optional optimization capability**, not a correctness dependency. The intended project-level modes are `none | local | shared`, with `none` as the safe initial/default mode and an explicit forced-fresh/cache-bypass path available regardless of the configured mode. Projects should opt into caching when build/test scale makes the extra mechanism worthwhile rather than adopting it merely because the framework supports it.
 
-Build-model/configuration and cache-independent execution are now qualified on exact experiment main `4106f71f09ef98e3a5ce5a1a9b965f27219cf0e7`, exact-main run `35317952373` — green across discovery plus all 22 control/cache testcase jobs. CI-08 through CI-11 prove root/shared versus module-local model invalidation, shared dependency-version invalidation, and correct Maven execution without consuming build-cache results. The next qualification slice is actual toolchain/input identity plus fresh-runner/cross-run shared-cache reuse; fallback and repeated performance qualification follow afterward.
+Build-model/configuration and cache-independent execution are qualified on exact experiment main `4106f71f09ef98e3a5ce5a1a9b965f27219cf0e7`, exact-main run `35317952373`.
+
+Runtime identity and fresh-runner cache transport are now qualified on exact experiment main `7bdf9017d543a81d48557968a232b39890b9b642`, exact-main run `35320255528` — all 28 jobs green. CI-12 proves a real Maven JDK 8 → 17 change selects a separate runtime cache namespace and rebuilds rather than consuming prior runtime state. CI-13 proves a separate hosted runner can start with zero module outputs, restore Maven's transported local build cache, reuse all four modules and recover all five Surefire reports. CI-14 proves an explicit transport miss falls back to the normal Maven build.
+
+The PoP also established two required design constraints: cache storage is partitioned by runtime identity, and Surefire reports are retained as attached cache outputs. This proves fresh-runner/cross-job reuse, not yet persistence across separate workflow runs.
+
+The next valid question is no longer basic cache correctness. It is whether `shared` caching is worth and usable in the intended production model: reuse must survive from one workflow run to a later workflow run, and the benefit must outweigh setup/transport overhead on representative work.
 
 There is currently **no active migration**.
 
