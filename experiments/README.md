@@ -66,9 +66,7 @@ retain regression testcase
 
 This turns the original PoP into a durable CI architecture qualification suite rather than a disposable prototype.
 
-## Active
-
-## Project-backed parallel work
+## Active project-backed work
 
 ### Detachable SCAD clip interface PoP
 
