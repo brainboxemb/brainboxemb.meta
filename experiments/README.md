@@ -70,13 +70,13 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ### Java CI architecture PoP
 
-[Java CI architecture PoP](004-java-ci-architecture/README.md) — **active — cross-workflow shared-cache reuse qualified; representative end-to-end production-value qualification next**.
+[Java CI architecture PoP](004-java-ci-architecture/README.md) — **active — representative shared-cache latency value qualified; release/canonical-artifact policy next**.
 
 Tracks generic Java/software CI incremental execution, build-output reuse, module invalidation and reproducible qualification. Meta issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69).
 
 Implementation/evidence repository: `brainboxemb/exp.2026-004.java-ci-architecture`.
 
-The Java cache architecture is qualified through runtime identity, fresh hosted-runner reuse and separate-workflow persistence. CI-15 used exact experiment main `681ce7b9d56973b5540cb314c8e45e25618915a0`, producer run `35323272710` and later consumer run `35323361468`; all cross-workflow assertions passed. The next work measures representative end-to-end wall-clock and hosted-runner cost, including setup/cache transport, before any rollout decision.
+The Java cache architecture is qualified through runtime identity, fresh hosted-runner reuse, separate-workflow persistence and representative later-run latency value. Six matched real-consumer samples across two benchmark pairs all show lower shared-consumer latency, with median paired saving 6.5 s / 28.8%; total producer+consumer hosted-compute saving is not established as structural. The next work qualifies release/canonical-artifact cache policy before any rollout decision.
 
 ## Parked
 
