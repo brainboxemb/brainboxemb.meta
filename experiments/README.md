@@ -78,6 +78,32 @@ Implementation/evidence repository: `brainboxemb/exp.2026-004.java-ci-architectu
 
 The Java cache architecture is qualified through runtime identity, fresh hosted-runner reuse and separate-workflow persistence. CI-15 used exact experiment main `681ce7b9d56973b5540cb314c8e45e25618915a0`, producer run `35323272710` and later consumer run `35323361468`; all cross-workflow assertions passed. The next work measures representative end-to-end wall-clock and hosted-runner cost, including setup/cache transport, before any rollout decision.
 
+## Project-backed parallel work
+
+### Detachable SCAD clip interface PoP
+
+[Detachable SCAD clip interface PoP](005-detachable-scad-clip-interface/README.md)
+— **active — source/provenance survey and PoP repository setup**.
+
+This PoP is driven by the current HUB75 display-frame project but deliberately
+runs outside the production coupler source. It studies a compact fixed-side /
+removable-side printed attachment inspired by OpenGrid, then qualifies a
+detachable aluminium-tube clip on neutral coupons before production integration.
+
+Meta issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79).
+
+Planned implementation/evidence repository:
+`brainboxemb/exp.2026-005.scad-detachable-clip-interface`.
+
+The current preferred external mechanism reference is
+`AndyLevesque/QuackWorks`, especially its OpenGrid board and removable snap.
+The selected source must be retained through a separately named external-source
+fork once the licence/provenance survey is complete.
+
+This project-backed PoP does **not** replace the Java CI architecture PoP as the
+primary cross-project work track and does not authorize production integration
+before the HUB75 project reaches its own core-interface freeze gate.
+
 ## Parked
 
 ### Moon as SCAD target engine
