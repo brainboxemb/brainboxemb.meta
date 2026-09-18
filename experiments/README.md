@@ -83,7 +83,7 @@ The Java cache architecture is qualified through runtime identity, fresh hosted-
 ### Detachable SCAD clip interface PoP
 
 [Detachable SCAD clip interface PoP](005-detachable-scad-clip-interface/README.md)
-— **active — OG-01 reference qualified; AT-01 neutral coupon next**.
+— **active — OG-01/OG-02 qualified; AT-01 neutral coupon next**.
 
 This PoP is driven by the current HUB75 display-frame project but deliberately
 runs outside the production coupler source. It studies a compact fixed-side /
@@ -101,12 +101,12 @@ confirmed by GitHub as a fork of `AndyLevesque/QuackWorks` and pinned by the
 experiment at exact source
 `e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
 
-OG-01 was completed in
+OG-01 and OG-02 were completed in
 [experiment PR #1](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/1)
-and merged as `ceaaaef95d3592a0d3ee5a8b1199d274bbdb8c7c`. The reference receiver +
-removable snap is retained as assembled/exploded/section PNG evidence plus
-separate printable STLs. AT-01 is next and will reduce that relationship to a
-neutral attachment coupon before tube-clamp geometry is introduced.
+and [PR #2](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/2).
+The reference evidence now includes Full/Lite assembled/exploded/section PNGs,
+individual receiver/snap profile PNGs, complete printable parts and 1.0 mm
+profile-slice STLs. Lite is the primary reduction reference for AT-01.
 
 This project-backed PoP does **not** replace the Java CI architecture PoP as the
 primary cross-project work track and does not authorize production integration
