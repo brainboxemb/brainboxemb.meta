@@ -40,6 +40,12 @@ Go to [SCAD and CAD](../domains/scad/README.md).
 
 That section has separate readable pages for projects, reusable libraries and shared tooling.
 
+## I am looking for software information
+
+Go to [Software](../domains/software/README.md).
+
+That section groups software projects, Java tooling/templates and reusable Java CI qualification work, with a technical architecture view linking to the durable Java execution model.
+
 ## I want to see the repositories
 
 Use the [repository overview](../repositories/README.md) for the maintained public list and the [dashboard](../dashboard/README.md) for live GitHub status.

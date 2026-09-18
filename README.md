@@ -24,6 +24,16 @@ There you can browse separately through:
 - [reusable libraries](domains/scad/libraries.md);
 - [tooling and templates](domains/scad/tooling.md).
 
+### Software
+
+Go to [Software](domains/software/README.md).
+
+There you can browse separately through:
+
+- [projects](domains/software/projects.md);
+- [tooling and templates](domains/software/tooling.md);
+- [technical architecture](domains/software/architecture.md).
+
 ### How projects are organised
 
 Read [How brainboxemb projects are organised](docs/working-model/projects.md).

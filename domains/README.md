@@ -4,8 +4,9 @@ Domain directories contain portfolio-level navigation and durable cross-project 
 
 They do not replace the implementation documentation in individual repositories.
 
-Current planned domain migration:
+Current domain views:
 
-- [SCAD](scad/README.md)
+- [SCAD and CAD](scad/README.md)
+- [Software](software/README.md)
 
 Add another domain only when there is real cross-project knowledge/coordination to own; do not create domain folders merely to mirror repository naming.
