@@ -54,6 +54,47 @@ Cross-workflow persistence is now qualified by CI-15 on exact experiment main `6
 
 The next valid question is no longer whether `shared` survives between workflow runs. It is whether the complete production path saves enough **end-to-end wall-clock and hosted-runner cost** on representative Java work to justify setup, cache transport and storage overhead. Maven-phase timing alone is not sufficient.
 
+### Project-backed parallel PoP — detachable SCAD clip interface
+
+**Active setup work, but not the primary cross-project track.**
+
+[PoP/experiment record](experiments/005-detachable-scad-clip-interface/README.md)
+· tracking issue [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
+· planned implementation/evidence repository
+`brainboxemb/exp.2026-005.scad-detachable-clip-interface`
+
+The current HUB75 display-frame project is waiting on unfinished physical panel
+verification before its panel-facing coupler interface can be frozen. That
+physical gate does not need to block independent research into the detachable
+reinforcement attachment.
+
+The PoP therefore runs on neutral/surrogate fixed-side and removable-side
+coupons. Its current preferred mechanism reference is
+`AndyLevesque/QuackWorks` at exact main
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`, specifically the OpenGrid board
+receiver and removable snap implementation. QuackWorks' CC BY-NC-SA 4.0
+licensing and the snap file's additional provenance/licensing wording must be
+kept explicit; studying the mechanical principle is not treated as permission
+to copy the implementation into production.
+
+A generic external-fork naming rule is being established as
+`fork.<upstream-owner>.<upstream-repository>`, normalized to lowercase. If the
+source survey confirms QuackWorks, the planned fork is
+`brainboxemb/fork.andylevesque.quackworks`.
+
+The intended boundary is:
+
+```text
+external-source fork
+        ↓ exact pinned reference
+detachable-interface PoP
+        ↓ qualified interface contract
+HUB75 project integration
+        ↑ only after project core-interface freeze
+```
+
+The Java CI architecture PoP remains the primary repository-spanning work track.
+
 There is currently **no active migration**.
 
 ## Proposed / inactive
