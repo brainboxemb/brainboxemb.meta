@@ -134,6 +134,19 @@ snap/socket and lock implementations, including BOSL2 clip/rabbit-style
 mechanisms. It is a comparison source, not currently the preferred fixed
 receiver/removable insert reference.
 
+### Application reference — openGrid Snap Mount Generator
+
+`nnarain/opengrid-snap-mount-generator` demonstrates almost exactly the
+application pattern behind this PoP: it takes the QuackWorks-style
+`openGridSnap()` and fuses one or more snaps to an otherwise ordinary mounting
+plate with user-defined holes.
+
+It is useful as evidence that "removable OpenGrid snap + arbitrary functional
+part" is a practical decomposition. It currently carries a copied snap
+implementation rather than establishing a cleaner upstream source/licence
+boundary, and its copy predates recent QuackWorks snap-connectivity fixes, so it
+is a design/application reference rather than the preferred source dependency.
+
 ### Verification reference — connector-foundry
 
 `dnnsmnstrr/connector-foundry` vendors/wraps the QuackWorks OpenGrid board and
