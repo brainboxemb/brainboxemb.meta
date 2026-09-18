@@ -1,6 +1,6 @@
 # Java CI architecture PoP
 
-Status: **active — local/model qualification complete; cross-run qualification next**
+Status: **active — runtime/fresh-runner qualification complete; production-value qualification next**
 
 Tracking issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69)
 
@@ -76,15 +76,33 @@ The second correctness slice is qualified on:
 
 This strengthens the conclusion that Maven-native caching can remain an optional optimisation rather than a correctness dependency. Cache-independent execution is intentionally distinct from a `clean` build with empty output directories.
 
+## Qualified runtime/fresh-runner evidence
+
+The third qualification slice is now on:
+
+- exact experiment main `7bdf9017d543a81d48557968a232b39890b9b642`;
+- exact-main run `35320255528` — all 28 jobs green;
+- CI-12 actual Maven runtime JDK 8 → 17 invalidation;
+- CI-13 separate hosted-runner producer/consumer reuse;
+- CI-14 explicit transported-cache miss fallback;
+- result schema v4 with prime/measured runtime evidence and fresh-runner provenance.
+
+The PoP exposed and corrected two design gaps instead of weakening the tests:
+
+1. Maven Build Cache 1.3.0 did not itself separate cache state for the tested Maven runtime JDK change, so the adapter now partitions cache storage by JDK release metadata, OS/architecture and exact Maven Wrapper identity.
+2. Fresh-runner reuse initially restored module artifacts but not Surefire XML, so `surefire-reports` is now an attached Maven Build Cache output.
+
+The qualified shared path keeps GitHub Actions as opaque cache transport while Maven remains the module validity/restore authority. The current evidence proves fresh-runner/cross-job reuse; it does not yet prove persistence and reuse from one workflow run to a later workflow run.
+
 ## Remaining qualification
 
-The next qualification work is:
+The next question is **production value**, not another local correctness permutation:
 
-1. actual toolchain/input identity invalidation;
-2. fresh-runner/cross-run shared-cache transport and reuse;
-3. unavailable/missing shared-cache fallback where practical;
-4. repeated performance measurements on representative workloads;
-5. release/canonical-artifact policy, including whether releases require separate empty-output clean qualification.
+1. prove shared-cache persistence/reuse across separate workflow runs, because that is the useful production form of `shared`;
+2. measure end-to-end benefit including cache setup/transport on a representative workload rather than only Maven phase time;
+3. decide release/canonical-artifact policy, including whether releases require separate empty-output `clean` qualification;
+4. add unavailable/corrupt-cache behaviour only if it materially changes the production decision;
+5. use a real-consumer canary before broad rollout if meta chooses to activate a production migration.
 
 No production migration is active yet.
 
