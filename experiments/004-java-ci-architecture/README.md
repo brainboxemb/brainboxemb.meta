@@ -1,6 +1,6 @@
 # Java CI architecture PoP
 
-Status: **active — representative shared-cache latency value qualified; release/canonical-artifact policy next**
+Status: **complete — initial Java CI PoP/qualification closed; reusable regression lab retained**
 
 Tracking issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69)
 
@@ -135,16 +135,63 @@ Across six matched control/shared samples:
 
 The completed owner evidence is retained on experiment main `5c3aabe2e38a7607eb3401445ee707cd244d5161`. This supports `shared` as an optional latency optimisation, not as a guaranteed compute-cost optimisation. `none` remains a valid safe/default mode.
 
-## Remaining qualification
+## Qualified Git build-identity evidence
 
-The next question is **release/canonical-artifact policy**:
+CI-16 used the immutable real-consumer workload to change Git commit identity while keeping the tracked Git tree identical.
 
-1. determine whether canonical/release artifacts may hydrate source-equivalent Maven build-cache outputs or require explicit cache-bypassed/empty-output execution;
-2. keep build/run-specific provenance semantics correct, especially when product artifacts embed build identity;
-3. add unavailable/corrupt-cache behaviour only if it materially changes the production decision;
-4. use a real-consumer canary before broad rollout if meta later chooses to activate a production migration.
+The initial baseline correctly failed:
+- run `35336851477`;
+- both `event-timing-framework` and `event-timing-app` restored as `LOCAL`;
+- the consumer app JAR retained the producer revision.
 
-No production migration is active yet.
+The qualified correction is product/module-scoped rather than repository-wide: the app module declares `maven.build.cache.input.1=../.git/HEAD`. Qualified run `35337342442` then proves:
+- zero consumer module outputs before Maven;
+- identical producer/consumer Git tree;
+- `framework=LOCAL`;
+- `app=BUILD`;
+- app JAR embeds the exact consumer revision.
+
+The retained correction/evidence is on experiment main `e30c71c2f7404a49900c301c6dceac064abd8e5d`; final PR regression run `35358585970` was 30/30 green.
+
+## Qualified release/canonical-artifact policy
+
+The final policy is retained on experiment main `2353b18ccfd90c25c9cc7fab65e1a2a8f2b73da9`; PR regression run `35359099065` was 30/30 green.
+
+The qualified policy is:
+
+```text
+normal PR/main canonical
+  project-selected none | local | shared
+  all material inputs participate in cache validity
+  hydrated output retains original producer evidence
+
+exact release tag
+  fresh/empty module output
+  no Maven build-output cache read/write
+  Maven dependency cache allowed
+  ordinary canonical Maven lifecycle
+  full release evidence/platform qualification
+
+publication
+  consume prepared canonical output
+  never rebuild merely to publish
+```
+
+No additional CI-17 was needed: CI-11 already proves cache bypass within the Maven lifecycle, while immutable real-consumer release run `35211641563` proves the stronger exact-tag fresh hosted-runner boundary with no build-output cache configured.
+
+## Completion and production handoff
+
+The initial Java CI PoP/qualification set is **complete**.
+
+It supports a later cross-project adoption decision with these constraints:
+- caching remains optional and project-configurable as `none | local | shared`;
+- `shared` has qualified later-run latency value, not guaranteed hosted-compute savings;
+- runtime-specific cache namespace and restored Surefire outputs are correctness/evidence requirements;
+- product modules declare material non-source inputs such as embedded Git identity;
+- exact-tag release remains fresh/cache-independent;
+- publication reuses prepared canonical output.
+
+No production migration is active. Completing this PoP does not create one automatically.
 
 ## Ownership
 

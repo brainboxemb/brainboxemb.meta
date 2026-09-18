@@ -66,19 +66,7 @@ retain regression testcase
 
 This turns the original PoP into a durable CI architecture qualification suite rather than a disposable prototype.
 
-## Active
-
-### Java CI architecture PoP
-
-[Java CI architecture PoP](004-java-ci-architecture/README.md) — **active — representative shared-cache latency value qualified; release/canonical-artifact policy next**.
-
-Tracks generic Java/software CI incremental execution, build-output reuse, module invalidation and reproducible qualification. Meta issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69).
-
-Implementation/evidence repository: `brainboxemb/exp.2026-004.java-ci-architecture`.
-
-The Java cache architecture is qualified through runtime identity, fresh hosted-runner reuse, separate-workflow persistence and representative later-run latency value. Six matched real-consumer samples across two benchmark pairs all show lower shared-consumer latency, with median paired saving 6.5 s / 28.8%; total producer+consumer hosted-compute saving is not established as structural. The next work qualifies release/canonical-artifact cache policy before any rollout decision.
-
-## Project-backed parallel work
+## Active project-backed work
 
 ### Detachable SCAD clip interface PoP
 
@@ -108,9 +96,22 @@ The reference evidence now includes Full/Lite assembled/exploded/section PNGs,
 individual receiver/snap profile PNGs, complete printable parts and 1.0 mm
 profile-slice STLs. Lite is the primary reduction reference for AT-01.
 
-This project-backed PoP does **not** replace the Java CI architecture PoP as the
-primary cross-project work track and does not authorize production integration
-before the HUB75 project reaches its own core-interface freeze gate.
+This project-backed PoP does not authorize production integration before the HUB75 project reaches its own core-interface freeze gate.
+
+## Complete
+
+### Java CI architecture PoP
+
+[Java CI architecture PoP](004-java-ci-architecture/README.md) — **complete — initial architecture qualification closed; reusable regression lab retained**.
+
+The PoP qualified Maven-native module reuse, build-model/runtime invalidation, fresh-runner and cross-workflow shared reuse, representative real-consumer latency value, product-scoped Git build-identity invalidation, and the final release/canonical-artifact cache policy.
+
+Final owner baseline:
+- Git-identity correction/evidence main `e30c71c2f7404a49900c301c6dceac064abd8e5d`;
+- release/cache-policy main `2353b18ccfd90c25c9cc7fab65e1a2a8f2b73da9`;
+- final policy PR regression run `35359099065` — 30/30 green.
+
+The result supports a later production adoption decision but does not automatically activate a migration. The implementation/evidence repository remains available for future migration/production regressions.
 
 ## Parked
 

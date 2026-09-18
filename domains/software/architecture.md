@@ -39,7 +39,7 @@ Generated output follows the shared technical namespaces documented in [Generate
 
 ## CI architecture qualification
 
-The active reusable Java CI PoP adds another layer that is deliberately **not** production runtime infrastructure:
+The retained reusable Java CI PoP adds another layer that is deliberately **not** production runtime infrastructure:
 
 ```text
 target CI concept
@@ -55,6 +55,6 @@ separate production migration when adoption is justified
 
 This allows cache invalidation, fresh-runner reuse, cross-workflow behaviour and later production defects to be proven reproducibly without weakening production repositories just to experiment.
 
-Cross-workflow Maven cache persistence and representative later-run latency value are now qualified. Six matched real-consumer samples all show lower shared-consumer latency; total producer+consumer hosted-compute reduction is not established as structural. The active PoP question is now release/canonical-artifact cache policy.
+The initial Java CI PoP is complete. It qualified cross-workflow Maven cache persistence, representative later-run latency value, product-scoped Git build-identity invalidation, and release/canonical-artifact policy. Shared caching is supported as an optional latency optimisation, not as a guaranteed hosted-compute saving. Exact-tag release remains fresh/cache-independent. No production migration is active; the PoP repository remains available as a reusable regression lab.
 
 See the [experiment/PoP record](../../experiments/004-java-ci-architecture/README.md) for the current cross-project qualification status.
