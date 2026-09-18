@@ -1,6 +1,6 @@
 # Java CI architecture PoP
 
-Status: **active — runtime/fresh-runner qualification complete; production-value qualification next**
+Status: **active — cross-workflow shared-cache reuse qualified; representative end-to-end production-value qualification next**
 
 Tracking issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69)
 
@@ -92,14 +92,30 @@ The PoP exposed and corrected two design gaps instead of weakening the tests:
 1. Maven Build Cache 1.3.0 did not itself separate cache state for the tested Maven runtime JDK change, so the adapter now partitions cache storage by JDK release metadata, OS/architecture and exact Maven Wrapper identity.
 2. Fresh-runner reuse initially restored module artifacts but not Surefire XML, so `surefire-reports` is now an attached Maven Build Cache output.
 
-The qualified shared path keeps GitHub Actions as opaque cache transport while Maven remains the module validity/restore authority. The current evidence proves fresh-runner/cross-job reuse; it does not yet prove persistence and reuse from one workflow run to a later workflow run.
+The qualified shared path keeps GitHub Actions as opaque cache transport while Maven remains the module validity/restore authority.
+
+## Qualified cross-workflow persistence evidence
+
+CI-15 now proves the useful production form of `shared`: Maven build-cache state survives from one GitHub Actions workflow run to a later workflow run.
+
+Exact qualification evidence:
+
+- experiment main `681ce7b9d56973b5540cb314c8e45e25618915a0`;
+- producer run `35323272710` — all four modules `BUILD`, Maven cache populated from 0 to 12 files;
+- later consumer run `35323361468` — exact transport hit on the same source, zero module outputs before Maven, all four modules `LOCAL`, four JARs restored and five Surefire reports restored;
+- producer and consumer workflow-run IDs are different;
+- all CI-15 correctness and qualification assertions pass;
+- evidence/capability promotion merged in the experiment repository as `0d59eb6af11eff0db311650fd9b1a6aa30f8eb4f`;
+- PR regression run `35324923371` — 28/28 jobs green.
+
+This qualifies `cross_workflow_output_cache = true` for the Maven Build Cache candidate. It does not yet prove that the optimization is worthwhile in real production repositories.
 
 ## Remaining qualification
 
-The next question is **production value**, not another local correctness permutation:
+The next question is **production value**, not another cache-correctness permutation:
 
-1. prove shared-cache persistence/reuse across separate workflow runs, because that is the useful production form of `shared`;
-2. measure end-to-end benefit including cache setup/transport on a representative workload rather than only Maven phase time;
+1. measure end-to-end benefit including checkout, setup, candidate preparation, cache restore/save and Maven execution on a representative workload rather than only Maven phase time;
+2. compare complete workflow wall-clock and hosted-runner seconds against a control path without shared cache, using repeated samples;
 3. decide release/canonical-artifact policy, including whether releases require separate empty-output `clean` qualification;
 4. add unavailable/corrupt-cache behaviour only if it materially changes the production decision;
 5. use a real-consumer canary before broad rollout if meta chooses to activate a production migration.
