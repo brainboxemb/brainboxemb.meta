@@ -85,11 +85,13 @@ QuackWorks fork now exists and GitHub confirms the upstream fork relationship.
 The experiment pins it at exact source
 `e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
 
-OG-01 is complete and merged in experiment PR #1 as
-`ceaaaef95d3592a0d3ee5a8b1199d274bbdb8c7c`. Its qualified reference output
-contains assembled/exploded/section PNGs plus separate receiver/snap STLs. AT-01
-is the next experiment step: reduce the observed relationship to a neutral
-fixed/removable coupon before adding a tube clamp.
+OG-01 and OG-02 are complete in experiment PRs #1 and #2. OG-02 adds the
+Full/Lite comparison, including individual receiver/snap cross-section PNGs and
+1.0 mm profile-slice STLs. Lite is selected as the primary reduction reference:
+receiver 4.0 mm, snap 3.4 mm, same ~24.8 mm snap footprint, with a derived
+0.6 mm top-flush assembly offset. AT-01 is now the next experiment step: reduce
+the Lite relationship to a neutral fixed/removable coupon before adding a tube
+clamp.
 
 The intended boundary is:
 
