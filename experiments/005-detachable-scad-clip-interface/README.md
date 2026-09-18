@@ -1,6 +1,6 @@
 # Detachable SCAD clip interface PoP
 
-Status: **active — OG-01/OG-02 qualified; AT-01 neutral coupon next**
+Status: **active — upstream reference work complete; reduced receiver + snap under refinement**
 
 Tracking issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
 
@@ -78,12 +78,13 @@ Established:
 brainboxemb/exp.2026-005.scad-detachable-clip-interface
 ```
 
-OG-01 and OG-02 are complete in experiment PRs #1 and #2. The repository pins
-the fork below `dsg/openscad/ext/quackworks` at exact
+The **Upstream Full reference** and **Full versus Lite comparison** are complete
+in experiment PRs #1 and #2. The repository pins the fork below
+`dsg/openscad/ext/quackworks` at exact
 `e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
 
-OG-02 adds Full/Lite comparison evidence plus separate Full/Lite receiver and
-snap profile PNGs and 1.0 mm profile-slice STLs. The upstream dimensions are:
+The Full/Lite comparison adds separate Full/Lite receiver and snap profile PNGs
+and 1.0 mm profile-slice STLs. The upstream dimensions are:
 
 ```text
                          Full       Lite
@@ -92,7 +93,7 @@ snap height              6.8 mm     3.4 mm
 snap footprint          24.8 mm    24.8 mm
 ```
 
-Lite is selected as the primary starting reference for AT-01.
+Lite is selected as the primary starting reference for the reduced receiver + snap design.
 
 It owns:
 
@@ -240,34 +241,35 @@ The PoP should answer at least:
 - whether the eventual tube clip can be printed in a favourable orientation
   independently of the production coupler.
 
-## Initial experiment cases
+## Experiment sequence
 
-The first implementation/evidence repository should start small:
+Keep the implementation/evidence sequence small and descriptive:
 
-1. **OG-01 — upstream reference assembly**
+1. **Upstream Full reference**
    - reproduce the selected QuackWorks fixed receiver + removable snap at the
      pinned revision;
-   - generate reproducible assembled, exploded and section PNG evidence;
-   - export the relevant fixed-side and removable-side STL parts so the
-     reference mechanism can be printed, handled and measured;
-2. **AT-01 — neutral fixed/removable coupon**
-   - isolate the minimum attachment pair from the full 28 mm grid context;
-   - generate the same basic assembled/exploded/section PNG evidence;
-   - export separate fixed-side and removable-side coupon STLs;
-3. **AT-02 — retention/flex section**
-   - make the compliant/locking region visible and measurable;
-4. **AT-03 — tolerance variants**
-   - vary only the critical clearance/interference dimension;
-5. **TC-01 — tube-clip carrier**
-   - attach a separate horizontal-tube clamp only after AT-01..03 establish a
-     viable attachment principle.
+   - generate assembled, exploded and section PNG evidence;
+   - export the fixed receiver and removable snap as STL;
+2. **Full versus Lite comparison**
+   - compare the upstream low-profile Lite relationship with the Full reference;
+   - retain Full as the control when the purpose of a removed feature is unclear;
+3. **Reduced receiver + snap**
+   - isolate the minimum attachment pair from the full OpenGrid context;
+   - keep the fixed/removable geometry neutral and reusable;
+4. **Retention and flex geometry**
+   - make compliant regions, lead-ins and locking/contact surfaces measurable;
+5. **Tolerance qualification**
+   - vary only the critical clearance/interference dimensions;
+6. **Tube-clip carrier**
+   - add the horizontal-tube clamp only after the attachment principle is
+     understood.
 
 Do not manufacture extra candidate mechanisms unless an earlier case exposes a
 concrete unresolved design decision.
 
-## OG-01 retained result
+## Upstream Full reference retained result
 
-OG-01 established the upstream reference decomposition without adapting it:
+The upstream Full reference established the source decomposition without adapting it:
 
 - fixed side: OpenGrid cell/receiver;
 - removable side: separate approximately 24.8 mm `openGridSnap()`;
@@ -279,19 +281,21 @@ The experiment explicitly does not infer insertion force, pull-out force,
 fatigue, material choice or printer-tolerance robustness from those renders.
 Those remain later PoP questions.
 
-Next: **AT-01 — neutral fixed/removable coupon**.
+The later Full/Lite comparison retained this as the control reference.
 
-## OG-02 retained result
+## Full versus Lite comparison retained result
 
 The Lite receiver is derived from the upper part of the Full receiver. The Lite
 snap keeps the same footprint but removes the lower Full-height stage and moves
 the retention/compliance geometry into the shallower body.
 
-For a top-flush Lite assembly the snap bottom sits 0.6 mm above the receiver
-bottom. This relation is retained in the PoP evidence.
+The receiver is 4.0 mm high and the basic Lite snap is 3.4 mm high. The accepted
+reference does not convert that arithmetic 0.6 mm difference into a seated
+offset; receiver and snap use the upstream CENTER anchoring.
 
-AT-01 should reduce the Lite relationship first, keeping Full as a control when
-the purpose of a removed feature is uncertain.
+The active **Reduced receiver + snap** work reduces the Lite relationship first,
+keeping Full as a control when the purpose of a removed feature is uncertain.
+Current geometry/evidence refinement is tracked in experiment PR #6.
 
 ## Qualification boundary
 
