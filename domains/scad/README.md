@@ -9,6 +9,8 @@ You do not need to know the tooling architecture first. Start with the part you 
 - [**Tooling and templates**](tooling.md) — which shared repositories own project setup, builds, verification and the CAD runtime;
 - [**Technical architecture**](architecture.md) — how GitHub Actions, Moon capabilities/inheritance, SCons, runtime profiles, caches and publication fit together.
 
+Historical experimental evidence that shaped the current execution boundary is retained in [`exp.2026-003.scad-ci-performance`](https://github.com/brainboxemb/exp.2026-003.scad-ci-performance). That experiment compared the Docker and host execution shapes used during Migration 004; it is evidence, not a production dependency.
+
 ## The basic picture
 
 The SCAD/CAD repositories have three main roles:
