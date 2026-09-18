@@ -8,7 +8,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### PoP — reusable Java CI architecture qualification
 
-**Active — runtime + fresh-runner cache qualification complete; production-value qualification next.**
+**Active — cross-workflow shared-cache reuse qualified; representative end-to-end production-value qualification next.**
 
 [PoP/experiment record](experiments/004-java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
 
@@ -48,9 +48,11 @@ Build-model/configuration and cache-independent execution are qualified on exact
 
 Runtime identity and fresh-runner cache transport are now qualified on exact experiment main `7bdf9017d543a81d48557968a232b39890b9b642`, exact-main run `35320255528` — all 28 jobs green. CI-12 proves a real Maven JDK 8 → 17 change selects a separate runtime cache namespace and rebuilds rather than consuming prior runtime state. CI-13 proves a separate hosted runner can start with zero module outputs, restore Maven's transported local build cache, reuse all four modules and recover all five Surefire reports. CI-14 proves an explicit transport miss falls back to the normal Maven build.
 
-The PoP also established two required design constraints: cache storage is partitioned by runtime identity, and Surefire reports are retained as attached cache outputs. This proves fresh-runner/cross-job reuse, not yet persistence across separate workflow runs.
+The PoP also established two required design constraints: cache storage is partitioned by runtime identity, and Surefire reports are retained as attached cache outputs.
 
-The next valid question is no longer basic cache correctness. It is whether `shared` caching is worth and usable in the intended production model: reuse must survive from one workflow run to a later workflow run, and the benefit must outweigh setup/transport overhead on representative work.
+Cross-workflow persistence is now qualified by CI-15 on exact experiment main `681ce7b9d56973b5540cb314c8e45e25618915a0`. Producer run `35323272710` built all four modules and saved 12 Maven build-cache files. A later, separate `workflow_run` consumer `35323361468` restored the exact cache on the same source, started with zero module outputs, reused all four modules as Maven-native `LOCAL`, and restored all four JARs plus five Surefire reports. The retained evidence/capability update is on experiment main `0d59eb6af11eff0db311650fd9b1a6aa30f8eb4f`; PR regression run `35324923371` was 28/28 green.
+
+The next valid question is no longer whether `shared` survives between workflow runs. It is whether the complete production path saves enough **end-to-end wall-clock and hosted-runner cost** on representative Java work to justify setup, cache transport and storage overhead. Maven-phase timing alone is not sufficient.
 
 There is currently **no active migration**.
 
