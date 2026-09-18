@@ -1,14 +1,14 @@
 # Detachable SCAD clip interface PoP
 
-Status: **active — source/provenance survey and PoP repository setup**
+Status: **active — repositories established; OG-01 reference bootstrap in progress**
 
 Tracking issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
 
 Production driver:
 `brainboxemb/2026-009-01.cad.HUB75-display-frame`
 
-Planned implementation/evidence repository:
-`brainboxemb/exp.2026-005.scad-detachable-clip-interface`
+Implementation/evidence repository:
+[`brainboxemb/exp.2026-005.scad-detachable-clip-interface`](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface)
 
 ## Question
 
@@ -57,24 +57,33 @@ fork.<upstream-owner>.<upstream-repository>
 
 normalized to lowercase.
 
-Current preferred fork candidate:
+Selected fork:
 
 ```text
 brainboxemb/fork.andylevesque.quackworks
 ```
+
+GitHub confirms that repository as a real fork of `AndyLevesque/QuackWorks`.
+Its `main` is currently the exact inspected source
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
 
 The fork is an external-source boundary, not the place for HUB75-specific
 fixtures or design decisions.
 
 ### Experiment repository
 
-Planned:
+Established:
 
 ```text
 brainboxemb/exp.2026-005.scad-detachable-clip-interface
 ```
 
-It will own:
+OG-01 bootstrap is tracked in
+[experiment PR #1](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/1).
+The repo pins the fork below `dsg/openscad/ext/quackworks` at exact
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
+
+It owns:
 
 - neutral fixed-side and removable-side coupons;
 - source/mechanism analysis;
