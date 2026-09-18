@@ -83,7 +83,7 @@ The Java cache architecture is qualified through runtime identity, fresh hosted-
 ### Detachable SCAD clip interface PoP
 
 [Detachable SCAD clip interface PoP](005-detachable-scad-clip-interface/README.md)
-— **active — source/provenance survey and PoP repository setup**.
+— **active — repositories established; OG-01 reference bootstrap in progress**.
 
 This PoP is driven by the current HUB75 display-frame project but deliberately
 runs outside the production coupler source. It studies a compact fixed-side /
@@ -92,13 +92,19 @@ detachable aluminium-tube clip on neutral coupons before production integration.
 
 Meta issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79).
 
-Planned implementation/evidence repository:
-`brainboxemb/exp.2026-005.scad-detachable-clip-interface`.
+Implementation/evidence repository:
+[`brainboxemb/exp.2026-005.scad-detachable-clip-interface`](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface).
 
-The current preferred external mechanism reference is
-`AndyLevesque/QuackWorks`, especially its OpenGrid board and removable snap.
-The selected source must be retained through a separately named external-source
-fork once the licence/provenance survey is complete.
+External-source fork:
+[`brainboxemb/fork.andylevesque.quackworks`](https://github.com/brainboxemb/fork.andylevesque.quackworks),
+confirmed by GitHub as a fork of `AndyLevesque/QuackWorks` and pinned by the
+experiment at exact source
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
+
+The experiment's first implementation step is
+[OG-01 / PR #1](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/1):
+reproduce the upstream receiver + removable snap with assembled/exploded/section
+PNG output and separate fixed/removable STL exports.
 
 This project-backed PoP does **not** replace the Java CI architecture PoP as the
 primary cross-project work track and does not authorize production integration
