@@ -1,6 +1,6 @@
 # Java CI architecture PoP
 
-Status: **active — cross-workflow shared-cache reuse qualified; representative end-to-end production-value qualification next**
+Status: **active — representative shared-cache latency value qualified; release/canonical-artifact policy next**
 
 Tracking issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69)
 
@@ -108,17 +108,41 @@ Exact qualification evidence:
 - evidence/capability promotion merged in the experiment repository as `0d59eb6af11eff0db311650fd9b1a6aa30f8eb4f`;
 - PR regression run `35324923371` — 28/28 jobs green.
 
-This qualifies `cross_workflow_output_cache = true` for the Maven Build Cache candidate. It does not yet prove that the optimization is worthwhile in real production repositories.
+This qualifies `cross_workflow_output_cache = true` for the Maven Build Cache candidate.
+
+## Qualified representative production-value evidence
+
+The PoP then used the exact current real-consumer workload:
+
+```text
+brainboxemb/2026-010-02.java.event-timing-framework
+0f9dbc2f5aa0beaec8f63465ada83f2bc2a83709
+```
+
+Two independent exact-main benchmark pairs were retained:
+
+- experiment `2d9ac9af9006725576009b5c453590800a1a7337` — producer `35335319664`, separate consumer `35335436917`;
+- experiment `d47d10ae0cb2be7828310331a8fed8121e10d0fd` — producer `35335827417`, separate consumer `35335932166`.
+
+Across six matched control/shared samples:
+
+- later-run paired savings were `16, 14, 4, 3, 9, 2 s`;
+- all 6/6 shared consumers were faster;
+- median paired later-run saving was **6.5 s / 28.8%**;
+- producer+consumer hosted-compute deltas were `10, 10, -1, 0, 9, -2 s`;
+- therefore structural hosted-runner cost reduction is **not** qualified;
+- the second run retained about 153 kB of Maven build-cache state, with median save/restore steps of about 1 s.
+
+The completed owner evidence is retained on experiment main `5c3aabe2e38a7607eb3401445ee707cd244d5161`. This supports `shared` as an optional latency optimisation, not as a guaranteed compute-cost optimisation. `none` remains a valid safe/default mode.
 
 ## Remaining qualification
 
-The next question is **production value**, not another cache-correctness permutation:
+The next question is **release/canonical-artifact policy**:
 
-1. measure end-to-end benefit including checkout, setup, candidate preparation, cache restore/save and Maven execution on a representative workload rather than only Maven phase time;
-2. compare complete workflow wall-clock and hosted-runner seconds against a control path without shared cache, using repeated samples;
-3. decide release/canonical-artifact policy, including whether releases require separate empty-output `clean` qualification;
-4. add unavailable/corrupt-cache behaviour only if it materially changes the production decision;
-5. use a real-consumer canary before broad rollout if meta chooses to activate a production migration.
+1. determine whether canonical/release artifacts may hydrate source-equivalent Maven build-cache outputs or require explicit cache-bypassed/empty-output execution;
+2. keep build/run-specific provenance semantics correct, especially when product artifacts embed build identity;
+3. add unavailable/corrupt-cache behaviour only if it materially changes the production decision;
+4. use a real-consumer canary before broad rollout if meta later chooses to activate a production migration.
 
 No production migration is active yet.
 
