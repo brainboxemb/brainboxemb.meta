@@ -196,6 +196,11 @@ The first PoP should establish the attachment pair without the tube. Only after
 insertion, retention, printability and tolerances are understood should the real
 horizontal tube profile be added.
 
+Early experiment steps should treat **PNG and STL as complementary evidence**:
+PNG assemblies/sections explain the mechanism and mating geometry, while
+separate STL exports make the same fixed/removable parts available for physical
+handling and print-fit checks.
+
 The fixed feature should preferably remain compact and useful as a common
 interface when no clip is installed.
 
@@ -219,11 +224,16 @@ The PoP should answer at least:
 
 The first implementation/evidence repository should start small:
 
-1. **OG-01 — upstream reference render**
+1. **OG-01 — upstream reference assembly**
    - reproduce the selected QuackWorks fixed receiver + removable snap at the
      pinned revision;
+   - generate reproducible assembled, exploded and section PNG evidence;
+   - export the relevant fixed-side and removable-side STL parts so the
+     reference mechanism can be printed, handled and measured;
 2. **AT-01 — neutral fixed/removable coupon**
    - isolate the minimum attachment pair from the full 28 mm grid context;
+   - generate the same basic assembled/exploded/section PNG evidence;
+   - export separate fixed-side and removable-side coupon STLs;
 3. **AT-02 — retention/flex section**
    - make the compliant/locking region visible and measurable;
 4. **AT-03 — tolerance variants**
