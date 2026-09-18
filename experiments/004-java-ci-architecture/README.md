@@ -1,6 +1,6 @@
 # Java CI architecture PoP
 
-Status: **active — target concept defined; PoP qualification next**
+Status: **active — local Maven Build Cache PoP qualified; broader qualification in progress**
 
 Tracking issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69)
 
@@ -33,43 +33,46 @@ The intended responsibility split is:
 - **GitHub Actions** — event, runner, job and artifact orchestration;
 - **Moon / generic repository tooling** — repository/capability affected selection and platform policy;
 - **Maven** — reactor, lifecycle, build and test authority;
-- **Maven-native build cache** — first PoP mechanism for module-level incremental/cache semantics;
+- **Maven-native build cache** — optional module-level incremental/cache optimization, configurable as `none | local | shared`;
 - **publication** — reuses canonical prepared build output and does not rebuild merely to publish.
 
 Maven-native build caching is the first mechanism to qualify because module-level reuse belongs naturally inside Maven semantics if it proves correct, observable and portable. Moon output caching remains an alternative/complement only when a concrete PoP result leaves a material requirement unresolved.
 
-## Existing control evidence
+## Qualified local PoP evidence
 
-The reusable harness/control baseline is already on experiment main:
+The reusable harness and local Maven Build Cache PoP are qualified on experiment main:
 
-- exact source `1f2dde6629e2acc6f6b86c482939c7752939c2f6`;
-- exact-main workflow run `35233519246` — green;
+- exact source `bc5d1b16da3820b72430611b65969ec7fb0588d0`;
+- exact-main run `35250860673` — green across discovery plus 14 control/cache jobs;
 - deterministic graph `core -> feature-a/feature-b -> app`;
-- cases CI-01 through CI-05;
-- declarative TOML cases, generic harness and GitHub Actions matrix;
-- normalized machine-readable result/evidence including exact source/run/toolchain provenance.
+- seven self-verifying declarative cases;
+- native Maven cache report retained and normalized;
+- class/test/JAR workset and semantic JAR payload measured separately.
 
-The plain-Maven control shows:
+The local result supports Maven-native caching as a strong architectural candidate: unchanged/docs-only work is fully reused; app-local changes stay within the app module; shared-core changes invalidate the dependent graph; test-only changes rerun the affected module tests without changing production payload.
 
-- warm/no-op: no module JAR rewrite, but all Surefire reports rewritten;
-- docs-only: no module JAR rewrite, but all Surefire reports rewritten;
-- app-only: only app JAR rewritten, but all Surefire reports rewritten;
-- core change: all module JARs and Surefire reports rewritten.
+Caching remains an **optimization, not a correctness dependency**. The intended modes are:
 
-This is control evidence, not the architecture decision.
+```text
+none    ordinary Maven lifecycle, no build-cache reuse
+local   Maven Build Cache local reuse
+shared  cross-run/shared Maven Build Cache reuse
+```
 
-## Minimal PoP
+`none` is the safe initial/default mode. A forced-fresh/cache-bypass path remains available regardless of configured mode.
 
-The next step is to qualify the smallest set of principles needed to trust the target concept:
+## Remaining qualification
 
-1. unchanged warm module reuse;
-2. application-only selectivity;
-3. shared/core dependent invalidation;
-4. representative build-model/toolchain invalidation;
-5. fresh-runner cross-run reuse;
-6. forced-fresh execution for correctness-sensitive qualification.
+The next qualification work is deliberately ordered:
 
-Correctness and observability are gates. Performance is evaluated after those pass.
+1. root/module POM and representative dependency/plugin/configuration invalidation;
+2. forced-fresh/cache-bypass correctness;
+3. actual toolchain invalidation and fresh-runner/cross-run reuse;
+4. missing/corrupt cache fallback where practical;
+5. repeated performance measurements;
+6. release/canonical artifact implications.
+
+No production migration is active yet.
 
 ## Ownership
 
