@@ -1,6 +1,6 @@
 # Detachable SCAD clip interface PoP
 
-Status: **active — OG-01/OG-02 qualified; AT-01 neutral coupon next**
+Status: **active — OG-01/OG-02 qualified; AT-01 active in draft PR #4**
 
 Tracking issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
 
@@ -93,6 +93,15 @@ snap footprint          24.8 mm    24.8 mm
 ```
 
 Lite is selected as the primary starting reference for AT-01.
+
+AT-01 is active in
+[experiment draft PR #4](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/4).
+The current concept uses one local receiver/snap interface in two neutral carrier
+contexts: a 50 × 10 × 4 mm rail and a 50 × 20 × 6 mm plate with a local support
+boss. The digital evidence includes assembled/exploded/retention views, a top
+view of the centring receiver lead-in, separate STL coupons and optional compact
+1 mm reference grooves. Physical insertion/removal force and fatigue remain
+unqualified.
 
 It owns:
 
@@ -279,7 +288,9 @@ The experiment explicitly does not infer insertion force, pull-out force,
 fatigue, material choice or printer-tolerance robustness from those renders.
 Those remain later PoP questions.
 
-Next: **AT-01 — neutral fixed/removable coupon**.
+Current: **AT-01 — neutral fixed/removable coupon**, active in draft PR #4.
+AT-02 remains downstream of AT-01 digital/visual acceptance and physical coupon
+qualification.
 
 ## OG-02 retained result
 

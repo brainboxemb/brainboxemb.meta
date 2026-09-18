@@ -41,9 +41,12 @@ OG-01 and OG-02 are complete in experiment PRs #1 and #2. OG-02 adds the
 Full/Lite comparison, including individual receiver/snap cross-section PNGs and
 1.0 mm profile-slice STLs. Lite is selected as the primary reduction reference:
 receiver 4.0 mm, snap 3.4 mm, same ~24.8 mm snap footprint, with a derived
-0.6 mm top-flush assembly offset. AT-01 is now the next experiment step: reduce
-the Lite relationship to a neutral fixed/removable coupon before adding a tube
-clamp.
+0.6 mm top-flush assembly offset. AT-01 is now active in experiment draft PR
+#4. It reduces the Lite relationship to one local neutral fixed/removable
+interface on two carrier contexts (rail and plate), with generated assembled,
+section, top-view and STL evidence. The current blocking path is visual/digital
+acceptance of that receiver/snap geometry before physical coupon qualification;
+AT-02 is not started yet.
 
 The intended boundary is:
 

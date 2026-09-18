@@ -85,6 +85,50 @@ PoP repositories are preferably **reusable rather than disposable**. If a later 
 
 Completing a PoP/experiment does not automatically authorize or activate a production migration. If rollout across production owners is needed, create/select that work separately.
 
+## Commit and CI discipline
+
+Treat branch updates that trigger CI as **logical work boundaries**, not as
+individual file-save operations.
+
+For one coherent, reviewable work unit, agents should prepare the complete
+related change set first, check it as a whole, and then advance the branch with
+one commit where the available Git tooling permits. Only after that commit is
+published should its CI/evidence run be treated as the result of that work
+unit.
+
+Do not create one commit per file merely because a contents-oriented API makes
+that the easiest write primitive. On CI-backed branches this causes avoidable
+workflow churn: runs are started and then superseded or cancelled before they
+can provide useful evidence.
+
+For multi-file GitHub changes, prefer this pattern when supported:
+
+```text
+prepare all related file contents
+    -> create blobs
+    -> create one tree
+    -> create one commit
+    -> update the branch ref once
+    -> inspect the resulting CI/evidence
+```
+
+Keep commits reviewable; batching is by **logical work unit**, not an excuse to
+combine unrelated work. Separate commits remain appropriate for genuinely
+independent concerns, explicit evidence milestones, or a correction discovered
+only after a completed/failed CI run.
+
+Before advancing a branch, check the complete touched set for avoidable
+follow-up fixes such as stale names, imports/includes, documentation links,
+generated-output entrypoints, repository references and authority records.
+
+When cross-project work spans multiple repositories, preserve repository
+ownership: produce a coherent commit in each affected owner repository rather
+than mixing ownership boundaries or generating a series of per-file commits.
+
+Do not rewrite already-published history solely to squash earlier granular
+agent commits unless another requirement makes history rewriting necessary.
+Apply this discipline to subsequent work.
+
 ## Dashboard
 
 The dashboard is a subproject under `dashboard/`. Read `dashboard/AGENTS.md` before changing dashboard code or workflows.
