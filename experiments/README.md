@@ -70,13 +70,13 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ### Java CI architecture PoP
 
-[Java CI architecture PoP](004-java-ci-architecture/README.md) — **active — local cache PoP qualified; broader qualification in progress**.
+[Java CI architecture PoP](004-java-ci-architecture/README.md) — **active — local/model qualification complete; cross-run qualification next**.
 
 Tracks generic Java/software CI incremental execution, build-output reuse, module invalidation and reproducible qualification. Meta issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69).
 
 Implementation/evidence repository: `brainboxemb/exp.2026-004.java-ci-architecture`.
 
-The local Maven Build Cache PoP is qualified on exact experiment main `bc5d1b16da3820b72430611b65969ec7fb0588d0`, exact-main run `35250860673`. The next work qualifies build-model/configuration invalidation and forced-fresh correctness before fresh-runner/shared-cache behaviour and repeated performance measurements.
+The local and build-model/cache-independent Maven Build Cache qualification is now on exact experiment main `4106f71f09ef98e3a5ce5a1a9b965f27219cf0e7`, exact-main run `35317952373`. The next work qualifies actual toolchain/input identity and fresh-runner/shared-cache reuse before fallback, repeated performance and release-policy qualification.
 
 ## Parked
 

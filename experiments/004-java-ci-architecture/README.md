@@ -1,6 +1,6 @@
 # Java CI architecture PoP
 
-Status: **active — local Maven Build Cache PoP qualified; broader qualification in progress**
+Status: **active — local/model qualification complete; cross-run qualification next**
 
 Tracking issue: [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69)
 
@@ -61,16 +61,30 @@ shared  cross-run/shared Maven Build Cache reuse
 
 `none` is the safe initial/default mode. A forced-fresh/cache-bypass path remains available regardless of configured mode.
 
+## Qualified build-model/cache-independent evidence
+
+The second correctness slice is qualified on:
+
+- exact source `4106f71f09ef98e3a5ce5a1a9b965f27219cf0e7`;
+- exact-main run `35317952373` — green across discovery plus all 22 control/cache testcase jobs;
+- CI-08 root/shared build-model invalidation;
+- CI-09 module-local build-model invalidation;
+- CI-10 shared dependency-version invalidation;
+- CI-11 cache-independent execution of the same Maven lifecycle;
+- result schema v3 retaining native `source_raw` plus normalized execution state;
+- deterministic unmeasured extension/dependency preparation before prime/measured timing.
+
+This strengthens the conclusion that Maven-native caching can remain an optional optimisation rather than a correctness dependency. Cache-independent execution is intentionally distinct from a `clean` build with empty output directories.
+
 ## Remaining qualification
 
-The next qualification work is deliberately ordered:
+The next qualification work is:
 
-1. root/module POM and representative dependency/plugin/configuration invalidation;
-2. forced-fresh/cache-bypass correctness;
-3. actual toolchain invalidation and fresh-runner/cross-run reuse;
-4. missing/corrupt cache fallback where practical;
-5. repeated performance measurements;
-6. release/canonical artifact implications.
+1. actual toolchain/input identity invalidation;
+2. fresh-runner/cross-run shared-cache transport and reuse;
+3. unavailable/missing shared-cache fallback where practical;
+4. repeated performance measurements on representative workloads;
+5. release/canonical-artifact policy, including whether releases require separate empty-output clean qualification.
 
 No production migration is active yet.
 
