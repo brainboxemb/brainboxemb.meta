@@ -56,7 +56,7 @@ The next valid question is no longer whether `shared` survives between workflow 
 
 ### Project-backed parallel PoP — detachable SCAD clip interface
 
-**Active setup work, but not the primary cross-project track.**
+**Active project-backed PoP, but not the primary cross-project track.**
 
 [PoP/experiment record](experiments/005-detachable-scad-clip-interface/README.md)
 · tracking issue [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
@@ -85,8 +85,11 @@ QuackWorks fork now exists and GitHub confirms the upstream fork relationship.
 The experiment pins it at exact source
 `e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
 
-OG-01 is active in experiment PR #1 and is setting up the first reproducible
-assembled/exploded/section PNGs plus fixed/removable STL exports.
+OG-01 is complete and merged in experiment PR #1 as
+`ceaaaef95d3592a0d3ee5a8b1199d274bbdb8c7c`. Its qualified reference output
+contains assembled/exploded/section PNGs plus separate receiver/snap STLs. AT-01
+is the next experiment step: reduce the observed relationship to a neutral
+fixed/removable coupon before adding a tube clamp.
 
 The intended boundary is:
 
