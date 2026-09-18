@@ -78,6 +78,40 @@ Implementation/evidence repository: `brainboxemb/exp.2026-004.java-ci-architectu
 
 The Java cache architecture is qualified through runtime identity, fresh hosted-runner reuse, separate-workflow persistence and representative later-run latency value. Six matched real-consumer samples across two benchmark pairs all show lower shared-consumer latency, with median paired saving 6.5 s / 28.8%; total producer+consumer hosted-compute saving is not established as structural. The next work qualifies release/canonical-artifact cache policy before any rollout decision.
 
+## Project-backed parallel work
+
+### Detachable SCAD clip interface PoP
+
+[Detachable SCAD clip interface PoP](005-detachable-scad-clip-interface/README.md)
+— **active — OG-01/OG-02 qualified; AT-01 neutral coupon next**.
+
+This PoP is driven by the current HUB75 display-frame project but deliberately
+runs outside the production coupler source. It studies a compact fixed-side /
+removable-side printed attachment inspired by OpenGrid, then qualifies a
+detachable aluminium-tube clip on neutral coupons before production integration.
+
+Meta issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79).
+
+Implementation/evidence repository:
+[`brainboxemb/exp.2026-005.scad-detachable-clip-interface`](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface).
+
+External-source fork:
+[`brainboxemb/fork.andylevesque.quackworks`](https://github.com/brainboxemb/fork.andylevesque.quackworks),
+confirmed by GitHub as a fork of `AndyLevesque/QuackWorks` and pinned by the
+experiment at exact source
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
+
+OG-01 and OG-02 were completed in
+[experiment PR #1](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/1)
+and [PR #2](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/2).
+The reference evidence now includes Full/Lite assembled/exploded/section PNGs,
+individual receiver/snap profile PNGs, complete printable parts and 1.0 mm
+profile-slice STLs. Lite is the primary reduction reference for AT-01.
+
+This project-backed PoP does **not** replace the Java CI architecture PoP as the
+primary cross-project work track and does not authorize production integration
+before the HUB75 project reaches its own core-interface freeze gate.
+
 ## Parked
 
 ### Moon as SCAD target engine

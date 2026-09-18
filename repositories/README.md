@@ -36,6 +36,42 @@ The maintained cross-project experiment/PoP records are under [experiments/](../
 
 See the [dashboard](../dashboard/README.md) for the complete current public set and live status.
 
+## External source forks
+
+Some experiments need a retained fork of a third-party repository so upstream
+history, licensing and exact source provenance remain visible.
+
+Use:
+
+```text
+fork.<upstream-owner>.<upstream-repository>
+```
+
+with owner and repository normalized to lowercase for the brainboxemb repository
+name. For example:
+
+```text
+AndyLevesque/QuackWorks
+    -> brainboxemb/fork.andylevesque.quackworks
+```
+
+Including the upstream owner avoids collisions when unrelated projects use the
+same repository name.
+
+A fork has a narrow role:
+
+- preserve the GitHub fork relationship and upstream history;
+- retain upstream licence and attribution;
+- provide a stable brainboxemb-side exact revision for an experiment;
+- stay close to upstream instead of becoming the experiment or product owner.
+
+Experiment fixtures, adapters and qualification evidence belong in the
+corresponding `exp....` repository. Product-specific implementation belongs in
+its production repository. If an experimental upstream patch is required, keep
+it explicit and separable from the experiment's own geometry.
+
+Only add a fork to `catalog.yml` after the public fork actually exists.
+
 ## The machine-readable catalog
 
 [`catalog.yml`](catalog.yml) is the maintained list used by the dashboard. It records stable information such as:

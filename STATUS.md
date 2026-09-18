@@ -62,6 +62,58 @@ Across six matched samples, every shared consumer was faster than its paired con
 
 The next valid question is **release/canonical-artifact policy**: determine when source-equivalent cached outputs may be hydrated and when canonical/release artifacts must come from an explicit cache-bypassed/empty-output build.
 
+### Project-backed parallel PoP — detachable SCAD clip interface
+
+**Active project-backed PoP, but not the primary cross-project track.**
+
+[PoP/experiment record](experiments/005-detachable-scad-clip-interface/README.md)
+· tracking issue [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
+· implementation/evidence repository
+`brainboxemb/exp.2026-005.scad-detachable-clip-interface`
+· external-source fork
+`brainboxemb/fork.andylevesque.quackworks`
+
+The current HUB75 display-frame project is waiting on unfinished physical panel
+verification before its panel-facing coupler interface can be frozen. That
+physical gate does not need to block independent research into the detachable
+reinforcement attachment.
+
+The PoP therefore runs on neutral/surrogate fixed-side and removable-side
+coupons. Its current preferred mechanism reference is
+`AndyLevesque/QuackWorks` at exact main
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`, specifically the OpenGrid board
+receiver and removable snap implementation. QuackWorks' CC BY-NC-SA 4.0
+licensing and the snap file's additional provenance/licensing wording must be
+kept explicit; studying the mechanical principle is not treated as permission
+to copy the implementation into production.
+
+The generic external-fork naming rule is
+`fork.<upstream-owner>.<upstream-repository>`, normalized to lowercase. The
+QuackWorks fork now exists and GitHub confirms the upstream fork relationship.
+The experiment pins it at exact source
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
+
+OG-01 and OG-02 are complete in experiment PRs #1 and #2. OG-02 adds the
+Full/Lite comparison, including individual receiver/snap cross-section PNGs and
+1.0 mm profile-slice STLs. Lite is selected as the primary reduction reference:
+receiver 4.0 mm, snap 3.4 mm, same ~24.8 mm snap footprint, with a derived
+0.6 mm top-flush assembly offset. AT-01 is now the next experiment step: reduce
+the Lite relationship to a neutral fixed/removable coupon before adding a tube
+clamp.
+
+The intended boundary is:
+
+```text
+external-source fork
+        ↓ exact pinned reference
+detachable-interface PoP
+        ↓ qualified interface contract
+HUB75 project integration
+        ↑ only after project core-interface freeze
+```
+
+The Java CI architecture PoP remains the primary repository-spanning work track.
+
 There is currently **no active migration**.
 
 ## Proposed / inactive
