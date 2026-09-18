@@ -8,7 +8,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### PoP — reusable Java CI architecture qualification
 
-**Active — local Maven Build Cache PoP qualified; broader qualification in progress.**
+**Active — local + build-model/cache-independent qualification complete; cross-run qualification next.**
 
 [PoP/experiment record](experiments/004-java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
 
@@ -44,7 +44,7 @@ The target responsibility split remains GitHub Actions for runner/event orchestr
 
 Caching is an **optional optimization capability**, not a correctness dependency. The intended project-level modes are `none | local | shared`, with `none` as the safe initial/default mode and an explicit forced-fresh/cache-bypass path available regardless of the configured mode. Projects should opt into caching when build/test scale makes the extra mechanism worthwhile rather than adopting it merely because the framework supports it.
 
-The next qualification slice is build-model/configuration invalidation plus forced-fresh correctness. After that come actual toolchain/fresh-runner cross-run reuse, cache failure/fallback and repeated performance measurements.
+Build-model/configuration and cache-independent execution are now qualified on exact experiment main `4106f71f09ef98e3a5ce5a1a9b965f27219cf0e7`, exact-main run `35317952373` — green across discovery plus all 22 control/cache testcase jobs. CI-08 through CI-11 prove root/shared versus module-local model invalidation, shared dependency-version invalidation, and correct Maven execution without consuming build-cache results. The next qualification slice is actual toolchain/input identity plus fresh-runner/cross-run shared-cache reuse; fallback and repeated performance qualification follow afterward.
 
 There is currently **no active migration**.
 
