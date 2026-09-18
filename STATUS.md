@@ -8,7 +8,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### PoP — reusable Java CI architecture qualification
 
-**Active — cross-workflow shared-cache reuse qualified; representative end-to-end production-value qualification next.**
+**Active — representative shared-cache latency value qualified; release/canonical-artifact policy next.**
 
 [PoP/experiment record](experiments/004-java-ci-architecture/README.md) · tracking issue [#69](https://github.com/brainboxemb/brainboxemb.meta/issues/69) · implementation/evidence repository `brainboxemb/exp.2026-004.java-ci-architecture`
 
@@ -52,7 +52,15 @@ The PoP also established two required design constraints: cache storage is parti
 
 Cross-workflow persistence is now qualified by CI-15 on exact experiment main `681ce7b9d56973b5540cb314c8e45e25618915a0`. Producer run `35323272710` built all four modules and saved 12 Maven build-cache files. A later, separate `workflow_run` consumer `35323361468` restored the exact cache on the same source, started with zero module outputs, reused all four modules as Maven-native `LOCAL`, and restored all four JARs plus five Surefire reports. The retained evidence/capability update is on experiment main `0d59eb6af11eff0db311650fd9b1a6aa30f8eb4f`; PR regression run `35324923371` was 28/28 green.
 
-The next valid question is no longer whether `shared` survives between workflow runs. It is whether the complete production path saves enough **end-to-end wall-clock and hosted-runner cost** on representative Java work to justify setup, cache transport and storage overhead. Maven-phase timing alone is not sufficient.
+Representative end-to-end production value is now qualified against exact real-consumer source `brainboxemb/2026-010-02.java.event-timing-framework@0f9dbc2f5aa0beaec8f63465ada83f2bc2a83709`.
+
+Two independent exact-main benchmark pairs were retained:
+- experiment `2d9ac9af9006725576009b5c453590800a1a7337` — producer `35335319664`, consumer `35335436917`;
+- experiment `d47d10ae0cb2be7828310331a8fed8121e10d0fd` — producer `35335827417`, consumer `35335932166`.
+
+Across six matched samples, every shared consumer was faster than its paired control: savings `16, 14, 4, 3, 9, 2 s`, median **6.5 s / 28.8%**. Total producer+consumer hosted compute is not structurally qualified as a saving: paired deltas were `10, 10, -1, 0, 9, -2 s`. The second run retained ~153 kB of Maven build-cache state with ~1 s median save and restore steps. Final owner evidence is on experiment main `5c3aabe2e38a7607eb3401445ee707cd244d5161`.
+
+The next valid question is **release/canonical-artifact policy**: determine when source-equivalent cached outputs may be hydrated and when canonical/release artifacts must come from an explicit cache-bypassed/empty-output build.
 
 There is currently **no active migration**.
 
