@@ -1,6 +1,6 @@
 # Detachable SCAD clip interface PoP
 
-Status: **active — repositories established; OG-01 reference bootstrap in progress**
+Status: **active — OG-01 reference qualified; AT-01 neutral coupon next**
 
 Tracking issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
 
@@ -78,10 +78,13 @@ Established:
 brainboxemb/exp.2026-005.scad-detachable-clip-interface
 ```
 
-OG-01 bootstrap is tracked in
-[experiment PR #1](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/1).
-The repo pins the fork below `dsg/openscad/ext/quackworks` at exact
-`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
+OG-01 was completed in
+[experiment PR #1](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/1)
+and merged as `ceaaaef95d3592a0d3ee5a8b1199d274bbdb8c7c`. The repository pins the fork
+below `dsg/openscad/ext/quackworks` at exact
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`. The qualified OG-01 reference
+produces assembled/exploded/section PNGs and separate fixed-receiver/removable-
+snap STLs. AT-01 is the next valid experiment step.
 
 It owns:
 
@@ -253,6 +256,22 @@ The first implementation/evidence repository should start small:
 
 Do not manufacture extra candidate mechanisms unless an earlier case exposes a
 concrete unresolved design decision.
+
+## OG-01 retained result
+
+OG-01 established the upstream reference decomposition without adapting it:
+
+- fixed side: OpenGrid cell/receiver;
+- removable side: separate approximately 24.8 mm `openGridSnap()`;
+- full receiver and full snap share the nominal 6.8 mm Z envelope;
+- retention is local around the snap perimeter;
+- long side openings leave compliant material beside the retention features.
+
+The experiment explicitly does not infer insertion force, pull-out force,
+fatigue, material choice or printer-tolerance robustness from those renders.
+Those remain later PoP questions.
+
+Next: **AT-01 — neutral fixed/removable coupon**.
 
 ## Qualification boundary
 
