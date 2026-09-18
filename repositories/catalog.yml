@@ -273,3 +273,24 @@ repositories:
     lifecycle: current
     dashboard_group: Sites & experiments
     role: Reusable Java CI architecture Proof of Principle and qualification/regression environment.
+
+  - repository: brainboxemb/exp.2026-005.scad-detachable-clip-interface
+    category: experiment
+    domain: scad
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Proof of Principle for a detachable printable SCAD clip interface inspired by OpenGrid.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
+
+  - repository: brainboxemb/fork.andylevesque.quackworks
+    category: external-source
+    domain: scad
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Retained fork of AndyLevesque/QuackWorks for exact OpenGrid source provenance in experiments.
+    engines:
+      - openscad
