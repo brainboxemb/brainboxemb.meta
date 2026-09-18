@@ -60,8 +60,10 @@ The next valid question is no longer whether `shared` survives between workflow 
 
 [PoP/experiment record](experiments/005-detachable-scad-clip-interface/README.md)
 · tracking issue [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
-· planned implementation/evidence repository
+· implementation/evidence repository
 `brainboxemb/exp.2026-005.scad-detachable-clip-interface`
+· external-source fork
+`brainboxemb/fork.andylevesque.quackworks`
 
 The current HUB75 display-frame project is waiting on unfinished physical panel
 verification before its panel-facing coupler interface can be frozen. That
@@ -77,10 +79,14 @@ licensing and the snap file's additional provenance/licensing wording must be
 kept explicit; studying the mechanical principle is not treated as permission
 to copy the implementation into production.
 
-A generic external-fork naming rule is being established as
-`fork.<upstream-owner>.<upstream-repository>`, normalized to lowercase. If the
-source survey confirms QuackWorks, the planned fork is
-`brainboxemb/fork.andylevesque.quackworks`.
+The generic external-fork naming rule is
+`fork.<upstream-owner>.<upstream-repository>`, normalized to lowercase. The
+QuackWorks fork now exists and GitHub confirms the upstream fork relationship.
+The experiment pins it at exact source
+`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
+
+OG-01 is active in experiment PR #1 and is setting up the first reproducible
+assembled/exploded/section PNGs plus fixed/removable STL exports.
 
 The intended boundary is:
 
