@@ -41,6 +41,12 @@ Do not duplicate the same maintenance rule across README, docs, migrations and e
 
 Private or archived-private repositories do not belong in the public catalog.
 
+For intentionally retained third-party forks, use the reader-facing naming rule
+from `repositories/README.md`:
+`fork.<upstream-owner>.<upstream-repository>`, normalized to lowercase.
+Do not add planned-but-not-created fork or experiment repositories to the
+catalog.
+
 ## Cross-project work tracks
 
 `STATUS.md` is the authority for which repository-spanning work track is currently primary. A work track may be a migration, an experiment/PoP or another explicitly documented cross-project activity.
