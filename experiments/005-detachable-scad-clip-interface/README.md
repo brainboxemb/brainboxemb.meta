@@ -295,7 +295,7 @@ offset; receiver and snap use the upstream CENTER anchoring.
 
 The active **Reduced receiver + snap** work reduces the Lite relationship first,
 keeping Full as a control when the purpose of a removed feature is uncertain.
-Current geometry/evidence refinement is tracked in experiment PR #6.
+Current geometry/evidence refinement is tracked in experiment PR #7.
 
 ## Qualification boundary
 

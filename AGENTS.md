@@ -23,6 +23,20 @@ Do not make migration terminology the framing for unrelated documentation or PoP
 
 Implementation stays in the repository that owns it. Project-specific plans and design documentation stay with the project; tool/library implementation details stay with that tool/library; experiment/PoP fixtures, harnesses, adapters and qualification results stay in the dedicated experiment repository.
 
+A need observed in one consumer repository is not automatically a shared-tooling requirement. Prefer a consumer-local solution first unless the behaviour is already part of an explicit shared contract or evidence from multiple consumers shows that it belongs in shared tooling. Before promoting such a change, inspect current consumer use cases, compatibility and existing links/contracts rather than generalising from one repository.
+
+## Cross-repository work discipline
+
+Treat repository ownership and CI boundaries as part of the work plan:
+
+- follow the owner repository's current issue/branch/PR convention instead of inventing a parallel naming scheme;
+- group related edits into one coherent commit and branch update per affected repository when the available Git tooling permits;
+- do not push per-file micro-commits merely because an API makes that convenient;
+- after advancing an active CI branch, inspect that run/evidence before starting the next corrective push unless the run itself exposes a blocker that requires correction;
+- when one logical task spans multiple repositories, keep one coherent change per owner rather than mixing implementation and coordination details across boundaries.
+
+This keeps GitHub Actions evidence readable and avoids repeatedly superseding or cancelling runs with avoidable micro-pushes.
+
 ## Write for people in public documentation
 
 README files and normal documentation should first help a reader understand:

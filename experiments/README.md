@@ -97,7 +97,7 @@ The reference evidence includes Full/Lite assembled/exploded/section PNGs,
 individual receiver/snap profile PNGs, complete printable parts and 1.0 mm
 profile-slice STLs. Lite is the primary reduction reference for the active
 **Reduced receiver + snap** work in
-[experiment PR #6](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/6).
+[experiment PR #7](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/7).
 
 This project-backed PoP does not authorize production integration before the HUB75 project reaches its own core-interface freeze gate.
 
