@@ -45,7 +45,7 @@ snap footprint. The accepted reference uses the upstream CENTER anchoring and
 does not invent a seated 0.6 mm offset from the height difference.
 
 The active step is **Reduced receiver + snap**. Geometry and generated evidence
-are being refined in experiment PR #6 before later retention/flex and tolerance
+are being refined in experiment PR #7 before later retention/flex and tolerance
 qualification.
 
 The intended boundary is:
