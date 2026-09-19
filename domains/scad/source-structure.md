@@ -19,24 +19,46 @@ implementation requirement.
 
 ## Component layout
 
-A component that has design documentation normally uses:
+The established HUB75 library pattern keeps the public/production entrypoint
+one level above its support/design directory:
 
 ```text
-dsg/openscad/components/<component>/
+<component-family>/
 ├── <component>.scad
-├── <component>_render.scad
-└── design/
-    └── design.md
+└── <component>/
+    ├── <component>_render.scad
+    ├── design/
+    │   └── design.md
+    └── render/
+        └── ...                     # optional component-specific renders
 ```
 
-Related repository-level presentation output remains separate:
+For example, `lib.scad.hub75` uses:
+
+```text
+openscad/p5-64x32-panel/
+├── hub75_p5_64x32_panel.scad
+└── hub75_p5_64x32_panel/
+    ├── hub75_p5_64x32_panel_render.scad
+    ├── design/
+    │   └── design.md
+    └── render/
+        └── ...
+```
+
+This split is preferred for components with substantial design/evidence
+support because the production entrypoint stays prominent and uncluttered while
+interactive walkthrough code and component-specific presentation files remain
+grouped beside their documentation.
+
+Repository-level presentation output remains separate:
 
 ```text
 dsg/openscad/render/*.scad
 dsg/openscad/export/*.scad
 ```
 
-### `<component>.scad`
+### Public/production `<component>.scad`
 
 Owns the actual reusable/production geometry and its public modules/functions.
 
@@ -56,9 +78,11 @@ Useful rules:
   `intersection()`, `difference()` or the real production cutters rather than
   redraw the intended shape.
 
-### `<component>_render.scad`
+### Support `<component>/<component>_render.scad`
 
-Owns the **interactive design-review adapter** for that component.
+Owns the **interactive design-review adapter** for that component. It belongs
+inside the component support directory, not beside the public/production
+entrypoint and not inside `design/` itself.
 
 A maintainer opening this file directly in OpenSCAD must be able to step through
 the meaningful named design states with the Customizer. Therefore expose a
@@ -98,9 +122,11 @@ The exact view names are component-specific, but the contract is not:
 If another top-level switch materially helps interactive review, expose it in
 the Customizer as well rather than requiring a maintainer to edit source text.
 
-## `design/design.md`
+## Support `<component>/design/design.md`
 
 Owns the step-by-step explanation of how the component is constructed and why.
+Its normal `source:` points to the sibling support adapter, for example
+`source: hub75_p5_64x32_panel_render.scad`.
 
 Each important step should answer one clear question. Avoid relying on one
 attractive isometric image when the geometry being explained is a profile,
@@ -174,6 +200,6 @@ states.
 - **tool.scad-project** — only owns automation when behaviour genuinely needs
   shared implementation.
 
-A missing Customizer selector in one repository should first be corrected in
-that repository. Promote automation to shared tooling only when a real
-cross-consumer need is established.
+A missing Customizer selector or inconsistent support layout in one repository
+should first be corrected in that repository. Promote automation to shared
+tooling only when a real cross-consumer need is established.
