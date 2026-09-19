@@ -10,8 +10,10 @@ For the technical execution model — including Moon capabilities, inheritance, 
 | --- | --- |
 | [`tool.git-project`](https://github.com/brainboxemb/tool.git-project) | Generic repository/Moon mechanics: exact revision comparison, affected-task query and shared Git/publication primitives. |
 | [`tool.scad-project`](https://github.com/brainboxemb/tool.scad-project) | SCAD-specific project model and lifecycle: shared capability tasks, builds/renders/docs/verification, runtime selection and applicable cache policy. |
-| [`docker.scad-toolchain`](https://github.com/brainboxemb/docker.scad-toolchain) | Related CAD runtime image family: an OpenSCAD-focused profile plus the full OpenSCAD + PythonSCAD profile. |
-| [`docker.scad-toolchain.test`](https://github.com/brainboxemb/docker.scad-toolchain.test) | External qualification of both runtime profiles and their shared/specific capability contracts. |
+| [`docker.scad-toolchain`](https://github.com/brainboxemb/docker.scad-toolchain) | Related SCAD runtime image family: OpenSCAD-focused, drawing/publication and full OpenSCAD + PythonSCAD profiles. |
+| [`docker.scad-toolchain.test`](https://github.com/brainboxemb/docker.scad-toolchain.test) | External qualification of the published SCAD runtime profiles and their shared/specific capability contracts. |
+| [`docker.freecad`](https://github.com/brainboxemb/docker.freecad) | Optional headless FreeCAD runtime for mesh/Part automation and TechDraw hidden-line projection. |
+| [`docker.freecad.test`](https://github.com/brainboxemb/docker.freecad.test) | External consumer qualification of the optional FreeCAD runtime. |
 | [`template.scad-project`](https://github.com/brainboxemb/template.scad-project) | Reference project showing the intended consumer-facing setup. |
 
 ## How these pieces fit together
@@ -38,20 +40,56 @@ Normal consumers should therefore not copy a large Moon lifecycle graph. Shared 
 
 ## Runtime profiles
 
-The shared runtime is one image family, not one mandatory all-inclusive image for every task.
+The normal shared SCAD runtime is one image family, not one mandatory
+all-inclusive image for every task.
 
 ```text
 OpenSCAD-focused
   OpenSCAD + BOSL2 + docs tooling + SCons + common runtime tools
+
+drawing/publication
+  OpenSCAD-focused contract
+  + drawsvg + Inkscape
 
 full/dual
   OpenSCAD-focused contract
   + PythonSCAD + pybosl2 + PythonSCAD-specific dependencies
 ```
 
-The first two-profile release is `docker.scad-toolchain v0.5.0`.
+The focused/full split was introduced in `docker.scad-toolchain v0.5.0`; the
+drawing profile followed in v0.6.0 and the current v0.6.1 line pins drawsvg for
+scripted SVG authoring.
 
-Runtime selection follows effective project configuration/capabilities rather than a repository-name allowlist. OpenSCAD-only work may use the focused profile; a project that intentionally supports PythonSCAD uses the full/dual profile.
+Runtime selection follows effective project configuration/capabilities rather
+than a repository-name allowlist. OpenSCAD-only work may use the focused
+profile, publication work can opt into the drawing profile, and a project that
+intentionally supports PythonSCAD uses the full/dual profile.
+
+## Optional FreeCAD HLR runtime
+
+FreeCAD is deliberately **not** bundled into the frequently used drawing
+profile. The current use case is occasional independent CAD-style projection of
+an OpenSCAD-produced STL, while the FreeCAD runtime itself is comparatively
+large.
+
+That optional boundary is owned separately:
+
+```text
+OpenSCAD source
+    -> STL
+    -> docker.freecad
+    -> Mesh -> Part/refine -> TechDraw HLR
+    -> SVG reference
+```
+
+`docker.freecad` owns the minimal reproducible headless FreeCAD runtime.
+`docker.freecad.test` owns its external consumer qualification. A project or
+experiment should pull that image only when it explicitly needs FreeCAD-based
+geometry/reference evidence.
+
+The HLR result is an independent reference, not a replacement source of truth
+for the OpenSCAD model and not a reason to make every normal drawing job carry
+FreeCAD.
 
 ## Moon and SCons are different layers
 

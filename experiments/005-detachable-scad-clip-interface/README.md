@@ -105,6 +105,40 @@ It owns:
 - reproducible digital and physical testcases;
 - retained qualification evidence.
 
+### Optional HLR reference runtime
+
+The reduced-profile work needs to distinguish two different kinds of 2D line:
+
+- a horizontal **section contour**, which may cross the middle of one continuous
+  sloped face;
+- a projected **real 3D edge**, which exists only where the source solids have
+  an actual topological edge.
+
+OpenSCAD `projection(cut=true)` remains a useful independent check of exact
+horizontal sections, and normal projection remains useful for silhouette
+checks. Neither replaces CAD-style hidden-line/visible-edge projection.
+
+For the latter, the shared tooling boundary is deliberately optional and
+separate from the normal SCAD drawing runtime:
+
+```text
+experiment/OpenSCAD
+    -> STL
+    -> brainboxemb/docker.freecad
+    -> Mesh -> Part/refine -> TechDraw HLR
+    -> SVG reference
+```
+
+External runtime qualification belongs in
+[`brainboxemb/docker.freecad.test`](https://github.com/brainboxemb/docker.freecad.test).
+The runtime repositories have been created; bootstrap/qualification is the next
+tooling step before Experiment 005 relies on this route as retained evidence.
+
+FreeCAD HLR is an **independent oracle**, not the source of the OpenGrid
+reimplementation. Understanding the pinned QuackWorks source profiles and the
+real edges produced by their straight/corner constructions remains the primary
+design-learning objective.
+
 ### Production project
 
 The HUB75 project consumes only the resulting qualified interface contract after
@@ -255,6 +289,10 @@ Keep the implementation/evidence sequence small and descriptive:
    - retain Full as the control when the purpose of a removed feature is unclear;
 3. **Reduced receiver + snap**
    - isolate the minimum attachment pair from the full OpenGrid context;
+   - reconstruct actual source-profile/topological edges rather than treating
+     every horizontal section contour as a drawing edge;
+   - cross-check visible-edge interpretation with the optional FreeCAD HLR
+     reference once that runtime is qualified;
    - keep the fixed/removable geometry neutral and reusable;
 4. **Retention and flex geometry**
    - make compliant regions, lead-ins and locking/contact surfaces measurable;
