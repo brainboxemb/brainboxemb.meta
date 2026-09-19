@@ -48,6 +48,26 @@ The active step is **Reduced receiver + snap**. Geometry and generated evidence
 are being refined in experiment PR #7 before later retention/flex and tolerance
 qualification.
 
+That refinement exposed a useful drawing/reference distinction: a horizontal
+section through a sloped face creates a section contour even when the 3D model
+has no topological edge there. OpenSCAD `projection(cut=true)` therefore
+remains useful for section validation, but it is not by itself a CAD-style
+visible-edge oracle.
+
+For independent hidden-line/visible-edge reference work, the selected tooling
+boundary is now a separate optional FreeCAD runtime rather than adding FreeCAD
+to every `scad-toolchain-drawing` job:
+
+- [`brainboxemb/docker.freecad`](https://github.com/brainboxemb/docker.freecad)
+  — minimal headless FreeCAD runtime;
+- [`brainboxemb/docker.freecad.test`](https://github.com/brainboxemb/docker.freecad.test)
+  — external consumer qualification of STL -> Mesh/Part -> TechDraw HLR -> SVG.
+
+Both repositories now exist. Their bootstrap and qualification are supporting
+work for the active PoP; they do not change the HUB75 production-integration
+gate. The earlier `docker.scad-toolchain` FreeCAD exploration established the
+packaging direction but is not the selected long-term ownership boundary.
+
 The intended boundary is:
 
 ```text

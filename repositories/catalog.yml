@@ -41,6 +41,20 @@ repositories:
       - openscad
       - pythonscad
 
+  - repository: brainboxemb/docker.freecad
+    category: tooling
+    domain: cad
+    lifecycle: current
+    dashboard_group: Tooling
+    role: Optional headless FreeCAD runtime for reproducible CAD automation, mesh-to-Part conversion, and TechDraw hidden-line projection.
+
+  - repository: brainboxemb/docker.freecad.test
+    category: tooling
+    domain: cad
+    lifecycle: current
+    dashboard_group: Tooling
+    role: External consumer qualification of the docker.freecad headless CAD automation runtime.
+
   - repository: brainboxemb/tool.git-project
     category: tooling
     domain: repository
