@@ -10,6 +10,7 @@ Use the repository according to the task:
 - public repository list → `repositories/`;
 - shared project/tooling guidance → `docs/`;
 - domain overview → `domains/`;
+- SCAD component/design source conventions → `domains/scad/source-structure.md`;
 - dashboard implementation → `dashboard/`;
 - current cross-project work → `STATUS.md`;
 - migration plans/evidence → `migrations/`;
