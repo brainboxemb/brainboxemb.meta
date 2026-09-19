@@ -5,6 +5,7 @@ This section is the easiest place to understand the public SCAD/CAD repositories
 You do not need to know the tooling architecture first. Start with the part you are interested in:
 
 - [**Projects**](projects.md) — the actual CAD designs;
+- [**Source structure**](source-structure.md) — how OpenSCAD components, interactive design views and design documentation fit together;
 - [**Libraries**](libraries.md) — reusable geometry and reference models used by projects;
 - [**Tooling and templates**](tooling.md) — which shared repositories own project setup, builds, verification and the CAD runtime;
 - [**Technical architecture**](architecture.md) — how GitHub Actions, Moon capabilities/inheritance, SCons, runtime profiles, caches and publication fit together.

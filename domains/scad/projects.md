@@ -33,5 +33,6 @@ This meta repository explains how the collection fits together; it does not repl
 ## Where next?
 
 - [SCAD overview](README.md)
+- [SCAD source structure](source-structure.md)
 - [SCAD tooling and templates](tooling.md)
 - [Reusable SCAD libraries](libraries.md)
