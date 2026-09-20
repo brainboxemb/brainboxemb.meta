@@ -6,78 +6,15 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Project-backed PoP — detachable SCAD clip interface
+There is currently **no active repository-spanning migration or PoP**.
 
-**Active project-backed PoP.**
+The OpenGrid-inspired detachable clip PoP has been closed. The removable HUB75
+tube clip is intended to print on its side, which makes the compliant snap/flex
+geometry a poor fit for the desired part orientation and layer direction.
 
-[PoP/experiment record](experiments/005-detachable-scad-clip-interface/README.md)
-· tracking issue [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
-· implementation/evidence repository
-`brainboxemb/exp.2026-005.scad-detachable-clip-interface`
-· external-source fork
-`brainboxemb/fork.andylevesque.quackworks`
-
-The current HUB75 display-frame project is waiting on unfinished physical panel
-verification before its panel-facing coupler interface can be frozen. That
-physical gate does not need to block independent research into the detachable
-reinforcement attachment.
-
-The PoP therefore runs on neutral/surrogate fixed-side and removable-side
-coupons. Its current preferred mechanism reference is
-`AndyLevesque/QuackWorks` at exact main
-`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`, specifically the OpenGrid board
-receiver and removable snap implementation. QuackWorks' CC BY-NC-SA 4.0
-licensing and the snap file's additional provenance/licensing wording must be
-kept explicit; studying the mechanical principle is not treated as permission
-to copy the implementation into production.
-
-The generic external-fork naming rule is
-`fork.<upstream-owner>.<upstream-repository>`, normalized to lowercase. The
-QuackWorks fork now exists and GitHub confirms the upstream fork relationship.
-The experiment pins it at exact source
-`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
-
-The **Upstream Full reference** and **Full versus Lite comparison** are complete
-in experiment PRs #1 and #2. The comparison adds individual receiver/snap
-cross-section PNGs and 1.0 mm profile-slice STLs. Lite is selected as the
-primary reduction reference: receiver 4.0 mm, snap 3.4 mm and the same ~24.8 mm
-snap footprint. The accepted reference uses the upstream CENTER anchoring and
-does not invent a seated 0.6 mm offset from the height difference.
-
-The active step is **Reduced receiver + snap**. Geometry and generated evidence
-are being refined in experiment PR #7 before later retention/flex and tolerance
-qualification.
-
-That refinement exposed a useful drawing/reference distinction: a horizontal
-section through a sloped face creates a section contour even when the 3D model
-has no topological edge there. OpenSCAD `projection(cut=true)` therefore
-remains useful for section validation, but it is not by itself a CAD-style
-visible-edge oracle.
-
-For independent hidden-line/visible-edge reference work, the selected tooling
-boundary is now a separate optional FreeCAD runtime rather than adding FreeCAD
-to every `scad-toolchain-drawing` job:
-
-- [`brainboxemb/docker.freecad`](https://github.com/brainboxemb/docker.freecad)
-  — minimal headless FreeCAD runtime;
-- [`brainboxemb/docker.freecad.test`](https://github.com/brainboxemb/docker.freecad.test)
-  — external consumer qualification of STL -> Mesh/Part -> TechDraw HLR -> SVG.
-
-Both repositories now exist. Their bootstrap and qualification are supporting
-work for the active PoP; they do not change the HUB75 production-integration
-gate. The earlier `docker.scad-toolchain` FreeCAD exploration established the
-packaging direction but is not the selected long-term ownership boundary.
-
-The intended boundary is:
-
-```text
-external-source fork
-        ↓ exact pinned reference
-detachable-interface PoP
-        ↓ qualified interface contract
-HUB75 project integration
-        ↑ only after project core-interface freeze
-```
+The next removable-connection direction is a simple dovetail developed directly
+inside `brainboxemb/2026-009-01.cad.HUB75-display-frame`. It is normal product
+design work and does not require a new experiment track.
 
 There is currently **no active migration**.
 
@@ -90,6 +27,30 @@ There is currently **no active migration**.
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the completed Java CI PoP and must not start automatically.
 
 ## Recently completed
+
+### Experiment 005 — detachable SCAD clip interface
+
+**Complete — investigated OpenGrid snap mechanism not selected for production.**
+
+[Experiment record](experiments/005-detachable-scad-clip-interface/README.md)
+· implementation/evidence repository
+`brainboxemb/exp.2026-005.scad-detachable-clip-interface`
+· external-source fork
+`brainboxemb/fork.andylevesque.quackworks`
+
+The experiment completed the upstream Full and Full/Lite reference work in PRs
+#1 and #2 and retained the source/mechanism evidence. Reduced receiver work in
+draft PR #7 was stopped and closed without merge.
+
+The deciding product constraint is print orientation: the actual removable tube
+clip should print on its side, while the investigated mechanism depends on
+compliant snap/flex regions. Rather than qualify a mechanism that is already a
+poor fit for the intended part, the work returns to the HUB75 product design
+with a simpler dovetail direction.
+
+No detachable-interface contract was qualified and no production integration is
+authorized by this experiment result.
+
 
 ### PoP — reusable Java CI architecture qualification
 

@@ -1,6 +1,6 @@
 # Detachable SCAD clip interface PoP
 
-Status: **active — upstream reference work complete; reduced receiver + snap under refinement**
+Status: **complete — OpenGrid-inspired snap investigated; mechanism not selected for production**
 
 Tracking issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
 
@@ -9,6 +9,34 @@ Production driver:
 
 Implementation/evidence repository:
 [`brainboxemb/exp.2026-005.scad-detachable-clip-interface`](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface)
+
+## Decision / closeout
+
+The experiment is closed without qualifying the reduced OpenGrid-inspired snap
+as a production interface.
+
+The deciding product constraint is the intended print orientation of the real
+removable tube clip. The clip should print on its side, while the investigated
+mechanism depends on compliant snap/flex regions. Continuing into retention,
+tolerance and physical qualification would therefore optimise a mechanism that
+is already a poor fit for the intended part and layer orientation.
+
+The next direction is a straightforward dovetail-style removable connection
+developed directly in the HUB75 project. That is ordinary product design work;
+no separate dovetail PoP is planned.
+
+The useful retained outcomes are:
+
+- the pinned QuackWorks/OpenGrid source provenance;
+- the Full receiver/snap reference;
+- the Full-versus-Lite comparison and dimensions;
+- the better understanding of which regions locate, retain and flex;
+- the drawing lesson that a horizontal section contour through a sloped face is
+  not automatically a real/topological 3D edge.
+
+Draft experiment PR #7 contains unfinished reduced-receiver work and was closed
+without merge.
+
 
 ## Question
 
@@ -105,44 +133,12 @@ It owns:
 - reproducible digital and physical testcases;
 - retained qualification evidence.
 
-### Optional HLR reference runtime
-
-The reduced-profile work needs to distinguish two different kinds of 2D line:
-
-- a horizontal **section contour**, which may cross the middle of one continuous
-  sloped face;
-- a projected **real 3D edge**, which exists only where the source solids have
-  an actual topological edge.
-
-OpenSCAD `projection(cut=true)` remains a useful independent check of exact
-horizontal sections, and normal projection remains useful for silhouette
-checks. Neither replaces CAD-style hidden-line/visible-edge projection.
-
-For the latter, the shared tooling boundary is deliberately optional and
-separate from the normal SCAD drawing runtime:
-
-```text
-experiment/OpenSCAD
-    -> STL
-    -> brainboxemb/docker.freecad
-    -> Mesh -> Part/refine -> TechDraw HLR
-    -> SVG reference
-```
-
-External runtime qualification belongs in
-[`brainboxemb/docker.freecad.test`](https://github.com/brainboxemb/docker.freecad.test).
-The runtime repositories have been created; bootstrap/qualification is the next
-tooling step before Experiment 005 relies on this route as retained evidence.
-
-FreeCAD HLR is an **independent oracle**, not the source of the OpenGrid
-reimplementation. Understanding the pinned QuackWorks source profiles and the
-real edges produced by their straight/corner constructions remains the primary
-design-learning objective.
-
 ### Production project
 
-The HUB75 project consumes only the resulting qualified interface contract after
-its own core panel-facing interface is physically accepted and frozen.
+The HUB75 project owns the next design step. No detachable-interface contract
+was qualified by this PoP. A simpler dovetail-style connection can therefore be
+developed directly in the product design, independently of this closed
+experiment.
 
 ## OpenGrid source survey
 
@@ -277,33 +273,17 @@ The PoP should answer at least:
 
 ## Experiment sequence
 
-Keep the implementation/evidence sequence small and descriptive:
+The original sequence closed early:
 
-1. **Upstream Full reference**
-   - reproduce the selected QuackWorks fixed receiver + removable snap at the
-     pinned revision;
-   - generate assembled, exploded and section PNG evidence;
-   - export the fixed receiver and removable snap as STL;
-2. **Full versus Lite comparison**
-   - compare the upstream low-profile Lite relationship with the Full reference;
-   - retain Full as the control when the purpose of a removed feature is unclear;
-3. **Reduced receiver + snap**
-   - isolate the minimum attachment pair from the full OpenGrid context;
-   - reconstruct actual source-profile/topological edges rather than treating
-     every horizontal section contour as a drawing edge;
-   - cross-check visible-edge interpretation with the optional FreeCAD HLR
-     reference once that runtime is qualified;
-   - keep the fixed/removable geometry neutral and reusable;
-4. **Retention and flex geometry**
-   - make compliant regions, lead-ins and locking/contact surfaces measurable;
-5. **Tolerance qualification**
-   - vary only the critical clearance/interference dimensions;
-6. **Tube-clip carrier**
-   - add the horizontal-tube clamp only after the attachment principle is
-     understood.
+1. **Upstream Full reference** — complete.
+2. **Full versus Lite comparison** — complete.
+3. **Reduced receiver + snap** — stopped during refinement; draft PR #7 closed without merge.
+4. **Retention and flex geometry** — not started.
+5. **Tolerance qualification** — not started.
+6. **Tube-clip carrier** — not started.
 
-Do not manufacture extra candidate mechanisms unless an earlier case exposes a
-concrete unresolved design decision.
+The later steps are intentionally not required after the product-level
+print-orientation decision.
 
 ## Upstream Full reference retained result
 
@@ -331,23 +311,24 @@ The receiver is 4.0 mm high and the basic Lite snap is 3.4 mm high. The accepted
 reference does not convert that arithmetic 0.6 mm difference into a seated
 offset; receiver and snap use the upstream CENTER anchoring.
 
-The active **Reduced receiver + snap** work reduces the Lite relationship first,
-keeping Full as a control when the purpose of a removed feature is uncertain.
-Current geometry/evidence refinement is tracked in experiment PR #7.
+Reduced receiver/snap work was started from the Lite relationship but stopped
+before qualification. Draft experiment PR #7 was closed without merge when the
+mechanism was no longer selected for the intended side-printed tube clip.
 
 ## Qualification boundary
 
-The PoP may qualify an attachment principle and interface contract.
+The experiment did **not** qualify an attachment interface contract.
 
 It does not:
 
 - accept the real HUB75 panel geometry;
 - accept the current production couplers physically;
 - freeze the production coupler interface;
-- authorize direct copying of third-party geometry into the production project.
+- authorize direct copying of third-party geometry into the production project;
+- require the HUB75 project to continue with the OpenGrid-inspired snap.
 
-Production integration starts only when the HUB75 project has both a frozen core
-interface and a qualified detachable-interface result.
+The retained evidence is reference/mechanism knowledge only. Subsequent dovetail
+design belongs directly to the HUB75 product repository.
 
 ## Reuse
 

@@ -12,8 +12,6 @@ For the technical execution model — including Moon capabilities, inheritance, 
 | [`tool.scad-project`](https://github.com/brainboxemb/tool.scad-project) | SCAD-specific project model and lifecycle: shared capability tasks, builds/renders/docs/verification, runtime selection and applicable cache policy. |
 | [`docker.scad-toolchain`](https://github.com/brainboxemb/docker.scad-toolchain) | Related SCAD runtime image family: OpenSCAD-focused, drawing/publication and full OpenSCAD + PythonSCAD profiles. |
 | [`docker.scad-toolchain.test`](https://github.com/brainboxemb/docker.scad-toolchain.test) | External qualification of the published SCAD runtime profiles and their shared/specific capability contracts. |
-| [`docker.freecad`](https://github.com/brainboxemb/docker.freecad) | Optional headless FreeCAD runtime for mesh/Part automation and TechDraw hidden-line projection. |
-| [`docker.freecad.test`](https://github.com/brainboxemb/docker.freecad.test) | External consumer qualification of the optional FreeCAD runtime. |
 | [`template.scad-project`](https://github.com/brainboxemb/template.scad-project) | Reference project showing the intended consumer-facing setup. |
 
 ## How these pieces fit together
@@ -64,32 +62,6 @@ Runtime selection follows effective project configuration/capabilities rather
 than a repository-name allowlist. OpenSCAD-only work may use the focused
 profile, publication work can opt into the drawing profile, and a project that
 intentionally supports PythonSCAD uses the full/dual profile.
-
-## Optional FreeCAD HLR runtime
-
-FreeCAD is deliberately **not** bundled into the frequently used drawing
-profile. The current use case is occasional independent CAD-style projection of
-an OpenSCAD-produced STL, while the FreeCAD runtime itself is comparatively
-large.
-
-That optional boundary is owned separately:
-
-```text
-OpenSCAD source
-    -> STL
-    -> docker.freecad
-    -> Mesh -> Part/refine -> TechDraw HLR
-    -> SVG reference
-```
-
-`docker.freecad` owns the minimal reproducible headless FreeCAD runtime.
-`docker.freecad.test` owns its external consumer qualification. A project or
-experiment should pull that image only when it explicitly needs FreeCAD-based
-geometry/reference evidence.
-
-The HLR result is an independent reference, not a replacement source of truth
-for the OpenSCAD model and not a reason to make every normal drawing job carry
-FreeCAD.
 
 ## Moon and SCons are different layers
 
