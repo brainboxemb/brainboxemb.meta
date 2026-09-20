@@ -1,6 +1,6 @@
 # Detachable SCAD clip interface PoP
 
-Status: **complete — OpenGrid-inspired snap investigated; mechanism not selected for production**
+Status: **stopped early — experiment not completed; OpenGrid-inspired snap not selected for production**
 
 Tracking issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79)
 
@@ -12,8 +12,8 @@ Implementation/evidence repository:
 
 ## Decision / closeout
 
-The experiment is closed without qualifying the reduced OpenGrid-inspired snap
-as a production interface.
+The experiment was stopped early without qualifying the reduced
+OpenGrid-inspired snap as a production interface.
 
 The deciding product constraint is the intended print orientation of the real
 removable tube clip. The clip should print on its side, while the investigated
@@ -25,7 +25,7 @@ The next direction is a straightforward dovetail-style removable connection
 developed directly in the HUB75 project. That is ordinary product design work;
 no separate dovetail PoP is planned.
 
-The useful retained outcomes are:
+The experiment as a whole was not completed. The useful retained outcomes are:
 
 - the pinned QuackWorks/OpenGrid source provenance;
 - the Full receiver/snap reference;

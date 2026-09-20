@@ -26,11 +26,11 @@ There is currently **no active migration**.
 
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the completed Java CI PoP and must not start automatically.
 
-## Recently completed
+## Recently stopped
 
 ### Experiment 005 — detachable SCAD clip interface
 
-**Complete — investigated OpenGrid snap mechanism not selected for production.**
+**Stopped early — experiment not completed; OpenGrid snap mechanism not selected for production.**
 
 [Experiment record](experiments/005-detachable-scad-clip-interface/README.md)
 · implementation/evidence repository
@@ -39,8 +39,9 @@ There is currently **no active migration**.
 `brainboxemb/fork.andylevesque.quackworks`
 
 The experiment completed the upstream Full and Full/Lite reference work in PRs
-#1 and #2 and retained the source/mechanism evidence. Reduced receiver work in
-draft PR #7 was stopped and closed without merge.
+#1 and #2 and retained the source/mechanism evidence. The experiment itself was
+then stopped early: reduced receiver work in draft PR #7 was not completed and
+was closed without merge.
 
 The deciding product constraint is print orientation: the actual removable tube
 clip should print on its side, while the investigated mechanism depends on
