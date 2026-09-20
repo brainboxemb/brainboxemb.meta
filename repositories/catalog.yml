@@ -120,6 +120,15 @@ repositories:
       generation: current
       provider: tool.scad-project
 
+  - repository: brainboxemb/lib.scad.mechint
+    category: library
+    domain: scad
+    lifecycle: current
+    dashboard_group: CAD libraries
+    role: Reusable mechanical interfaces for OpenSCAD, including dovetails, mating clearances, detents and release features.
+    engines:
+      - openscad
+
   - repository: brainboxemb/2026-003-01.cad.garden-tool-cart
     category: project
     domain: cad
