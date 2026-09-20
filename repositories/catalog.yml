@@ -120,6 +120,18 @@ repositories:
       generation: current
       provider: tool.scad-project
 
+  - repository: brainboxemb/lib.scad.util
+    category: library
+    domain: scad
+    lifecycle: current
+    dashboard_group: CAD libraries
+    role: Reusable domain-independent OpenSCAD inspection and modeling helpers.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
+
   - repository: brainboxemb/lib.scad.mechint
     category: library
     domain: scad
