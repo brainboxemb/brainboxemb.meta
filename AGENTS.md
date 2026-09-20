@@ -50,6 +50,22 @@ Avoid agent-oriented headings such as “source-of-truth boundary”, “ownersh
 
 Do not duplicate the same maintenance rule across README, docs, migrations and experiments. Put agent-only rules here and explain the system once in the appropriate reader-facing page.
 
+## Changelog coverage
+
+For repositories that maintain a `CHANGELOG.md`, record meaningful user-visible
+repository/resource changes under `Unreleased` even when the change is
+non-functional. This includes changes such as README previews/presentation,
+public documentation structure, generated-resource links, or other repository
+resources that materially change what a user sees or how the repository is
+understood.
+
+Do not create changelog noise for typo-only, whitespace-only, or similarly
+trivial editorial corrections. Released version entries are historical records;
+do not rewrite an already released entry to account for later follow-up changes.
+Record those follow-ups under `Unreleased`.
+
+The broader shared CHANGELOG format/template work is tracked in issue #52.
+
 ## Repository catalog
 
 `repositories/catalog.yml` contains the public repository inventory and stable classification. Do not copy live GitHub status into it; the dashboard reads live status from GitHub.
