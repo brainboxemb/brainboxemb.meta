@@ -8,6 +8,7 @@ Some CAD repositories are meant to be reused by several projects. Those reposito
 | --- | --- |
 | [`lib.scad.clamps`](https://github.com/brainboxemb/lib.scad.clamps) | Parametric clamp geometry and reusable clamp APIs. |
 | [`lib.scad.hub75`](https://github.com/brainboxemb/lib.scad.hub75) | HUB75 LED-panel reference geometry, dimensions and mechanical helpers. |
+| [`lib.scad.util`](https://github.com/brainboxemb/lib.scad.util) | Domain-independent OpenSCAD utilities, including reusable section-inspection helpers. |
 
 The complete public repository list and classification live in [`../../repositories/catalog.yml`](../../repositories/catalog.yml). This page is the human-readable introduction rather than a second machine-maintained catalog.
 
