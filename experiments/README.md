@@ -68,40 +68,26 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
+There is currently no active project-backed experiment/PoP.
+
+## Complete
+
 ### Detachable SCAD clip interface PoP
 
 [Detachable SCAD clip interface PoP](005-detachable-scad-clip-interface/README.md)
-— **active — upstream Full and Full/Lite reference work complete; reduced receiver + snap active**.
+— **complete — OpenGrid-inspired snap investigated but not selected for the HUB75
+tube clip**.
 
-This PoP is driven by the current HUB75 display-frame project but deliberately
-runs outside the production coupler source. It studies a compact fixed-side /
-removable-side printed attachment inspired by OpenGrid, then qualifies a
-detachable aluminium-tube clip on neutral coupons before production integration.
+The Full and Full/Lite upstream references were completed and retained. The
+reduced receiver/snap direction was stopped before retention/flex and tolerance
+qualification because the real tube clip is intended to print on its side,
+making the compliant snap geometry a poor fit for the desired print/layer
+orientation.
 
-Meta issue: [#79](https://github.com/brainboxemb/brainboxemb.meta/issues/79).
+Draft experiment PR #7 was closed without merge. Subsequent detachable
+connection design returns to the HUB75 project, where a straightforward
+dovetail can be developed as normal product design rather than another PoP.
 
-Implementation/evidence repository:
-[`brainboxemb/exp.2026-005.scad-detachable-clip-interface`](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface).
-
-External-source fork:
-[`brainboxemb/fork.andylevesque.quackworks`](https://github.com/brainboxemb/fork.andylevesque.quackworks),
-confirmed by GitHub as a fork of `AndyLevesque/QuackWorks` and pinned by the
-experiment at exact source
-`e0c1cb7ec78dd9e9a8476ed739bd3402074354f3`.
-
-The **Upstream Full reference** and **Full versus Lite comparison** were
-completed in
-[experiment PR #1](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/1)
-and [PR #2](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/2).
-The reference evidence includes Full/Lite assembled/exploded/section PNGs,
-individual receiver/snap profile PNGs, complete printable parts and 1.0 mm
-profile-slice STLs. Lite is the primary reduction reference for the active
-**Reduced receiver + snap** work in
-[experiment PR #7](https://github.com/brainboxemb/exp.2026-005.scad-detachable-clip-interface/pull/7).
-
-This project-backed PoP does not authorize production integration before the HUB75 project reaches its own core-interface freeze gate.
-
-## Complete
 
 ### Java CI architecture PoP
 

@@ -43,9 +43,6 @@ host finishing/publication
 
 Normal current-generation production uses one hosted job and at most one SCAD runtime. Avoiding work and reusing work are preferred over adding heavy parallel runners merely to improve stopwatch time.
 
-Optional independent reference checks, such as FreeCAD hidden-line projection,
-are separate on-demand verification steps. They are not part of every normal
-SCAD production/drawing execution.
 
 ## Current released baseline
 
@@ -238,7 +235,6 @@ ghcr.io/brainboxemb/scad-toolchain-drawing:<version>
 
 Extends the OpenSCAD-focused contract with drawsvg and Inkscape for scripted
 technical-drawing composition and deterministic SVG/PNG/PDF publication.
-FreeCAD is intentionally not part of this profile.
 
 ### Full/dual
 
@@ -261,35 +257,6 @@ The Migration-005 controlled qualification measured the focused image at about
 27% fewer compressed bytes than the then-current full image. Later drawing
 capabilities remain opt-in for the same reason: normal consumers should not
 carry unrelated heavy tooling.
-
-### Optional FreeCAD HLR reference runtime
-
-CAD-style visible/hidden-edge projection is a different capability from normal
-drawing publication. The current architecture keeps it in a separate image:
-
-```text
-OpenSCAD -> STL
-              |
-              v
-        docker.freecad
-        Mesh -> Part/refine
-              |
-              v
-         TechDraw HLR
-              |
-              v
-        reference SVG
-```
-
-`brainboxemb/docker.freecad` owns the minimal headless FreeCAD runtime and
-`brainboxemb/docker.freecad.test` owns its external consumer qualification.
-Consumers pull it only for explicit FreeCAD-based reference/verification work.
-
-This keeps the frequent `scad-toolchain-drawing` path small and makes the
-dependency direction explicit: FreeCAD consumes an exported interchange
-artifact; it does not become the project model owner. HLR output can serve as
-an independent oracle for visible-edge checks, while source/profile reasoning
-and OpenSCAD section/projection checks retain their own roles.
 
 ## CAD engine and project setup are different things
 
@@ -402,8 +369,6 @@ The remaining unrelated-change preflight latency is tracked as generic `tool.git
 | `tool.scad-project` | Shared SCAD capabilities, configuration validation, runtime/cache selection, normal/release SCAD lifecycle and finishing orchestration. |
 | `docker.scad-toolchain` | Reproducible focused/drawing/full SCAD runtime image family. |
 | `docker.scad-toolchain.test` | External functional qualification of the SCAD runtime image family. |
-| `docker.freecad` | Optional headless FreeCAD runtime for CAD automation and TechDraw HLR reference projection. |
-| `docker.freecad.test` | External consumer qualification of the optional FreeCAD runtime. |
 | consumer repository | Project source/configuration, capability selection, project-specific source impact and verification content. |
 | `brainboxemb.meta` | Durable portfolio/architecture explanation and migration evidence; never a runtime dependency. |
 
