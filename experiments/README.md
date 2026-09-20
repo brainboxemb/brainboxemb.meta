@@ -24,7 +24,8 @@ Within an experiment/PoP implementation repository, supporting documents under `
 - **active** — deliberately selected as current cross-project research/PoP work;
 - **proposed / inactive** — defined but not started;
 - **parked** — intentionally paused until a reactivation condition is met;
-- **complete** — the current question/conclusion is closed with retained evidence.
+- **stopped** — deliberately ended before the planned experiment/qualification sequence was completed;
+- **complete** — the planned current question/conclusion is closed with retained evidence.
 
 A repository may remain useful after a track is complete. In particular, a PoP repository can stay as a repeatable qualification/regression lab even after its initial production migration has finished.
 
@@ -70,24 +71,26 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 There is currently no active project-backed experiment/PoP.
 
-## Complete
+## Stopped
 
 ### Detachable SCAD clip interface PoP
 
 [Detachable SCAD clip interface PoP](005-detachable-scad-clip-interface/README.md)
-— **complete — OpenGrid-inspired snap investigated but not selected for the HUB75
-tube clip**.
+— **stopped early — OpenGrid-inspired snap investigated, but the planned PoP
+sequence was not completed**.
 
 The Full and Full/Lite upstream references were completed and retained. The
-reduced receiver/snap direction was stopped before retention/flex and tolerance
-qualification because the real tube clip is intended to print on its side,
-making the compliant snap geometry a poor fit for the desired print/layer
-orientation.
+experiment was then stopped before the reduced receiver/snap, retention/flex and
+tolerance qualification were completed because the real tube clip is intended
+to print on its side, making the compliant snap geometry a poor fit for the
+desired print/layer orientation.
 
 Draft experiment PR #7 was closed without merge. Subsequent detachable
 connection design returns to the HUB75 project, where a straightforward
 dovetail can be developed as normal product design rather than another PoP.
 
+
+## Complete
 
 ### Java CI architecture PoP
 
