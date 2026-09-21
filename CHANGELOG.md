@@ -13,6 +13,11 @@
 - Add `2026-010-02.java.event-timing-framework` to **Software projects**.
 - Define shared changelog coverage for meaningful user-visible repository/resource changes, including non-functional documentation and presentation changes, while excluding trivial editorial noise.
 - Activate Experiment 006 to qualify transitive SCAD library dependencies and `lib.scad.util` as a lightweight foundation dependency without sacrificing direct desktop OpenSCAD use.
+- Add the shared SCAD naming convention: `d_` for design/functional standalone inputs, `c_` for presentation-only Customizer state, uppercase for true constants/fixed entrypoint choices, and a leading underscore for private variables, functions and modules.
+- Strengthen the SCAD component-design convention: read an existing `design/design.md` before geometry changes, establish one for substantial components when design context would otherwise be repeatedly reconstructed, and add a short design-document pointer to production SCAD headers.
+- Advance Experiment 006 through DEP-05 qualification: controlled transitive external dependencies, direct desktop OpenSCAD use, nested build discovery, normal bootstrap/update entrypoints, and independent owner-local `lib.scad.util` pins; DEP-06 is active for full-closure status/update behavior.
+- Complete the HUB75 component-lab track and promote its accepted geometry to the owning repositories: constant-wall clamp behavior in `lib.scad.clamps v0.1.8`, printable male lock release in `lib.scad.mechint v0.1.6`, and HUB75 integration retained behind the parent project's physical acceptance gate.
+- Add the public `2026-009-02.cad.hub75-component-lab` and `exp.2026-006.scad-library-dependencies` repositories to the canonical public repository catalog; archived/private Experiment 005 remains outside the public catalog.
 
 ## v0.2.0 - 2026-09-12
 
