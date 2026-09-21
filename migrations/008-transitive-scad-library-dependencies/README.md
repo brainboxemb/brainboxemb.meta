@@ -81,10 +81,24 @@ Do not manufacture new library dependencies merely to demonstrate the migration.
 
 Migration 008 is active.
 
-The first blocking step is `tool.git-project`: reproduce the already-qualified
-Experiment 006 closure/status/update contract in owner tests before changing
-released generic behaviour. The PoP remains the regression oracle; production
-implementation should preserve that contract rather than redesign it.
+Steps 1 through 5 are complete:
 
-Later owner steps remain blocked until the preceding owner has qualified and
-released its part of the contract.
+- `tool.git-project v0.2.9` is released and qualified for the generic controlled
+  transitive closure, status/update and safety contract;
+- `tool.scad-project v0.15.2` is released and qualified for exact build-dependency
+  provenance from the normal SCAD build graph;
+- `template.scad-project` has qualified the released stack in production run
+  `35652899229`;
+- Experiment 006 has regressed DEP-01 through DEP-07 plus the normal dependency
+  entrypoints and SCAD production against the released owners;
+- exact regression head
+  `85a30b56307d5fac72c6389b5e34c9812a6b6881` passed all nine workflows and was
+  merged through PR #11 as `8ff28e04c6ca4a2e04371eada7e210166fc17183`.
+
+Step 6 is now active: qualify the released model in the representative real
+library chain `lib.scad.mechint -> lib.scad.util`. This is production-library
+adoption, not another prototype. Preserve the existing library-owned dependency
+intent and do not manufacture a new dependency merely for the migration.
+
+The PoP remains the regression oracle while the real-library rollout verifies
+that the released owner behavior is sufficient outside the experiment fixture.
