@@ -16,7 +16,7 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-- [008 — adopt transitive SCAD library dependencies](008-transitive-scad-library-dependencies/README.md) — active production rollout from completed Experiment 006; first blocking owner is `tool.git-project`.
+No migration is currently active.
 
 ## Proposed / inactive
 
@@ -24,6 +24,7 @@ Having a migration directory does not mean that work is active.
 
 ## Complete
 
+- [008 — adopt transitive SCAD library dependencies](008-transitive-scad-library-dependencies/README.md) — released `tool.git-project v0.2.9` and `tool.scad-project v0.15.2`, qualified the template and full Experiment 006 regression suite, then proved the real `lib.scad.mechint -> lib.scad.util` chain on exact-main run `35658098181`.
 - [006 — simplify the Java execution architecture](006-java-execution-architecture/README.md) — released `tool.java-project v0.3.2`, immutable `template.java-project v0.1.0`, real event-timing PR/main qualification and downstream `2026-010-02.java.event-timing-framework v0.2.1` all agree on selective PR/release Windows execution and Windows-free ordinary main publication; durable rules now live in [`docs/working-model/java-execution.md`](../docs/working-model/java-execution.md).
 - [005 — simplify the SCAD execution architecture](005-scad-execution-architecture/README.md) — the execution/publication architecture is qualified on `bld` / `vrf`; released owner guidance is aligned in `tool.scad-project v0.14.10` and proven by the green exact-main template run `35140381160`.
 - [004 — SCAD repository execution model](004-scad-repository-execution-model/README.md) — qualified the common conditional-SCAD execution model through the template and both reusable SCAD libraries.

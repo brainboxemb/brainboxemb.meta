@@ -6,26 +6,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 008 — adopt transitive SCAD library dependencies
-
-**Active.**
-
-[Migration 008](migrations/008-transitive-scad-library-dependencies/README.md)
-is the current production rollout from completed Experiment 006.
-
-The qualified contract is already fixed by the PoP. Migration steps 1 through 5
-are now complete: `tool.git-project v0.2.9`, `tool.scad-project v0.15.2`,
-template qualification, and the full Experiment 006 released-owner regression
-are green. Experiment 006 PR #11 qualified exact head
-`85a30b56307d5fac72c6389b5e34c9812a6b6881` across DEP-01 through DEP-07,
-normal dependency entrypoints and SCAD production, then merged as
-`8ff28e04c6ca4a2e04371eada7e210166fc17183`.
-
-The active step is now the representative real-library rollout:
-`lib.scad.mechint -> lib.scad.util`. This should verify the released dependency
-model in production library ownership without inventing new dependency intent.
-
-Tracking issue: [#100](https://github.com/brainboxemb/brainboxemb.meta/issues/100).
+There is currently **no active cross-project migration or experiment/PoP**.
 
 ## Proposed / inactive
 
@@ -36,6 +17,30 @@ Tracking issue: [#100](https://github.com/brainboxemb/brainboxemb.meta/issues/10
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the completed Java CI PoP and must not start automatically.
 
 ## Recently completed
+
+### Migration 008 — adopt transitive SCAD library dependencies
+
+**Complete.**
+
+[Migration record](migrations/008-transitive-scad-library-dependencies/README.md)
+· tracking issue [#100](https://github.com/brainboxemb/brainboxemb.meta/issues/100).
+
+Released owners are `tool.git-project v0.2.9` and
+`tool.scad-project v0.15.2`. Template production run `35652899229` is green,
+and Experiment 006 regressed DEP-01 through DEP-07 plus the normal entrypoints
+against the released stack on exact head
+`85a30b56307d5fac72c6389b5e34c9812a6b6881`.
+
+The real `lib.scad.mechint -> lib.scad.util` production-library chain then
+qualified the same contract without changing dependency intent. Mechint PR #21
+head `58331707741bc009ecc589a33861ca055a91fa48` passed production run
+`35657957029`, merged as
+`37a2a4fedb647cc81780f7734d57dbadb8629b10`, and exact-main production run
+`35658098181` is green. The existing `lib.scad.util v0.1.0` pin remains exact
+at `5c88cd9b6b118d376825927ed67e26aff6eaee2d`, while its own nested tooling
+gitlinks remain uninitialized.
+
+Future adoption is demand-driven rather than another blocking migration step.
 
 ### Experiment 006 — transitive SCAD library dependencies
 
