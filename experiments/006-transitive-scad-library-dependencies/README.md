@@ -1,161 +1,98 @@
 # Transitive SCAD library dependencies PoP
 
-Status: **active**
+Status: **complete**
 
 Tracking issue: [#96](https://github.com/brainboxemb/brainboxemb.meta/issues/96)
 
-Implementation/evidence repository: `brainboxemb/exp.2026-006.scad-library-dependencies` — active; DEP-01 through DEP-05 qualified, DEP-06 active
+Implementation/evidence repository:
+`brainboxemb/exp.2026-006.scad-library-dependencies` — retained as a reusable
+qualification/regression lab.
 
-Potential production owners:
-
-- `brainboxemb/tool.git-project` — dependency/bootstrap behavior;
-- `brainboxemb/tool.scad-project` — SCAD dependency discovery/build behavior where required;
-- reusable SCAD libraries such as `brainboxemb/lib.scad.mechint`;
-- `brainboxemb/lib.scad.util` as the candidate lightweight foundation library.
+Production handoff:
+[Migration 008](../../migrations/008-transitive-scad-library-dependencies/README.md)
+— **proposed / inactive**.
 
 ## Question
 
-Can reusable Brainboxemb SCAD libraries depend on another SCAD library at
-runtime — initially `lib.scad.util` — while keeping the normal developer
-experience simple?
+Can reusable Brainboxemb SCAD libraries own and pin other SCAD libraries while
+keeping the normal developer experience simple?
 
-The required experience is:
+Required experience:
 
 ```text
 clone / checkout
         ↓
 bootstrap
         ↓
-open a component .scad directly in desktop OpenSCAD
+open the relevant .scad directly in desktop OpenSCAD
         ↓
-works without additional machine configuration
+works without global OPENSCADPATH or manual library installation
 ```
 
-## Why this is a PoP first
+## Qualified dependency model
 
-The intended architecture is plausible, but several SCAD-specific assumptions
-still need reproducible evidence before changing the shared dependency model:
-
-- nested external dependencies must bootstrap predictably;
-- a library embedded in a consumer must still resolve its own dependency;
-- direct desktop OpenSCAD use must not depend on CI-only environment setup;
-- different owners may pin different revisions of the same foundation library;
-- dependency scanning, status/update behavior and provenance must remain
-  deterministic.
-
-If qualified, a later migration can adopt the model in tooling and selected
-libraries. This PoP does not authorize that rollout.
-
-## Target concept
+The experiment qualified a controlled closure based on owner-local
+`project.yml` dependencies:
 
 ```text
-lib.scad.util
-    lightweight foundation library
-
-        ↓
-
-lib.scad.mechint
-lib.scad.clamps
-other reusable SCAD libraries
-
-        ↓
-
-project consumers
-```
-
-A library owns and pins its direct runtime dependencies. A candidate standalone
-layout is:
-
-```text
-lib.scad.mechint/
-├── openscad/
-└── ext/
-    └── lib.scad.util/
-```
-
-A real consumer may independently pin the same foundation library:
-
-```text
-HUB75 project
-├── ext/lib.scad.util
-└── ext/lib.scad.mechint
-    └── ext/lib.scad.util
-```
-
-The exact directory/import contract is part of the PoP and is not yet frozen.
-
-## Desktop OpenSCAD constraint
-
-A successful architecture must not require a developer to:
-
-- install `lib.scad.util` globally;
-- edit OpenSCAD's global library directories;
-- set a permanent `OPENSCADPATH`;
-- launch OpenSCAD through a special wrapper merely to resolve normal library
-  dependencies.
-
-After the normal repository bootstrap, directly opening the relevant
-`.scad` file on Windows must work.
-
-## Candidate dependency rule
-
-The PoP should evaluate a controlled runtime/external dependency closure rather
-than unrestricted recursive submodules:
-
-```text
-external/runtime dependency
+role: external + type: git-submodule
     -> follow transitively
 
-tooling/development dependency
-    -> do not recursively initialize merely because a parent library has it
+tooling/development submodules
+    -> do not recurse merely because a parent library owns them
 ```
 
-The existing `role: external` declaration in `project.yml` is a candidate
-signal; the PoP must determine whether that is sufficient.
+Each owner keeps authority over its own path and ref. The same repository may
+therefore appear at independent paths with different pins.
 
-## Qualification cases
-
-Retain reproducible evidence for at least:
-
-1. standalone library bootstrap;
-2. bootstrap through a real consumer;
-3. direct Windows desktop OpenSCAD use after bootstrap;
-4. CI/build dependency discovery for nested dependencies;
-5. independent compatible version pins in consumer and nested library;
-6. understandable status/update behavior;
-7. publication/provenance identifying the actual nested revision.
-
-## First representative dependency
-
-The first representative chain uses the existing released relationship:
+Representative qualified layout:
 
 ```text
-lib.scad.mechint v0.1.6
-    -> lib.scad.util v0.1.0
+experiment
+├── lib.scad.util v0.2.0
+└── lib.scad.mechint v0.1.6
+    └── lib.scad.util v0.1.0
 ```
 
-In that release, `lib.scad.util` is used by mechint's verification and
-interactive inspection surface rather than by the public dovetail source. That
-makes it a useful real owner/pin/path fixture without changing production code
-merely to manufacture a testcase.
+## Qualification result
 
-DEP-01 retained the current direct-only bootstrap before-state. DEP-02 qualified
-an experiment-owned controlled closure in which the mechint-owned util gitlink
-is initialized while mechint's and util's nested tooling gitlinks remain
-uninitialized. DEP-03 through DEP-05 then qualified direct desktop OpenSCAD use,
-nested build discovery and independent project/library util pins without
-search-path fallback. DEP-06 now covers status/update behaviour of the complete
-closure.
+DEP-01 through DEP-07 are complete:
 
-The HUB75/mechint component-lab work that previously took priority is complete. The PoP is now the selected cross-project track; production integration still waits for qualification.
+1. released direct-only baseline retained;
+2. controlled transitive external closure on Linux and Windows;
+3. direct Windows desktop OpenSCAD use without global path setup;
+4. nested SCAD source discovery and precise SCons invalidation;
+5. independent project/library pins with no search-path fallback;
+6. normal bootstrap/update/status, dirty-worktree protection and safe recovery;
+7. machine-readable target-level provenance of the exact dependency revisions
+   actually present in the normal SCons source graph.
 
-## Activation boundary
+The provenance case distinguishes the project-owned `lib.scad.util v0.2.0`
+from mechint-owned nested `lib.scad.util v0.1.0` in one real build target.
 
-This PoP is deliberately selected as active. The independent evidence repository
-`brainboxemb/exp.2026-006.scad-library-dependencies` has qualified DEP-01
-through DEP-05. DEP-06 is the current active testcase.
+## Final evidence
 
-Activation authorizes experiment/evidence work only. Do not change shared
-bootstrap semantics or roll a new dependency model through production libraries
-until the PoP has qualified the required cases and a later production migration
-is explicitly selected.
+- exact qualifying source:
+  `16f36faf2ff9e2c19f5df6d23121c46ca9c33af4`;
+- DEP-07 build-dependency provenance run:
+  `35645913457` — green;
+- normal SCAD production:
+  `35645914291` — green through Moon materialization, finishing and Build
+  publication;
+- all DEP-01 through DEP-07 regressions and normal dependency entrypoints green
+  on the same qualifying source;
+- qualified experiment result merged to main as
+  `035a9233f4ef99ad468c3ed0ab288f4772654922`.
+
+The direct desktop gate was also exercised manually on Windows by opening the
+nested `lib.scad.mechint/main.scad` normally and rendering with F6.
+
+## Decision
+
+The architecture is viable and supports production adoption.
+
+The PoP does **not** itself change production owners. The experiment-owned
+bootstrap/status/provenance prototypes remain evidence until a production
+migration deliberately adopts them.
+
+Migration 008 records that possible rollout and remains inactive until selected.
