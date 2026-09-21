@@ -69,19 +69,7 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-### Transitive SCAD library dependencies
-
-[Experiment 006](006-transitive-scad-library-dependencies/README.md) —
-**active**.
-
-This design-first PoP asks whether reusable SCAD libraries can depend on
-`lib.scad.util` as a lightweight foundation library while remaining
-self-contained after bootstrap and directly openable in desktop OpenSCAD.
-
-Implementation/evidence repository:
-`brainboxemb/exp.2026-006.scad-library-dependencies`. Creating and bootstrapping
-that repository is the first execution step; production owners remain unchanged
-until the PoP is qualified and a later migration is deliberately activated.
+There is currently no active project-backed experiment/PoP.
 
 ## Proposed / inactive
 
@@ -107,6 +95,20 @@ dovetail can be developed as normal product design rather than another PoP.
 
 
 ## Complete
+
+### Transitive SCAD library dependencies PoP
+
+[Experiment 006](006-transitive-scad-library-dependencies/README.md) — **complete — DEP-01 through DEP-07 qualified; reusable regression lab retained**.
+
+The PoP qualified controlled transitive SCAD external-library dependencies without global OpenSCAD path configuration, including independent owner-local pins, normal bootstrap/update/status, precise SCons invalidation and exact target-level dependency provenance.
+
+Final evidence:
+- exact qualifying source `16f36faf2ff9e2c19f5df6d23121c46ca9c33af4`;
+- DEP-07 run `35645913457` — green;
+- normal SCAD production run `35645914291` — green;
+- merged experiment main `035a9233f4ef99ad468c3ed0ab288f4772654922`.
+
+Migration 008 records a possible production rollout, but remains proposed/inactive.
 
 ### Java CI architecture PoP
 

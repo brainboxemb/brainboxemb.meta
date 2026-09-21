@@ -21,6 +21,7 @@ No migration is currently active.
 ## Proposed / inactive
 
 - [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; not started automatically by closing Migration 006.
+- [008 — adopt transitive SCAD library dependencies](008-transitive-scad-library-dependencies/README.md) — production handoff from completed Experiment 006 for controlled external closure, normal bootstrap/update/status, and exact build-dependency provenance; proposed only, not active.
 
 ## Complete
 

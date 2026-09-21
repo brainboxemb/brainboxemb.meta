@@ -6,29 +6,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Experiment 006 — transitive SCAD library dependencies
-
-**Active.**
-
-[Experiment 006](experiments/006-transitive-scad-library-dependencies/README.md)
-is the current design-first PoP for using `lib.scad.util` as a lightweight
-foundation/runtime dependency of other SCAD libraries while preserving simple
-bootstrap and direct desktop OpenSCAD use.
-
-The implementation/evidence repository is
-`brainboxemb/exp.2026-006.scad-library-dependencies`.
-
-DEP-01 through DEP-05 are now qualified in the experiment repository: released
-direct-only baseline, controlled transitive `role: external` closure, direct
-Windows desktop OpenSCAD use, nested SCAD build discovery, and independent
-project/library pins of `lib.scad.util`. The normal root `bootstrap` and
-`update-repo` entrypoints also complete the qualified closure on Linux and
-Windows. DEP-06 is the active testcase for status/update behaviour of the
-complete dependency closure.
-
-Production owners are not changed by these PoP results.
-
-There is currently **no active migration**.
+There is currently **no active cross-project migration or experiment/PoP**.
 
 ## Proposed / inactive
 
@@ -37,6 +15,26 @@ There is currently **no active migration**.
 **Proposed / inactive.**
 
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the completed Java CI PoP and must not start automatically.
+
+### Migration 008 — adopt transitive SCAD library dependencies
+
+**Proposed / inactive.**
+
+[Migration 008](migrations/008-transitive-scad-library-dependencies/README.md) is the production handoff from completed Experiment 006. It would move the qualified external-dependency closure and exact build-dependency provenance into their production owners. It is documented but **not activated**.
+
+## Recently completed
+
+### Experiment 006 — transitive SCAD library dependencies
+
+**Complete — DEP-01 through DEP-07 qualified; reusable regression lab retained.**
+
+[Experiment record](experiments/006-transitive-scad-library-dependencies/README.md) · implementation/evidence repository `brainboxemb/exp.2026-006.scad-library-dependencies`.
+
+Final qualification source `16f36faf2ff9e2c19f5df6d23121c46ca9c33af4` passed DEP-01 through DEP-07, including exact owner-local dependency provenance. DEP-07 run `35645913457` and normal SCAD production run `35645914291` are green; the qualified result was merged to experiment main as `035a9233f4ef99ad468c3ed0ab288f4772654922`.
+
+The PoP proves controlled transitive `role: external` closure, direct Windows desktop OpenSCAD use without global path configuration, precise SCons discovery/invalidation, independent duplicate pins, safe status/update behaviour, and target-level provenance of the exact dependency revisions actually used.
+
+Production owners remain unchanged by the PoP itself. Migration 008 is only proposed/inactive.
 
 ## Recently stopped
 
