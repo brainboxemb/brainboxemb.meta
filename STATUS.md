@@ -18,11 +18,13 @@ bootstrap and direct desktop OpenSCAD use.
 The implementation/evidence repository is
 `brainboxemb/exp.2026-006.scad-library-dependencies`.
 
-DEP-01 established and retained the released direct-only baseline; DEP-02 then
-qualified a controlled transitive `role: external` closure on Linux and
-Windows without recursively initializing nested tooling. Both are merged in the
-experiment repository. DEP-03 is active in draft PR #3 and now tests direct
-OpenSCAD library-local path resolution plus the remaining Windows desktop gate.
+DEP-01 through DEP-05 are now qualified in the experiment repository: released
+direct-only baseline, controlled transitive `role: external` closure, direct
+Windows desktop OpenSCAD use, nested SCAD build discovery, and independent
+project/library pins of `lib.scad.util`. The normal root `bootstrap` and
+`update-repo` entrypoints also complete the qualified closure on Linux and
+Windows. DEP-06 is the active testcase for status/update behaviour of the
+complete dependency closure.
 
 Production owners are not changed by these PoP results.
 
