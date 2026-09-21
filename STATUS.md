@@ -6,32 +6,23 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active repository-spanning migration or PoP**.
+### Experiment 006 — transitive SCAD library dependencies
 
-The OpenGrid-inspired detachable clip PoP has been closed. The removable HUB75
-tube clip is intended to print on its side, which makes the compliant snap/flex
-geometry a poor fit for the desired part orientation and layer direction.
+**Active.**
 
-The next removable-connection direction is a simple dovetail developed directly
-inside `brainboxemb/2026-009-01.cad.HUB75-display-frame`. It is normal product
-design work and does not require a new experiment track.
+[Experiment 006](experiments/006-transitive-scad-library-dependencies/README.md)
+is the current design-first PoP for using `lib.scad.util` as a lightweight
+foundation/runtime dependency of other SCAD libraries while preserving simple
+bootstrap and direct desktop OpenSCAD use.
+
+The implementation/evidence repository is
+`brainboxemb/exp.2026-006.scad-library-dependencies`; creating and bootstrapping
+that repository is the first active execution step. Production owners are not
+changed by activation of the PoP.
 
 There is currently **no active migration**.
 
 ## Proposed / inactive
-
-### Experiment 006 — transitive SCAD library dependencies
-
-**Proposed / inactive.**
-
-[Experiment 006](experiments/006-transitive-scad-library-dependencies/README.md)
-records a design-first PoP for using `lib.scad.util` as a lightweight
-foundation/runtime dependency of other SCAD libraries while preserving simple
-bootstrap and direct desktop OpenSCAD use. Tracking issue:
-[#96](https://github.com/brainboxemb/brainboxemb.meta/issues/96).
-
-This PoP is deliberately not active and does not block current HUB75 or
-`lib.scad.mechint` geometry work.
 
 ### Migration 007 — standardise GitHub Actions dependency maintenance
 
