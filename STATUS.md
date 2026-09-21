@@ -16,9 +16,15 @@ foundation/runtime dependency of other SCAD libraries while preserving simple
 bootstrap and direct desktop OpenSCAD use.
 
 The implementation/evidence repository is
-`brainboxemb/exp.2026-006.scad-library-dependencies`. Baseline fixture work is
-active in experiment PR #1 using the released `mechint -> util` dependency
-relationship. Production owners are not changed by activation of the PoP.
+`brainboxemb/exp.2026-006.scad-library-dependencies`.
+
+DEP-01 established and retained the released direct-only baseline; DEP-02 then
+qualified a controlled transitive `role: external` closure on Linux and
+Windows without recursively initializing nested tooling. Both are merged in the
+experiment repository. DEP-03 is active in draft PR #3 and now tests direct
+OpenSCAD library-local path resolution plus the remaining Windows desktop gate.
+
+Production owners are not changed by these PoP results.
 
 There is currently **no active migration**.
 

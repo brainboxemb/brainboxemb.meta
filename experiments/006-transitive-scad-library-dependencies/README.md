@@ -4,7 +4,7 @@ Status: **active**
 
 Tracking issue: [#96](https://github.com/brainboxemb/brainboxemb.meta/issues/96)
 
-Implementation/evidence repository: `brainboxemb/exp.2026-006.scad-library-dependencies` — active; baseline fixture in PR #1
+Implementation/evidence repository: `brainboxemb/exp.2026-006.scad-library-dependencies` — active; DEP-01 and DEP-02 qualified, DEP-03 active in draft PR #3
 
 Potential production owners:
 
@@ -127,21 +127,33 @@ Retain reproducible evidence for at least:
 
 ## First representative dependency
 
-The motivating case is `lib.scad.mechint` using the lightweight transform
-helpers introduced in `lib.scad.util v0.2.0`, such as `xf_move()` and
-`xf_yrot()`.
+The first representative chain uses the existing released relationship:
 
-Their value is source readability rather than new geometry. The PoP therefore
-tests whether readable, consistent transform language can be a library-level
-contract without making repositories harder to use locally.
+```text
+lib.scad.mechint v0.1.6
+    -> lib.scad.util v0.1.0
+```
+
+In that release, `lib.scad.util` is used by mechint's verification and
+interactive inspection surface rather than by the public dovetail source. That
+makes it a useful real owner/pin/path fixture without changing production code
+merely to manufacture a testcase.
+
+DEP-01 retained the current direct-only bootstrap before-state. DEP-02 qualified
+an experiment-owned controlled closure in which the mechint-owned util gitlink
+is initialized while mechint's and util's nested tooling gitlinks remain
+uninitialized. A later runtime-dependent fixture may exercise utility APIs such
+as the transform helpers from `lib.scad.util v0.2.0` when the stronger runtime
+contract itself needs to be qualified.
 
 The HUB75/mechint component-lab work that previously took priority is complete. The PoP is now the selected cross-project track; production integration still waits for qualification.
 
 ## Activation boundary
 
 This PoP is deliberately selected as active. The independent evidence repository
-`brainboxemb/exp.2026-006.scad-library-dependencies` now exists; its first
-baseline fixture is being established in PR #1.
+`brainboxemb/exp.2026-006.scad-library-dependencies` has retained DEP-01 and
+DEP-02 as qualified baselines. DEP-03 is the current active testcase and keeps
+the direct Windows desktop OpenSCAD check as an explicit manual gate.
 
 Activation authorizes experiment/evidence work only. Do not change shared
 bootstrap semantics or roll a new dependency model through production libraries
