@@ -16,9 +16,9 @@ foundation/runtime dependency of other SCAD libraries while preserving simple
 bootstrap and direct desktop OpenSCAD use.
 
 The implementation/evidence repository is
-`brainboxemb/exp.2026-006.scad-library-dependencies`; creating and bootstrapping
-that repository is the first active execution step. Production owners are not
-changed by activation of the PoP.
+`brainboxemb/exp.2026-006.scad-library-dependencies`. Baseline fixture work is
+active in experiment PR #1 using the released `mechint -> util` dependency
+relationship. Production owners are not changed by activation of the PoP.
 
 There is currently **no active migration**.
 

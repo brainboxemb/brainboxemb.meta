@@ -4,7 +4,7 @@ Status: **active**
 
 Tracking issue: [#96](https://github.com/brainboxemb/brainboxemb.meta/issues/96)
 
-Implementation/evidence repository: `brainboxemb/exp.2026-006.scad-library-dependencies` — create and bootstrap as the first active execution step
+Implementation/evidence repository: `brainboxemb/exp.2026-006.scad-library-dependencies` — active; baseline fixture in PR #1
 
 Potential production owners:
 
@@ -139,9 +139,9 @@ The HUB75/mechint component-lab work that previously took priority is complete. 
 
 ## Activation boundary
 
-This PoP is deliberately selected as active. Its first implementation step is to
-create and bootstrap `brainboxemb/exp.2026-006.scad-library-dependencies` as an
-independent evidence repository.
+This PoP is deliberately selected as active. The independent evidence repository
+`brainboxemb/exp.2026-006.scad-library-dependencies` now exists; its first
+baseline fixture is being established in PR #1.
 
 Activation authorizes experiment/evidence work only. Do not change shared
 bootstrap semantics or roll a new dependency model through production libraries
