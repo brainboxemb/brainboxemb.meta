@@ -106,14 +106,16 @@ inside the component support directory, not beside the public/production
 entrypoint and not inside `design/` itself.
 
 A maintainer opening this file directly in OpenSCAD must be able to step through
-the meaningful named design states with the Customizer. Therefore expose a
-top-level `view` enum and pass it into the design-render module.
+the meaningful named design states with the Customizer. Follow the shared
+[naming convention](coding-conventions.md): presentation-only top-level
+Customizer state uses `c_`, while the public design-render module keeps normal
+domain parameter names.
 
 Example:
 
 ```openscad
 /* [Design view] */
-view = "final"; // [final,base,removed-material,profile,after-cut]
+c_view = "final"; // [final,base,removed-material,profile,after-cut]
 
 module example_design(view = "final") {
     if (view == "base")
@@ -126,7 +128,7 @@ module example_design(view = "final") {
         example_build();
 }
 
-example_design(view = view);
+example_design(view = c_view);
 ```
 
 The exact view names are component-specific, but the contract is not:

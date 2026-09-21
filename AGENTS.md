@@ -11,6 +11,7 @@ Use the repository according to the task:
 - shared project/tooling guidance → `docs/`;
 - domain overview → `domains/`;
 - SCAD component/design source conventions → `domains/scad/source-structure.md`;
+- SCAD naming/coding conventions → `domains/scad/coding-conventions.md`;
 - dashboard implementation → `dashboard/`;
 - current cross-project work → `STATUS.md`;
 - migration plans/evidence → `migrations/`;
@@ -38,6 +39,11 @@ Before changing non-trivial component geometry:
 Production component entrypoints should make an existing design document easy to
 discover from the source header, following `domains/scad/source-structure.md`.
 Do not duplicate the design explanation in the source comment; point to it.
+
+For SCAD naming, follow `domains/scad/coding-conventions.md`. Repository-local
+`AGENTS.md` files should reference that shared page rather than restating the
+`c_` / `d_` / uppercase / leading-underscore scheme. Keep only genuine
+repository-specific additions locally.
 
 
 ## Keep ownership in the right repository
