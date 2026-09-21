@@ -437,49 +437,99 @@ migration/release decision.
 
 ## Abbreviations
 
-Abbreviations save typing but cost readability when the reader has to maintain a
-mental dictionary.
+Abbreviations are encouraged when they come from a **shared, documented list**
+and make names shorter without making them ambiguous.
 
-Use the full word by default. Keep an abbreviation when it is more recognizable
-than the expanded form in the relevant technical domain.
+The purpose of this list is consistency: use the same abbreviation everywhere
+instead of inventing a new shortened form per file or repository.
 
-Commonly acceptable examples include:
+For example, prefer:
 
-| Prefer/allow | Meaning |
+```openscad
+mount_pos
+hole_cnt
+profile_len_mm
+src_obj
+des_obj
+```
+
+over mixing forms such as:
+
+```openscad
+mount_position
+hole_count
+profile_length_mm
+source_obj
+destination_object
+```
+
+Neither form is inherently unreadable, but a shared abbreviation vocabulary
+makes related source easier to scan.
+
+### General abbreviations
+
+The following list is adapted from the supplied coding-rules reference and is
+the default vocabulary for new SCAD code:
+
+| Abbreviation | Meaning | Example |
+| --- | --- | --- |
+| `adm` | administration | `view_adm` |
+| `avg` | average | `sample_avg` |
+| `ch` | character | `separator_ch` |
+| `cmd` | command | `render_cmd` |
+| `cnt` | count | `hole_cnt` |
+| `col` | column | `grid_col` |
+| `ctrl` | control | `view_ctrl` |
+| `des` | destination | `des_obj` |
+| `hor` | horizontal | `hor_offset_mm` |
+| `len` | length | `profile_len_mm` |
+| `max` | maximum | `width_max_mm` |
+| `min` | minimum | `width_min_mm` |
+| `nr` | number | `panel_nr` |
+| `obj` | object | `obj` |
+| `pos` | position | `mount_pos` |
+| `prev` | previous | `prev_pos` |
+| `rec` | record | `view_rec` |
+| `src` | source | `src_obj` |
+| `str` | string | `name_str` |
+| `ttl` | total | `width_ttl_mm` |
+| `val` | value | `default_val` |
+| `vert` | vertical | `vert_offset_mm` |
+
+Use the listed spelling. For example, if `pos` is the shared abbreviation for
+position, do not introduce `position`, `pst` or `psn` in comparable new
+identifiers without a reason.
+
+### Established technical abbreviations
+
+Established technical/domain abbreviations may be used directly when the
+abbreviation is more recognizable than the expanded form:
+
+| Abbreviation | Meaning |
 | --- | --- |
-| `min`, `max`, `avg` | minimum, maximum, average |
-| `id` | identifier |
-| `x`, `y`, `z` | coordinate axes |
 | `2d`, `3d` | dimensionality |
-| `pcb`, `led`, `cad`, `cnc`, `stl` | established technical terms |
-| `hub75` | established interface/domain name |
-| unit suffixes such as `mm`, `deg`, `rpm` | defined unit notation |
+| `cad` | computer-aided design |
+| `cnc` | computer numerical control |
+| `id` | identifier |
+| `led` | light-emitting diode |
+| `pcb` | printed circuit board |
+| `stl` | STL geometry/file format |
+| `hub75` | HUB75 interface/domain name |
 
-For ordinary words, prefer the full form:
+Coordinate axes `x`, `y` and `z` are also accepted without expansion.
 
-| Avoid by default | Prefer |
-| --- | --- |
-| `cnt` | `count` |
-| `nr` | `number` |
-| `pos` | `position` |
-| `src` | `source` |
-| `des` / `dst` | `destination` or `target` |
-| `prev` | `previous` |
-| `hor` | `horizontal` |
-| `vert` | `vertical` |
-| `ctrl` | `control` |
-| `cmd` | `command` |
-| `len` | `length` |
-| `str` | `string` |
-| `val` | `value` with the actual meaning preferred |
-| `ttl` | `total` |
-| `rec` | `record` |
-| `ch` | `character` |
-| `adm` | `administration` |
+Unit suffixes such as `mm`, `deg`, `rpm` and `mpa` are defined by the
+units section and are not treated as arbitrary abbreviations.
 
-A repository may establish an additional domain abbreviation when the expanded
-word would be less recognizable or unreasonably repetitive. Once chosen, spell
-it consistently.
+### Domain-specific abbreviations
+
+A repository or domain may add abbreviations when they occur often enough to
+justify a shared shorthand. Add them to the relevant shared documentation
+rather than inventing local variants repeatedly.
+
+The rule is therefore not "avoid abbreviations". It is:
+
+> abbreviate consistently from a known vocabulary.
 
 ## Use opposite pairs consistently
 
