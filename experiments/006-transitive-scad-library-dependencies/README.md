@@ -1,10 +1,10 @@
 # Transitive SCAD library dependencies PoP
 
-Status: **proposed / inactive**
+Status: **active**
 
 Tracking issue: [#96](https://github.com/brainboxemb/brainboxemb.meta/issues/96)
 
-Implementation/evidence repository: **not created; create only when this PoP is deliberately activated**
+Implementation/evidence repository: `brainboxemb/exp.2026-006.scad-library-dependencies` — create and bootstrap as the first active execution step
 
 Potential production owners:
 
@@ -135,11 +135,15 @@ Their value is source readability rather than new geometry. The PoP therefore
 tests whether readable, consistent transform language can be a library-level
 contract without making repositories harder to use locally.
 
-The current HUB75 trapezoid/lock-relief geometry work does **not** wait for this
-PoP and may continue independently using plain OpenSCAD.
+The HUB75/mechint component-lab work that previously took priority is complete. The PoP is now the selected cross-project track; production integration still waits for qualification.
 
 ## Activation boundary
 
-This record is intentionally only proposed. Do not create an implementation
-repository, change shared bootstrap semantics or roll a new dependency model
-through production libraries until the PoP is explicitly selected as active.
+This PoP is deliberately selected as active. Its first implementation step is to
+create and bootstrap `brainboxemb/exp.2026-006.scad-library-dependencies` as an
+independent evidence repository.
+
+Activation authorizes experiment/evidence work only. Do not change shared
+bootstrap semantics or roll a new dependency model through production libraries
+until the PoP has qualified the required cases and a later production migration
+is explicitly selected.
