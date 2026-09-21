@@ -12,6 +12,7 @@
 - Add `tool.git-project` to **Tooling**.
 - Add `2026-010-02.java.event-timing-framework` to **Software projects**.
 - Define shared changelog coverage for meaningful user-visible repository/resource changes, including non-functional documentation and presentation changes, while excluding trivial editorial noise.
+- Register proposed/inactive Experiment 006 to qualify transitive SCAD library dependencies and `lib.scad.util` as a lightweight foundation dependency without sacrificing direct desktop OpenSCAD use.
 
 ## v0.2.0 - 2026-09-12
 

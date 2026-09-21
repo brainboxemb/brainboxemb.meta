@@ -20,6 +20,19 @@ There is currently **no active migration**.
 
 ## Proposed / inactive
 
+### Experiment 006 — transitive SCAD library dependencies
+
+**Proposed / inactive.**
+
+[Experiment 006](experiments/006-transitive-scad-library-dependencies/README.md)
+records a design-first PoP for using `lib.scad.util` as a lightweight
+foundation/runtime dependency of other SCAD libraries while preserving simple
+bootstrap and direct desktop OpenSCAD use. Tracking issue:
+[#96](https://github.com/brainboxemb/brainboxemb.meta/issues/96).
+
+This PoP is deliberately not active and does not block current HUB75 or
+`lib.scad.mechint` geometry work.
+
 ### Migration 007 — standardise GitHub Actions dependency maintenance
 
 **Proposed / inactive.**
