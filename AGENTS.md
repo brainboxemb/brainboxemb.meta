@@ -34,6 +34,7 @@ Treat repository ownership and CI boundaries as part of the work plan:
 - group related edits into one coherent commit and branch update per affected repository when the available Git tooling permits;
 - do not push per-file micro-commits merely because an API makes that convenient;
 - after advancing an active CI branch, inspect that run/evidence before starting the next corrective push unless the run itself exposes a blocker that requires correction;
+- use existing logs/source first and batch related corrections when practical so broad workflow suites are not rerun for avoidable intermediate states;
 - when one logical task spans multiple repositories, keep one coherent change per owner rather than mixing implementation and coordination details across boundaries.
 
 This keeps GitHub Actions evidence readable and avoids repeatedly superseding or cancelling runs with avoidable micro-pushes.
