@@ -207,9 +207,10 @@ design.
 
 ## Object-based APIs
 
-Object-based APIs use a **semantic object name**.
+Object-based APIs use a deliberate distinction between the **caller-side
+variable name** and the **receiver-like function/module parameter**.
 
-Prefer:
+At the call site, prefer a semantic domain name:
 
 ```openscad
 panel = hub75_panel_create(...);
@@ -219,46 +220,65 @@ hub75_panel_render(panel);
 tube_mount_build(mount);
 ```
 
-and declarations such as:
+Inside a function or module that primarily operates on one object, use `obj`
+as the standard first parameter:
 
 ```openscad
-function hub75_panel_width_mm(panel) = ...;
+function hub75_panel_width_mm(obj) =
+    obj.width_mm;
 
-module tube_mount_build(mount) {
+module tube_mount_build(obj) {
+    ...
+}
+
+module tube_mount_render(
+    obj,
+    view = "final",
+    show_reference = false
+) {
     ...
 }
 ```
 
-The preferred order is:
+This gives object-based APIs a consistent visual pattern: the function/module
+name tells us the domain, while `obj` tells us which parameter is the object
+being operated on.
 
-1. use the domain name when the object has a clear role: `panel`, `mount`,
-   `clamp`, `connector`, `profile`;
-2. use `object` only for a genuinely generic helper that can accept unrelated
-   object types;
-3. do **not** abbreviate the parameter to `obj`;
-4. do **not** use `this` or `self` as the normal convention.
+Use `obj` only in this narrow receiver-like role. Do not use it as a generic
+name for arbitrary values elsewhere.
 
-`this` and `self` imply a method receiver/object-oriented execution model.
-Our OpenSCAD APIs are clearer when the parameter says what the object actually
-is.
+Do **not** use `this` or `self` as the normal convention. Those names imply a
+language-level method receiver, while OpenSCAD functions/modules still receive
+the object explicitly as an argument.
 
-When several objects of the same kind appear together, qualify their roles:
+When a function/module works with multiple objects and their roles matter, use
+role-qualified names instead of multiple ambiguous `obj` parameters:
 
 ```openscad
-source_panel
-target_panel
-left_mount
-right_mount
+source_obj
+target_obj
+
+left_obj
+right_obj
+```
+
+If the domain name is clearer than `obj` because several different object
+types are mixed in one function, use the domain names:
+
+```openscad
+panel
+mount
+connector
 ```
 
 ### Object parameter comes first
 
-When a function or module operates primarily on one existing object, put that
-object first, followed by additional input/options:
+When a function or module operates primarily on one existing object, put
+`obj` first, followed by additional input/options:
 
 ```openscad
 module tube_mount_render(
-    mount,
+    obj,
     view = "final",
     show_reference = false
 ) {
