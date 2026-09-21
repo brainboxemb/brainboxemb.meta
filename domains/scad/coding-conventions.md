@@ -205,6 +205,66 @@ actual behavior; a function called `calculate_...` should calculate, and a
 module called `render_...` should not unexpectedly mutate the meaning of the
 design.
 
+## Shared modeling utilities
+
+The portfolio provides a small shared modeling layer in
+[`brainboxemb/lib.scad.util`](https://github.com/brainboxemb/lib.scad.util).
+Use it when it makes ordinary OpenSCAD intent easier to read; it is a
+recommendation, not a requirement to wrap every native operation.
+
+Prefer the shared transform helpers for common placement/orientation patterns:
+
+```openscad
+xf_move([x_mm, y_mm, z_mm])
+    part();
+
+xf_frame(
+    pos_mm = [x_mm, y_mm, z_mm],
+    x_axis = [0, 1, 0],
+    y_axis = [0, 0, 1]
+)
+    profile();
+```
+
+The `xf_*` layer covers readable moves, rotations, reflections, transform
+objects and orthogonal coordinate-frame remapping. Use native OpenSCAD when it
+is already clearer, and keep native `multmatrix()` for genuine general affine
+or skew transforms that the shared frame API does not express naturally.
+
+Forge (`fg_*`) provides generic constructive-modeling helpers for patterns
+such as tagged differences and overlap-aware cutters:
+
+```openscad
+fg_diff() {
+    fg_body()
+        body();
+
+    fg_remove()
+        cutter();
+
+    fg_keep()
+        reinforcement();
+}
+```
+
+Forge's small Boolean overlap is only a numerical CSG robustness allowance. It
+must not be treated as fit clearance, printer tolerance or a design dimension.
+
+A useful rule of thumb is:
+
+```text
+xf_*    -> where/how geometry is placed
+fg_*    -> how positive and negative geometry are combined
+util_*  -> other shared domain-independent utilities
+```
+
+Keep domain geometry, mechanical dimensions and fit semantics in the owning
+library/project. The shared utility layer should remove generic OpenSCAD
+boilerplate, not hide the design.
+
+For full behavior and examples, see the transform and Forge manuals in
+`lib.scad.util`.
+
 ## Object-based APIs
 
 Object-based APIs use a deliberate distinction between the **caller-side
