@@ -6,15 +6,25 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active repository-spanning migration or PoP**.
+### Experiment 006 — transitive SCAD library dependencies
 
-The OpenGrid-inspired detachable clip PoP has been closed. The removable HUB75
-tube clip is intended to print on its side, which makes the compliant snap/flex
-geometry a poor fit for the desired part orientation and layer direction.
+**Active.**
 
-The next removable-connection direction is a simple dovetail developed directly
-inside `brainboxemb/2026-009-01.cad.HUB75-display-frame`. It is normal product
-design work and does not require a new experiment track.
+[Experiment 006](experiments/006-transitive-scad-library-dependencies/README.md)
+is the current design-first PoP for using `lib.scad.util` as a lightweight
+foundation/runtime dependency of other SCAD libraries while preserving simple
+bootstrap and direct desktop OpenSCAD use.
+
+The implementation/evidence repository is
+`brainboxemb/exp.2026-006.scad-library-dependencies`.
+
+DEP-01 established and retained the released direct-only baseline; DEP-02 then
+qualified a controlled transitive `role: external` closure on Linux and
+Windows without recursively initializing nested tooling. Both are merged in the
+experiment repository. DEP-03 is active in draft PR #3 and now tests direct
+OpenSCAD library-local path resolution plus the remaining Windows desktop gate.
+
+Production owners are not changed by these PoP results.
 
 There is currently **no active migration**.
 

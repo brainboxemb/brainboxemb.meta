@@ -69,7 +69,23 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-There is currently no active project-backed experiment/PoP.
+### Transitive SCAD library dependencies
+
+[Experiment 006](006-transitive-scad-library-dependencies/README.md) —
+**active**.
+
+This design-first PoP asks whether reusable SCAD libraries can depend on
+`lib.scad.util` as a lightweight foundation library while remaining
+self-contained after bootstrap and directly openable in desktop OpenSCAD.
+
+Implementation/evidence repository:
+`brainboxemb/exp.2026-006.scad-library-dependencies`. Creating and bootstrapping
+that repository is the first execution step; production owners remain unchanged
+until the PoP is qualified and a later migration is deliberately activated.
+
+## Proposed / inactive
+
+There is currently no other proposed project-backed experiment/PoP.
 
 ## Stopped
 
