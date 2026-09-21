@@ -229,6 +229,17 @@ repositories:
       generation: current
       provider: tool.scad-project
 
+  - repository: brainboxemb/2026-009-02.cad.hub75-component-lab
+    category: project
+    domain: cad
+    dashboard_group: CAD projects
+    role: Reproducible HUB75 component lab for isolated development and verification before promotion to reusable libraries and the parent frame project.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
+
   - repository: brainboxemb/2026-010-01.meta.event-timing-software
     category: project
     domain: software
@@ -294,6 +305,18 @@ repositories:
     lifecycle: current
     dashboard_group: Sites & experiments
     role: Reusable Java CI architecture Proof of Principle and qualification/regression environment.
+
+  - repository: brainboxemb/exp.2026-006.scad-library-dependencies
+    category: experiment
+    domain: scad
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Proof of Principle and retained qualification environment for transitive SCAD library dependencies, owner-local version pinning, bootstrap/update behaviour, desktop usability and provenance.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
 
   - repository: brainboxemb/fork.andylevesque.quackworks
     category: external-source

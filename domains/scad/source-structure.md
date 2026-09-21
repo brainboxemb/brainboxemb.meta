@@ -66,6 +66,27 @@ It may also expose documentation helpers when needed, but those helpers must be
 derived from the production construction. Do not create a second approximate
 geometry implementation merely to make documentation easier.
 
+### Design discovery from production source
+
+When a component has a design document, the production `.scad` entrypoint
+should advertise it near the file header so a maintainer or automated agent
+encounters the design context before changing geometry.
+
+Use a short navigation comment, for example:
+
+```openscad
+// Design: <component>/design/design.md
+// Design review: <component>/<component>_render.scad
+```
+
+Adjust the relative paths to the actual component layout. These lines are
+navigation aids, not imports and not a second copy of the design rationale.
+
+The design document is the first place to recover facts such as coordinate
+systems, print orientation, geometry ownership, accepted baseline shape and
+dimension provenance. Do not repeatedly reverse-engineer those decisions from
+the implementation when they are already documented.
+
 Useful rules:
 
 - keep the production component callable as a standalone object where practical;
@@ -85,14 +106,16 @@ inside the component support directory, not beside the public/production
 entrypoint and not inside `design/` itself.
 
 A maintainer opening this file directly in OpenSCAD must be able to step through
-the meaningful named design states with the Customizer. Therefore expose a
-top-level `view` enum and pass it into the design-render module.
+the meaningful named design states with the Customizer. Follow the shared
+[naming convention](coding-conventions.md): presentation-only top-level
+Customizer state uses `c_`, while the public design-render module keeps normal
+domain parameter names.
 
 Example:
 
 ```openscad
 /* [Design view] */
-view = "final"; // [final,base,removed-material,profile,after-cut]
+c_view = "final"; // [final,base,removed-material,profile,after-cut]
 
 module example_design(view = "final") {
     if (view == "base")
@@ -105,7 +128,7 @@ module example_design(view = "final") {
         example_build();
 }
 
-example_design(view = view);
+example_design(view = c_view);
 ```
 
 The exact view names are component-specific, but the contract is not:
@@ -127,6 +150,19 @@ the Customizer as well rather than requiring a maintainer to edit source text.
 Owns the step-by-step explanation of how the component is constructed and why.
 Its normal `source:` points to the sibling support adapter, for example
 `source: hub75_p5_64x32_panel_render.scad`.
+
+For a substantial component, this is not only retrospective documentation. It
+is persistent engineering context for the next modification. Read it before
+changing geometry so accepted baselines, coordinate transforms, print
+orientation and source/derived/project-owned dimensions do not have to be
+rediscovered on every iteration.
+
+A very small leaf component does not need ceremonial documentation merely to
+satisfy a folder pattern. But when a component has non-trivial construction,
+multiple coordinate systems, print-orientation constraints, reusable-library
+ownership boundaries, hidden fit geometry, or repeated design iterations, a
+worked-out design file should exist before those decisions become dependent on
+chat history or source-code archaeology.
 
 Each important step should answer one clear question. Avoid relying on one
 attractive isometric image when the geometry being explained is a profile,

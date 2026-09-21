@@ -6,6 +6,7 @@ You do not need to know the tooling architecture first. Start with the part you 
 
 - [**Projects**](projects.md) — the actual CAD designs;
 - [**Source structure**](source-structure.md) — how OpenSCAD components, interactive design views and design documentation fit together;
+- [**Coding conventions**](coding-conventions.md) — shared SCAD naming for design inputs, presentation state, constants and private helpers;
 - [**Libraries**](libraries.md) — reusable geometry and reference models used by projects;
 - [**Tooling and templates**](tooling.md) — which shared repositories own project setup, builds, verification and the CAD runtime;
 - [**Technical architecture**](architecture.md) — how GitHub Actions, Moon capabilities/inheritance, SCons, runtime profiles, caches and publication fit together.

@@ -11,12 +11,40 @@ Use the repository according to the task:
 - shared project/tooling guidance → `docs/`;
 - domain overview → `domains/`;
 - SCAD component/design source conventions → `domains/scad/source-structure.md`;
+- SCAD naming/coding conventions → `domains/scad/coding-conventions.md`;
 - dashboard implementation → `dashboard/`;
 - current cross-project work → `STATUS.md`;
 - migration plans/evidence → `migrations/`;
 - experiment/PoP questions/evidence → `experiments/`.
 
 Do not make migration terminology the framing for unrelated documentation or PoPs.
+
+## Read the component design before changing SCAD geometry
+
+For current-generation SCAD component work, treat the component's
+`design/design.md` and design-render adapter as engineering context, not as
+optional presentation material.
+
+Before changing non-trivial component geometry:
+
+- read the component's design document when one exists;
+- inspect the named design views that explain the affected feature;
+- use that document to recover coordinate systems, print orientation, ownership
+  boundaries, accepted baseline geometry and dimension provenance instead of
+  reconstructing those decisions from implementation code or chat history;
+- if substantial geometry work requires repeatedly reconstructing those facts
+  and the component has no design document yet, establish or complete the design
+  document before continuing iterative shape changes.
+
+Production component entrypoints should make an existing design document easy to
+discover from the source header, following `domains/scad/source-structure.md`.
+Do not duplicate the design explanation in the source comment; point to it.
+
+For SCAD naming, follow `domains/scad/coding-conventions.md`. Repository-local
+`AGENTS.md` files should reference that shared page rather than restating the
+`c_` / `d_` / uppercase / leading-underscore scheme. Keep only genuine
+repository-specific additions locally.
+
 
 ## Keep ownership in the right repository
 
