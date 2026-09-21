@@ -6,7 +6,21 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active cross-project migration or experiment/PoP**.
+### Migration 008 — adopt transitive SCAD library dependencies
+
+**Active.**
+
+[Migration 008](migrations/008-transitive-scad-library-dependencies/README.md)
+is the current production rollout from completed Experiment 006.
+
+The qualified contract is already fixed by the PoP. The first blocking owner is
+`tool.git-project`: reproduce the controlled transitive external closure,
+status/update and safety contract in owner tests before changing released
+behaviour. After that come the generic tool release, SCAD build-dependency
+provenance in `tool.scad-project`, template qualification, PoP regression
+against released owners, and a representative real consumer rollout.
+
+Tracking issue: [#100](https://github.com/brainboxemb/brainboxemb.meta/issues/100).
 
 ## Proposed / inactive
 
@@ -15,12 +29,6 @@ There is currently **no active cross-project migration or experiment/PoP**.
 **Proposed / inactive.**
 
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the completed Java CI PoP and must not start automatically.
-
-### Migration 008 — adopt transitive SCAD library dependencies
-
-**Proposed / inactive.**
-
-[Migration 008](migrations/008-transitive-scad-library-dependencies/README.md) is the production handoff from completed Experiment 006. It would move the qualified external-dependency closure and exact build-dependency provenance into their production owners. It is documented but **not activated**.
 
 ## Recently completed
 
