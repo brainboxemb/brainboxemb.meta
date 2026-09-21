@@ -13,12 +13,17 @@ For the normal repository overview, start with [`README.md`](README.md).
 [Migration 008](migrations/008-transitive-scad-library-dependencies/README.md)
 is the current production rollout from completed Experiment 006.
 
-The qualified contract is already fixed by the PoP. The first blocking owner is
-`tool.git-project`: reproduce the controlled transitive external closure,
-status/update and safety contract in owner tests before changing released
-behaviour. After that come the generic tool release, SCAD build-dependency
-provenance in `tool.scad-project`, template qualification, PoP regression
-against released owners, and a representative real consumer rollout.
+The qualified contract is already fixed by the PoP. Migration steps 1 through 5
+are now complete: `tool.git-project v0.2.9`, `tool.scad-project v0.15.2`,
+template qualification, and the full Experiment 006 released-owner regression
+are green. Experiment 006 PR #11 qualified exact head
+`85a30b56307d5fac72c6389b5e34c9812a6b6881` across DEP-01 through DEP-07,
+normal dependency entrypoints and SCAD production, then merged as
+`8ff28e04c6ca4a2e04371eada7e210166fc17183`.
+
+The active step is now the representative real-library rollout:
+`lib.scad.mechint -> lib.scad.util`. This should verify the released dependency
+model in production library ownership without inventing new dependency intent.
 
 Tracking issue: [#100](https://github.com/brainboxemb/brainboxemb.meta/issues/100).
 
@@ -42,7 +47,9 @@ Final qualification source `16f36faf2ff9e2c19f5df6d23121c46ca9c33af4` passed DEP
 
 The PoP proves controlled transitive `role: external` closure, direct Windows desktop OpenSCAD use without global path configuration, precise SCons discovery/invalidation, independent duplicate pins, safe status/update behaviour, and target-level provenance of the exact dependency revisions actually used.
 
-Production owners remain unchanged by the PoP itself. Migration 008 is only proposed/inactive.
+The original PoP did not change production owners; Migration 008 is now actively
+rolling that qualified contract through the production owners and real-library
+chain.
 
 ## Recently stopped
 
