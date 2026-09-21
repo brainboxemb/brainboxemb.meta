@@ -1,8 +1,8 @@
 # Migration 008 — adopt transitive SCAD library dependencies
 
-Status: **proposed / inactive**
+Status: **active**
 
-Tracking issue: [#99](https://github.com/brainboxemb/brainboxemb.meta/issues/99)
+Tracking issue: [#100](https://github.com/brainboxemb/brainboxemb.meta/issues/100)
 
 Source PoP:
 [Experiment 006](../../experiments/006-transitive-scad-library-dependencies/README.md)
@@ -77,10 +77,14 @@ Expected owners if the migration is activated:
 
 Do not manufacture new library dependencies merely to demonstrate the migration.
 
-## Activation boundary
+## Current status
 
-This record is intentionally **proposed / inactive**.
+Migration 008 is active.
 
-Creating this migration record does not authorize changes to
-`tool.git-project`, `tool.scad-project`, libraries or product consumers.
-Activation requires an explicit cross-project priority decision.
+The first blocking step is `tool.git-project`: reproduce the already-qualified
+Experiment 006 closure/status/update contract in owner tests before changing
+released generic behaviour. The PoP remains the regression oracle; production
+implementation should preserve that contract rather than redesign it.
+
+Later owner steps remain blocked until the preceding owner has qualified and
+released its part of the contract.
