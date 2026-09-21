@@ -1,6 +1,6 @@
 # Migration 008 — adopt transitive SCAD library dependencies
 
-Status: **active**
+Status: **complete**
 
 Tracking issue: [#100](https://github.com/brainboxemb/brainboxemb.meta/issues/100)
 
@@ -43,7 +43,7 @@ Final PoP source:
 
 ## Production ownership
 
-Expected owners if the migration is activated:
+Production owners:
 
 - **tool.git-project**
   - controlled transitive external closure;
@@ -63,7 +63,7 @@ Expected owners if the migration is activated:
     libraries;
   - preserve product/library ownership of dependency intent.
 
-## Likely rollout sequence
+## Rollout sequence
 
 1. reproduce the PoP contract in owner tests before changing released behaviour;
 2. implement/release the generic dependency closure in `tool.git-project`;
@@ -77,28 +77,39 @@ Expected owners if the migration is activated:
 
 Do not manufacture new library dependencies merely to demonstrate the migration.
 
-## Current status
+## Completion evidence
 
-Migration 008 is active.
+Migration 008 is complete.
 
-Steps 1 through 5 are complete:
+Released production owners:
 
-- `tool.git-project v0.2.9` is released and qualified for the generic controlled
-  transitive closure, status/update and safety contract;
-- `tool.scad-project v0.15.2` is released and qualified for exact build-dependency
-  provenance from the normal SCAD build graph;
-- `template.scad-project` has qualified the released stack in production run
-  `35652899229`;
-- Experiment 006 has regressed DEP-01 through DEP-07 plus the normal dependency
-  entrypoints and SCAD production against the released owners;
-- exact regression head
-  `85a30b56307d5fac72c6389b5e34c9812a6b6881` passed all nine workflows and was
-  merged through PR #11 as `8ff28e04c6ca4a2e04371eada7e210166fc17183`.
+- `tool.git-project v0.2.9` / exact
+  `9879da589101f41b2b0e634d196ddcc51e1a6102`;
+- `tool.scad-project v0.15.2` / exact
+  `70fd4162731484a949dc390e942dde8b8d811f10`;
+- `template.scad-project` production qualification run `35652899229` — green.
 
-Step 6 is now active: qualify the released model in the representative real
-library chain `lib.scad.mechint -> lib.scad.util`. This is production-library
-adoption, not another prototype. Preserve the existing library-owned dependency
-intent and do not manufacture a new dependency merely for the migration.
+The retained Experiment 006 regression lab then ran DEP-01 through DEP-07,
+normal dependency entrypoints and SCAD production against those released owners.
+Exact regression head
+`85a30b56307d5fac72c6389b5e34c9812a6b6881` passed all nine workflows and
+merged through PR #11 as
+`8ff28e04c6ca4a2e04371eada7e210166fc17183`.
 
-The PoP remains the regression oracle while the real-library rollout verifies
-that the released owner behavior is sufficient outside the experiment fixture.
+The representative real production-library chain is also qualified:
+
+- `lib.scad.mechint` PR #21 exact head
+  `58331707741bc009ecc589a33861ca055a91fa48`;
+- PR production run `35657957029` — green;
+- merged main source
+  `37a2a4fedb647cc81780f7734d57dbadb8629b10`;
+- exact-main production run `35658098181` — green;
+- the existing `lib.scad.util v0.1.0` dependency remains pinned to
+  `5c88cd9b6b118d376825927ed67e26aff6eaee2d`;
+- qualification proves that util is initialized through its
+  `role: external` ownership while util's own nested tooling gitlinks remain
+  uninitialized.
+
+No new library dependency was manufactured for the migration. Future adoption
+is demand-driven: libraries/consumers should use this released model when they
+have a real nested runtime-library dependency, not merely to broaden rollout.

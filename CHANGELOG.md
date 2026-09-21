@@ -19,6 +19,7 @@
 - Complete Experiment 006 with DEP-01 through DEP-07 qualified, including safe full-closure update/status and exact target-level SCAD dependency provenance; record Migration 008 as the proposed/inactive production handoff.
 - Activate Migration 008 to move the Experiment 006 transitive SCAD dependency contract into production owners, starting with owner tests and generic closure/status/update behaviour in `tool.git-project`.
 - Advance Migration 008 through released `tool.git-project v0.2.9`, `tool.scad-project v0.15.2`, template qualification and the full released-owner Experiment 006 regression; step 6 is now the real `lib.scad.mechint -> lib.scad.util` production-library rollout.
+- Complete Migration 008 after the real `lib.scad.mechint -> lib.scad.util` chain qualifies the released owner model on mechint main `37a2a4fedb647cc81780f7734d57dbadb8629b10`, production run `35658098181`, while retaining `lib.scad.util v0.1.0` and leaving its nested tooling uninitialized.
 - Complete the HUB75 component-lab track and promote its accepted geometry to the owning repositories: constant-wall clamp behavior in `lib.scad.clamps v0.1.8`, printable male lock release in `lib.scad.mechint v0.1.6`, and HUB75 integration retained behind the parent project's physical acceptance gate.
 - Add the public `2026-009-02.cad.hub75-component-lab` and `exp.2026-006.scad-library-dependencies` repositories to the canonical public repository catalog; archived/private Experiment 005 remains outside the public catalog.
 
