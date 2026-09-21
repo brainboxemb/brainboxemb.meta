@@ -12,6 +12,7 @@
 - Add `tool.git-project` to **Tooling**.
 - Add `2026-010-02.java.event-timing-framework` to **Software projects**.
 - Define shared changelog coverage for meaningful user-visible repository/resource changes, including non-functional documentation and presentation changes, while excluding trivial editorial noise.
+- Strengthen the SCAD component-design convention: read an existing `design/design.md` before geometry changes, establish one for substantial components when design context would otherwise be repeatedly reconstructed, and add a short design-document pointer to production SCAD headers.
 
 ## v0.2.0 - 2026-09-12
 
