@@ -430,6 +430,42 @@ RENDER_ITEM = "tube-clamp";
 Do not create an extra render-selector prefix merely for fixed entrypoint
 choices.
 
+## Geometry resolution terminology
+
+Keep CAD tessellation/resolution separate from actual printer-process settings.
+
+Use these terms when a model has multiple geometry-quality levels:
+
+- **preview resolution** — fast interactive OpenSCAD work; deliberately coarse
+  tessellation is acceptable;
+- **render resolution** — normal visual/design/verification output; geometry
+  should be smooth enough for inspection without paying unnecessary export cost;
+- **export resolution** — production mesh generation such as STL/3MF; use the
+  qualified geometry resolution intended for downstream manufacturing.
+
+Do not call OpenSCAD `$fn` / `$fa` / `$fs` choices **print resolution**.
+In portfolio terminology, print resolution belongs to the manufacturing/slicer
+process (for example layer height, line width and nozzle choice), not to CAD
+tessellation.
+
+When more than two quality contexts exist, prefer a semantic mode over vague
+`low` / `high` naming:
+
+```openscad
+c_resolution = "preview"; // [preview,render,export]
+```
+
+A simple two-state standalone component may still use a presentation control
+such as `c_high_resolution` when that is genuinely clearer. Do not rename
+released/local code mechanically merely to satisfy this vocabulary.
+
+Resolution controls are presentation/output controls, not design dimensions:
+changing only tessellation must not change nominal dimensions, fit, clearance
+or feature semantics.
+
+Dedicated render/export entrypoints may bind the appropriate resolution profile
+as a fixed constant instead of exposing it interactively.
+
 ## Units in names
 
 OpenSCAD scalar values do not carry a unit type, so physical units should be
