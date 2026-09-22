@@ -241,6 +241,45 @@ objects and orthogonal coordinate-frame remapping. Use native OpenSCAD when it
 is already clearer, and keep native `multmatrix()` for genuine general affine
 or skew transforms that the shared frame API does not express naturally.
 
+
+### Readability is the decision rule
+
+Do not treat Forge adoption as a goal in itself and do not measure compliance by
+counting or eliminating native `translate()`, `rotate()`, `mirror()` or
+`multmatrix()` calls.
+
+The question to ask at each call site is:
+
+```text
+Can a maintainer understand where/how this geometry is placed
+without reconstructing hidden axis, plane or vector semantics?
+```
+
+Use the representation that answers that question most clearly.
+
+For example, a native 2D translation such as:
+
+```openscad
+translate([rear_x_mm, rear_z_mm])
+    profile();
+```
+
+may be syntactically compact but semantically poor when the 2D operation is
+actually representing a project X/Z profile plane. In that case prefer a Forge
+transform, a semantic helper, or explicit adapter code that makes the plane and
+axis meaning obvious.
+
+Conversely, a short native transform is fine when its meaning is already
+immediate and a Forge wrapper would add ceremony without adding information.
+
+The intent of Forge is therefore:
+
+```text
+less reconstruction by the reader
+not
+more Forge calls
+```
+
 Forge also provides generic constructive-modeling helpers for patterns such as
 tagged differences and overlap-aware cutters:
 
