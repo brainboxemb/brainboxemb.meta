@@ -746,6 +746,17 @@ _HUB75_DOVETAIL_WIDTH_MM = 12;
 Prefer public accessor functions over exposing mutable-looking global constants
 as part of a reusable library API.
 
+A fixed public token that must survive normal OpenSCAD `use` may instead use
+the callable-constant form described above:
+
+```openscad
+function FG_LEFT() = "left";
+function FG_RIGHT() = "right";
+```
+
+The uppercase name communicates constant/enum semantics; the parentheses exist
+only because `use` imports functions and modules but not global variables.
+
 ## Comments and documentation
 
 Names should carry the basic meaning. Comments should explain information that
