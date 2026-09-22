@@ -38,6 +38,31 @@ A library repository is the place to look for:
 
 Project-specific dimensions, assemblies and decisions stay in the project that uses the library.
 
+## Public OpenSCAD entrypoints
+
+For a reusable feature with a public API, prefer a short consumer-facing
+entrypoint directly under `openscad/`:
+
+```text
+openscad/
+├── sliding_dovetail.scad
+└── sliding-dovetail/
+    ├── sliding_dovetail_lock.scad
+    ├── design/
+    ├── reference/
+    ├── assemblies/
+    └── render/
+```
+
+The top-level `.scad` file is the public API a consumer imports. The
+same-purpose companion directory owns implementation helpers and the material
+used to develop, explain and verify that API. Consumers should not need to know
+the internal workspace layout.
+
+This is a useful convention, not a reason to create empty directories: a small
+single-file library feature does not need a companion tree until it has
+supporting material.
+
 ## Where next?
 
 - [SCAD overview](README.md)
