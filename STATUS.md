@@ -6,7 +6,18 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active cross-project migration or experiment/PoP**.
+### Migration 009 — serialize SCAD production and roll out corrected tooling
+
+**Active.**
+
+[Migration record](migrations/009-scad-production-serialization/README.md) ·
+tracking issue [#113](https://github.com/brainboxemb/brainboxemb.meta/issues/113).
+
+The HUB75 v0.0.4 checkpoint exposed a shared `tool.scad-project` concurrency race:
+a newer main push can cancel an earlier production run after impact selection but
+before publication, while the replacement run only evaluates its own narrower
+`before -> head` range. Migration 009 owns the shared owner fix, patch release,
+and rollout to every catalogued current-generation SCAD consumer.
 
 ## Proposed / inactive
 
