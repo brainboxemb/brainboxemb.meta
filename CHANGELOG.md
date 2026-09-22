@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Register `lib.scad.forge` as the portfolio-owned OpenSCAD modeling library, with the `fg_*` namespace, `fg_xf_*` transform subfamily and `lib.scad.util` narrowed to non-Forge utilities such as section inspection.
+- Publish `lib.scad.mechint v0.2.3` on the Forge v0.2.1 stack and promote its consumer-facing sliding-dovetail API to `openscad/sliding_dovetail.scad`, with `openscad/sliding-dovetail/` retained as the companion implementation/design/reference/render workspace.
+- Complete the Forge/mechint rollout into HUB75 frame PR #45: direct Forge v0.2.1 transforms, mechint v0.2.3, util v0.4.0 inspection-only ownership, and green SCAD production run 167 on exact head `660b04129bb127d13eaf59dca3c51ffeb8251572`.
+- Define shared SCAD orientation terminology for design, project and print orientation plus qualified temporary frames such as lab orientation; define geometry-resolution levels as `low`, `high` and `export`, reserving print resolution for slicer/manufacturing settings.
+- Complete the central `lib.scad.mechint` library registration in both the human-readable SCAD library list and the canonical catalog, including current `tool.scad-project` infrastructure.
 - Rename the repository to `brainboxemb.meta` and establish it as the portfolio-level coordination source for public brainboxemb repositories.
 - Add the phased `brainboxemb.meta` consolidation migration plan and reusable handoff.
 - Add `repositories/catalog.yml` as the canonical inventory/classification source for public repositories and derive the dashboard runtime repository groups from it.
