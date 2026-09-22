@@ -168,11 +168,11 @@ a list is itself meaningful. Do not add `_array` mechanically.
 
 Functions and modules use snake_case.
 
-The narrow exception is a **callable constant token**: a zero-argument function
-that exists only because OpenSCAD `use` imports functions/modules but not global
-variables. Such a fixed public token may use `UPPER_SNAKE_CASE()`, for example
-`FG_LEFT()`. Do not use this form for ordinary calculations, accessors or
-operations.
+The narrow exception is a **callable constant**: a zero-argument function that
+exists only because OpenSCAD `use` imports functions/modules but not global
+variables. A fixed public token or fixed public scalar constant may use
+`UPPER_SNAKE_CASE()`, for example `FG_LEFT()` or `FG_OVERLAP_MM()`.
+Do not use this form for ordinary calculations, accessors or operations.
 
 Choose names that make their behavior clear. Common portfolio patterns are:
 
@@ -746,16 +746,17 @@ _HUB75_DOVETAIL_WIDTH_MM = 12;
 Prefer public accessor functions over exposing mutable-looking global constants
 as part of a reusable library API.
 
-A fixed public token that must survive normal OpenSCAD `use` may instead use
+A fixed public value that must survive normal OpenSCAD `use` may instead use
 the callable-constant form described above:
 
 ```openscad
 function FG_LEFT() = "left";
 function FG_RIGHT() = "right";
+function FG_OVERLAP_MM() = 0.001;
 ```
 
-The uppercase name communicates constant/enum semantics; the parentheses exist
-only because `use` imports functions and modules but not global variables.
+The uppercase name communicates constant semantics; the parentheses exist only
+because `use` imports functions and modules but not global variables.
 
 ## Comments and documentation
 
