@@ -791,6 +791,46 @@ Because units are encoded in numeric names, a separate unit comment is normally
 unnecessary. Add a comment when range, reference datum or interpretation is not
 obvious from the name.
 
+### Orientation terminology
+
+When a part moves through more than one coordinate frame, name the frame instead
+of using an unqualified word such as "orientation", "vertical" or "up".
+
+Use these terms consistently:
+
+- **design orientation** — the native/canonical coordinate system in which the
+  reusable part or interface is defined;
+- **project orientation** — that design placed in the consuming project's or
+  assembly's coordinate system;
+- **print orientation** — the manufactured part placed on the printer/build
+  plate, where printer Z is the build direction.
+
+The design orientation should be stable and should normally be recorded close
+to the design source (source header and/or its design document). Project and
+print orientation may change without redefining the design's native axes.
+
+For geometry where the distinction matters, a compact source comment is useful:
+
+```openscad
+// Design orientation:
+//   X = tube axis
+//   Y = interface depth
+//   Z = interface width
+//
+// Project orientation:
+//   design X -> project X
+//   design Y -> project -Z
+//   design Z -> project Y
+//
+// Print orientation:
+//   project X -> printer Z (build direction)
+```
+
+Not every file needs all three blocks. Document the frames that actually remove
+ambiguity. If an additional temporary frame is useful for a lab, fixture or
+verification view, give it a qualified name such as "lab orientation" rather
+than overloading one of the three terms.
+
 ## Scope and evolution
 
 This convention should stay practical rather than exhaustive.
