@@ -69,3 +69,48 @@ The [repository overview](../../repositories/README.md) records which setup a re
 For the practical project layout, see [How brainboxemb projects are organised](../working-model/projects.md).
 
 For generated output and the `dev/`, `prod/` and `rel/` locations, see [Generated output and publication](../working-model/generated-output.md).
+
+
+## GitHub Actions workflow filenames
+
+Workflow filenames under `.github/workflows/` use lowercase kebab-case and put
+the **category/purpose first** so related workflows group naturally in a
+directory listing.
+
+Use these forms:
+
+| Kind | Filename form | Example |
+| --- | --- | --- |
+| Contract/test workflow | `test-<capability>.yml` | `test-generated-output-publish.yml` |
+| Reusable workflow API | `reusable-<capability>.yml` | `reusable-generated-output-publish.yml` |
+| Repository-owned operation | `<operation>.yml` | `release.yml` |
+
+Prefer:
+
+```text
+test-self.yml
+test-execution-evidence-schema.yml
+test-generated-output-publish.yml
+test-generated-output-same-job.yml
+test-moon-orchestration.yml
+test-pr-preview-cleanup.yml
+test-release-lifecycle.yml
+
+reusable-generated-output-publish.yml
+reusable-pr-preview-cleanup.yml
+reusable-release.yml
+
+release.yml
+```
+
+Do not use the equivalent suffix form `<capability>-test.yml` for new/current
+workflows. Prefixing the category keeps all tests together when files are sorted
+by name.
+
+Workflow filenames describe a durable repository capability or contract. Do not
+encode issue numbers, migration numbers, temporary experiments, or the historical
+bug that first caused a regression test to be added.
+
+This convention defines naming only. It does not require an unrelated classic
+repository to be renamed immediately; existing current-generation repositories
+can adopt it with related tooling changes or a coordinated rollout.
