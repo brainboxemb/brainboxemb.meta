@@ -187,17 +187,17 @@ Examples:
 ```openscad
 function tube_mount_create(...) = object(...);
 
-function tube_mount_width_mm(mount) =
-    mount.width_mm;
+function tube_mount_width_mm(mount_obj) =
+    mount_obj.width_mm;
 
-function tube_mount_is_valid(mount) =
+function tube_mount_is_valid(mount_obj) =
     ...;
 
-module tube_mount_build(mount) {
+module tube_mount_build(mount_obj) {
     ...
 }
 
-module tube_mount_render(mount, view = "final") {
+module tube_mount_render(mount_obj, view = "final") {
     ...
 }
 ```
@@ -329,32 +329,33 @@ For full behavior and examples, see the manuals in `lib.scad.forge`.
 
 ## Object-based APIs
 
-Object-based APIs use a deliberate distinction between the **caller-side
-variable name** and the **receiver-like function/module parameter**.
+Object names should make the domain type and role visible at the point where
+they are used. OpenSCAD has no language-level receiver or static type annotation,
+so a bare `obj` in domain code forces the reader to recover meaning from the
+surrounding function/module name.
 
-At the call site, prefer a semantic domain name:
+For domain objects, use a semantic name ending in `_obj`:
 
 ```openscad
-panel = hub75_panel_create(...);
-mount = tube_mount_create(...);
+panel_obj = hub75_panel_create(...);
+mount_obj = tube_mount_create(...);
 
-hub75_panel_render(panel);
-tube_mount_build(mount);
+hub75_panel_render(panel_obj);
+tube_mount_build(mount_obj);
 ```
 
-Inside a function or module that primarily operates on one object, use `obj`
-as the standard first parameter:
+Inside domain functions/modules, keep the same semantic object naming:
 
 ```openscad
-function hub75_panel_width_mm(obj) =
-    obj.width_mm;
+function hub75_panel_width_mm(panel_obj) =
+    panel_obj.width_mm;
 
-module tube_mount_build(obj) {
+module tube_mount_build(mount_obj) {
     ...
 }
 
 module tube_mount_render(
-    obj,
+    mount_obj,
     view = "final",
     show_reference = false
 ) {
@@ -362,45 +363,48 @@ module tube_mount_render(
 }
 ```
 
-This gives object-based APIs a consistent visual pattern: the function/module
-name tells us the domain, while `obj` tells us which parameter is the object
-being operated on.
+Typical domain-object names include:
 
-Use `obj` only in this narrow receiver-like role. Do not use it as a generic
-name for arbitrary values elsewhere.
+```text
+panel_obj
+coupler_obj
+clamp_obj
+mount_obj
+connector_obj
+dovetail_obj
+```
+
+When multiple objects have different roles, combine the role and domain where
+that distinction adds useful information:
+
+```openscad
+source_coupler_obj
+target_coupler_obj
+
+left_panel_obj
+right_panel_obj
+
+coupler_obj
+clamp_obj
+```
+
+Bare `obj` is reserved for genuinely generic infrastructure where the object's
+domain type is intentionally unknown or irrelevant. Generic code may also use
+role-qualified generic names such as `src_obj`, `des_obj`, `left_obj` or
+`right_obj`.
 
 Do **not** use `this` or `self` as the normal convention. Those names imply a
 language-level method receiver, while OpenSCAD functions/modules still receive
-the object explicitly as an argument.
-
-When a function/module works with multiple objects and their roles matter, use
-role-qualified names instead of multiple ambiguous `obj` parameters:
-
-```openscad
-source_obj
-target_obj
-
-left_obj
-right_obj
-```
-
-If the domain name is clearer than `obj` because several different object
-types are mixed in one function, use the domain names:
-
-```openscad
-panel
-mount
-connector
-```
+objects explicitly as arguments.
 
 ### Object parameter comes first
 
-When a function or module operates primarily on one existing object, put
-`obj` first, followed by additional input/options:
+When a function or module primarily operates on one existing domain object, put
+that semantic `*_obj` parameter first, followed by additional inputs/options:
 
 ```openscad
 module tube_mount_render(
-    obj,
+    mount_obj,
     view = "final",
     show_reference = false
 ) {
@@ -408,7 +412,7 @@ module tube_mount_render(
 }
 ```
 
-This makes related APIs consistent and keeps the primary subject visible.
+This keeps the primary subject visible while preserving local type/role meaning.
 
 ### Do not repeat the object name in its fields
 
