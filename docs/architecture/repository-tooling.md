@@ -24,6 +24,28 @@ project
 
 It should stay useful across different project types. It therefore does not need to understand how OpenSCAD targets, Maven modules or document assembly work internally.
 
+## Root launcher naming
+
+Current-generation projects expose the generic Git repository entrypoints in the
+project root. Their names are a direct projection of the canonical consumer
+templates owned by `tool.git-project`:
+
+```text
+tool.git-project/bootstrap/consumer-bootstrap.ps1 -> bootstrap.ps1
+tool.git-project/bootstrap/consumer-bootstrap.sh  -> bootstrap.sh
+tool.git-project/bootstrap/consumer-update.ps1    -> update.ps1
+tool.git-project/bootstrap/consumer-update.sh     -> update.sh
+```
+
+The naming rule is deliberately mechanical: materializing a canonical consumer
+launcher removes only the `consumer-` prefix. It does not apply a second rename,
+so `consumer-update.*` becomes `update.*`, not `update-repo.*`.
+
+These root files are managed copies of generic Git tooling. Their implementation
+and refresh/provenance behaviour live in `tool.git-project`; this page records
+the portfolio-wide naming convention used by SCAD, Java and future project
+types.
+
 ## Domain-specific tools
 
 Domain tools contain the behaviour that really is specific to that type of project.
