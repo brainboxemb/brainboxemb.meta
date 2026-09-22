@@ -6,7 +6,26 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active cross-project migration or experiment/PoP**.
+### Migration 010 — restore canonical repository update contract
+
+**Active.**
+
+[Migration record](migrations/010-repository-update-contract/README.md) · tracking issue [#115](https://github.com/brainboxemb/brainboxemb.meta/issues/115).
+
+Migration 009 proved the then-selected SCAD consumer entrypoints functionally, but
+the follow-up HUB75 component-lab work exposed that the launcher ownership and
+source/provenance contract is still not durable: generic update/status belongs to
+`tool.git-project`, while current SCAD consumers also carry independently copied
+SCAD-aware root wrappers and `tool.scad-project` documents another composition
+path.
+
+The first blocking owner step is the already-existing
+[`tool.git-project#18`](https://github.com/brainboxemb/tool.git-project/issues/18):
+make centrally managed bootstrap/update launchers source/version-aware, provide a
+central refresh path, and warn when a consumer copy is out of sync with its
+pinned tool. Only after that provenance boundary is qualified will Migration 010
+decide which root files are generic, which SCAD-specific composition remains
+necessary, and which duplicated files should disappear.
 
 ## Proposed / inactive
 

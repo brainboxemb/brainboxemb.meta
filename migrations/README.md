@@ -16,7 +16,7 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-No migration is currently active.
+- [010 — restore canonical repository update contract](010-repository-update-contract/README.md) — establish source/version-aware generic launchers first through `tool.git-project#18`, then resolve SCAD composition ownership, qualify normal entrypoints on Windows/POSIX and roll one released contract through every current-generation consumer.
 
 ## Proposed / inactive
 
