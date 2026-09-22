@@ -9,6 +9,7 @@ Some CAD repositories are meant to be reused by several projects. Those reposito
 | [`lib.scad.clamps`](https://github.com/brainboxemb/lib.scad.clamps) | Parametric clamp geometry and reusable clamp APIs. |
 | [`lib.scad.hub75`](https://github.com/brainboxemb/lib.scad.hub75) | HUB75 LED-panel reference geometry, dimensions and mechanical helpers. |
 | [`lib.scad.forge`](https://github.com/brainboxemb/lib.scad.forge) | Lightweight object-aware modeling layer for readable transforms, tagged CSG and overlap-aware cutters. |
+| [`lib.scad.mechint`](https://github.com/brainboxemb/lib.scad.mechint) | Reusable mechanical interfaces such as sliding dovetails, mating clearances, locks and release features. |
 | [`lib.scad.util`](https://github.com/brainboxemb/lib.scad.util) | Domain-independent OpenSCAD utilities outside the Forge modeling language, including reusable section-inspection helpers. |
 
 The complete public repository list and classification live in [`../../repositories/catalog.yml`](../../repositories/catalog.yml). This page is the human-readable introduction rather than a second machine-maintained catalog.
