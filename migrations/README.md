@@ -16,7 +16,7 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-No migration is currently active.
+- [009 — serialize SCAD production and roll out corrected tooling](009-scad-production-serialization/README.md) — fix the shared production-run cancellation race, release the corrected `tool.scad-project`, and update every current-generation SCAD consumer.
 
 ## Proposed / inactive
 
