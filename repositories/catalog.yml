@@ -152,6 +152,9 @@ repositories:
     role: Reusable mechanical interfaces for OpenSCAD, including dovetails, mating clearances, detents and release features.
     engines:
       - openscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
 
   - repository: brainboxemb/2026-003-01.cad.garden-tool-cart
     category: project
