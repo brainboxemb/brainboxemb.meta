@@ -168,6 +168,12 @@ a list is itself meaningful. Do not add `_array` mechanically.
 
 Functions and modules use snake_case.
 
+The narrow exception is a **callable constant**: a zero-argument function that
+exists only because OpenSCAD `use` imports functions/modules but not global
+variables. A fixed public token or fixed public scalar constant may use
+`UPPER_SNAKE_CASE()`, for example `FG_LEFT()` or `FG_OVERLAP_MM()`.
+Do not use this form for ordinary calculations, accessors or operations.
+
 Choose names that make their behavior clear. Common portfolio patterns are:
 
 - `*_create()` — create and return an object/specification;
@@ -208,17 +214,21 @@ design.
 ## Shared modeling utilities
 
 The portfolio provides a small shared modeling layer in
-[`brainboxemb/lib.scad.util`](https://github.com/brainboxemb/lib.scad.util).
+[`brainboxemb/lib.scad.forge`](https://github.com/brainboxemb/lib.scad.forge).
 Use it when it makes ordinary OpenSCAD intent easier to read; it is a
 recommendation, not a requirement to wrap every native operation.
+
+Forge uses one public `fg_*` namespace. Transform operations form the
+`fg_xf_*` subfamily so they remain visibly grouped inside the wider modeling
+API.
 
 Prefer the shared transform helpers for common placement/orientation patterns:
 
 ```openscad
-xf_move([x_mm, y_mm, z_mm])
+fg_xf_move([x_mm, y_mm, z_mm])
     part();
 
-xf_frame(
+fg_xf_frame(
     pos_mm = [x_mm, y_mm, z_mm],
     x_axis = [0, 1, 0],
     y_axis = [0, 0, 1]
@@ -226,13 +236,13 @@ xf_frame(
     profile();
 ```
 
-The `xf_*` layer covers readable moves, rotations, reflections, transform
+The `fg_xf_*` layer covers readable moves, rotations, reflections, transform
 objects and orthogonal coordinate-frame remapping. Use native OpenSCAD when it
 is already clearer, and keep native `multmatrix()` for genuine general affine
 or skew transforms that the shared frame API does not express naturally.
 
-Forge (`fg_*`) provides generic constructive-modeling helpers for patterns
-such as tagged differences and overlap-aware cutters:
+Forge also provides generic constructive-modeling helpers for patterns such as
+tagged differences and overlap-aware cutters:
 
 ```openscad
 fg_diff() {
@@ -240,7 +250,14 @@ fg_diff() {
         body();
 
     fg_remove()
-        cutter();
+        fg_cut_box(
+            size_mm = [10, 20, 5],
+            overlap = [
+                FG_LEFT(),
+                FG_RIGHT(),
+                FG_BACK()
+            ]
+        );
 
     fg_keep()
         reinforcement();
@@ -253,17 +270,23 @@ must not be treated as fit clearance, printer tolerance or a design dimension.
 A useful rule of thumb is:
 
 ```text
-xf_*    -> where/how geometry is placed
-fg_*    -> how positive and negative geometry are combined
-util_*  -> other shared domain-independent utilities
+fg_xf_*  -> where/how geometry is placed
+fg_*     -> Forge CSG, cutters and other modeling operations
+util_*   -> other shared domain-independent utilities
 ```
 
-Keep domain geometry, mechanical dimensions and fit semantics in the owning
-library/project. The shared utility layer should remove generic OpenSCAD
-boilerplate, not hide the design.
+`lib.scad.util` remains the owner for domain-independent utilities that are
+not part of the Forge modeling language, such as section inspection.
 
-For full behavior and examples, see the transform and Forge manuals in
-`lib.scad.util`.
+Keep domain geometry, mechanical dimensions and fit semantics in the owning
+library/project. Forge should remove generic OpenSCAD boilerplate, not hide the
+design.
+
+Normal consumers may use Forge's umbrella `forge.scad` entrypoint. Focused
+libraries may import its transform, CSG or cutter sub-entrypoint directly when
+that makes the dependency boundary clearer.
+
+For full behavior and examples, see the manuals in `lib.scad.forge`.
 
 ## Object-based APIs
 
@@ -722,6 +745,18 @@ _HUB75_DOVETAIL_WIDTH_MM = 12;
 
 Prefer public accessor functions over exposing mutable-looking global constants
 as part of a reusable library API.
+
+A fixed public value that must survive normal OpenSCAD `use` may instead use
+the callable-constant form described above:
+
+```openscad
+function FG_LEFT() = "left";
+function FG_RIGHT() = "right";
+function FG_OVERLAP_MM() = 0.001;
+```
+
+The uppercase name communicates constant semantics; the parentheses exist only
+because `use` imports functions and modules but not global variables.
 
 ## Comments and documentation
 

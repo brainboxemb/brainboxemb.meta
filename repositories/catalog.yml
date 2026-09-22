@@ -120,12 +120,24 @@ repositories:
       generation: current
       provider: tool.scad-project
 
+  - repository: brainboxemb/lib.scad.forge
+    category: library
+    domain: scad
+    lifecycle: current
+    dashboard_group: CAD libraries
+    role: Lightweight object-aware OpenSCAD modeling layer for readable transforms, tagged CSG operations and reusable overlap-aware cutters.
+    engines:
+      - openscad
+    project_infrastructure:
+      generation: current
+      provider: tool.scad-project
+
   - repository: brainboxemb/lib.scad.util
     category: library
     domain: scad
     lifecycle: current
     dashboard_group: CAD libraries
-    role: Reusable domain-independent OpenSCAD inspection and modeling helpers.
+    role: Reusable domain-independent OpenSCAD inspection and small utility helpers outside the Forge modeling language.
     engines:
       - openscad
     project_infrastructure:
