@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Activate Migration 009 after the HUB75 checkpoint exposed a shared SCAD production concurrency race: fix production-branch serialization in `tool.scad-project`, release the correction, and roll it through every current-generation `tool.scad-project` consumer while leaving classic CAD repositories untouched.
+- Complete Migration 009 after the HUB75 checkpoint exposed a shared SCAD production concurrency race: release final owner baseline `tool.scad-project v0.15.7`, qualify production serialization plus the restored read-only `update-repo status` contract through Experiment 006, align every catalogued current-generation consumer to exact tool commit `bfaac9f6916c09bc6525abddf64c87238fe59103`, and repair HUB75 exact-main `prod/bld` / `prod/vrf` publication on run `35736506128`.
 - Complete the SCAD production cache-scope optimization from `tool.scad-project` issue #89: release `tool.scad-project v0.15.5` with exact-source Moon output caching for SCons consumers, retain target-level incremental reuse in SCons, qualify the policy through `exp.2026-003.scad-ci-performance` cache/shallow-history experiments and `template.scad-project`, and prove the rollout on HUB75 PR #45 production run 168 without restoring the former ~1.2 GiB rolling Moon cache.
 - Register `lib.scad.forge` as the portfolio-owned OpenSCAD modeling library, with the `fg_*` namespace, `fg_xf_*` transform subfamily and `lib.scad.util` narrowed to non-Forge utilities such as section inspection.
 - Publish `lib.scad.mechint v0.2.3` on the Forge v0.2.1 stack and promote its consumer-facing sliding-dovetail API to `openscad/sliding_dovetail.scad`, with `openscad/sliding-dovetail/` retained as the companion implementation/design/reference/render workspace.
