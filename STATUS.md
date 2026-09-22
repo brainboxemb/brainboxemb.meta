@@ -6,18 +6,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 009 — serialize SCAD production and roll out corrected tooling
-
-**Active.**
-
-[Migration record](migrations/009-scad-production-serialization/README.md) ·
-tracking issue [#113](https://github.com/brainboxemb/brainboxemb.meta/issues/113).
-
-The HUB75 v0.0.4 checkpoint exposed a shared `tool.scad-project` concurrency race:
-a newer main push can cancel an earlier production run after impact selection but
-before publication, while the replacement run only evaluates its own narrower
-`before -> head` range. Migration 009 owns the shared owner fix, patch release,
-and rollout to every catalogued current-generation SCAD consumer.
+There is currently **no active cross-project migration or experiment/PoP**.
 
 ## Proposed / inactive
 
@@ -28,6 +17,20 @@ and rollout to every catalogued current-generation SCAD consumer.
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the completed Java CI PoP and must not start automatically.
 
 ## Recently completed
+
+### Migration 009 — serialize SCAD production and roll out corrected tooling
+
+**Complete.**
+
+[Migration record](migrations/009-scad-production-serialization/README.md).
+
+Final owner baseline is `tool.scad-project v0.15.7` at
+`bfaac9f6916c09bc6525abddf64c87238fe59103`. Experiment 006 is green across
+DEP-01 through DEP-07, normal entrypoints and SCAD production on merged main
+`c4f4690c6850fbe44395017ef81f43a0a7121629`. Every catalogued
+current-generation consumer now uses that exact tool revision. HUB75 exact-main
+production run `35736506128` repaired `prod/bld` and `prod/vrf` to source
+`9fec18b4f925f41f292201784de2608ccd0b21c4`.
 
 ### Migration 008 — adopt transitive SCAD library dependencies
 
