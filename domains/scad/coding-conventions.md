@@ -168,6 +168,12 @@ a list is itself meaningful. Do not add `_array` mechanically.
 
 Functions and modules use snake_case.
 
+The narrow exception is a **callable constant token**: a zero-argument function
+that exists only because OpenSCAD `use` imports functions/modules but not global
+variables. Such a fixed public token may use `UPPER_SNAKE_CASE()`, for example
+`FG_LEFT()`. Do not use this form for ordinary calculations, accessors or
+operations.
+
 Choose names that make their behavior clear. Common portfolio patterns are:
 
 - `*_create()` — create and return an object/specification;
@@ -247,9 +253,9 @@ fg_diff() {
         fg_cut_box(
             size_mm = [10, 20, 5],
             overlap = [
-                fg_left(),
-                fg_right(),
-                fg_back()
+                FG_LEFT(),
+                FG_RIGHT(),
+                FG_BACK()
             ]
         );
 
