@@ -434,37 +434,36 @@ choices.
 
 Keep CAD tessellation/resolution separate from actual printer-process settings.
 
-Use these terms when a model has multiple geometry-quality levels:
+Use these three geometry-resolution levels consistently:
 
-- **preview resolution** — fast interactive OpenSCAD work; deliberately coarse
-  tessellation is acceptable;
-- **render resolution** — normal visual/design/verification output; geometry
-  should be smooth enough for inspection without paying unnecessary export cost;
-- **export resolution** — production mesh generation such as STL/3MF; use the
-  qualified geometry resolution intended for downstream manufacturing.
+- **low** — fast interactive OpenSCAD work; deliberately coarse tessellation is
+  acceptable;
+- **high** — normal visual/design/verification work where geometry should be
+  smooth enough for inspection;
+- **export** — production mesh generation such as STL/3MF, using the qualified
+  geometry resolution intended for downstream manufacturing.
 
-Do not call OpenSCAD `$fn` / `$fa` / `$fs` choices **print resolution**.
-In portfolio terminology, print resolution belongs to the manufacturing/slicer
-process (for example layer height, line width and nozzle choice), not to CAD
-tessellation.
+Use `export`, not `print`, for the highest CAD geometry-resolution level.
+In portfolio terminology, **print resolution** belongs to the
+manufacturing/slicer process (for example layer height, line width and nozzle
+choice), not to OpenSCAD `$fn` / `$fa` / `$fs` tessellation.
 
-When more than two quality contexts exist, prefer a semantic mode over vague
-`low` / `high` naming:
+For a selectable three-level control, prefer:
 
 ```openscad
-c_resolution = "preview"; // [preview,render,export]
+c_resolution = "low"; // [low,high,export]
 ```
 
-A simple two-state standalone component may still use a presentation control
-such as `c_high_resolution` when that is genuinely clearer. Do not rename
-released/local code mechanically merely to satisfy this vocabulary.
+A simple two-state standalone component may still use a boolean such as
+`c_high_resolution` when that is clearer. Do not rename released/local code
+mechanically merely to satisfy this vocabulary.
 
 Resolution controls are presentation/output controls, not design dimensions:
 changing only tessellation must not change nominal dimensions, fit, clearance
 or feature semantics.
 
-Dedicated render/export entrypoints may bind the appropriate resolution profile
-as a fixed constant instead of exposing it interactively.
+Dedicated render/export entrypoints may bind `high` or `export` as a fixed
+choice instead of exposing the resolution interactively.
 
 ## Units in names
 
