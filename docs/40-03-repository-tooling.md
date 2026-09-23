@@ -88,7 +88,7 @@ The [repository overview](../repositories/README.md) records which setup a repos
 
 ## More detail
 
-For the practical project layout, see [How brainboxemb projects are organised](40-02_projects.md).
+For the practical project layout, see [How brainboxemb projects are organised](40-02-projects.md).
 
 For generated output and the `dev/`, `prod/` and `rel/` locations, see [Generated output and publication](40-04_generated-output.md).
 
