@@ -723,8 +723,8 @@ including its images, without having to infer the `prod/bld` path themselves.
 
 These observations are deliberately **not** used to reopen already-qualified
 Migration-011 owner/consumer releases. They are retained as migration
-conclusions and should become one or more meta follow-up issues after the
-baseline rollout and closing audit are complete.
+conclusions and are now tracked in meta
+[#163 — Improve human-readable SCAD specifications and visual design navigation](https://github.com/brainboxemb/brainboxemb.meta/issues/163).
 
 ## Completion criteria
 
