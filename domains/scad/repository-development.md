@@ -9,7 +9,7 @@ repositories. The technical architecture explains how the shared system works;
 this guide explains what a maintainer actually changes and which changes are
 managed automatically.
 
-A repository keeps a short local `doc/01-development.md` with its own
+A repository keeps a short local `doc/20-01-development.md` with its own
 entrypoints, dependency set, workflow set and exceptions. That local document
 links here for the shared rules.
 
@@ -31,12 +31,19 @@ tools/
 └── tool.scad-project
 
 .github/workflows/
-├── scad.yml
-├── release.yml        # when this repository publishes versioned releases
-└── pr-cleanup.yml     # when PR preview output is published
+├── self-production.yml
+├── self-release.yml        # when this repository publishes versioned releases
+└── self-pr-cleanup.yml     # when PR preview output is published
 
 doc/
-└── 40-development.md
+├── README.md
+├── 10-00-plan.md
+├── 20-00-manuals.md
+├── 20-01-development.md
+├── 20-02-user.md
+├── 30-00-specification.md
+├── 40-00-design.md
+└── 50-00-verification.md
 ```
 
 Libraries and projects may add domain-specific files and workflows, but shared
@@ -85,7 +92,7 @@ that ref and records the exact revision through the gitlink.
 
 The SCAD post-update hook aligns brainboxemb-owned SCAD reusable-workflow calls
 to the same semantic release ref. A maintainer should not have to edit
-`scad.yml` and `release.yml` separately just to repeat the same
+`self-production.yml` and `self-release.yml` separately just to repeat the same
 `tool.scad-project` version.
 
 ### Reusable libraries
@@ -163,33 +170,35 @@ intent coherent.
 
 ## GitHub Actions convention
 
-Current-generation SCAD repositories use thin callers with stable filenames.
+Current-generation SCAD repositories use thin **self** callers with stable
+category-prefixed filenames. The local callers are repository entrypoints;
+substantial implementation lives in released reusable workflows.
 
-### `.github/workflows/scad.yml`
+### `.github/workflows/self-production.yml`
 
 Normal SCAD CI caller.
 
 For normal projects/libraries it normally calls:
 
 ```text
-brainboxemb/tool.scad-project/.github/workflows/project-production.yml@<tool-scad-release>
+brainboxemb/tool.scad-project/.github/workflows/reusable-production.yml@<tool-scad-release>
 ```
 
 A specialised lab may deliberately call a narrower released workflow such as
-`project-build.yml`, but the local `doc/01-development.md` must explain that
+`reusable-build.yml`, but the local `doc/20-01-development.md` must explain that
 exception.
 
 The normal human-facing workflow name is `SCAD production`; a deliberately
 specialised repository may use a clearer role-specific display name.
 
-### `.github/workflows/release.yml`
+### `.github/workflows/self-release.yml`
 
 Present when the repository owns versioned releases.
 
 It is a thin caller of:
 
 ```text
-brainboxemb/tool.scad-project/.github/workflows/project-release.yml@<tool-scad-release>
+brainboxemb/tool.scad-project/.github/workflows/reusable-release.yml@<tool-scad-release>
 ```
 
 Normal display name: `Release`.
@@ -197,7 +206,7 @@ Normal display name: `Release`.
 Repositories that do not publish versioned releases do not add this file merely
 for symmetry.
 
-### `.github/workflows/pr-cleanup.yml`
+### `.github/workflows/self-pr-cleanup.yml`
 
 Present when the repository publishes generated PR-preview branches.
 
@@ -248,7 +257,7 @@ Most third-party actions used by a normal SCAD repository should be hidden
 inside the shared reusable workflows. Any remaining direct third-party action in
 a consumer is still subject to that portfolio policy.
 
-## Local `doc/01-development.md`
+## Local `doc/20-01-development.md`
 
 Every maintained current-generation SCAD repository keeps this short local
 manual.
@@ -276,7 +285,7 @@ A normal local document can stay compact:
 # Development
 
 ## Start here
-- Plan: [00-plan.md](00-plan.md)
+- Plan: [10-00-plan.md](10-00-plan.md)
 - Shared SCAD repository guide: <brainboxemb.meta link>
 
 ## Local workflow
@@ -287,9 +296,9 @@ State which project.yml refs a maintainer changes and any repository-specific
 dependency rule.
 
 ## GitHub Actions
-- scad.yml — why this repo uses production/build
-- release.yml — present/absent and why
-- pr-cleanup.yml — present/absent and why
+- self-production.yml — why this repo uses production/build
+- self-release.yml — present/absent and why
+- self-pr-cleanup.yml — present/absent and why
 
 ## Repository-specific exceptions
 State real deviations, or say there are none.
@@ -306,8 +315,8 @@ Check at least:
 - committed direct gitlinks resolve to those releases;
 - bootstrap gitlink is the deliberately accepted generic-tool revision;
 - managed root launcher provenance matches the bootstrap tool after refresh;
-- `scad.yml` / `release.yml` use the expected released SCAD workflow ref;
-- `pr-cleanup.yml` uses the expected released generic workflow ref when
+- `self-production.yml` / `self-release.yml` use the expected released SCAD workflow ref;
+- `self-pr-cleanup.yml` uses the expected released generic workflow ref when
   present;
 - no stale local orchestration duplicates shared tooling;
 - repository-local verification passes;

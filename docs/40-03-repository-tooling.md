@@ -103,13 +103,25 @@ Use these forms:
 
 | Kind | Filename form | Example |
 | --- | --- | --- |
-| Contract/test workflow | `test-<capability>.yml` | `test-generated-output-publish.yml` |
+| Repository self-entry workflow | `self-<operation>.yml` | `self-release.yml` |
 | Reusable workflow API | `reusable-<capability>.yml` | `reusable-generated-output-publish.yml` |
-| Repository-owned operation | `<operation>.yml` | `release.yml` |
+| Contract/test workflow | `test-<capability>.yml` | `test-generated-output-publish.yml` |
+
+The prefixes describe workflow scope:
+
+- `self-` — owned and started by this repository (event/manual dispatch), not a
+  cross-repository workflow API;
+- `reusable-` — public `workflow_call` API that other workflows/repositories
+  may call;
+- `test-` — workflow whose primary purpose is qualifying a capability or
+  contract.
 
 Prefer:
 
 ```text
+self-release.yml
+self-pages.yml
+
 test-self.yml
 test-execution-evidence-schema.yml
 test-generated-output-publish.yml
@@ -121,9 +133,12 @@ test-release-lifecycle.yml
 reusable-generated-output-publish.yml
 reusable-pr-preview-cleanup.yml
 reusable-release.yml
-
-release.yml
 ```
+
+Do not leave current repository self-entry workflows unprefixed merely
+because names such as `release.yml` or `pages.yml` are familiar. The
+`self-` prefix makes their non-reusable scope explicit and groups them
+together in directory listings.
 
 Do not use the equivalent suffix form `<capability>-test.yml` for new/current
 workflows. Prefixing the category keeps all tests together when files are sorted
