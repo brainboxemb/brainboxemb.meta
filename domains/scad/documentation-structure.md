@@ -60,6 +60,15 @@ The README is the human-facing start page. Keep enough introduction to answer:
 
 Route the reader to the owning documents instead of duplicating them.
 
+For visual CAD repositories, a short README does **not** mean a text-only
+README. Include one or a few representative generated renders when they let a
+reader understand the model or product substantially faster than prose alone.
+Prefer stable generated Build/Verification output over committed duplicate
+images on `main`.
+
+Do not remove an existing useful preview merely to make the README more
+"minimal".
+
 ### AGENTS
 
 AGENTS is the agent-facing start page. Keep:
@@ -167,6 +176,12 @@ Typical content includes:
 
 The design document should stay understandable without descending into every
 private helper or geometry operation.
+
+Keep architecture concrete while doing so. Tie abstractions back to real
+components, files, views, public objects or representative generated images
+where that makes the design easier to read. A design document should not become
+a vocabulary of layers and boundaries that requires the reader to already know
+the repository.
 
 ## 20-xx — Detailed design
 
