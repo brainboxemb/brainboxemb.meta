@@ -6,25 +6,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 010 — standardise SCAD documentation and agent guidance
-
-**Active.**
-
-[Migration 010](migrations/010-scad-documentation-agent-guidance/README.md)
-qualifies a cold-start documentation/agent model for current-generation SCAD
-repositories.
-
-The migration combines the pending AGENTS-discovery and SCAD-document-structure
-work from issues #93, #124 and #128. Forge is the first canary. The key
-acceptance test is whether a blank agent can discover shared Git/commit/CI rules,
-SCAD conventions, repository intent/API, pinned tooling/runtime behavior,
-documentation/verification structure and current live status without relying on
-prior chat history.
-
-Dependency-owner `AGENTS.md` files are not inherited by consumers. Current
-working guidance comes top-down from `brainboxemb.meta`; exact dependency
-behavior comes from the consumer's config/gitlink and the pinned dependency's
-README/docs/source/tests.
+There is currently no active cross-project migration.
 
 ## Proposed / inactive
 
@@ -35,6 +17,25 @@ README/docs/source/tests.
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the active SCAD documentation migration.
 
 ## Recently completed
+
+### Migration 010 — standardise SCAD documentation and agent guidance
+
+**Complete.**
+
+[Migration record](migrations/010-scad-documentation-agent-guidance/README.md)
+· tracking issue [#128](https://github.com/brainboxemb/brainboxemb.meta/issues/128).
+
+The migration qualified the blank-agent documentation/working-guidance model
+through Forge, the SCAD tool boundary, geometry-heavy libraries, the real HUB75
+application, retained lab/experiment cases and finally the template. Shared
+working guidance now flows top-down from `brainboxemb.meta`; dependency-owner
+AGENTS files are not inherited by consumers; exact pinned behavior comes from
+config/gitlinks plus pinned consumer-facing docs/source/tests.
+
+The rollout also retained useful visual CAD previews instead of interpreting
+"concise README" as "text-only README". Exact qualification revisions/runs are
+recorded in the migration record.
+
 
 ### Migration 009 — serialize SCAD production and roll out corrected tooling
 

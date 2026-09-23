@@ -16,13 +16,15 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-- [010 — standardise SCAD documentation and agent guidance](010-scad-documentation-agent-guidance/README.md) — qualify and roll out the blank-agent documentation/working-guidance model through current-generation SCAD repositories, starting with Forge.
+There is currently no active migration.
 
 ## Proposed / inactive
 
 - [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; remains inactive while Migration 010 is the selected cross-project track.
 
 ## Complete
+
+- [010 — standardise SCAD documentation and agent guidance](010-scad-documentation-agent-guidance/README.md) — qualified the blank-agent model through real current-generation SCAD libraries/projects, corrected shared conventions from canary evidence, aligned retained lab/experiment guidance and updated the template last.
 
 - [009 — serialize SCAD production and roll out corrected tooling](009-scad-production-serialization/README.md) — released final owner baseline `tool.scad-project v0.15.7`, qualified the retained Experiment 006 matrix, aligned every current-generation consumer, and repaired HUB75 exact-main Build/Verification publication.
 - [008 — adopt transitive SCAD library dependencies](008-transitive-scad-library-dependencies/README.md) — released `tool.git-project v0.2.9` and `tool.scad-project v0.15.2`, qualified the template and full Experiment 006 regression suite, then proved the real `lib.scad.mechint -> lib.scad.util` chain on exact-main run `35658098181`.
