@@ -277,7 +277,7 @@ The shared operating rules live in
 Every maintained in-scope repository gets a concise local:
 
 ```text
-doc/40-development.md
+doc/01-development.md
 ```
 
 It records the repository-specific developer experience: normal entrypoints,
@@ -286,9 +286,7 @@ release path and intentional deviations.
 
 Generic rules are linked rather than copied.
 
-The template currently has `doc/40-ci-orchestration.md`. When the template is
-updated last, move that detail page to `doc/40-01-ci-orchestration.md` and make
-`doc/40-development.md` the development-family entrypoint.
+The template's existing `doc/40-ci-orchestration.md` can remain as a separate CI detail page; `doc/01-development.md` becomes the local developer/maintenance entrypoint and may link to it.
 
 ## GitHub Actions audit
 
@@ -392,7 +390,7 @@ Migration 011 is complete only when:
 - all eight normal current-generation SCAD rollout repositories have audited
   direct dependency refs/gitlinks;
 - canonical managed root bootstrap/update launchers are installed;
-- every maintained rollout repository has `doc/40-development.md` with its local operating summary and exceptions;
+- every maintained rollout repository has `doc/01-development.md` with its local operating summary and exceptions;
 - GitHub Actions callers use the standard filenames and match the released SCAD contract for each repository role;
 - every intentional old dependency pin is documented as such;
 - exact PR/main CI evidence is retained for rollout repositories;
