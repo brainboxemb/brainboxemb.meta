@@ -195,13 +195,14 @@ Recommended pattern:
 
 - self workflows normally use the operation only, for example `Release`,
   `Pages`, or `CI`;
-- reusable workflows use a lowercase `reusable` qualifier followed by the short
-  capability name, for example `reusable release` or `reusable PR cleanup`;
+- reusable workflows use a lowercase `reusable` qualifier followed by the normal
+  capability name, for example `reusable Release`, `reusable Build`, or
+  `reusable PR cleanup`;
 - qualification workflows use a lowercase `test` qualifier followed by the
-  capability name, for example `test self`, `test release`, or `test Moon`.
+  normal capability name, for example `test Self`, `test Release`, or `test Moon`.
 
-Lowercase `reusable` and `test` deliberately: they are qualifiers that group the
-human-facing capability names, not the primary operation names themselves.
+Lowercase only the `reusable` and `test` qualifiers deliberately. The actual
+human-facing capability name that follows keeps its normal capitalization.
 Repository self-entry names such as `CI`, `Pages`, and `Release` remain normal
 operation names.
 
