@@ -79,6 +79,7 @@ It is operational. Typical content includes:
 - a short statement of the repository/library/project goal and scope;
 - repository-specific working method;
 - information sources and which questions they are authoritative for;
+- applicable shared BrainboxEmb guidance from `brainboxemb.meta`, including the portfolio agent entrypoint, generic Git workflow and domain conventions;
 - current focus and implementation sequence;
 - dependencies, decision points and open questions;
 - phases or milestones;
@@ -88,6 +89,12 @@ It is operational. Typical content includes:
 The plan may summarize the goal so a maintainer knows what they are working on,
 but the durable explanation of **why** the library/project and its functional
 parts exist belongs in the specification.
+
+For current-generation repositories, the information-sources section should make
+shared dependencies explicit rather than assuming an agent already knows the
+portfolio. A SCAD repository will normally point to `brainboxemb.meta/AGENTS.md`
+and the relevant SCAD coding/document/source guidance, plus its pinned tooling
+AGENTS where tool-specific behavior matters.
 
 Do not create a separate roadmap document by default. A normal roadmap is a
 section of the plan unless its size/lifecycle genuinely justifies separation.

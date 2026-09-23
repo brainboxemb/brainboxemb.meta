@@ -4,6 +4,12 @@ This section explains how the public brainboxemb repositories work together.
 
 You do not need to read it from top to bottom. Pick the question that matches what you are trying to understand.
 
+## How should engineering work be approached?
+
+Read [Shared engineering workflow](working-model/engineering-workflow.md).
+
+For Git/issue/commit/PR/CI conventions, read [Git and repository workflow](working-model/git-workflow.md).
+
 ## How is a project organised?
 
 Start with [How brainboxemb projects are organised](working-model/projects.md).
