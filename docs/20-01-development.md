@@ -7,7 +7,7 @@ This page explains how to develop and maintain `brainboxemb.meta` itself.
 Before editing:
 
 1. read [../AGENTS.md](../AGENTS.md);
-2. read [10-00_plan.md](10-00_plan.md);
+2. read [10-00-plan.md](10-00-plan.md);
 3. check [../STATUS.md](../STATUS.md) for repository-spanning work;
 4. load only the relevant manual/design/domain authority.
 
@@ -26,7 +26,7 @@ Typical ownership:
 
 ## Normal change flow
 
-Follow [20-11 — Git workflow](20-11_git-workflow.md).
+Follow [20-11 — Git workflow](20-11-git-workflow.md).
 
 For shared-convention changes:
 
