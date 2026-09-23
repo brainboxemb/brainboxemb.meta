@@ -14,7 +14,7 @@ README / AGENTS     where do I start?
 00 plan             how do we work here and what is happening now?
 10 specification    why does this exist and what should it achieve?
 20 design           how is the repository/system organised to achieve that?
-21..29 detail       how is one functional part built in detail?
+20-xx detail        how is one functional part built in detail?
 30 verification     how do we know the intended result is achieved?
 source/API docs     how do I call the public API?
 ```
@@ -28,8 +28,8 @@ doc/
 ├── 00-plan.md
 ├── 10-specification.md
 ├── 20-design.md
-├── 21-...md               # optional detailed design
-├── 22-...md               # optional detailed design
+├── 20-01-...md            # optional detailed design
+├── 20-02-...md            # optional detailed design
 ├── ...
 ├── 30-verification.md
 └── 40-...md               # other optional subject documents
@@ -37,6 +37,11 @@ doc/
 vrf/
 └── ... executable verification sources and generated evidence
 ```
+
+The second number keeps detailed design inside the design family and scales
+without reserving only a handful of filenames. This is intentionally similar to
+the hierarchical numbering already used in larger BrainboxEmb engineering
+documentation sets.
 
 The numbered files are source documentation. `vrf/` is execution/evidence,
 not a second source-documentation tree.
@@ -66,6 +71,11 @@ AGENTS is the agent-facing start page. Keep:
 Do not duplicate the plan, specification, design or verification procedure in
 AGENTS merely to make it visible to an agent.
 
+Repository-local AGENTS files should route to the current
+`brainboxemb.meta/AGENTS.md` shared entrypoint. Dependency AGENTS files are not
+inherited by consumers; exact pinned dependency behavior is read from the pinned
+dependency's consumer-facing README/docs/source.
+
 A fact or rule should have one clear authority. A short orienting summary is
 fine; parallel maintained copies are not.
 
@@ -79,7 +89,7 @@ It is operational. Typical content includes:
 - a short statement of the repository/library/project goal and scope;
 - repository-specific working method;
 - information sources and which questions they are authoritative for;
-- applicable shared BrainboxEmb guidance from `brainboxemb.meta`, including the portfolio agent entrypoint, generic Git workflow and domain conventions;
+- applicable shared BrainboxEmb **entrypoints** from `brainboxemb.meta`;
 - current focus and implementation sequence;
 - dependencies, decision points and open questions;
 - phases or milestones;
@@ -90,11 +100,19 @@ The plan may summarize the goal so a maintainer knows what they are working on,
 but the durable explanation of **why** the library/project and its functional
 parts exist belongs in the specification.
 
-For current-generation repositories, the information-sources section should make
-shared dependencies explicit rather than assuming an agent already knows the
-portfolio. A SCAD repository will normally point to `brainboxemb.meta/AGENTS.md`
-and the relevant SCAD coding/document/source guidance, plus its pinned tooling
-AGENTS where tool-specific behavior matters.
+For a current-generation SCAD repository the plan should normally make these
+routes discoverable without duplicating every shared page:
+
+```text
+shared working guidance
+    -> brainboxemb.meta/AGENTS.md
+
+shared SCAD-domain guidance
+    -> brainboxemb.meta/domains/scad/README.md
+
+exact tool/library behavior
+    -> local config + exact gitlink + pinned dependency README/docs/source
+```
 
 Do not create a separate roadmap document by default. A normal roadmap is a
 section of the plan unless its size/lifecycle genuinely justifies separation.
@@ -132,13 +150,7 @@ Use a stable requirement identifier only when one individual requirement
 genuinely benefits from independent traceability, for example because physical
 or automated verification must refer to it exactly.
 
-Readable headings remain the default:
-
-```text
-Why semantic resolution exists
-Why coordinate frames are separate from simple rotations
-What Forge deliberately does not replace
-```
+Readable headings remain the default.
 
 ## 20 — Design
 
@@ -156,7 +168,7 @@ Typical content includes:
 The design document should stay understandable without descending into every
 private helper or geometry operation.
 
-## 21..29 — Detailed design
+## 20-xx — Detailed design
 
 Detailed-design documents are optional. Add one when a functional area has
 enough internal reasoning that keeping it inside `20-design.md` would make the
@@ -165,9 +177,11 @@ architecture document noisy.
 Examples:
 
 ```text
-doc/21-resolution-context.md
-doc/22-transform-model.md
-doc/23-cutter-overlap.md
+doc/20-01-resolution-context.md
+doc/20-02-transform-model.md
+doc/20-03-cutter-overlap.md
+...
+doc/20-20-...
 ```
 
 Detailed design answers questions such as:
@@ -180,8 +194,8 @@ Detailed design answers questions such as:
 - private-helper responsibilities;
 - implementation edge cases and rationale.
 
-Do not create all `21..29` files pre-emptively. Create only the detailed
-designs that carry useful engineering knowledge.
+Do not create detailed-design files pre-emptively. Create only the documents
+that carry useful engineering knowledge.
 
 ### Component-local detailed design
 
@@ -198,7 +212,7 @@ doc/10-specification.md
 doc/20-design.md
     repository/system architecture
 
-doc/21-...md
+doc/20-01-...md
     detailed design of a functional software/modeling area
 
 <component>/design/design.md
@@ -228,22 +242,7 @@ where the requirement itself genuinely needs a stable identifier.
 
 ## vrf — execution and evidence
 
-`vrf/` owns executable verification material and generated evidence, for
-example:
-
-```text
-vrf/
-├── openscad/
-│   └── verification_evidence.scad
-└── out/
-    ├── README.md
-    ├── png/
-    ├── evidence/
-    └── ...
-```
-
-Temporary machine artifacts may exist during execution but should not be
-published merely because a testcase generated them.
+`vrf/` owns executable verification material and generated evidence.
 
 A published verification snapshot may include a copy of the applicable
 verification document so the evidence branch is self-contained, but the source
@@ -275,7 +274,7 @@ The same roles apply to both, with different emphasis.
 00 plan             work context, sources, focus, roadmap
 10 specification    why the library/capabilities exist; goals/non-goals
 20 design           library architecture and responsibilities
-21..29 detail       internal design of complex functional areas when useful
+20-xx detail        internal design of complex functional areas when useful
 30 verification     how intended behavior is demonstrated
 API reference       exact consumer-facing calls
 ```
@@ -286,7 +285,7 @@ API reference       exact consumer-facing calls
 00 plan             work context, sources, focus, phases/roadmap
 10 specification    why the product/design exists; goals/requirements/constraints
 20 design           assembly/model architecture and major design choices
-21..29 detail       optional non-visual detailed design topics
+20-xx detail        optional non-visual detailed design topics
 component docs      detailed visual construction where useful
 30 verification     product/design verification strategy
 ```
@@ -295,6 +294,5 @@ component docs      detailed visual construction where useful
 
 Existing repositories are not wrong merely because they predate this structure.
 
-Templates/reference repositories should demonstrate the convention after a
-coherent rollout decision. Existing projects/libraries should adopt it when the
-documents carry useful knowledge rather than through ceremonial file creation.
+Migration 010 qualifies and rolls this model through current-generation SCAD
+repositories before the template is treated as the settled reference.
