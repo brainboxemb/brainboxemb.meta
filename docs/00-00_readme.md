@@ -18,11 +18,11 @@ cross-repository conventions live and which repository owns a change.
 
 | Family | Start here | Purpose |
 | --- | --- | --- |
-| 10 Plan | [10-plan.md](10-plan.md) | current meta-repository work |
-| 20 Manuals | [20-manuals.md](20-manuals.md) | how to work with and maintain the portfolio |
-| 30 Specification | [30-specification.md](30-specification.md) | why meta exists and for whom |
-| 40 Design | [40-design.md](40-design.md) | how portfolio coordination is organised |
-| 50 Verification | [50-verification.md](50-verification.md) | how current claims stay trustworthy |
+| 10 Plan | [10-00_plan.md](10-00_plan.md) | current meta-repository work |
+| 20 Manuals | [20-00_manuals.md](20-00_manuals.md) | how to work with and maintain the portfolio |
+| 30 Specification | [30-00_specification.md](30-00_specification.md) | why meta exists and for whom |
+| 40 Design | [40-00_design.md](40-00_design.md) | how portfolio coordination is organised |
+| 50 Verification | [50-00_verification.md](50-00_verification.md) | how current claims stay trustworthy |
 
 For current repository-spanning work, use [STATUS.md](../STATUS.md). It is an
 operational register, not a chapter copied into this documentation set.
