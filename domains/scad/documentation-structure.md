@@ -5,7 +5,7 @@ Status: **current shared SCAD specialization**
 ## Shared model
 
 Current-generation maintained SCAD repositories specialize the shared
-[reusable repository documentation model](../../docs/20-13_repository-documentation.md).
+[reusable repository documentation model](../../docs/20-13-repository-documentation.md).
 
 The normal SCAD library documentation set is:
 
@@ -15,16 +15,16 @@ AGENTS.md
 
 doc/
 ├── README.md
-├── 10-00_plan.md
-├── 20-00_manuals.md
-├── 20-01_development.md
-├── 20-02_user.md
-├── 20-xx_...md
-├── 30-00_specification.md
-├── 40-00_design.md
-├── 40-xx_...md
-├── 50-00_verification.md
-└── 50-xx_...md
+├── 10-00-plan.md
+├── 20-00-manuals.md
+├── 20-01-development.md
+├── 20-02-user.md
+├── 20-xx-...md
+├── 30-00-specification.md
+├── 40-00-design.md
+├── 40-xx-...md
+├── 50-00-verification.md
+└── 50-xx-...md
 ```
 
 The first number identifies the family; the second number is a stable detail
@@ -59,7 +59,7 @@ For a reusable SCAD library it should briefly state:
 
 ## 10 — Plan
 
-`doc/10-00_plan.md` owns current repository work, information sources, focus,
+`doc/10-00-plan.md` owns current repository work, information sources, focus,
 sequence and roadmap.
 
 Durable engineering intent belongs in specification rather than being repeated
@@ -67,11 +67,11 @@ as plan history.
 
 ## 20 — Manuals
 
-`doc/20-00_manuals.md` is the manual-family index.
+`doc/20-00-manuals.md` is the manual-family index.
 
 ### 20-01 — Development
 
-`doc/20-01_development.md` explains how to work on the repository itself.
+`doc/20-01-development.md` explains how to work on the repository itself.
 
 For current-generation maintained SCAD repositories it should cover:
 
@@ -88,7 +88,7 @@ the repo-specific summary.
 
 ### 20-02 — User
 
-`doc/20-02_user.md` teaches a consumer how to use the library/tool/project.
+`doc/20-02-user.md` teaches a consumer how to use the library/tool/project.
 
 For a reusable SCAD library it normally contains:
 
@@ -115,7 +115,7 @@ important.
 
 ## 30 — Specification
 
-`doc/30-00_specification.md` explains:
+`doc/30-00-specification.md` explains:
 
 - why the library/project exists;
 - why a consumer would use it;
@@ -127,7 +127,7 @@ Do not make specification an API catalog.
 
 ## 40 — Design
 
-`doc/40-00_design.md` owns repository/system architecture.
+`doc/40-00-design.md` owns repository/system architecture.
 
 Use `40-xx` for detailed non-visual design topics such as resolution context,
 transform behavior or cutter semantics.
@@ -144,12 +144,12 @@ beside source, for example:
 with generated/interactive design-render adapters.
 
 That is a SCAD-specific detailed-design form. The repository-level
-`40-00_design.md` links to those component-local authorities instead of moving
+`40-00-design.md` links to those component-local authorities instead of moving
 them merely for numbering symmetry.
 
 ## 50 — Verification
 
-`doc/50-00_verification.md` explains how intended behavior/design is validated.
+`doc/50-00-verification.md` explains how intended behavior/design is validated.
 
 Typical SCAD evidence includes:
 
@@ -177,7 +177,7 @@ duplicate signatures/parameter catalogs.
 
 ## Generated combined book
 
-A future `bld/docs/99-book.md` may assemble the numbered source documentation
+A future `bld/docs/99-00-book.md` may assemble the numbered source documentation
 in reading order.
 
 It is generated output, not a source authority.
