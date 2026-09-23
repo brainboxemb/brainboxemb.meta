@@ -6,7 +6,7 @@ Java repositories had a reproducible Maven/JDK baseline but still duplicated rep
 
 Status: **complete**
 
-Durable model: [Java execution model](../../domains/software/40-01_java-execution.md).
+Durable model: [Java execution model](../../domains/software/40-01-java-execution.md).
 Historical rollout/evidence: [06 — Implementation and qualification plan](06-implementation-plan.md).
 
 ## Final architecture
