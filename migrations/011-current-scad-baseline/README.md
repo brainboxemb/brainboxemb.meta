@@ -581,10 +581,32 @@ mechint can adopt the new Forge/util releases only after those releases exist.
 
 ### Phase 6 — template last
 
-Update `template.scad-project` only after the real repositories have proved the
-baseline.
+**Complete.**
 
-The template records the qualified convention; it does not decide it.
+`template.scad-project` was updated only after the real repositories had proved
+the baseline. The template records the qualified convention; it did not decide
+it.
+
+Exact qualification evidence:
+
+- integration PR #63 qualified exact head
+  `6c968e24f5fe2e7b05f5dd4acbb44bb216c961f1`;
+- exact-head CI run `35918399781` — success, including execution/hydration,
+  capability materialization and PR Build/Verification publication;
+- merge commit
+  `5a1ae13ee54727aaf0745e96caf621421e24c897`;
+- exact-main CI/publication run `35918567717` — success;
+- both `prod/bld/publication-info.txt` and
+  `prod/vrf/publication-info.txt` identify exact main
+  `5a1ae13ee54727aaf0745e96caf621421e24c897`, `tool.scad-project v0.15.11`,
+  `tool.git-project` exact
+  `d1ed47c7d85524cfcb2a8f7e1ea81ba106ae9c60`, and
+  `lib.scad.clamps` exact
+  `e9f2fe0039a5f1cb6e2a0386a736767d95e627e7`;
+- generated Build design publication remains present under
+  `prod/bld/design/...` with rendered images;
+- generated Verification now publishes `50-00-verification.md`;
+- template issue #62 closed through the merged PR.
 
 ### Phase 7 — closing audit
 
