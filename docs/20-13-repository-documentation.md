@@ -31,20 +31,20 @@ AGENTS.md
 docs/ or doc/
 ├── README.md
 │
-├── 10-00_plan.md
+├── 10-00-plan.md
 │
-├── 20-00_manuals.md
-├── 20-01_development.md
-├── 20-02_user.md
-├── 20-xx_...md             # optional additional manuals
+├── 20-00-manuals.md
+├── 20-01-development.md
+├── 20-02-user.md
+├── 20-xx-...md             # optional additional manuals
 │
-├── 30-00_specification.md
+├── 30-00-specification.md
 │
-├── 40-00_design.md
-├── 40-xx_...md             # optional detailed design
+├── 40-00-design.md
+├── 40-xx-...md             # optional detailed design
 │
-├── 50-00_verification.md
-└── 50-xx_...md             # optional verification detail
+├── 50-00-verification.md
+└── 50-xx-...md             # optional verification detail
 ```
 
 Generated documentation may additionally publish:
@@ -52,21 +52,21 @@ Generated documentation may additionally publish:
 ```text
 bld/
 └── docs/
-    └── 99-book.md
+    └── 99-00-book.md
 ```
 
-The numbered files use the first number for the document family and the second number for a stable subdocument inside that family. Chapter 00 is the intentional exception: `README.md` is both the documentation overview and GitHub's directory landing page, so no duplicate `00-00_readme.md` is kept. Its alphabetical position in the file list is accepted; preserving GitHub's native README behavior and a single authority is more important than forcing it to sort first.
+Numbered source files use `<family>-<order>-<name>.md`: the first number identifies the document family, the second gives stable ordering inside that family, and the remaining kebab-case name is human-readable. Chapter 00 is the intentional exception: `README.md` is both the documentation overview and GitHub's directory landing page, so no duplicate `00-00_readme.md` is kept. Its alphabetical position in the file list is accepted; preserving GitHub's native README behavior and a single authority is more important than forcing it to sort first.
 
 For example:
 
 ```text
-20-00_manuals.md
-20-01_development.md
-20-02_user.md
+20-00-manuals.md
+20-01-development.md
+20-02-user.md
 20-10-git-workflow.md
 
-40-00_design.md
-40-01_repository-layout.md
+40-00-design.md
+40-01-repository-layout.md
 40-02_publication-model.md
 ```
 
@@ -86,14 +86,14 @@ Examples:
 ```text
 docs/
 ├── README.md
-├── 10-00_plan.md
-├── 20-00_manuals.md
+├── 10-00-plan.md
+├── 20-00-manuals.md
 └── ...
 
 doc/
 ├── README.md
-├── 10-00_plan.md
-├── 20-00_manuals.md
+├── 10-00-plan.md
+├── 20-00-manuals.md
 └── ...
 
 domains/scad/
@@ -158,7 +158,7 @@ It is the overview chapter. It should not become a second full root README.
 
 ## 10 — Plan
 
-`10-00_plan.md` answers:
+`10-00-plan.md` answers:
 
 > What are we working on now, and what is the intended sequence?
 
@@ -174,7 +174,7 @@ The plan is operational and changes with current work.
 
 ## 20 — Manuals
 
-`20-00_manuals.md` is the manual-family entrypoint.
+`20-00-manuals.md` is the manual-family entrypoint.
 
 It answers:
 
@@ -184,7 +184,7 @@ A normal reusable repository starts with:
 
 ### 20-01 — Development
 
-`20-01_development.md` answers:
+`20-01-development.md` answers:
 
 > How do I develop, test, update, release and maintain this repository?
 
@@ -202,7 +202,7 @@ Typical content:
 
 ### 20-02 — User
 
-`20-02_user.md` answers:
+`20-02-user.md` answers:
 
 > How do I use this tool or library?
 
@@ -225,16 +225,16 @@ to the manual family.
 Examples:
 
 ```text
-20-10_engineering-workflow.md
-20-11_git-workflow.md
-20-12_versioning-and-releases.md
+20-10-engineering-workflow.md
+20-11-git-workflow.md
+20-12-versioning-and-releases.md
 ```
 
 A manual tells someone **what to do**. Architecture rationale belongs in design.
 
 ## 30 — Specification
 
-`30-00_specification.md` answers:
+`30-00-specification.md` answers:
 
 > Why does this exist?
 
@@ -257,7 +257,7 @@ Do not turn specification into an API/CLI inventory.
 
 ## 40 — Design
 
-`40-00_design.md` is the design-family entrypoint and answers:
+`40-00-design.md` is the design-family entrypoint and answers:
 
 > How is it put together?
 
@@ -272,8 +272,8 @@ Typical content:
 Use stable `40-xx` detail documents for substantial design areas:
 
 ```text
-40-00_design.md
-40-01_repository-layout.md
+40-00-design.md
+40-01-repository-layout.md
 40-02_tooling-boundary.md
 40-03_publication-model.md
 ```
@@ -283,7 +283,7 @@ documentation may remain beside source and be linked from the repository design.
 
 ## 50 — Verification
 
-`50-00_verification.md` is the verification-family entrypoint and answers:
+`50-00-verification.md` is the verification-family entrypoint and answers:
 
 > How do we know it works?
 
@@ -301,7 +301,7 @@ Use `50-xx` for substantial verification detail.
 
 ## 99 — Combined documentation book
 
-`99-book.md` is optional **generated output**.
+`99-00-book.md` is optional **generated output**.
 
 It assembles the maintained source documents in numeric reading order:
 
@@ -314,7 +314,7 @@ README / overview
 50 verification + 50-xx
 ```
 
-The normal location is `bld/docs/99-book.md` or an equivalent generated Build
+The normal location is `bld/docs/99-00-book.md` or an equivalent generated Build
 namespace. It is never hand-maintained or treated as a source authority.
 
 A renderer may later produce HTML/PDF from the same ordered source set.
@@ -390,7 +390,7 @@ When adopting this model:
    in a generic bucket;
 5. update links and remove obsolete parallel indexes;
 6. keep historical migration/experiment evidence intact;
-7. generate `99-book.md` only after source structure is coherent.
+7. generate `99-00-book.md` only after source structure is coherent.
 
 Do not force completed experiment/PoP repositories into current documentation
 maintenance unless they are deliberately reactivated.
