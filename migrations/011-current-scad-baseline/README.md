@@ -535,7 +535,7 @@ infrastructure.
 
 ### Phase 5 — remaining current-generation consumers
 
-**Current.**
+**Complete.**
 
 1. **Complete:** accept the Migration-011 rollout in
    `2026-009-01.cad.HUB75-display-frame` at exact
@@ -550,10 +550,28 @@ infrastructure.
    - generated verification publishes `50-00-verification.md`;
    - core-coupler, tube-mount/dovetail, reinforcement and physical issue #43
      semantics remain unchanged.
-2. **Current:** roll the resulting baseline through
-   `2026-009-02.cad.hub75-component-lab`.
-3. Update `template.scad-project` only in Phase 6 after both real projects are
-   qualified.
+2. **Complete:** accept the retained-lab Migration-011 rollout in
+   `2026-009-02.cad.hub75-component-lab` at exact main
+   `7735a310eec7c5f600279040e55ea9ef664db119`.
+   - issue #12 / PR #13 preserve the completed-lab documentation exception and
+     do not reopen either geometry experiment;
+   - final PR head `5d66b3dab2bd5d528f28af4bbce091d13bce565a`
+     qualified in Build run `35912470862` — success;
+   - that run built GitHub's synthetic PR merge
+     `2ad79af46081a9dc2983ec726f50a1cf82c5e676`;
+   - synthetic-merge tree and actual squash-main tree are exactly equal at
+     `2c05ba93a960ff93bf31b8a6244f8f207c3acb28`, proving the built content is
+     byte-for-byte the content merged to main even though this retained lab
+     intentionally has no `push: main` build trigger;
+   - preview `dev/pr-13/bld` retains `tool.git-project v0.2.14`,
+     `tool.scad-project v0.15.11`, `lib.scad.clamps v0.1.9` and
+     `lib.scad.mechint v0.2.4`;
+   - the only compatibility adaptation was the lab's local tube-mount adapter
+     moving from the old mechint internal parameter/accessor names to the
+     released v0.2.4 public `*_mm` / `*_deg` API; retained geometry values
+     and experiment conclusions are unchanged;
+   - PR cleanup run `35912641384` — success.
+3. `template.scad-project` remains untouched until Phase 6.
 
 Roll the baseline through the production libraries/projects/lab. For each repo:
 
@@ -569,8 +587,10 @@ mechint can adopt the new Forge/util releases only after those releases exist.
 
 ### Phase 6 — template last
 
-Update `template.scad-project` only after the real repositories have proved the
-baseline.
+**Current.**
+
+Update `template.scad-project` now that the maintained real repositories and
+retained component lab have proved the baseline.
 
 The template records the qualified convention; it does not decide it.
 
