@@ -20,8 +20,6 @@ The live repositories show several forms of drift at once:
 - the HUB75 frame is on a different tool release again (`v0.15.8`);
 - `lib.scad.mechint` still declares Forge `v0.2.1` while newer Forge releases
   exist;
-- retained Experiment 006 intentionally contains historical library pins and must
-  distinguish fixture intent from accidental staleness;
 - every catalogued current-generation SCAD repository still has root
   `update-repo.ps1` / `update-repo.sh`;
 - current `tool.git-project` documentation defines the canonical managed root
@@ -78,15 +76,12 @@ repository to current-generation tooling would be a separate migration.
 | lib.scad.mechint | v0.15.7 | Forge v0.2.1; util v0.4.0 |
 | HUB75 display frame | v0.15.8 | Forge v0.3.0; util v0.4.0 plus product libraries |
 | HUB75 component lab | v0.15.7 | clamps v0.1.8; mechint v0.1.6 |
-| Experiment 006 | v0.15.7 | mechint v0.1.6; util v0.2.0 |
 
 All eight normal rollout repositories currently contain root
 `bootstrap.ps1/.sh` and `update-repo.ps1/.sh`. Their workflow sets vary by
 repository role, which is valid only when the variation matches the released
 tooling contract.
 
-Experiment 006 may still contain the same historical launcher generation, but
-that is retained PoP state rather than Migration-011 maintenance debt.
 
 Current observed owner releases before qualification:
 
