@@ -27,11 +27,11 @@ The portfolio-wide agent entrypoint is
 
 From there, load only the shared material relevant to the task:
 
-- [Git and repository workflow](20-11_git-workflow.md) for issues, branches, commits,
+- [Git and repository workflow](20-11-git-workflow.md) for issues, branches, commits,
   PRs, CI, changelog and merge discipline;
 - [project organisation](40-02-projects.md) for generic project/tool ownership;
 - [reusable repository documentation](20-13-repository-documentation.md) for the shared plan/development/specification/design/verification/usage document roles;
-- [versioning and releases](20-12_versioning-and-releases.md) for released interfaces
+- [versioning and releases](20-12-versioning-and-releases.md) for released interfaces
   and consumer pins;
 - the applicable domain entrypoint under `domains/`;
 - [STATUS.md](../STATUS.md) when the work spans repositories or relates to an
