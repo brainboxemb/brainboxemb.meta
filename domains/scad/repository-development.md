@@ -31,9 +31,9 @@ tools/
 └── tool.scad-project
 
 .github/workflows/
-├── scad.yml
-├── release.yml        # when this repository publishes versioned releases
-└── pr-cleanup.yml     # when PR preview output is published
+├── self-production.yml
+├── self-release.yml        # when this repository publishes versioned releases
+└── self-pr-cleanup.yml     # when PR preview output is published
 
 doc/
 ├── README.md
@@ -296,9 +296,9 @@ State which project.yml refs a maintainer changes and any repository-specific
 dependency rule.
 
 ## GitHub Actions
-- scad.yml — why this repo uses production/build
-- release.yml — present/absent and why
-- pr-cleanup.yml — present/absent and why
+- self-production.yml — why this repo uses production/build
+- self-release.yml — present/absent and why
+- self-pr-cleanup.yml — present/absent and why
 
 ## Repository-specific exceptions
 State real deviations, or say there are none.
