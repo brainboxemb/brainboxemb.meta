@@ -23,7 +23,7 @@ software consumer
   project-specific source, metadata and release semantics
 ```
 
-The durable production model is documented in [Java execution model](../../domains/software/40-01-java-execution.md).
+The durable production model is documented in [Java execution model](40-01_java-execution.md).
 
 ## Platform qualification
 
