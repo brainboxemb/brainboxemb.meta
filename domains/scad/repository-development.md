@@ -31,7 +31,7 @@ tools/
 └── tool.scad-project
 
 .github/workflows/
-├── self-production.yml
+├── self-ci.yml
 ├── self-release.yml        # when this repository publishes versioned releases
 └── self-pr-cleanup.yml     # when PR preview output is published
 
@@ -92,7 +92,7 @@ that ref and records the exact revision through the gitlink.
 
 The SCAD post-update hook aligns brainboxemb-owned SCAD reusable-workflow calls
 to the same semantic release ref. A maintainer should not have to edit
-`self-production.yml` and `self-release.yml` separately just to repeat the same
+`self-ci.yml` and `self-release.yml` separately just to repeat the same
 `tool.scad-project` version.
 
 ### Reusable libraries
@@ -171,24 +171,29 @@ intent coherent.
 ## GitHub Actions convention
 
 Current-generation SCAD repositories use thin **self** callers with stable
-category-prefixed filenames. The local callers are repository entrypoints;
+category-prefixed filenames. The self callers are repository entrypoints;
 substantial implementation lives in released reusable workflows.
 
-### `.github/workflows/self-production.yml`
+The normal integration workflow is named `ci`, not `production`: it evaluates
+impact and orchestrates the required build/verification/publication capabilities
+for PR/main integration. `production` is avoided because it can be confused
+with a deployment environment.
+
+### `.github/workflows/self-ci.yml`
 
 Normal SCAD CI caller.
 
 For normal projects/libraries it normally calls:
 
 ```text
-brainboxemb/tool.scad-project/.github/workflows/reusable-production.yml@<tool-scad-release>
+brainboxemb/tool.scad-project/.github/workflows/reusable-ci.yml@<tool-scad-release>
 ```
 
 A specialised lab may deliberately call a narrower released workflow such as
 `reusable-build.yml`, but the local `doc/20-01-development.md` must explain that
 exception.
 
-The normal human-facing workflow name is `SCAD production`; a deliberately
+The normal human-facing workflow name is `SCAD CI`; a deliberately
 specialised repository may use a clearer role-specific display name.
 
 ### `.github/workflows/self-release.yml`
@@ -296,7 +301,7 @@ State which project.yml refs a maintainer changes and any repository-specific
 dependency rule.
 
 ## GitHub Actions
-- self-production.yml — why this repo uses production/build
+- self-ci.yml — why this repo uses production/build
 - self-release.yml — present/absent and why
 - self-pr-cleanup.yml — present/absent and why
 
@@ -315,7 +320,7 @@ Check at least:
 - committed direct gitlinks resolve to those releases;
 - bootstrap gitlink is the deliberately accepted generic-tool revision;
 - managed root launcher provenance matches the bootstrap tool after refresh;
-- `self-production.yml` / `self-release.yml` use the expected released SCAD workflow ref;
+- `self-ci.yml` / `self-release.yml` use the expected released SCAD workflow ref;
 - `self-pr-cleanup.yml` uses the expected released generic workflow ref when
   present;
 - no stale local orchestration duplicates shared tooling;
