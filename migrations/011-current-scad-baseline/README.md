@@ -537,9 +537,20 @@ infrastructure.
 
 **Current.**
 
-1. **Current:** roll the accepted standalone-library/tooling baseline through
-   `2026-009-01.cad.HUB75-display-frame`.
-2. **Next:** roll the resulting baseline through
+1. **Complete:** accept the Migration-011 rollout in
+   `2026-009-01.cad.HUB75-display-frame` at exact
+   `af838a5b8951feb93912adaf882e5613c4ba08d3`.
+   - integration PR #62 exact-head CI run `35908923811` — success;
+   - exact-main CI/publication run `35909363385` — success;
+   - `prod/bld` and `prod/vrf` both identify that exact source;
+   - production provenance retains `tool.git-project v0.2.14`,
+     `tool.scad-project v0.15.11`, `lib.scad.hub75 v0.1.8`,
+     `lib.scad.clamps v0.1.9`, `lib.scad.util v0.4.1`,
+     `lib.scad.forge v0.3.1` and `lib.scad.mechint v0.2.4`;
+   - generated verification publishes `50-00-verification.md`;
+   - core-coupler, tube-mount/dovetail, reinforcement and physical issue #43
+     semantics remain unchanged.
+2. **Current:** roll the resulting baseline through
    `2026-009-02.cad.hub75-component-lab`.
 3. Update `template.scad-project` only in Phase 6 after both real projects are
    qualified.
