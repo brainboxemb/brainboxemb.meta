@@ -92,7 +92,7 @@ that ref and records the exact revision through the gitlink.
 
 The SCAD post-update hook aligns brainboxemb-owned SCAD reusable-workflow calls
 to the same semantic release ref. A maintainer should not have to edit
-`local-scad.yml` and `local-release.yml` separately just to repeat the same
+`self-production.yml` and `self-release.yml` separately just to repeat the same
 `tool.scad-project` version.
 
 ### Reusable libraries
@@ -170,11 +170,11 @@ intent coherent.
 
 ## GitHub Actions convention
 
-Current-generation SCAD repositories use thin **local** callers with stable
+Current-generation SCAD repositories use thin **self** callers with stable
 category-prefixed filenames. The local callers are repository entrypoints;
 substantial implementation lives in released reusable workflows.
 
-### `.github/workflows/local-scad.yml`
+### `.github/workflows/self-production.yml`
 
 Normal SCAD CI caller.
 
@@ -191,7 +191,7 @@ exception.
 The normal human-facing workflow name is `SCAD production`; a deliberately
 specialised repository may use a clearer role-specific display name.
 
-### `.github/workflows/local-release.yml`
+### `.github/workflows/self-release.yml`
 
 Present when the repository owns versioned releases.
 
@@ -206,7 +206,7 @@ Normal display name: `Release`.
 Repositories that do not publish versioned releases do not add this file merely
 for symmetry.
 
-### `.github/workflows/local-pr-cleanup.yml`
+### `.github/workflows/self-pr-cleanup.yml`
 
 Present when the repository publishes generated PR-preview branches.
 
@@ -315,8 +315,8 @@ Check at least:
 - committed direct gitlinks resolve to those releases;
 - bootstrap gitlink is the deliberately accepted generic-tool revision;
 - managed root launcher provenance matches the bootstrap tool after refresh;
-- `local-scad.yml` / `local-release.yml` use the expected released SCAD workflow ref;
-- `local-pr-cleanup.yml` uses the expected released generic workflow ref when
+- `self-production.yml` / `self-release.yml` use the expected released SCAD workflow ref;
+- `self-pr-cleanup.yml` uses the expected released generic workflow ref when
   present;
 - no stale local orchestration duplicates shared tooling;
 - repository-local verification passes;
