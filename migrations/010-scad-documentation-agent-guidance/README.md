@@ -1,6 +1,6 @@
 # Migration 010 — standardise SCAD documentation and agent guidance
 
-Status: **active — audit/qualification phase**
+Status: **complete**
 
 Tracking issue: [#128](https://github.com/brainboxemb/brainboxemb.meta/issues/128)
 
@@ -11,17 +11,13 @@ Input issues:
 
 ## Phase status
 
-- **Phase 1 — implementation:** complete. The shared SCAD documentation and
-  agent-guidance model has been established.
-- **Phase 2 — audit/qualification:** active. Audit the implemented model from a
-  blank-agent perspective against real SCAD repositories.
-- **Phase 3 — correction:** apply only concrete changes justified by audit
-  findings.
-- **Phase 4 — closing audit:** repeat qualification against the corrected state
-  and close the migration when the completion criteria are met.
+- **Phase 1 — implementation:** complete.
+- **Phase 2 — audit/qualification:** complete.
+- **Phase 3 — correction:** complete.
+- **Phase 4 — closing audit:** complete.
 
-The current work is therefore an audit of the implemented model, not another
-initial design/implementation pass.
+The migration is retained as evidence; durable rules now live in the shared
+working-model/SCAD-domain documents and the aligned owner repositories.
 
 ## Why this migration exists
 
@@ -300,20 +296,50 @@ the convention.
   working rule.
 - **#122 — semantic SCAD object naming rollout**: separate API/naming rollout.
 
+## Qualification evidence
+
+The blank-agent/documentation model was qualified against real owner
+repositories before the template was updated.
+
+| Repository / role | Qualified source | Evidence |
+| --- | --- | --- |
+| `lib.scad.forge` — first semantic-library canary | `37ef5685f40557f68872937ed752f784d013d10f` | exact-main SCAD production `35844764572` |
+| `tool.scad-project` — owner-vs-consumer guidance boundary | `bf580ab77333f544245255b0aeca82e2f8b86e91` | exact-main Test `35845493265` |
+| `lib.scad.hub75` — geometry-heavy/physical-verification canary | `67cf49c417cf5fd8128b3ddb89434cb4bf8796c1` | exact-main SCAD production `35848300475` |
+| HUB75 display-frame — real application/#93 reproduction | `a47dd533100661ca76f43175534662266ca8ba7b` | exact-main SCAD production `35849957392` |
+| `lib.scad.clamps` | `ba6c5e5e89dcfc2d246b2610692ef3db0d10fbb0` | exact-main SCAD production `35852123977` |
+| `lib.scad.mechint` | `1a2d70830db63897db89a6c132d10a48d5b9bf0b` | exact-main SCAD production `35852110157` |
+| `lib.scad.util` | `3fe0586bc1a0ac45a81e15095bef1f5f26f9bbd5` | exact-main SCAD production `35852744097` |
+| retained HUB75 component lab | main `a558795f05055b5cf43c2c97c578f023b880dd4a` | exact PR-head lab build `35852989072`; no push-to-main workflow by design |
+| retained Experiment 006 | `1ee94f911e69d811758200a04cc69fc5f3fa6503` | exact-main SCAD production `35853720278` plus DEP-01..DEP-07 regression workflows |
+| `template.scad-project` — template last | `8d7478df7e8ea2bf482aa80e356731d03d67fad2` | exact-main SCAD production `35853805546` |
+
+Audit corrections that changed the shared convention itself are also retained:
+
+- meta PR #135 changed bare `// Design:` breadcrumbs to docsgen-safe ordinary
+  comment bullets after the HUB75 canary proved the original example invalid;
+- meta PR #136 clarified that concise CAD documentation may still be visual:
+  useful generated README previews are retained, while abstract repositories do
+  not add decorative images merely to satisfy a format.
+
+The current-generation rollout therefore includes the semantic libraries, the
+real HUB75 application, the retained lab/experiment cases and the template.
+Classic repositories remain outside the migration scope.
+
 ## Completion criteria
 
-Migration 010 is complete when:
+Migration 010 completed with all criteria met:
 
 - the shared SCAD documentation/agent model is durable in meta;
-- Forge passes the retained blank-agent audit;
-- tool-owner AGENTS versus pinned consumer documentation are unambiguous;
-- one geometry-heavy library passes;
-- one real SCAD application passes;
-- all selected current-generation SCAD repositories have been inventoried and
-  aligned or explicitly exempted;
-- the template reflects the qualified result;
-- exact PR/main CI evidence is retained for changed owner repositories;
-- #93, #124 and #128 can close without leaving unresolved guidance ambiguity.
+- Forge passed the retained blank-agent audit;
+- tool-owner AGENTS versus pinned consumer documentation is unambiguous;
+- the geometry-heavy HUB75 library passed;
+- the real HUB75 application reproduced and closed the #93 failure mode;
+- selected current-generation SCAD repositories were inventoried and aligned,
+  with retained lab/experiment handling kept intentionally lightweight;
+- the template was updated last, after real repositories qualified the model;
+- exact PR/main CI evidence is retained above;
+- #93, #124 and #128 can close without unresolved guidance ambiguity.
 
 Generated API-reference publication, self-contained physical-verification
 packages and generic CHANGELOG normalisation may remain open follow-ups.
