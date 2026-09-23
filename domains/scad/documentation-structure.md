@@ -4,9 +4,20 @@ Status: **current shared documentation convention**
 
 ## Purpose
 
-Current-generation SCAD repositories use one predictable source-documentation
-home. Different kinds of engineering information have different jobs; a
-single "design" document should not become a catch-all.
+Current-generation SCAD repositories use one predictable documentation model,
+but that model must not create documents for their own sake.
+
+Each document role answers a different question:
+
+```text
+README / AGENTS     where do I start?
+00 plan             how do we work here and what is happening now?
+10 specification    why does this exist and what should it achieve?
+20 design           how is the repository/system organised to achieve that?
+21..29 detail       how is one functional part built in detail?
+30 verification     how do we know the intended result is achieved?
+source/API docs     how do I call the public API?
+```
 
 The normal repository-level shape is:
 
@@ -17,18 +28,18 @@ doc/
 ├── 00-plan.md
 ├── 10-specification.md
 ├── 20-design.md
+├── 21-...md               # optional detailed design
+├── 22-...md               # optional detailed design
+├── ...
 ├── 30-verification.md
-└── 40-...md
+└── 40-...md               # other optional subject documents
 
 vrf/
 └── ... executable verification sources and generated evidence
 ```
 
-Number ordered source documents in increments of 10 so later material can be
-inserted without broad renumbering.
-
-The structure is role-based, not ceremonial. A repository does not need every
-optional document merely to satisfy the tree.
+The numbered files are source documentation. `vrf/` is execution/evidence,
+not a second source-documentation tree.
 
 ## Standard entrypoints
 
@@ -36,153 +47,177 @@ optional document merely to satisfy the tree.
 
 ### README
 
-The README is the human-facing start page. It should contain only enough
-introduction to answer:
+The README is the human-facing start page. Keep enough introduction to answer:
 
 - what is this repository;
 - why might I care;
 - where should I read next.
 
-It routes the reader to the owning source documents instead of repeating their
-content.
+Route the reader to the owning documents instead of duplicating them.
 
 ### AGENTS
 
-AGENTS is the agent-facing start page. It should contain:
+AGENTS is the agent-facing start page. Keep:
 
-- only genuinely agent-specific instructions;
+- genuinely agent-specific instructions;
 - the minimum repository context needed to start safely;
-- links to the applicable shared policy and repository source documents.
+- links to shared policy and repository authorities.
 
-Do not duplicate the repository plan, engineering contracts, design rationale
-or verification procedure in AGENTS merely to make them visible to an agent.
-Point to their authority.
+Do not duplicate the plan, specification, design or verification procedure in
+AGENTS merely to make it visible to an agent.
 
-A fact or rule should have one clear authority. A short summary is acceptable
-when it materially improves navigation, but parallel maintained copies are not.
+A fact or rule should have one clear authority. A short orienting summary is
+fine; parallel maintained copies are not.
 
 ## 00 — Plan
 
 `doc/00-plan.md` is the normal engineering/work entrypoint after README or
 AGENTS.
 
-It explains what the repository/library/project is for, what belongs in its
-scope, how work is intended to proceed and where the relevant information
-lives.
+It is operational. Typical content includes:
 
-Typical content includes:
-
-- **purpose** — why the repository/library/project exists and what problem it
-  serves;
-- **scope** — what belongs here and what explicitly belongs elsewhere;
+- a short statement of the repository/library/project goal and scope;
 - repository-specific working method;
-- information sources and their authority, such as drawings, STEP files,
-  datasheets, upstream APIs or other local documents;
+- information sources and which questions they are authoritative for;
 - current focus and implementation sequence;
-- dependencies, decision points and known open questions;
+- dependencies, decision points and open questions;
 - phases or milestones;
-- an optional roadmap section;
-- links to specification, design, verification and external authoritative
-  sources.
+- an optional roadmap;
+- links to the specification, design, detailed design and verification.
 
-The plan is operational, not a second specification. It links to normative
-contracts instead of copying them and links to verification rules instead of
-restating them.
+The plan may summarize the goal so a maintainer knows what they are working on,
+but the durable explanation of **why** the library/project and its functional
+parts exist belongs in the specification.
 
-Do not create a separate roadmap document by default. Keep a normal roadmap as
-a section of `00-plan.md`; split it only when its scale or lifecycle genuinely
-justifies an independent document.
+Do not create a separate roadmap document by default. A normal roadmap is a
+section of the plan unless its size/lifecycle genuinely justifies separation.
 
 ## 10 — Specification
 
-`doc/10-specification.md` turns the plan's purpose and scope into precise
-engineering promises and constraints.
+`doc/10-specification.md` primarily answers **why**.
+
+It should help a reader understand the engineering intent before looking at
+architecture or source.
 
 Typical content includes:
 
-- terminology;
-- requirements;
-- public or semantic contracts;
-- externally visible invariants;
-- constraints and boundaries;
-- compatibility expectations.
+- the problem the repository/library/project is intended to solve;
+- goals and desired outcomes;
+- important non-goals;
+- why each major functional area, sub-library or capability exists;
+- what those capabilities are intended to mean to a user/consumer;
+- important requirements and constraints at the intent level.
 
-For a reusable library this is where semantic contracts such as context
-ownership, coordinate meaning, token behavior and API invariants belong.
+For example, a modeling library specification can explain **why semantic
+resolution is needed** and what problem it prevents. It should not immediately
+turn that idea into an implementation inventory of `$fn/$fa/$fs`, helper
+modules or private data flow; those belong in design/detail/API documentation.
 
-For a CAD application/project it records the requirements and constraints the
-design must satisfy.
+### Numbering and requirement identifiers
 
-Stable contract identifiers are useful when verification should point back to
-one exact promise, for example:
+Document numbering exists for navigation and reading order.
+
+Do **not** automatically name specification headings with identifiers such as
+`FORGE-GEN-01`, `RES-CTX-02`, and so on. That creates noise when the reader
+only needs a clear explanation.
+
+Use a stable requirement identifier only when one individual requirement
+genuinely benefits from independent traceability, for example because physical
+or automated verification must refer to it exactly.
+
+Readable headings remain the default:
 
 ```text
-RES-CTX-01
-RES-CTX-02
+Why semantic resolution exists
+Why coordinate frames are separate from simple rotations
+What Forge deliberately does not replace
 ```
 
 ## 20 — Design
 
-`doc/20-design.md` explains **how** the specification is realised.
+`doc/20-design.md` answers **how at architecture level**.
 
 Typical content includes:
 
-- architecture and decomposition;
-- geometry construction;
-- coordinate systems;
-- internal data flow;
-- implementation choices;
-- trade-offs;
-- reusable versus project-owned responsibilities.
+- major decomposition and responsibilities;
+- sub-libraries/modules and how they interact;
+- public versus internal ownership;
+- coordinate/data/control flow at system level;
+- major implementation choices and trade-offs;
+- how the architecture supports the intent from the specification.
 
-A design document should refer back to specification contracts where that
-improves traceability rather than repeating the contract text.
+The design document should stay understandable without descending into every
+private helper or geometry operation.
 
-### Component-local visual design documents
+## 21..29 — Detailed design
 
-Existing component-local `design/design.md` walkthroughs remain useful for
-complex physical geometry. They can show named views and explain the
-construction of one component step by step.
+Detailed-design documents are optional. Add one when a functional area has
+enough internal reasoning that keeping it inside `20-design.md` would make the
+architecture document noisy.
 
-Their role is narrower than repository-level specification/design:
+Examples:
+
+```text
+doc/21-resolution-context.md
+doc/22-transform-model.md
+doc/23-cutter-overlap.md
+```
+
+Detailed design answers questions such as:
+
+- how one module/function family is internally composed;
+- local control/data flow;
+- scope/lifetime behavior;
+- geometry construction sequence;
+- algorithms and transformations;
+- private-helper responsibilities;
+- implementation edge cases and rationale.
+
+Do not create all `21..29` files pre-emptively. Create only the detailed
+designs that carry useful engineering knowledge.
+
+### Component-local detailed design
+
+For geometry-heavy components, the established component-local
+`design/design.md` plus its interactive design-render adapter may be the
+better detailed-design form because the explanation is inherently visual.
+
+The relationship can therefore be:
 
 ```text
 doc/10-specification.md
-    repository/library/product contracts
+    why the library/project or capability exists
 
 doc/20-design.md
-    repository-level architecture/design
+    repository/system architecture
+
+doc/21-...md
+    detailed design of a functional software/modeling area
 
 <component>/design/design.md
-    detailed visual construction of that component
+    detailed visual construction of a physical component
 ```
 
-Do not mechanically rename existing component walkthroughs solely to satisfy
-the repository-level numbering convention.
+Do not mechanically move useful visual component documentation into `doc/`.
 
 ## 30 — Verification
 
-`doc/30-verification.md` is source documentation. It explains how relevant
-specification and design claims are proven.
+`doc/30-verification.md` is source documentation. It explains how we determine
+whether the specification/design intent is actually satisfied.
 
 Typical content includes:
 
 - verification risks and questions;
-- mapping from specification/design claims to tests or evidence;
+- the specification/design section being exercised;
 - machine versus human evidence;
+- testcase/evidence mapping;
 - acceptance criteria;
 - evidence interpretation;
 - intentional exclusions and limitations;
-- physical verification procedure where applicable.
+- physical verification procedures where applicable.
 
-For contract-heavy libraries, prefer explicit traceability:
-
-| Contract | Verification question | Test/evidence |
-| --- | --- | --- |
-| `RES-CTX-01` | Does the public resolution owner establish context for its child geometry? | resolution-context testcase |
-| `RES-CTX-04` | Does the context stop at the child boundary? | leakage/restoration testcase |
-
-The verification document belongs under `doc/`, not under `vrf/`.
+Prefer links to clear specification/design headings. Use requirement IDs only
+where the requirement itself genuinely needs a stable identifier.
 
 ## vrf — execution and evidence
 
@@ -209,56 +244,50 @@ authority remains `doc/30-verification.md`.
 
 ## API/reference documentation
 
-API/reference documentation is separate from plan, specification, design and
-verification.
+API/reference documentation is code-near and answers **how do I call it?**
 
-For reusable OpenSCAD libraries, keep API documentation next to the owning
+For reusable OpenSCAD libraries, keep API documentation beside the owning
 source and generate the reference with `openscad_docsgen` where appropriate.
 
-Use the layers as follows:
+API/reference documentation is also the natural place for:
 
-```text
-README / AGENTS     where do I start?
-00 plan             why does this repo exist and how do we work here?
-10 specification    what does it promise?
-20 design           how is that promise realised?
-30 verification     how is the promise proven?
-source/API docs     how do I call the API?
-```
+- exact function/module signatures;
+- parameters and return values;
+- focused call examples;
+- compatibility/deprecation notices.
 
-Do not copy the same explanation into all layers.
+Do not make the specification an API catalog.
 
 ## Libraries and applications
 
-The same document roles apply to both, with different emphasis.
+The same roles apply to both, with different emphasis.
 
 ### Reusable library
 
 ```text
-00 plan             purpose, scope, information sources, evolution/roadmap
-10 specification    public concepts and semantic contracts
-20 design           internal architecture and implementation
-30 verification     contract proof strategy
-API reference       code-near generated reference
+00 plan             work context, sources, focus, roadmap
+10 specification    why the library/capabilities exist; goals/non-goals
+20 design           library architecture and responsibilities
+21..29 detail       internal design of complex functional areas when useful
+30 verification     how intended behavior is demonstrated
+API reference       exact consumer-facing calls
 ```
 
 ### CAD application/project
 
 ```text
-00 plan             purpose, scope, sources, working method, phases/roadmap
-10 specification    requirements, constraints and external interfaces
-20 design           assemblies, geometry and implementation
-30 verification     product/design verification strategy
+00 plan             work context, sources, focus, phases/roadmap
+10 specification    why the product/design exists; goals/requirements/constraints
+20 design           assembly/model architecture and major design choices
+21..29 detail       optional non-visual detailed design topics
 component docs      detailed visual construction where useful
+30 verification     product/design verification strategy
 ```
 
 ## Evolution
 
-This convention describes the target documentation roles. Existing
-current-generation repositories are not automatically wrong because they
-predate it.
+Existing repositories are not wrong merely because they predate this structure.
 
-Template/reference repositories should demonstrate the convention after a
-separate rollout decision. Existing projects/libraries should move through a
-coherent migration or when the structure materially helps the work, rather than
-through ad-hoc one-file renames.
+Templates/reference repositories should demonstrate the convention after a
+coherent rollout decision. Existing projects/libraries should adopt it when the
+documents carry useful knowledge rather than through ceremonial file creation.
