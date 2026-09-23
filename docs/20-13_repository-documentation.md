@@ -55,7 +55,7 @@ bld/
     └── 99-book.md
 ```
 
-The numbered files use the first number for the document family and the second number for a stable subdocument inside that family. Chapter 00 is the intentional exception: `README.md` is both the documentation overview and GitHub's directory landing page, so no duplicate `00-00_readme.md` is kept.
+The numbered files use the first number for the document family and the second number for a stable subdocument inside that family. Chapter 00 is the intentional exception: `README.md` is both the documentation overview and GitHub's directory landing page, so no duplicate `00-00_readme.md` is kept. Its alphabetical position in the file list is accepted; preserving GitHub's native README behavior and a single authority is more important than forcing it to sort first.
 
 For example:
 
