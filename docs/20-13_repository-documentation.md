@@ -31,20 +31,20 @@ AGENTS.md
 docs/ or doc/
 ├── 00-readme.md
 │
-├── 10-plan.md
+├── 10-00_plan.md
 │
-├── 20-manuals.md
-├── 20-01-development.md
-├── 20-02-user.md
-├── 20-xx-...md             # optional additional manuals
+├── 20-00_manuals.md
+├── 20-01_development.md
+├── 20-02_user.md
+├── 20-xx_...md             # optional additional manuals
 │
-├── 30-specification.md
+├── 30-00_specification.md
 │
-├── 40-design.md
-├── 40-xx-...md             # optional detailed design
+├── 40-00_design.md
+├── 40-xx_...md             # optional detailed design
 │
-├── 50-verification.md
-└── 50-xx-...md             # optional verification detail
+├── 50-00_verification.md
+└── 50-xx_...md             # optional verification detail
 ```
 
 Generated documentation may additionally publish:
@@ -60,14 +60,14 @@ The numbered files use the first number for the document family and the second n
 For example:
 
 ```text
-20-manuals.md
-20-01-development.md
-20-02-user.md
+20-00_manuals.md
+20-01_development.md
+20-02_user.md
 20-10-git-workflow.md
 
-40-design.md
-40-01-repository-layout.md
-40-02-publication-model.md
+40-00_design.md
+40-01_repository-layout.md
+40-02_publication-model.md
 ```
 
 Do not assign a new top-level category merely because one subject grows. Add a
@@ -158,7 +158,7 @@ It is the overview chapter. It should not become a second full root README.
 
 ## 10 — Plan
 
-`10-plan.md` answers:
+`10-00_plan.md` answers:
 
 > What are we working on now, and what is the intended sequence?
 
@@ -174,7 +174,7 @@ The plan is operational and changes with current work.
 
 ## 20 — Manuals
 
-`20-manuals.md` is the manual-family entrypoint.
+`20-00_manuals.md` is the manual-family entrypoint.
 
 It answers:
 
@@ -184,7 +184,7 @@ A normal reusable repository starts with:
 
 ### 20-01 — Development
 
-`20-01-development.md` answers:
+`20-01_development.md` answers:
 
 > How do I develop, test, update, release and maintain this repository?
 
@@ -202,7 +202,7 @@ Typical content:
 
 ### 20-02 — User
 
-`20-02-user.md` answers:
+`20-02_user.md` answers:
 
 > How do I use this tool or library?
 
@@ -225,16 +225,16 @@ to the manual family.
 Examples:
 
 ```text
-20-10-engineering-workflow.md
-20-11-git-workflow.md
-20-12-versioning-and-releases.md
+20-10_engineering-workflow.md
+20-11_git-workflow.md
+20-12_versioning-and-releases.md
 ```
 
 A manual tells someone **what to do**. Architecture rationale belongs in design.
 
 ## 30 — Specification
 
-`30-specification.md` answers:
+`30-00_specification.md` answers:
 
 > Why does this exist?
 
@@ -257,7 +257,7 @@ Do not turn specification into an API/CLI inventory.
 
 ## 40 — Design
 
-`40-design.md` is the design-family entrypoint and answers:
+`40-00_design.md` is the design-family entrypoint and answers:
 
 > How is it put together?
 
@@ -272,10 +272,10 @@ Typical content:
 Use stable `40-xx` detail documents for substantial design areas:
 
 ```text
-40-design.md
-40-01-repository-layout.md
-40-02-tooling-boundary.md
-40-03-publication-model.md
+40-00_design.md
+40-01_repository-layout.md
+40-02_tooling-boundary.md
+40-03_publication-model.md
 ```
 
 For geometry-heavy SCAD components, component-local visual design
@@ -283,7 +283,7 @@ documentation may remain beside source and be linked from the repository design.
 
 ## 50 — Verification
 
-`50-verification.md` is the verification-family entrypoint and answers:
+`50-00_verification.md` is the verification-family entrypoint and answers:
 
 > How do we know it works?
 
