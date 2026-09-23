@@ -1,0 +1,47 @@
+# Meta repository plan
+
+## Purpose
+
+This plan governs maintenance of `brainboxemb.meta` itself.
+
+It does not replace [STATUS.md](../STATUS.md), which selects and summarizes the
+current cross-project work track.
+
+## Current responsibilities
+
+Keep meta useful as:
+
+- the public repository/ownership map;
+- the durable portfolio-wide working-model authority;
+- the entrypoint for domain guidance;
+- the registry for active/completed migrations and experiments;
+- the source for catalog/dashboard coordination.
+
+## Working method
+
+1. decide whether information is portfolio-wide, domain-wide or owner-local;
+2. keep one durable authority for each rule;
+3. keep README/AGENTS and numbered docs as navigation rather than duplicate policy;
+4. retain migrations/experiments as historical coordination/evidence;
+5. verify current catalog/status claims against live owner repositories.
+
+## Current documentation focus
+
+The numbered repository-documentation model is tracked by
+[issue #143](https://github.com/brainboxemb/brainboxemb.meta/issues/143).
+
+Cross-project implementation work remains selected through
+[STATUS.md](../STATUS.md).
+
+## Information authorities
+
+| Question | Authority |
+| --- | --- |
+| Current cross-project track | [STATUS.md](../STATUS.md) |
+| Public repository inventory | [repositories/catalog.yml](../repositories/catalog.yml) |
+| Practical shared working rules | [20 — Manuals](20-manuals.md) |
+| Documentation convention | [20-13 — Repository documentation](20-13-repository-documentation.md) |
+| Portfolio architecture | [40 — Design](40-design.md) |
+| Domain guidance | [domains/](../domains/README.md) |
+| Migration history/evidence | [migrations/](../migrations/README.md) |
+| Experiment/PoP history/evidence | [experiments/](../experiments/README.md) |
