@@ -474,6 +474,22 @@ requirements into release qualification.
 
 **Current.**
 
+1. **Complete:** accept `lib.scad.mechint v0.2.4` at exact
+   `28a8ac1aa1097f7284fd806c91b4cab655566509`.
+   - integration PR #35 exact-head CI run `35900314113` — success;
+   - exact-main integration run `35900507034` — success;
+   - release-metadata exact-main run `35900865180` — success;
+   - release lifecycle run `35900990289` — success;
+   - annotated tag object `1d8b150f0a658e1bb5b4b014551aad19ceada88f`
+     points to exact release commit
+     `28a8ac1aa1097f7284fd806c91b4cab655566509`;
+   - immutable `rel/v0.2.4/bld` and `rel/v0.2.4/vrf` both retain
+     `tool.git-project v0.2.14`, `tool.scad-project v0.15.11`,
+     `lib.scad.forge v0.3.1` and `lib.scad.util v0.4.1`.
+2. **Current:** roll the accepted tooling/documentation baseline through the
+   standalone libraries `lib.scad.clamps` and `lib.scad.hub75` before the
+   HUB75 application/lab repositories consume their resulting releases.
+
 Roll the accepted owner releases directly through maintained libraries and
 projects. This migration assumes the underlying architecture is already
 qualified by previous work and owner test suites.
