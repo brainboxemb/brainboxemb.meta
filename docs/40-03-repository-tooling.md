@@ -148,6 +148,41 @@ Workflow filenames describe a durable repository capability or contract. Do not
 encode issue numbers, migration numbers, temporary experiments, or the historical
 bug that first caused a regression test to be added.
 
+### Workflow purpose header
+
+Every maintained workflow should state its intent near the top of the file,
+directly after `name:`.
+
+Use a short two-line comment:
+
+```yaml
+name: Release
+
+# Purpose: create an immutable tool release from an already-qualified commit.
+# Scope: repository self-entry workflow; not a reusable workflow API.
+```
+
+For reusable workflows, identify the public `workflow_call` contract:
+
+```yaml
+name: Reusable generated-output publication
+
+# Purpose: publish one generated-output family for a caller repository.
+# Scope: public reusable workflow API.
+```
+
+For test workflows, state the capability or contract being qualified:
+
+```yaml
+name: Test release lifecycle
+
+# Purpose: qualify the generic release-request/tag lifecycle without publishing a real release.
+# Scope: repository qualification workflow.
+```
+
+Keep these comments concise. They are orientation, not a duplicate design
+document.
+
 This convention defines naming only. It does not require an unrelated classic
 repository to be renamed immediately; existing current-generation repositories
 can adopt it with related tooling changes or a coordinated rollout.

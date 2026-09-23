@@ -84,7 +84,7 @@ Their GitHub Actions are thin callers, but the exact caller set depends on
 repository role. Migration 011 standardises the **filenames and ownership
 contract**:
 
-- `.github/workflows/self-production.yml` — normal SCAD production/build caller;
+- `.github/workflows/self-ci.yml` — normal SCAD CI/build caller;
 - `.github/workflows/self-release.yml` — only when the repository publishes
   versioned releases;
 - `.github/workflows/self-pr-cleanup.yml` — only when PR preview output exists.
@@ -138,8 +138,8 @@ Blocking owner work includes:
 - reconcile owner tests, fixtures and consumer docs with the generic launcher
   contract;
 - verify the SCAD post-update hook owns only reusable-workflow ref alignment;
-- qualify the normal production/release reusable workflow contracts and the generic PR-preview cleanup caller contract;
-- resolve tool.scad-project #112 by renaming public `project-*` workflow APIs to `reusable-*`, removing the redundant SCAD PR-cleanup wrapper, and prefixing owner-local workflows with `self-`.
+- qualify the normal CI/release reusable workflow contracts and the generic PR-preview cleanup caller contract;
+- resolve tool.scad-project #112 by renaming public `project-*` workflow APIs to the current `reusable-*` capability names (`reusable-ci`, `reusable-build`, `reusable-verify`, `reusable-release`), removing the redundant SCAD PR-cleanup wrapper, and prefixing owner-self workflows with `self-`.
 
 The next accepted SCAD release must have exact-main and exact-tag/release
 qualification appropriate to the tool's release model.
