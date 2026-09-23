@@ -42,7 +42,7 @@ That page explains the common project structure in practical terms and points to
 
 ### Shared tooling
 
-Use the [technical guide](docs/00-00_readme.md) when you want to understand how shared tooling, generated output, versions and releases work.
+Use the [technical guide](docs/README.md) when you want to understand how shared tooling, generated output, versions and releases work.
 
 The implementation details stay in the tool repositories themselves.
 
