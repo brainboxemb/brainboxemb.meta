@@ -5,7 +5,8 @@ This section is the easiest place to understand the public SCAD/CAD repositories
 You do not need to know the tooling architecture first. Start with the part you are interested in:
 
 - [**Projects**](projects.md) — the actual CAD designs;
-- [**Documentation structure**](documentation-structure.md) — the roles of plan, specification, design, verification and API/reference documentation;
+- [**Documentation structure**](documentation-structure.md) — the roles of plan, specification, design, verification, development and API/reference documentation;
+- [**Repository development**](repository-development.md) — how a maintainer updates dependencies, managed launchers and thin GitHub Actions callers;
 - [**Source structure**](source-structure.md) — how OpenSCAD components, interactive design views and component documentation fit together;
 - [**Coding conventions**](coding-conventions.md) — shared SCAD naming for design inputs, presentation state, constants and private helpers;
 - [**Libraries**](libraries.md) — reusable geometry and reference models used by projects;
