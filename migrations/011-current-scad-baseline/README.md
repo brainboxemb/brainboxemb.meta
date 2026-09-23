@@ -20,8 +20,6 @@ The live repositories show several forms of drift at once:
 - the HUB75 frame is on a different tool release again (`v0.15.8`);
 - `lib.scad.mechint` still declares Forge `v0.2.1` while newer Forge releases
   exist;
-- retained Experiment 006 intentionally contains historical library pins and must
-  distinguish fixture intent from accidental staleness;
 - every catalogued current-generation SCAD repository still has root
   `update-repo.ps1` / `update-repo.sh`;
 - current `tool.git-project` documentation defines the canonical managed root
@@ -58,12 +56,10 @@ Normal rollout scope:
 7. `brainboxemb/2026-009-01.cad.HUB75-display-frame`;
 8. `brainboxemb/2026-009-02.cad.hub75-component-lab`.
 
-`brainboxemb/exp.2026-006.scad-library-dependencies` is **not** a normal
-baseline-maintenance target even though it uses current-generation tooling. It
-is a completed experiment retained as a low-maintenance qualification/regression
-lab. Migration 011 may update it only where the migration directly touches the
-behavior that Experiment 006 exists to prove, such as bootstrap/update/status or
-transitive dependency closure.
+`brainboxemb/exp.2026-006.scad-library-dependencies` is **not part of the
+Migration-011 rollout**. It is a completed PoP/experiment repository retained as
+historical qualification/regression evidence. Migration 011 does not reactivate
+that PoP and does not update it merely to keep pace with production releases.
 
 Classic/legacy SCAD repositories are explicitly out of scope. Moving a classic
 repository to current-generation tooling would be a separate migration.
@@ -80,16 +76,12 @@ repository to current-generation tooling would be a separate migration.
 | lib.scad.mechint | v0.15.7 | Forge v0.2.1; util v0.4.0 |
 | HUB75 display frame | v0.15.8 | Forge v0.3.0; util v0.4.0 plus product libraries |
 | HUB75 component lab | v0.15.7 | clamps v0.1.8; mechint v0.1.6 |
-| Experiment 006 | v0.15.7 | mechint v0.1.6; util v0.2.0 |
 
 All eight normal rollout repositories currently contain root
 `bootstrap.ps1/.sh` and `update-repo.ps1/.sh`. Their workflow sets vary by
 repository role, which is valid only when the variation matches the released
 tooling contract.
 
-Experiment 006 currently has the same launcher generation too, but that fact does
-not create an obligation to keep the entire experiment continuously aligned with
-production.
 
 Current observed owner releases before qualification:
 
@@ -233,13 +225,10 @@ must be one of:
 2. an explicitly documented historical/alternative pin required by the
    repository's purpose.
 
-This matters especially for Experiment 006: historical pins that exercise
-independent-version and transitive-dependency behavior are test fixtures, not
-ordinary stale dependencies. They should not be "updated to latest" when doing
-so destroys the testcase. The exception must be visible in the migration
-evidence.
+For normal maintained consumers there should be no unexplained stale direct pin.
 
-For normal production consumers there should be no unexplained stale direct pin.
+Completed experiment/PoP repositories are outside this rule because their
+historical pins are retained evidence, not production dependency policy.
 
 ## Managed root launchers
 
@@ -313,22 +302,21 @@ requirements into release qualification.
 1. complete Forge's selected pre-release cleanup and release it;
 2. merge/qualify the util inspection-only cleanup and release it.
 
-### Phase 4 — targeted Experiment 006 regression use
+### Phase 4 — maintained consumer rollout
 
-Use Experiment 006 only because this migration changes behavior that the retained
-experiment was specifically built to qualify: dependency closure and
-bootstrap/update/status semantics.
+Roll the accepted owner releases directly through maintained libraries and
+projects. This migration assumes the underlying architecture is already
+qualified by previous work and owner test suites.
 
-Apply the **minimum experiment-local update needed to exercise the accepted new
-tooling contract**. Preserve intentionally historical library pins and do not
-turn the experiment into another permanently maintained production consumer.
+Do not reopen or repurpose Experiment 006 as a qualification step.
 
-Run the relevant retained regressions, especially DEP-06 status/update behavior,
-plus any adjacent cases needed to prove the launcher transition. Running the
-complete DEP-01 through DEP-07 matrix is useful when cheap and still meaningful,
-but it is not a standing maintenance requirement for every future SCAD migration.
+If rollout exposes a genuinely new generic behavior that cannot be diagnosed or
+qualified cleanly in an owner repository or maintained real consumer, create a
+new dedicated qualification/experiment repository with an explicit question.
+Do not silently turn a completed PoP repository back into active migration
+infrastructure.
 
-### Phase 5 — real current-generation consumers
+### Phase 5 — remaining current-generation consumers
 
 Roll the baseline through the production libraries/projects/lab. For each repo:
 
@@ -368,8 +356,7 @@ Migration 011 is complete only when:
   canonical launcher names;
 - qualified Forge and util releases are recorded;
 - relevant stale/completed open issues have been reconciled;
-- Experiment 006 is used only to the extent justified by the changed
-  bootstrap/update/dependency contract, with any experiment update kept minimal;
+- completed PoP/experiment repositories are not updated as part of the rollout;
 - all eight normal current-generation SCAD rollout repositories have audited
   direct dependency refs/gitlinks;
 - canonical managed root bootstrap/update launchers are installed;
