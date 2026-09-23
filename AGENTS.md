@@ -10,6 +10,7 @@ Use the repository according to the task:
 - public repository list → `repositories/`;
 - shared project/tooling guidance → `docs/`;
 - domain overview → `domains/`;
+- SCAD documentation roles/numbering → `domains/scad/documentation-structure.md`;
 - SCAD component/design source conventions → `domains/scad/source-structure.md`;
 - SCAD naming/coding conventions → `domains/scad/coding-conventions.md`;
 - dashboard implementation → `dashboard/`;
@@ -19,11 +20,16 @@ Use the repository according to the task:
 
 Do not make migration terminology the framing for unrelated documentation or PoPs.
 
-## Read the component design before changing SCAD geometry
+## Read the engineering context before changing SCAD geometry
 
-For current-generation SCAD component work, treat the component's
-`design/design.md` and design-render adapter as engineering context, not as
-optional presentation material.
+For current-generation SCAD work, use
+`domains/scad/documentation-structure.md` to locate the owning plan,
+specification, design and verification documents. Do not reconstruct durable
+repository knowledge from chat history when an owning document exists.
+
+For component geometry, treat an existing component-local `design/design.md`
+and design-render adapter as engineering context, not optional presentation
+material.
 
 Before changing non-trivial component geometry:
 

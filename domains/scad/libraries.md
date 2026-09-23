@@ -32,12 +32,16 @@ The library does not own the consuming project. Likewise, this meta repository i
 A library repository is the place to look for:
 
 - the reusable source and public API;
-- library-specific design notes;
-- tests and verification;
+- numbered plan/specification/design/verification source documentation when needed;
+- component-local visual design notes where useful;
+- tests and generated verification evidence;
 - releases and version history;
 - generated examples or evidence that belong to that library.
 
 Project-specific dimensions, assemblies and decisions stay in the project that uses the library.
+
+For shared document roles and numbering, see
+[SCAD documentation structure](documentation-structure.md).
 
 ## Public OpenSCAD entrypoints
 

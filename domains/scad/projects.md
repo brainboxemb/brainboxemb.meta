@@ -26,7 +26,7 @@ The complete public list and classification are maintained in [`../../repositori
 
 ## Where do the details live?
 
-Open the project repository itself for its current dimensions, design status, source files, renders, tests and project-specific documentation.
+Open the project repository itself for its current dimensions, design status, source files, renders, tests and project-specific documentation. Current-generation repositories use the shared [SCAD documentation structure](documentation-structure.md) when plan, specification, design and verification need persistent source documents.
 
 This meta repository explains how the collection fits together; it does not replace each project's own documentation.
 
