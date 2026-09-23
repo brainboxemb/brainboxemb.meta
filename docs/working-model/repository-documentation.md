@@ -17,25 +17,32 @@ A reusable tool or library should make these questions easy to answer:
 6. how do I use it as a consumer;
 7. who are the typical users and use cases.
 
-The document set is ordered like a small engineering book: orientation first,
-then current work, then practical manuals, then intent, design and verification.
+The documentation reads like a small engineering book: overview, plan, manuals,
+specification, design and verification.
 
-## Numbered backbone
+## Numbered families
 
 The normal source-documentation set is:
 
 ```text
-README.md                    # repository/GitHub entrypoint
-AGENTS.md                    # agent entrypoint
+README.md
+AGENTS.md
 
 docs/ or doc/
 ├── 00-readme.md
+│
 ├── 10-plan.md
-├── 20-development-manual.md
-├── 21-user-manual.md
+│
+├── 20-manuals.md
+├── 20-01-development.md
+├── 20-02-user.md
+├── 20-xx-...md             # optional additional manuals
+│
 ├── 30-specification.md
+│
 ├── 40-design.md
-├── 40-xx-...md             # optional design detail
+├── 40-xx-...md             # optional detailed design
+│
 ├── 50-verification.md
 └── 50-xx-...md             # optional verification detail
 ```
@@ -48,16 +55,32 @@ bld/
     └── 99-book.md
 ```
 
-The repository may use `doc/` or `docs/` according to its established family
-convention. Do not rename a complete repository tree merely for spelling
-uniformity.
+The first number identifies the document family. The second number identifies a
+stable subdocument inside that family.
 
-The numbered source files are authorities. `99-book.md` is generated output,
-not another maintained authority.
+For example:
+
+```text
+20-manuals.md
+20-01-development.md
+20-02-user.md
+20-10-git-workflow.md
+
+40-design.md
+40-01-repository-layout.md
+40-02-publication-model.md
+```
+
+Do not assign a new top-level category merely because one subject grows. Add a
+subdocument to the owning family.
+
+The repository may use `doc/` or `docs/` according to its established family
+convention. Do not rename an entire tree merely for spelling uniformity.
 
 ## Root README and AGENTS
 
-The root `README.md` and `AGENTS.md` remain repository entrypoints.
+The root `README.md` and `AGENTS.md` remain repository entrypoints rather
+than parallel technical authorities.
 
 ### Root README
 
@@ -66,37 +89,35 @@ The root README should quickly answer:
 - what is this repository;
 - why might I care;
 - who normally uses it;
-- what is one representative way to use or inspect it;
+- one representative way to use or inspect it;
 - where should I read next.
 
-Keep it useful on GitHub. Do not turn it into the only maintained plan,
-specification, design, verification and user manual.
+Keep it useful on GitHub.
 
 ### AGENTS
 
-AGENTS explains how an agent should start work safely in that repository and
-routes to the owning documents plus shared BrainboxEmb guidance.
+AGENTS explains how an agent should start work safely and routes to the owning
+documents plus shared BrainboxEmb guidance.
 
 Do not copy complete plans, manuals or technical contracts into AGENTS.
 
-## 00 — Documentation README
+## 00 — Overview
 
 `00-readme.md` is the front page of the documentation set.
 
 It answers:
 
-> What documentation exists, who is it for, and in what order should I read it?
+> What documentation exists, who is it for, and how should I read it?
 
 Typical content:
 
-- a concise repository/documentation overview;
+- concise repository/documentation overview;
 - intended audiences;
 - document map and reading order;
-- links to the plan, manuals, specification, design and verification;
-- links to important generated/reference material.
+- links to generated/reference material;
+- links to domain-specific material where applicable.
 
-It may repeat a very short orientation from the root README, but should not
-become a second full repository README.
+It is the overview chapter. It should not become a second full root README.
 
 ## 10 — Plan
 
@@ -110,36 +131,41 @@ Typical content:
 - information sources and authorities;
 - open decisions;
 - active owner work;
-- phases, milestones and roadmap where useful;
-- links to the durable manuals/specification/design/verification documents.
+- phases, milestones and roadmap where useful.
 
 The plan is operational and changes with current work.
 
-## 20/21 — Manuals
+## 20 — Manuals
 
-The manual family explains how people actually work with the repository.
+`20-manuals.md` is the manual-family entrypoint.
 
-### 20 — Development manual
+It answers:
 
-`20-development-manual.md` answers:
+> Which practical manuals exist for this repository?
+
+A normal reusable repository starts with:
+
+### 20-01 — Development
+
+`20-01-development.md` answers:
 
 > How do I develop, test, update, release and maintain this repository?
+
+It is written for contributors and maintainers.
 
 Typical content:
 
 - local development entrypoints and prerequisites;
-- normal edit/test loop;
+- edit/test loop;
 - generated and managed files;
 - dependency/version update points;
 - CI/reusable-workflow ownership;
 - release procedure;
-- repository-specific exceptions from shared working conventions.
+- local exceptions.
 
-It is written for contributors and maintainers.
+### 20-02 — User
 
-### 21 — User manual
-
-`21-user-manual.md` answers:
+`20-02-user.md` answers:
 
 > How do I use this tool or library?
 
@@ -149,20 +175,25 @@ Typical content:
 
 - installation/consumption model;
 - first useful example;
-- normal/common tasks;
+- common tasks;
 - configuration entrypoints;
-- version-selection and compatibility guidance;
+- version-selection/compatibility guidance;
 - links to exact API/CLI/config/workflow reference.
 
-For a tool, this may lead to CLI, schema, launcher and reusable-workflow
-reference.
+### Additional manuals
 
-For a library, this may lead to generated/code-near API reference and focused
-examples.
+Use stable `20-xx` numbers for other practical guidance that genuinely belongs
+to the manual family.
 
-A repository that genuinely has no external/operator-facing usage surface may
-keep this page very small, but reusable tools and libraries should normally have
-one.
+Examples:
+
+```text
+20-10-engineering-workflow.md
+20-11-git-workflow.md
+20-12-versioning-and-releases.md
+```
+
+A manual tells someone **what to do**. Architecture rationale belongs in design.
 
 ## 30 — Specification
 
@@ -179,9 +210,9 @@ Typical content:
 - problem and purpose;
 - target users / consumer types;
 - representative use cases;
-- value provided to those users;
+- value provided;
 - when the repository is the right choice;
-- important non-goals and when it is not the right choice;
+- important non-goals;
 - desired behavior and compatibility constraints;
 - major capabilities at intent level.
 
@@ -189,7 +220,7 @@ Do not turn specification into an API/CLI inventory.
 
 ## 40 — Design
 
-`40-design.md` answers:
+`40-design.md` is the design-family entrypoint and answers:
 
 > How is it put together?
 
@@ -197,73 +228,68 @@ Typical content:
 
 - architecture and decomposition;
 - ownership boundaries;
-- modules/subsystems and their responsibilities;
+- modules/subsystems and responsibilities;
 - important data/control flow;
-- major implementation choices and trade-offs;
-- how the design supports the specification.
+- implementation choices and trade-offs.
 
-Use `40-xx-...` detail documents only when a subsystem carries enough
-engineering reasoning to justify its own page.
+Use stable `40-xx` detail documents for substantial design areas:
 
-For geometry-heavy SCAD components, component-local visual design documentation
-may remain beside the owning geometry rather than being mechanically moved into
-this family.
+```text
+40-design.md
+40-01-repository-layout.md
+40-02-tooling-boundary.md
+40-03-publication-model.md
+```
+
+For geometry-heavy SCAD components, component-local visual design
+documentation may remain beside source and be linked from the repository design.
 
 ## 50 — Verification
 
-`50-verification.md` answers:
+`50-verification.md` is the verification-family entrypoint and answers:
 
 > How do we know it works?
 
 Typical content:
 
 - verification strategy;
-- important risks/contracts being exercised;
+- risks/contracts being exercised;
 - unit/integration/consumer/physical evidence as applicable;
 - release qualification;
 - testcase/evidence mapping;
 - acceptance criteria;
 - intentional exclusions and limitations.
 
-Tests and generated evidence remain executable artifacts; the document explains
-their strategy and interpretation.
-
-Use `50-xx-...` for substantial verification detail.
+Use `50-xx` for substantial verification detail.
 
 ## 99 — Combined documentation book
 
-`99-book.md` is an optional **generated** reading artifact.
+`99-book.md` is optional **generated output**.
 
-It concatenates or renders the maintained source documents in their intended
-order, for example:
+It assembles the maintained source documents in numeric reading order:
 
 ```text
-00-readme
-10-plan
-20-development-manual
-21-user-manual
-30-specification
-40-design
-40-xx details
-50-verification
-50-xx details
+00 overview
+10 plan
+20 manuals + 20-xx
+30 specification
+40 design + 40-xx
+50 verification + 50-xx
 ```
 
-The combined book should normally be produced into `bld/docs/` or another
-generated Build namespace. It should not be hand-edited or treated as a source
-authority.
+The normal location is `bld/docs/99-book.md` or an equivalent generated Build
+namespace. It is never hand-maintained or treated as a source authority.
 
-A future renderer may also produce HTML/PDF from the same ordered source set.
-The source Markdown files remain authoritative.
+A renderer may later produce HTML/PDF from the same ordered source set.
 
 ## Mapping the reader questions
 
 | Reader question | Primary authority |
 | --- | --- |
-| Where do I start? | 00 documentation README |
+| Where do I start? | 00 overview |
 | What are we working on? | 10 plan |
-| How do I develop/maintain it? | 20 development manual |
-| How do I use it? | 21 user manual |
+| How do I develop/maintain it? | 20-01 development manual |
+| How do I use it? | 20-02 user manual |
 | Why does it exist? | 30 specification |
 | Why would I use it? | 30 specification |
 | Who are typical users? | 30 specification |
@@ -272,17 +298,17 @@ The source Markdown files remain authoritative.
 
 ## Repository-type differences
 
-The numbered backbone is shared; emphasis differs.
+The numbered families are shared; the contents differ by repository type.
 
 ### Reusable library
 
 Libraries commonly emphasize:
 
-- specification around consumer semantics and use cases;
 - user manual around normal API usage;
+- specification around consumer semantics/use cases;
 - design around API/implementation ownership;
 - verification around behavior/geometry/compatibility;
-- generated or code-near API reference linked from the user manual.
+- generated/code-near API reference linked from the user manual.
 
 ### Reusable tool
 
@@ -291,13 +317,26 @@ Tools commonly emphasize:
 - development manual around owner tests, release lifecycle and workflow
   maintenance;
 - user manual around CLI/configuration/managed launchers/reusable workflows;
-- specification around repository/maintainer problems and supported consumer
-  roles;
+- specification around repository/maintainer problems and consumer roles;
 - design around orchestration and ownership boundaries;
-- verification around owner fixtures, cross-platform behavior and released
-  interfaces.
+- verification around fixtures, cross-platform behavior and released interfaces.
 
-The content differs; the reading order stays predictable.
+Tools may therefore have more manual subdocuments than libraries. That is an
+expected specialization, not a different documentation model.
+
+## Meta and domain documentation
+
+A coordination/meta repository can use the same top-level families.
+
+Portfolio-wide practical working rules belong under `20-xx` manuals; portfolio
+architecture belongs under `40-xx` design documents.
+
+Technology/domain-specific guidance may remain under a domain directory when it
+would be misleading to present it as portfolio-wide policy.
+
+This allows, for example, a SCAD or software domain to mature independently
+without turning the general meta documentation into a technology-specific
+collection.
 
 ## Evolution
 
@@ -306,14 +345,15 @@ rewritten merely to satisfy filenames.
 
 When adopting this model:
 
-1. add the missing numbered backbone;
-2. classify existing documents as manual, design detail, verification detail or
-   consumer/reference detail;
-3. rename/relink existing detail documents only when the new name improves
-   discoverability;
-4. remove duplicated explanations once the owning authority exists;
-5. keep historical/released evidence intact;
-6. generate `99-book.md` only after the source set is coherent.
+1. create the missing family entrypoints;
+2. classify existing documents as manual, specification, design or
+   verification material;
+3. assign stable subnumbers inside the owning family;
+4. move domain-specific material to the relevant domain rather than keeping it
+   in a generic bucket;
+5. update links and remove obsolete parallel indexes;
+6. keep historical migration/experiment evidence intact;
+7. generate `99-book.md` only after source structure is coherent.
 
 Do not force completed experiment/PoP repositories into current documentation
 maintenance unless they are deliberately reactivated.
