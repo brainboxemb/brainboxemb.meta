@@ -535,7 +535,7 @@ infrastructure.
 
 ### Phase 5 — remaining current-generation consumers
 
-**Current.**
+**Complete.**
 
 1. **Complete:** accept the Migration-011 rollout in
    `2026-009-01.cad.HUB75-display-frame` at exact
@@ -550,8 +550,20 @@ infrastructure.
    - generated verification publishes `50-00-verification.md`;
    - core-coupler, tube-mount/dovetail, reinforcement and physical issue #43
      semantics remain unchanged.
-2. **Current:** roll the resulting baseline through
-   `2026-009-02.cad.hub75-component-lab`.
+2. **Complete:** accept the Migration-011 rollout in
+   `2026-009-02.cad.hub75-component-lab` at exact
+   `7735a310eec7c5f600279040e55ea9ef664db119`.
+   - integration PR #13 qualified exact head
+     `5d66b3dab2bd5d528f28af4bbce091d13bce565a`;
+   - exact-head Build run `35912470862` — success;
+   - exact-head PR cleanup run `35912641384` — success;
+   - merge commit tree is identical to the qualified PR-head tree
+     (`2c05ba93a960ff93bf31b8a6244f8f207c3acb28`);
+   - retained-lab role intentionally has no main-push production build;
+   - declared baseline retains `tool.git-project v0.2.14`,
+     `tool.scad-project v0.15.11`, `lib.scad.clamps v0.1.9`,
+     `lib.scad.mechint v0.2.4`, and the current released supporting
+     libraries.
 3. Update `template.scad-project` only in Phase 6 after both real projects are
    qualified.
 
