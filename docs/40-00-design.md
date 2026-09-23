@@ -31,8 +31,8 @@ remain outside the numbered book because they have a different lifecycle.
 
 - [40-01 — Project families](40-01-project-families.md)
 - [40-02 — Projects](40-02-projects.md)
-- [40-03 — Repository tooling](40-03_repository-tooling.md)
-- [40-04 — Generated output](40-04_generated-output.md)
+- [40-03 — Repository tooling](40-03-repository-tooling.md)
+- [40-04 — Generated output](40-04-generated-output.md)
 
 Domain-specific execution models belong in their domain, for example the
 [software Java execution model](../domains/software/40-01-java-execution.md).
