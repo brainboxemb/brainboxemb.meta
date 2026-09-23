@@ -1,6 +1,6 @@
 # Migration 010 — standardise SCAD documentation and agent guidance
 
-Status: **active**
+Status: **active — audit/qualification phase**
 
 Tracking issue: [#128](https://github.com/brainboxemb/brainboxemb.meta/issues/128)
 
@@ -8,6 +8,20 @@ Input issues:
 
 - [#93 — clarify AGENTS inheritance from meta across repositories](https://github.com/brainboxemb/brainboxemb.meta/issues/93);
 - [#124 — plan Forge guidance discovery through repository AGENTS](https://github.com/brainboxemb/brainboxemb.meta/issues/124).
+
+## Phase status
+
+- **Phase 1 — implementation:** complete. The shared SCAD documentation and
+  agent-guidance model has been established.
+- **Phase 2 — audit/qualification:** active. Audit the implemented model from a
+  blank-agent perspective against real SCAD repositories.
+- **Phase 3 — correction:** apply only concrete changes justified by audit
+  findings.
+- **Phase 4 — closing audit:** repeat qualification against the corrected state
+  and close the migration when the completion criteria are met.
+
+The current work is therefore an audit of the implemented model, not another
+initial design/implementation pass.
 
 ## Why this migration exists
 
