@@ -506,9 +506,20 @@ requirements into release qualification.
      `tool.git-project v0.2.14` and `tool.scad-project v0.15.11`;
    - the release preserves the dual OpenSCAD/PythonSCAD clamp API/geometry and
      adds the current numbered documentation/publication structure only.
-3. **Current:** roll the accepted tooling/documentation baseline through
-   `lib.scad.hub75` before the HUB75 application/lab repositories consume the
-   resulting standalone-library releases.
+3. **Complete:** accept `lib.scad.hub75 v0.1.8` at exact
+   `bdd92ab920213849ed678c7d11f9615d4992ed14`.
+   - integration PR #46 exact-head CI run `35905809530` — success;
+   - exact-main integration run `35905968869` — success;
+   - release-metadata exact-main run `35906276077` — success;
+   - release lifecycle run `35906341915` — success;
+   - annotated tag object `6339de49c07c86424e75933751ff969d8b4d03eb`
+     points to exact release commit
+     `bdd92ab920213849ed678c7d11f9615d4992ed14`;
+   - immutable `rel/v0.1.8/bld` and `rel/v0.1.8/vrf` both retain
+     `tool.git-project v0.2.14` and `tool.scad-project v0.15.11`;
+   - the release preserves HUB75 panel/reference geometry, fixture/testcase
+     semantics and public API while adopting the current numbered documentation
+     and workbench `50-00-verification.md` publication.
 
 Roll the accepted owner releases directly through maintained libraries and
 projects. This migration assumes the underlying architecture is already
@@ -523,6 +534,15 @@ Do not silently turn a completed PoP repository back into active migration
 infrastructure.
 
 ### Phase 5 — remaining current-generation consumers
+
+**Current.**
+
+1. **Current:** roll the accepted standalone-library/tooling baseline through
+   `2026-009-01.cad.HUB75-display-frame`.
+2. **Next:** roll the resulting baseline through
+   `2026-009-02.cad.hub75-component-lab`.
+3. Update `template.scad-project` only in Phase 6 after both real projects are
+   qualified.
 
 Roll the baseline through the production libraries/projects/lab. For each repo:
 
