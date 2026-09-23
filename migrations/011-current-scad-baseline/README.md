@@ -273,7 +273,7 @@ Migration 011 also closes the durable documentation-structure gap.
 
 Maintained current-generation repositories follow the shared numbered
 documentation-family convention from
-[`docs/20-13_repository-documentation.md`](../../docs/20-13_repository-documentation.md),
+[`docs/20-13-repository-documentation.md`](../../docs/20-13-repository-documentation.md),
 with the SCAD specialization in
 [`domains/scad/documentation-structure.md`](../../domains/scad/documentation-structure.md).
 
@@ -282,13 +282,13 @@ A maintained SCAD library/tool/project documentation collection normally has:
 ```text
 doc/ or docs/
 README.md
-10-00_plan.md
-20-00_manuals.md
-20-01_development.md
-20-02_user.md          # when a meaningful consumer/operator surface exists
-30-00_specification.md
-40-00_design.md
-50-00_verification.md
+10-00-plan.md
+20-00-manuals.md
+20-01-development.md
+20-02-user.md          # when a meaningful consumer/operator surface exists
+30-00-specification.md
+40-00-design.md
+50-00-verification.md
 ```
 
 Optional `20-xx`, `40-xx` and `50-xx` documents keep useful detail in the
@@ -301,8 +301,8 @@ Generic rules are linked rather than copied.
 
 Existing useful documents are classified and renumbered rather than discarded.
 For example, the template's current CI-orchestration page belongs under the
-manual family and should be linked from `20-00_manuals.md` /
-`20-01_development.md` after renumbering.
+manual family and should be linked from `20-00-manuals.md` /
+`20-01-development.md` after renumbering.
 
 Every maintained documentation collection keeps one local `README.md` as its
 overview/index; no parallel `00-00_readme.md` is added.
@@ -409,7 +409,7 @@ Migration 011 is complete only when:
 - all eight normal current-generation SCAD rollout repositories have audited
   direct dependency refs/gitlinks;
 - canonical managed root bootstrap/update launchers are installed;
-- every maintained rollout repository uses the shared numbered documentation families, including a local documentation `README.md` and `20-01_development.md` operating summary where applicable;
+- every maintained rollout repository uses the shared numbered documentation families, including a local documentation `README.md` and `20-01-development.md` operating summary where applicable;
 - GitHub Actions callers use the standard filenames and match the released SCAD contract for each repository role;
 - every intentional old dependency pin is documented as such;
 - exact PR/main CI evidence is retained for rollout repositories;
