@@ -195,10 +195,15 @@ Recommended pattern:
 
 - self workflows normally use the operation only, for example `Release`,
   `Pages`, or `CI`;
-- reusable workflows keep the `Reusable` group word, followed by a short
-  capability label, for example `Reusable release` or `Reusable PR cleanup`;
-- qualification workflows consistently use `Test <capability>`, for example
-  `Test self`, `Test release`, or `Test Moon`.
+- reusable workflows use a lowercase `reusable` qualifier followed by the short
+  capability name, for example `reusable release` or `reusable PR cleanup`;
+- qualification workflows use a lowercase `test` qualifier followed by the
+  capability name, for example `test self`, `test release`, or `test Moon`.
+
+Lowercase `reusable` and `test` deliberately: they are qualifiers that group the
+human-facing capability names, not the primary operation names themselves.
+Repository self-entry names such as `CI`, `Pages`, and `Release` remain normal
+operation names.
 
 Use a domain/repository qualifier only when it disambiguates two workflows in
 the same repository. The repository name itself normally adds no useful
