@@ -9,7 +9,7 @@ repositories. The technical architecture explains how the shared system works;
 this guide explains what a maintainer actually changes and which changes are
 managed automatically.
 
-A repository keeps a short local `doc/40-development.md` with its own
+A repository keeps a short local `doc/01-development.md` with its own
 entrypoints, dependency set, workflow set and exceptions. That local document
 links here for the shared rules.
 
@@ -176,7 +176,7 @@ brainboxemb/tool.scad-project/.github/workflows/project-production.yml@<tool-sca
 ```
 
 A specialised lab may deliberately call a narrower released workflow such as
-`project-build.yml`, but the local `doc/40-development.md` must explain that
+`project-build.yml`, but the local `doc/01-development.md` must explain that
 exception.
 
 The normal human-facing workflow name is `SCAD production`; a deliberately
@@ -248,7 +248,7 @@ Most third-party actions used by a normal SCAD repository should be hidden
 inside the shared reusable workflows. Any remaining direct third-party action in
 a consumer is still subject to that portfolio policy.
 
-## Local `doc/40-development.md`
+## Local `doc/01-development.md`
 
 Every maintained current-generation SCAD repository keeps this short local
 manual.
