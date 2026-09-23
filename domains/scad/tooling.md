@@ -97,4 +97,4 @@ Those projects are labelled **classic** in the repository catalog. Classic does 
 - [Technical architecture](architecture.md)
 - [Reusable SCAD libraries](libraries.md)
 - [SCAD projects](projects.md)
-- [How projects are organised](../../docs/40-02_projects.md)
+- [How projects are organised](../../docs/40-02-projects.md)
