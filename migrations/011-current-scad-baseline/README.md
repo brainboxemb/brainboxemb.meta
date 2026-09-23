@@ -152,21 +152,43 @@ Owner issue audit at acceptance:
 
 ### 2. tool.scad-project
 
-The SCAD tool release must consume the accepted generic-tool release and resolve
-the owner-side naming/documentation mismatch before rollout.
+**Accepted baseline: `v0.15.11`.**
 
-Blocking owner work includes:
+Exact immutable evidence:
 
-- [tool.scad-project #107](https://github.com/brainboxemb/tool.scad-project/issues/107)
-  — align SCAD consumers with canonical managed `update.*` launchers;
-- reconcile owner tests, fixtures and consumer docs with the generic launcher
-  contract;
-- verify the SCAD post-update hook owns only reusable-workflow ref alignment;
-- qualify the normal CI/release reusable workflow contracts and the generic PR-preview cleanup caller contract;
-- resolve tool.scad-project #112 by renaming public `project-*` workflow APIs to the current `reusable-*` capability names (`reusable-ci`, `reusable-build`, `reusable-verify`, `reusable-release`), removing the redundant SCAD PR-cleanup wrapper, and prefixing owner-self workflows with `self-`.
+- release commit / lightweight tag target:
+  `8d167ad17dbfa798d68f46d871aaeed2e2e09857`;
+- release-preparation PR #114 exact-head `test Self` run
+  `35886336178` — success;
+- exact-main `test Self` run `35886486580` — success;
+- repository release run `35886631700` — success; it validated the request,
+  created lightweight `v0.15.11`, dispatched tagged owner qualification and
+  removed the release-request branch;
+- Git ref `refs/tags/v0.15.11` resolves directly to
+  `8d167ad17dbfa798d68f46d871aaeed2e2e09857`;
+- tagged `test Self` workflow-dispatch run `35886652260` — success.
 
-The next accepted SCAD release must have exact-main and exact-tag/release
-qualification appropriate to the tool's release model.
+The accepted release consumes `tool.git-project v0.2.13` and includes the
+Migration-011 owner cleanup:
+
+- #107 — canonical managed `update.ps1/.sh` launcher ownership: completed;
+- #110 — numbered repository documentation families: completed;
+- #112 — public `reusable-build` / `reusable-verify` / `reusable-ci` /
+  `reusable-release` APIs, `self-*` owner entries and `test-self.yml`
+  qualification: completed;
+- the redundant SCAD PR-cleanup wrapper is removed; consumers use the generic
+  `tool.git-project/reusable-pr-preview-cleanup.yml` API;
+- owner post-update synchronization covers only the current reusable SCAD API
+  names;
+- `self-pages.yml` successfully followed renamed `test Self` on exact main
+  in run `35886151702`.
+
+Owner issue audit at acceptance:
+
+- #10 release-publication lifecycle — completed/closed;
+- #80 runtime v0.5.1 request — superseded/closed as not planned by the later
+  v0.6.1 runtime baseline;
+- #42 post-build decision audit — valid non-blocking follow-up.
 
 ### 3. lib.scad.forge
 
@@ -371,14 +393,12 @@ requirements into release qualification.
 
 1. **Complete:** accept `tool.git-project v0.2.13` at exact
    `c048ae38516da78fcea138cf63ce1426831ea815`;
-2. **Current:** finish the remaining SCAD owner inconsistencies, including #112
-   workflow API/self-entry naming against the accepted generic-tool baseline;
-3. release/accept the new `tool.scad-project` baseline against that generic
-   tool release.
+2. **Complete:** accept `tool.scad-project v0.15.11` at exact
+   `8d167ad17dbfa798d68f46d871aaeed2e2e09857`.
 
 ### Phase 3 — Forge and util baseline
 
-1. complete Forge's selected pre-release cleanup and release it;
+1. **Current:** complete Forge's selected pre-release cleanup and release it;
 2. merge/qualify the util inspection-only cleanup and release it.
 
 ### Phase 4 — maintained consumer rollout
