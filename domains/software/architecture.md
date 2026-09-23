@@ -35,7 +35,7 @@ The shared policy uses `auto | none | smoke | full`, with affected selection dec
 
 Java execution retains build/test evidence separately from orchestration evidence. Timing distinguishes Maven/build time from runner, checkout, setup and artifact-transfer overhead.
 
-Generated output follows the shared technical namespaces documented in [Generated output and publication](../../docs/40-04_generated-output.md).
+Generated output follows the shared technical namespaces documented in [Generated output and publication](../../docs/40-04-generated-output.md).
 
 ## CI architecture qualification
 
