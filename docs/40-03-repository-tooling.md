@@ -116,9 +116,27 @@ The prefixes describe workflow scope:
 - `test-` — workflow whose primary purpose is qualifying a capability or
   contract.
 
+Use capability names that describe what the workflow actually does:
+
+- `build` — produce build output;
+- `verify` — validate/qualify project output or behavior;
+- `ci` — normal pull-request/main integration orchestration that decides which
+  build/verify work is needed;
+- `release` — create or coordinate a release;
+- `pages` — publish GitHub Pages.
+
+Prefer `ci` over `production` for the normal PR/main integration workflow.
+Reserve `production` for a workflow that genuinely represents a deployment
+environment or other production-specific operation.
+
+For example, a normal SCAD consumer may expose `self-ci.yml`, while the
+tool providing that orchestration exposes `reusable-ci.yml`; focused reusable
+capabilities remain `reusable-build.yml` and `reusable-verify.yml`.
+
 Prefer:
 
 ```text
+self-ci.yml
 self-release.yml
 self-pages.yml
 
@@ -130,9 +148,12 @@ test-moon-orchestration.yml
 test-pr-preview-cleanup.yml
 test-release-lifecycle.yml
 
+reusable-build.yml
+reusable-ci.yml
 reusable-generated-output-publish.yml
 reusable-pr-preview-cleanup.yml
 reusable-release.yml
+reusable-verify.yml
 ```
 
 Do not leave current repository self-entry workflows unprefixed merely
