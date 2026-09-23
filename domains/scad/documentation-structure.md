@@ -14,7 +14,7 @@ README.md
 AGENTS.md
 
 doc/
-├── 00-readme.md
+├── README.md
 ├── 10-00_plan.md
 ├── 20-00_manuals.md
 ├── 20-01_development.md
@@ -47,7 +47,7 @@ Do not remove an existing useful preview merely to make a README shorter.
 
 ## 00 — Overview
 
-`doc/00-readme.md` is the documentation front page.
+`doc/README.md` is the documentation front page and acts as chapter 00.
 
 For a reusable SCAD library it should briefly state:
 
