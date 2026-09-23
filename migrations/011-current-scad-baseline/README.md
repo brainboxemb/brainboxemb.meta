@@ -47,7 +47,7 @@ project_infrastructure.generation: current
 project_infrastructure.provider: tool.scad-project
 ```
 
-Current catalog scope:
+Normal rollout scope:
 
 1. `brainboxemb/template.scad-project`;
 2. `brainboxemb/lib.scad.clamps`;
@@ -56,8 +56,14 @@ Current catalog scope:
 5. `brainboxemb/lib.scad.util`;
 6. `brainboxemb/lib.scad.mechint`;
 7. `brainboxemb/2026-009-01.cad.HUB75-display-frame`;
-8. `brainboxemb/2026-009-02.cad.hub75-component-lab`;
-9. `brainboxemb/exp.2026-006.scad-library-dependencies`.
+8. `brainboxemb/2026-009-02.cad.hub75-component-lab`.
+
+`brainboxemb/exp.2026-006.scad-library-dependencies` is **not** a normal
+baseline-maintenance target even though it uses current-generation tooling. It
+is a completed experiment retained as a low-maintenance qualification/regression
+lab. Migration 011 may update it only where the migration directly touches the
+behavior that Experiment 006 exists to prove, such as bootstrap/update/status or
+transitive dependency closure.
 
 Classic/legacy SCAD repositories are explicitly out of scope. Moving a classic
 repository to current-generation tooling would be a separate migration.
@@ -76,9 +82,14 @@ repository to current-generation tooling would be a separate migration.
 | HUB75 component lab | v0.15.7 | clamps v0.1.8; mechint v0.1.6 |
 | Experiment 006 | v0.15.7 | mechint v0.1.6; util v0.2.0 |
 
-All nine currently contain root `bootstrap.ps1/.sh` and
-`update-repo.ps1/.sh`. Their workflow sets vary by repository role, which is
-valid only when the variation matches the released tooling contract.
+All eight normal rollout repositories currently contain root
+`bootstrap.ps1/.sh` and `update-repo.ps1/.sh`. Their workflow sets vary by
+repository role, which is valid only when the variation matches the released
+tooling contract.
+
+Experiment 006 currently has the same launcher generation too, but that fact does
+not create an obligation to keep the entire experiment continuously aligned with
+production.
 
 Current observed owner releases before qualification:
 
@@ -302,15 +313,20 @@ requirements into release qualification.
 1. complete Forge's selected pre-release cleanup and release it;
 2. merge/qualify the util inspection-only cleanup and release it.
 
-### Phase 4 — retained dependency regression canary
+### Phase 4 — targeted Experiment 006 regression use
 
-Update Experiment 006 to the accepted tooling/launcher/workflow baseline while
-preserving intentionally historical library pins required by its testcase
-matrix.
+Use Experiment 006 only because this migration changes behavior that the retained
+experiment was specifically built to qualify: dependency closure and
+bootstrap/update/status semantics.
 
-Run the retained DEP-01 through DEP-07 suite plus normal entrypoints and normal
-SCAD production. DEP-06 status/update behavior is specifically required evidence
-for the launcher transition.
+Apply the **minimum experiment-local update needed to exercise the accepted new
+tooling contract**. Preserve intentionally historical library pins and do not
+turn the experiment into another permanently maintained production consumer.
+
+Run the relevant retained regressions, especially DEP-06 status/update behavior,
+plus any adjacent cases needed to prove the launcher transition. Running the
+complete DEP-01 through DEP-07 matrix is useful when cheap and still meaningful,
+but it is not a standing maintenance requirement for every future SCAD migration.
 
 ### Phase 5 — real current-generation consumers
 
@@ -352,9 +368,10 @@ Migration 011 is complete only when:
   canonical launcher names;
 - qualified Forge and util releases are recorded;
 - relevant stale/completed open issues have been reconciled;
-- Experiment 006 passes its retained dependency/update regression suite;
-- all nine catalogued current-generation SCAD repositories have audited direct
-  dependency refs/gitlinks;
+- Experiment 006 is used only to the extent justified by the changed
+  bootstrap/update/dependency contract, with any experiment update kept minimal;
+- all eight normal current-generation SCAD rollout repositories have audited
+  direct dependency refs/gitlinks;
 - canonical managed root bootstrap/update launchers are installed;
 - GitHub Actions callers match the released SCAD contract for each repository
   role;
