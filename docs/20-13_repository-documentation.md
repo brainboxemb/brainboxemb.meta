@@ -55,8 +55,7 @@ bld/
     └── 99-book.md
 ```
 
-The first number identifies the document family. The second number identifies a
-stable subdocument inside that family.
+The numbered files use the first number for the document family and the second number for a stable subdocument inside that family. Chapter 00 is the intentional exception: `README.md` is both the documentation overview and GitHub's directory landing page, so no duplicate `00-00_readme.md` is kept.
 
 For example:
 
@@ -269,7 +268,7 @@ Use `50-xx` for substantial verification detail.
 It assembles the maintained source documents in numeric reading order:
 
 ```text
-00 overview
+README / overview
 10 plan
 20 manuals + 20-xx
 30 specification
@@ -286,7 +285,7 @@ A renderer may later produce HTML/PDF from the same ordered source set.
 
 | Reader question | Primary authority |
 | --- | --- |
-| Where do I start? | 00 overview |
+| Where do I start? | README / overview |
 | What are we working on? | 10 plan |
 | How do I develop/maintain it? | 20-01 development manual |
 | How do I use it? | 20-02 user manual |
