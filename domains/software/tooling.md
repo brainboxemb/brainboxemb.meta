@@ -36,4 +36,4 @@ It owns fixtures, declarative testcases, harnesses, candidate adapters and quali
 
 [`tool.eng-docs`](https://github.com/brainboxemb/tool.eng-docs) is domain-neutral engineering-document tooling. Software projects can consume it, but it is not part of the Java build stack.
 
-For the general repository-tooling split, see [How the shared tools fit together](../../docs/architecture/repository-tooling.md).
+For the general repository-tooling split, see [How the shared tools fit together](../../docs/40-03-repository-tooling.md).
