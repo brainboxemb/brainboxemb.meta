@@ -49,7 +49,7 @@ implementation.
 ## Documentation
 
 Use the numbered model in
-[20-13 — Repository documentation](20-13_repository-documentation.md).
+[20-13 — Repository documentation](20-13-repository-documentation.md).
 
 Domain-specific material remains under `domains/`. Migrations and experiments
 remain operational/historical registers rather than being folded into the
