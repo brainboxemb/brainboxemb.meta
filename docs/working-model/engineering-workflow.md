@@ -30,6 +30,7 @@ From there, load only the shared material relevant to the task:
 - [Git and repository workflow](git-workflow.md) for issues, branches, commits,
   PRs, CI, changelog and merge discipline;
 - [project organisation](projects.md) for generic project/tool ownership;
+- [reusable repository documentation](repository-documentation.md) for the shared plan/development/specification/design/verification/usage document roles;
 - [versioning and releases](versioning-and-releases.md) for released interfaces
   and consumer pins;
 - the applicable domain entrypoint under `domains/`;
@@ -163,8 +164,9 @@ complete.
 
 ## Avoid duplicated authorities
 
-README and AGENTS are entrypoints. Plans, specifications, designs, coding
-standards and verification documents are durable authorities.
+README and AGENTS are entrypoints. Plans, development guides, specifications,
+designs, verification documents and consumer usage/reference documents are
+durable authorities.
 
 When shared guidance exists in meta, repository-local documentation should link
 to it and record only genuine local additions or exceptions.
