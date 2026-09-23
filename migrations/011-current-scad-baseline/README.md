@@ -1,6 +1,6 @@
 # Migration 011 — refresh current-generation SCAD baseline
 
-Status: **active**
+Status: **complete**
 
 Tracking issue: [#138](https://github.com/brainboxemb/brainboxemb.meta/issues/138)
 
@@ -610,13 +610,59 @@ Exact qualification evidence:
 
 ### Phase 7 — closing audit
 
-Re-query the live catalog and prove that every current-generation SCAD
-repository is either:
+**Complete.**
 
-- aligned to the accepted baseline; or
-- carrying a documented intentional exception.
+The live catalog was re-queried after the template exact-main qualification.
 
-Confirm classic repositories remained untouched.
+All eight normal rollout repositories now use the accepted direct tooling
+baseline:
+
+- `tool.scad-project v0.15.11` /
+  `8d167ad17dbfa798d68f46d871aaeed2e2e09857`;
+- `tool.git-project` exact
+  `d1ed47c7d85524cfcb2a8f7e1ea81ba106ae9c60`;
+- canonical managed root `bootstrap.ps1/.sh` and `update.ps1/.sh`;
+- repository-local `self-*` workflow naming appropriate to repository role;
+- no normal rollout repository retains root `update-repo.ps1/.sh`.
+
+The live direct product/library dependencies also match the accepted releases:
+
+- template -> clamps `v0.1.9` /
+  `e9f2fe0039a5f1cb6e2a0386a736767d95e627e7`;
+- mechint -> Forge `v0.3.1` /
+  `100693541e056e312605c88a2f145ee1cbb829a4` and util `v0.4.1` /
+  `af04b44c2fb1d779a87797da4290deca92c7594d`;
+- HUB75 frame -> hub75 `v0.1.8`, clamps `v0.1.9`, util `v0.4.1`,
+  Forge `v0.3.1` and mechint `v0.2.4`, with exact gitlinks matching the
+  accepted owner release commits;
+- retained component lab -> clamps `v0.1.9` and mechint `v0.2.4`, with
+  matching exact gitlinks.
+
+Documentation/workflow audit:
+
+- the maintained libraries, real HUB75 frame and template all expose the shared
+  numbered documentation families, including local `doc/README.md`,
+  `20-01-development.md`, specification/design/verification authorities;
+- the retained component lab remains an intentional role exception: it has no
+  numbered repository-documentation tree and uses `self-build.yml` rather than
+  normal production `self-ci.yml`, matching its retained PR/manual-build
+  qualification role;
+- no undocumented old direct dependency pin remains in the normal rollout.
+
+Out-of-scope proof:
+
+- `exp.2026-006.scad-library-dependencies` remains on exact main
+  `1ee94f911e69d811758200a04cc69fc5f3fa6503`, its Migration-010 guidance
+  update from before Migration 011 activation; it was not reactivated for this
+  rollout;
+- every catalogued classic CAD repository still has its latest main commit in
+  August 2026, before Migration 011 was opened on 23 September 2026. No classic
+  repository was changed by this migration.
+
+This closing audit satisfies the tooling-state reconstruction requested by meta
+#116: accepted releases/exact gitlinks, managed-launcher provenance, owner issue
+classification, migration/owner reconciliation and stale/superseded rollout
+state are all captured in this record.
 
 ## Conclusions and follow-up observations
 
