@@ -1,364 +1,222 @@
 # SCAD documentation structure
 
-Status: **current shared documentation convention**
+Status: **current shared SCAD specialization**
 
-## Purpose
+## Shared model
 
-Current-generation SCAD repositories specialize the shared
+Current-generation maintained SCAD repositories specialize the shared
 [reusable repository documentation model](../../docs/working-model/repository-documentation.md).
-The same reader questions and numbered backbone apply, with SCAD-specific
-visual/API conventions layered on top. The model must not create documents for
-their own sake.
 
-Each document role answers a different question:
-
-```text
-README / AGENTS     where do I start?
-00 plan             how do we work here and what is happening now?
-10 specification    why does this exist and what should it achieve?
-20 design           how is the repository/system organised to achieve that?
-20-xx detail        how is one functional part built in detail?
-30 verification     how do we know the intended result is achieved?
-40 usage            how do I consume/use this repository?
-01 development      how do I work in and maintain this repository?
-source/API docs     exact public API reference
-```
-
-The normal repository-level shape is:
+The normal SCAD library documentation set is:
 
 ```text
 README.md
 AGENTS.md
+
 doc/
-├── 00-plan.md
-├── 01-development.md
-├── 10-specification.md
-├── 20-design.md
-├── 20-01-...md            # optional detailed design
-├── 20-02-...md            # optional detailed design
-├── ...
-├── 30-verification.md
-└── 40-usage.md
-
-vrf/
-└── ... executable verification sources and generated evidence
+├── 00-readme.md
+├── 10-plan.md
+├── 20-manuals.md
+├── 20-01-development.md
+├── 20-02-user.md
+├── 20-xx-...md
+├── 30-specification.md
+├── 40-design.md
+├── 40-xx-...md
+├── 50-verification.md
+└── 50-xx-...md
 ```
 
-The second number keeps detailed design inside the design family and scales
-without reserving only a handful of filenames. This is intentionally similar to
-the hierarchical numbering already used in larger BrainboxEmb engineering
-documentation sets.
+The first number identifies the family; the second number is a stable detail
+inside that family.
 
-The numbered files are source documentation. `vrf/` is execution/evidence,
-not a second source-documentation tree.
+Not every optional detail page is required.
 
-## Standard entrypoints
+## Root README
 
-`README.md` and `AGENTS.md` are the two standard entrypoints.
+The root README remains the GitHub-facing start page.
 
-### README
+For visual CAD repositories it may and often should contain one or a few
+representative generated renders when they explain the library or design faster
+than prose.
 
-The README is the human-facing start page. Keep enough introduction to answer:
-
-- what is this repository;
-- why might I care;
-- where should I read next.
-
-Route the reader to the owning documents instead of duplicating them.
-
-For visual CAD repositories, a short README does **not** mean a text-only
-README. Include one or a few representative generated renders when they let a
-reader understand the model or product substantially faster than prose alone.
 Prefer stable generated Build/Verification output over committed duplicate
-images on `main`.
+screenshots where practical.
 
-Do not remove an existing useful preview merely to make the README more
-"minimal".
+Do not remove an existing useful preview merely to make a README shorter.
 
-### AGENTS
+## 00 — Overview
 
-AGENTS is the agent-facing start page. Keep:
+`doc/00-readme.md` is the documentation front page.
 
-- genuinely agent-specific instructions;
-- the minimum repository context needed to start safely;
-- links to shared policy and repository authorities.
+For a reusable SCAD library it should briefly state:
 
-Do not duplicate the plan, specification, design or verification procedure in
-AGENTS merely to make it visible to an agent.
+- what the library provides;
+- typical consumers/use cases;
+- how the numbered documents are organised;
+- where generated or source-adjacent API reference lives;
+- where useful Build/Verification output can be found.
 
-Repository-local AGENTS files should route to the current
-`brainboxemb.meta/AGENTS.md` shared entrypoint. Dependency AGENTS files are not
-inherited by consumers; exact pinned dependency behavior is read from the pinned
-dependency's consumer-facing README/docs/source.
+## 10 — Plan
 
-A fact or rule should have one clear authority. A short orienting summary is
-fine; parallel maintained copies are not.
+`doc/10-plan.md` owns current repository work, information sources, focus,
+sequence and roadmap.
 
-## 00 — Plan
+Durable engineering intent belongs in specification rather than being repeated
+as plan history.
 
-`doc/00-plan.md` is the normal engineering/work entrypoint after README or
-AGENTS.
+## 20 — Manuals
 
-It is operational. Typical content includes:
+`doc/20-manuals.md` is the manual-family index.
 
-- a short statement of the repository/library/project goal and scope;
-- repository-specific working method;
-- information sources and which questions they are authoritative for;
-- applicable shared BrainboxEmb **entrypoints** from `brainboxemb.meta`;
-- current focus and implementation sequence;
-- dependencies, decision points and open questions;
-- phases or milestones;
-- an optional roadmap;
-- links to the specification, design, detailed design and verification.
+### 20-01 — Development
 
-The plan may summarize the goal so a maintainer knows what they are working on,
-but the durable explanation of **why** the library/project and its functional
-parts exist belongs in the specification.
+`doc/20-01-development.md` explains how to work on the repository itself.
 
-For a current-generation SCAD repository the plan should normally make these
-routes discoverable without duplicating every shared page:
+For current-generation maintained SCAD repositories it should cover:
 
-```text
-shared working guidance
-    -> brainboxemb.meta/AGENTS.md
+- normal edit/build/verify workflow;
+- dependency and tool version-selection points;
+- managed bootstrap/update launchers;
+- GitHub Actions caller files and their roles;
+- release procedure where applicable;
+- repository-specific exceptions.
 
-shared SCAD-domain guidance
-    -> brainboxemb.meta/domains/scad/README.md
+Shared SCAD repository maintenance mechanics live in
+[repository-development.md](repository-development.md); the local manual gives
+the repo-specific summary.
 
-exact tool/library behavior
-    -> local config + exact gitlink + pinned dependency README/docs/source
-```
+### 20-02 — User
 
-Do not create a separate roadmap document by default. A normal roadmap is a
-section of the plan unless its size/lifecycle genuinely justifies separation.
+`doc/20-02-user.md` teaches a consumer how to use the library/tool/project.
 
-## 10 — Specification
+For a reusable SCAD library it normally contains:
 
-`doc/10-specification.md` primarily answers **why**.
+- normal `use` / `include` model;
+- one small useful example;
+- main public API families;
+- compatibility/version guidance;
+- links to generated or code-near API reference.
 
-It should help a reader understand the engineering intent before looking at
-architecture or source.
+For a one-off CAD project without a meaningful operator/consumer interface, the
+user manual may be short or omitted when it would add no useful information.
 
-Typical content includes:
+### Additional SCAD manuals
 
-- the problem the repository/library/project is intended to solve;
-- goals and desired outcomes;
-- important non-goals;
-- why each major functional area, sub-library or capability exists;
-- what those capabilities are intended to mean to a user/consumer;
-- important requirements and constraints at the intent level.
+Use `20-xx` only for durable practical guidance that really needs its own page.
 
-For example, a modeling library specification can explain **why semantic
-resolution is needed** and what problem it prevents. It should not immediately
-turn that idea into an implementation inventory of `$fn/$fa/$fs`, helper
-modules or private data flow; those belong in design/detail/API documentation.
+Examples might include:
 
-### Numbering and requirement identifiers
+- migration/compatibility instructions for consumers;
+- a specialized release/manual verification procedure.
 
-Document numbering exists for navigation and reading order.
+Do not put architecture rationale in a manual merely because it is operationally
+important.
 
-Do **not** automatically name specification headings with identifiers such as
-`FORGE-GEN-01`, `RES-CTX-02`, and so on. That creates noise when the reader
-only needs a clear explanation.
+## 30 — Specification
 
-Use a stable requirement identifier only when one individual requirement
-genuinely benefits from independent traceability, for example because physical
-or automated verification must refer to it exactly.
+`doc/30-specification.md` explains:
 
-Readable headings remain the default.
+- why the library/project exists;
+- why a consumer would use it;
+- typical users and use cases;
+- goals and desired behavior;
+- important non-goals and constraints.
 
-## 20 — Design
+Do not make specification an API catalog.
 
-`doc/20-design.md` answers **how at architecture level**.
+## 40 — Design
 
-Typical content includes:
+`doc/40-design.md` owns repository/system architecture.
 
-- major decomposition and responsibilities;
-- sub-libraries/modules and how they interact;
-- public versus internal ownership;
-- coordinate/data/control flow at system level;
-- major implementation choices and trade-offs;
-- how the architecture supports the intent from the specification.
+Use `40-xx` for detailed non-visual design topics such as resolution context,
+transform behavior or cutter semantics.
 
-The design document should stay understandable without descending into every
-private helper or geometry operation.
+### Component-local visual design
 
-Keep architecture concrete while doing so. Tie abstractions back to real
-components, files, views, public objects or representative generated images
-where that makes the design easier to read. A design document should not become
-a vocabulary of layers and boundaries that requires the reader to already know
-the repository.
-
-## 20-xx — Detailed design
-
-Detailed-design documents are optional. Add one when a functional area has
-enough internal reasoning that keeping it inside `20-design.md` would make the
-architecture document noisy.
-
-Examples:
+Geometry-heavy components may keep detailed visual construction documentation
+beside source, for example:
 
 ```text
-doc/20-01-resolution-context.md
-doc/20-02-transform-model.md
-doc/20-03-cutter-overlap.md
-...
-doc/20-20-...
-```
-
-Detailed design answers questions such as:
-
-- how one module/function family is internally composed;
-- local control/data flow;
-- scope/lifetime behavior;
-- geometry construction sequence;
-- algorithms and transformations;
-- private-helper responsibilities;
-- implementation edge cases and rationale.
-
-Do not create detailed-design files pre-emptively. Create only the documents
-that carry useful engineering knowledge.
-
-### Component-local detailed design
-
-For geometry-heavy components, the established component-local
-`design/design.md` plus its interactive design-render adapter may be the
-better detailed-design form because the explanation is inherently visual.
-
-The relationship can therefore be:
-
-```text
-doc/10-specification.md
-    why the library/project or capability exists
-
-doc/20-design.md
-    repository/system architecture
-
-doc/20-01-...md
-    detailed design of a functional software/modeling area
-
 <component>/design/design.md
-    detailed visual construction of a physical component
 ```
 
-Do not mechanically move useful visual component documentation into `doc/`.
+with generated/interactive design-render adapters.
 
-## 30 — Verification
+That is a SCAD-specific detailed-design form. The repository-level
+`40-design.md` links to those component-local authorities instead of moving
+them merely for numbering symmetry.
 
-`doc/30-verification.md` is source documentation. It explains how we determine
-whether the specification/design intent is actually satisfied.
+## 50 — Verification
 
-Typical content includes:
+`doc/50-verification.md` explains how intended behavior/design is validated.
 
-- verification risks and questions;
-- the specification/design section being exercised;
-- machine versus human evidence;
-- testcase/evidence mapping;
-- acceptance criteria;
-- evidence interpretation;
-- intentional exclusions and limitations;
-- physical verification procedures where applicable.
+Typical SCAD evidence includes:
 
-Prefer links to clear specification/design headings. Use requirement IDs only
-where the requirement itself genuinely needs a stable identifier.
+- executable OpenSCAD/PythonSCAD verification;
+- generated STL/PNG/SVG evidence;
+- geometry assertions;
+- consumer compilation/render checks;
+- physical testcases where geometry requires human/physical confirmation.
 
-## vrf — execution and evidence
+`vrf/` owns executable verification material and generated evidence. A
+published verification snapshot may include the applicable verification document
+for self-contained review, but source authority remains in `doc/`.
 
-`vrf/` owns executable verification material and generated evidence.
-
-A published verification snapshot may include a copy of the applicable
-verification document so the evidence branch is self-contained, but the source
-authority remains `doc/30-verification.md`.
-
-## 01 — Development and maintenance
-
-`doc/01-development.md` is the repository-local operating manual for a
-maintainer/developer.
-
-It answers practical questions that do not belong in the engineering plan,
-product/library specification or architecture design:
-
-- what should I open or run for normal development in this repository;
-- which dependency/tool versions are selected locally and where they are changed;
-- which root launchers are managed rather than hand-maintained;
-- which GitHub Actions callers exist and why;
-- what build/verification/release path is normal here;
-- what repository-specific deviations from the shared SCAD convention exist.
-
-The local document should stay concise and link to the shared
-[SCAD repository development guide](repository-development.md) for generic
-bootstrap/update/workflow/version-management rules.
-
-Unlike the plan, this page is not primarily about current work or roadmap. It is
-the durable "how to work in this repo" page.
-
-Current-generation maintained SCAD repositories should normally have this
-document even when the repository otherwise needs only minimal documentation.
-
-Additional operating detail can remain in a clearly named optional subject document when it genuinely deserves its own page. The main `01-development.md` remains the repository-local operating entrypoint.
-
-## 40 — Usage
-
-`doc/40-usage.md` is the consumer-facing guide.
-
-For a reusable SCAD library it should explain the normal include/use model,
-show a small useful example, describe the main API families and route to the
-code-near/generated API reference.
-
-For a CAD application/project, a separate usage page is optional unless the
-repository has a meaningful reusable/operator-facing interface. Do not invent a
-consumer manual for a one-off design merely for symmetry.
-
-The shared repository documentation model owns the generic role; this SCAD
-convention adds only the domain-specific expectations above.
+Use `50-xx` for substantial verification procedures/details.
 
 ## API/reference documentation
 
-API/reference documentation is code-near and answers **how do I call it?**
+Exact public API reference remains code-near.
 
-For reusable OpenSCAD libraries, keep API documentation beside the owning
-source and generate the reference with `openscad_docsgen` where appropriate.
+For reusable OpenSCAD libraries, keep source/API documentation beside the owning
+source and generate reference with `openscad_docsgen` where appropriate.
 
-API/reference documentation is also the natural place for:
+The user manual links to that reference. Specification and design should not
+duplicate signatures/parameter catalogs.
 
-- exact function/module signatures;
-- parameters and return values;
-- focused call examples;
-- compatibility/deprecation notices.
+## Generated combined book
 
-Do not make the specification an API catalog.
+A future `bld/docs/99-book.md` may assemble the numbered source documentation
+in reading order.
 
-## Libraries and applications
+It is generated output, not a source authority.
 
-The same roles apply to both, with different emphasis.
+## Libraries versus projects
+
+The same numbered families apply with different emphasis.
 
 ### Reusable library
 
 ```text
-00 plan             work context, sources, focus, roadmap
-10 specification    why the library/capabilities exist; goals/non-goals
-20 design           library architecture and responsibilities
-20-xx detail        internal design of complex functional areas when useful
-30 verification     how intended behavior is demonstrated
-40 usage            how a consumer uses the library
-01 development      how to develop, update and release this repository
-API reference       exact consumer-facing calls
+00 overview
+10 plan
+20 manuals
+  20-01 development
+  20-02 user/API guidance
+30 specification
+40 design + optional details
+50 verification
+source/API reference beside code
 ```
 
 ### CAD application/project
 
 ```text
-00 plan             work context, sources, focus, phases/roadmap
-10 specification    why the product/design exists; goals/requirements/constraints
-20 design           assembly/model architecture and major design choices
-20-xx detail        optional non-visual detailed design topics
-component docs      detailed visual construction where useful
-30 verification     product/design verification strategy
-01 development      local development/update/release operating guide
+00 overview
+10 plan
+20 manuals
+  20-01 development
+  20-02 operator/user guide only when meaningful
+30 specification
+40 design + component-local visual details
+50 verification
 ```
 
 ## Evolution
 
-Existing repositories are not wrong merely because they predate this structure.
+Existing current-generation SCAD repositories are migrated to this model as
+part of the current baseline/documentation refresh.
 
-Migration 010 qualifies and rolls this model through current-generation SCAD
-repositories before the template is treated as the settled reference.
+Preserve useful content. Renumber and classify it rather than rewriting history
+for filename symmetry.
