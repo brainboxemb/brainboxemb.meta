@@ -246,17 +246,39 @@ change this migration baseline.
 
 ### 4. lib.scad.util
 
-Complete the already-qualified inspection-only cleanup:
+**Accepted baseline: `v0.4.1`.**
 
-- [util #16](https://github.com/brainboxemb/lib.scad.util/issues/16);
-- [util PR #17](https://github.com/brainboxemb/lib.scad.util/pull/17).
+The util owner state now combines three already-qualified pieces:
 
-The accepted release must contain only the intended util-owned inspection API
-and managed inspection consumer controls; the old transform/Forge surfaces must
-not remain as a parallel modeling language.
+- #16 / PR #17 — inspection-only ownership cleanup;
+- #18 / PR #19 — Migration-011 tooling integration;
+- #20 / PR #21 — current numbered documentation structure.
 
-Because this removes released pre-1.0 public API, the release notes/changelog
-must state the removal clearly.
+The `v0.4.1` release is intentionally a patch release. The removed util-owned
+`xf_*` / `fg_*` code was stale against an ownership decision that had already
+been made; this release does not establish a new incompatible product direction.
+
+Exact immutable evidence:
+
+- release source commit:
+  `af04b44c2fb1d779a87797da4290deca92c7594d`;
+- exact-main documentation qualification commit
+  `123207fb32bcad81b209265d8f52bf8abf307127`, run `35899078347` — success;
+- release-metadata exact-main run `35899314331` — success;
+- release lifecycle run `35899380256` — success;
+- annotated tag object
+  `fc84b97d9ef40a2442b3b6a410067f78ab78c469` points to exact release
+  commit `af04b44c2fb1d779a87797da4290deca92c7594d`;
+- immutable release publications `rel/v0.4.1/bld` and
+  `rel/v0.4.1/vrf` both identify tag `v0.4.1`, that exact source commit,
+  `tool.git-project` at
+  `d1ed47c7d85524cfcb2a8f7e1ea81ba106ae9c60` (`v0.2.14`) and
+  `tool.scad-project` at
+  `8d167ad17dbfa798d68f46d871aaeed2e2e09857` (`v0.15.11`).
+
+The accepted source surface contains section inspection plus managed consumer
+controls only. The current documentation collection follows the shared
+`README / 10 / 20 / 30 / 40 / 50` family structure.
 
 ## Open-issue audit
 
@@ -306,7 +328,9 @@ Known cases requiring explicit disposition:
 
 ### lib.scad.util
 
-- #16 / PR #17: blocking until merged, exact-main qualified and released.
+- #16 / PR #17: completed inspection-only ownership cleanup.
+- #18 / PR #19: completed Migration-011 tooling integration.
+- #20 / PR #21: completed current numbered documentation structure.
 
 ### brainboxemb.meta
 
@@ -443,9 +467,12 @@ requirements into release qualification.
 
 1. **Complete:** accept `lib.scad.forge v0.3.1` at exact
    `100693541e056e312605c88a2f145ee1cbb829a4`;
-2. **Current:** merge/qualify the util inspection-only cleanup and release it.
+2. **Complete:** accept `lib.scad.util v0.4.1` at exact
+   `af04b44c2fb1d779a87797da4290deca92c7594d`.
 
 ### Phase 4 — maintained consumer rollout
+
+**Current.**
 
 Roll the accepted owner releases directly through maintained libraries and
 projects. This migration assumes the underlying architecture is already
