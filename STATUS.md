@@ -6,26 +6,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 011 — refresh current-generation SCAD baseline
-
-**Active.**
-
-[Migration record](migrations/011-current-scad-baseline/README.md)
-· tracking issue [#138](https://github.com/brainboxemb/brainboxemb.meta/issues/138).
-
-Migration 011 reconstructs and refreshes the complete current-generation SCAD
-baseline after the recent tooling, Forge, util and documentation work.
-
-The migration first qualifies released owner baselines for `tool.git-project`,
-`tool.scad-project`, `lib.scad.forge` and `lib.scad.util`. It then rolls
-those accepted releases through every repository currently classified in the
-catalog with `project_infrastructure.generation: current` and
-`provider: tool.scad-project`.
-
-The rollout also replaces legacy root `update-repo.*` copies with the canonical
-managed update-launcher contract, audits bootstrap provenance and checks each
-repository's GitHub Actions callers against the released SCAD-tool contract.
-Classic/legacy SCAD repositories remain out of scope.
+No cross-project migration is currently active.
 
 ## Proposed / inactive
 
@@ -36,6 +17,31 @@ Classic/legacy SCAD repositories remain out of scope.
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from active Migration 011; that migration audits SCAD reusable-workflow shape/refs but does not standardise third-party GitHub Action dependency maintenance.
 
 ## Recently completed
+
+### Migration 011 — refresh current-generation SCAD baseline
+
+**Complete.**
+
+[Migration record](migrations/011-current-scad-baseline/README.md)
+· tracking issue [#138](https://github.com/brainboxemb/brainboxemb.meta/issues/138).
+
+Migration 011 established the current SCAD baseline across all eight normal
+current-generation rollout repositories: `tool.git-project v0.2.14`,
+`tool.scad-project v0.15.11`, qualified Forge/util/product-library releases,
+canonical managed `bootstrap.*` / `update.*` launchers, current numbered
+documentation and role-appropriate `self-*` workflow entrypoints.
+
+The template was updated last and qualified on exact main
+`5a1ae13ee54727aaf0745e96caf621421e24c897`, run `35918567717`; its
+`prod/bld` and `prod/vrf` publications identify that exact source. The final
+catalog audit confirmed the retained experiment and classic SCAD repositories
+were not pulled into the rollout.
+
+The migration also retained two documentation follow-ups rather than expanding
+the baseline rollout: richer human-readable specifications tailored to each
+repository, and better navigation from source design authority to generated
+visual `prod/bld/design` documents.
+
 
 ### Migration 010 — standardise SCAD documentation and agent guidance
 
