@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document is the historical owner order, qualification gates and evidence record for Migration 006. The durable post-migration model lives in [Java execution model](../../domains/software/40-01_java-execution.md).
+This document is the historical owner order, qualification gates and evidence record for Migration 006. The durable post-migration model lives in [Java execution model](../../domains/software/40-01-java-execution.md).
 
 Status: **complete**
 
