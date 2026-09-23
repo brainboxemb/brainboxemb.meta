@@ -3,12 +3,12 @@
 Use this when continuing work in a fresh ChatGPT or other engineering session.
 
 The repository is the source of truth. The handoff message should therefore stay
-short: say where to look, let the repository explain itself, and add the current
-goal separately in the new conversation.
+short: say where to look, let the repository explain itself, and put the current
+goal plus repository at the end.
 
 ## Generic repository handoff
 
-Copy/paste this complete message and change only the repository line at the end:
+Copy/paste this complete message and change only the final goal/repository lines:
 
 ```text
 Werk vanuit de repository onderaan dit bericht als source of truth.
@@ -28,18 +28,16 @@ Als tijdens het werk een gedeelde of cross-repository wijziging nodig blijkt,
 controleer dan eerst brainboxemb/brainboxemb.meta en de relevante owner
 repository voordat je de verantwoordelijkheid lokaal oplost.
 
+Huidig doel:
+<wat ik wil doen of waar ik mee bezig ben>
+
 Repository:
 https://github.com/brainboxemb/REPOSITORY
 ```
 
-In the new conversation, add the actual request or current goal as the normal
-message around or after this handoff. The reusable handoff itself does not need a
-second placeholder for that.
-
 ## Cross-project / meta handoff
 
-For repository-spanning work the repository is fixed, so this is also directly
-copy/pasteable:
+For repository-spanning work use the same style:
 
 ```text
 Werk vanuit brainboxemb/brainboxemb.meta als cross-project coordination source.
@@ -53,8 +51,14 @@ je verdergaat. Gebruik oude chatgeschiedenis niet als source of truth wanneer de
 repositories actuelere informatie bevatten.
 
 Gebruik de geselecteerde owner repository voor implementatie en
-brainboxemb.meta voor cross-project sequencing, gedeelde conventies en
-retained evidence.
+brainboxemb.meta voor cross-project sequencing, gedeelde conventies en retained
+evidence.
+
+Huidig doel:
+<wat ik wil doen of waar ik mee bezig ben>
+
+Repository:
+https://github.com/brainboxemb/brainboxemb.meta
 ```
 
 ## Why the handoff stays short
