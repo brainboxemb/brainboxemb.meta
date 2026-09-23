@@ -230,7 +230,7 @@ The corrected immutable downstream baseline is now:
 
 The architectural point remains unchanged: Migration 006 did not require manufacturing a product release merely for tooling proof. The product was subsequently released through its normal product-owned release flow, and `v0.2.1` now provides additional immutable downstream evidence of the same contract.
 
-Durable model: [Java execution model](domains/software/40-01-java-execution.md).
+Durable model: [Java execution model](domains/software/40-01_java-execution.md).
 Canonical migration record: [Migration 006](migrations/006-java-execution-architecture/README.md).
 
 ### Migration 005 — simplify the SCAD execution architecture
