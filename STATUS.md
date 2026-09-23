@@ -264,4 +264,5 @@ Other completed migrations:
 - self-contained physical-verification document packages — issue #18;
 - one release flow for requested versions across project types — issue #20;
 - standardise CHANGELOG format and add a shared template — issue #52;
+- improve human-readable SCAD specifications and generated visual design navigation — issue #163;
 - `tool.git-project` #17, #22 and #26 remain owner-local follow-ups.
