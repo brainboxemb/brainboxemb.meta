@@ -76,6 +76,44 @@ subdocument to the owning family.
 The repository may use `doc/` or `docs/` according to its established family
 convention. Do not rename an entire tree merely for spelling uniformity.
 
+## README convention for documentation collections
+
+Every directory that acts as a maintained documentation collection or navigation
+boundary keeps a local `README.md`.
+
+Examples:
+
+```text
+docs/
+├── README.md
+├── 10-00_plan.md
+├── 20-00_manuals.md
+└── ...
+
+doc/
+├── README.md
+├── 10-00_plan.md
+├── 20-00_manuals.md
+└── ...
+
+domains/scad/
+├── README.md
+└── ...
+```
+
+That `README.md` is the local overview/index and acts as chapter 00 for that
+collection. Do not keep a parallel `00-00_readme.md`.
+
+Its alphabetical position in GitHub's file list is accepted. Preserving native
+GitHub README rendering and one clear authority is more important than forcing
+the overview to sort first.
+
+This rule applies to actual documentation collections. It does **not** require a
+new README in every source-adjacent directory that happens to contain one design
+document or generated artifact. For example, a component-local
+`design/design.md` may remain a single focused authority when that directory is
+not intended as a navigable documentation set.
+
 ## Root README and AGENTS
 
 The root `README.md` and `AGENTS.md` remain repository entrypoints rather
