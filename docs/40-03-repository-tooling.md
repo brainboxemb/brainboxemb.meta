@@ -183,6 +183,27 @@ name: Test release lifecycle
 Keep these comments concise. They are orientation, not a duplicate design
 document.
 
+### Workflow display names
+
+The workflow filename owns the machine-facing scope category. The YAML `name:`
+owns the human-facing label shown in the GitHub Actions sidebar.
+
+Do not mechanically repeat the filename or repository name in `name:`.
+Keep display names short enough to scan comfortably.
+
+Recommended pattern:
+
+- self workflows normally use the operation only, for example `Release`,
+  `Pages`, or `CI`;
+- reusable workflows keep the `Reusable` group word, followed by a short
+  capability label, for example `Reusable release` or `Reusable PR cleanup`;
+- qualification workflows use `Self-test` or `Test <capability>`, for example
+  `Test release` or `Test Moon`.
+
+Use a domain/repository qualifier only when it disambiguates two workflows in
+the same repository. The repository name itself normally adds no useful
+information in the Actions sidebar.
+
 This convention defines naming only. It does not require an unrelated classic
 repository to be renamed immediately; existing current-generation repositories
 can adopt it with related tooling changes or a coordinated rollout.
