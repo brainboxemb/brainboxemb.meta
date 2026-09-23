@@ -74,7 +74,7 @@ When changing this repository itself:
 
 - general overview → `README.md`;
 - public repository inventory → `repositories/`;
-- durable shared working model → `docs/working-model/`;
+- durable shared manuals/design → `docs/20-*` / `docs/40-*`;
 - domain guidance → `domains/`;
 - current cross-project work → `STATUS.md`;
 - migrations → `migrations/`;
