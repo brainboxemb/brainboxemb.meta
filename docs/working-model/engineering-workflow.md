@@ -36,8 +36,35 @@ From there, load only the shared material relevant to the task:
 - [STATUS.md](../../STATUS.md) when the work spans repositories or relates to an
   active/proposed migration, experiment or PoP.
 
-A local repository plan should list the shared meta sources that matter to that
-repository so an agent does not have to rediscover them.
+A local repository plan should identify the shared **entrypoints** relevant to
+that repository. It should not duplicate the complete list of downstream shared
+documents when the shared entrypoint already routes to them.
+
+## AGENTS do not inherit through dependencies
+
+An `AGENTS.md` file describes how an agent should work **in the repository that
+owns that file**.
+
+A consumer does not automatically inherit the `AGENTS.md` instructions of a
+pinned tool or library dependency. In particular, dependency-owner commit/PR
+rules must not override the consumer repository's working conventions.
+
+When a consumer needs to understand the exact behavior of a pinned dependency,
+use the documentation and source from that **pinned dependency revision**:
+
+```text
+consumer working method
+    -> current brainboxemb.meta/AGENTS.md
+    -> consumer-local AGENTS / plan
+
+exact dependency behavior
+    -> consumer config + exact gitlink
+    -> pinned dependency README / docs / source / tests
+```
+
+A pinned dependency may link to current portfolio guidance for contribution
+conventions, but current moving guidance must not be required to reconstruct the
+technical behavior of an old pinned release.
 
 ## Use the current repository as source of truth
 

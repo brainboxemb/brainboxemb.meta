@@ -6,7 +6,25 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently **no active cross-project migration or experiment/PoP**.
+### Migration 010 — standardise SCAD documentation and agent guidance
+
+**Active.**
+
+[Migration 010](migrations/010-scad-documentation-agent-guidance/README.md)
+qualifies a cold-start documentation/agent model for current-generation SCAD
+repositories.
+
+The migration combines the pending AGENTS-discovery and SCAD-document-structure
+work from issues #93, #124 and #128. Forge is the first canary. The key
+acceptance test is whether a blank agent can discover shared Git/commit/CI rules,
+SCAD conventions, repository intent/API, pinned tooling/runtime behavior,
+documentation/verification structure and current live status without relying on
+prior chat history.
+
+Dependency-owner `AGENTS.md` files are not inherited by consumers. Current
+working guidance comes top-down from `brainboxemb.meta`; exact dependency
+behavior comes from the consumer's config/gitlink and the pinned dependency's
+README/docs/source/tests.
 
 ## Proposed / inactive
 
@@ -14,7 +32,7 @@ There is currently **no active cross-project migration or experiment/PoP**.
 
 **Proposed / inactive.**
 
-[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the completed Java CI PoP and must not start automatically.
+[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the active SCAD documentation migration.
 
 ## Recently completed
 

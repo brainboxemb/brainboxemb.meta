@@ -16,11 +16,11 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-No migration is currently active.
+- [010 — standardise SCAD documentation and agent guidance](010-scad-documentation-agent-guidance/README.md) — qualify and roll out the blank-agent documentation/working-guidance model through current-generation SCAD repositories, starting with Forge.
 
 ## Proposed / inactive
 
-- [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; not started automatically by closing Migration 006.
+- [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; remains inactive while Migration 010 is the selected cross-project track.
 
 ## Complete
 
