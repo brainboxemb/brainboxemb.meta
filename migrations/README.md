@@ -16,11 +16,11 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-There is currently no active migration.
+- [011 — refresh current-generation SCAD baseline](011-current-scad-baseline/README.md) — qualify released generic/SCAD tool and Forge/util baselines, then align every catalogued current-generation SCAD repository in dependencies, managed bootstrap/update launchers and reusable GitHub Actions callers.
 
 ## Proposed / inactive
 
-- [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; remains inactive while Migration 010 is the selected cross-project track.
+- [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; remains inactive while Migration 011 is the selected cross-project track; Migration 011 does not standardise third-party action update policy.
 
 ## Complete
 

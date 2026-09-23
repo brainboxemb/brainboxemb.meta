@@ -6,7 +6,26 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-There is currently no active cross-project migration.
+### Migration 011 — refresh current-generation SCAD baseline
+
+**Active.**
+
+[Migration record](migrations/011-current-scad-baseline/README.md)
+· tracking issue [#138](https://github.com/brainboxemb/brainboxemb.meta/issues/138).
+
+Migration 011 reconstructs and refreshes the complete current-generation SCAD
+baseline after the recent tooling, Forge, util and documentation work.
+
+The migration first qualifies released owner baselines for `tool.git-project`,
+`tool.scad-project`, `lib.scad.forge` and `lib.scad.util`. It then rolls
+those accepted releases through every repository currently classified in the
+catalog with `project_infrastructure.generation: current` and
+`provider: tool.scad-project`.
+
+The rollout also replaces legacy root `update-repo.*` copies with the canonical
+managed update-launcher contract, audits bootstrap provenance and checks each
+repository's GitHub Actions callers against the released SCAD-tool contract.
+Classic/legacy SCAD repositories remain out of scope.
 
 ## Proposed / inactive
 
@@ -14,7 +33,7 @@ There is currently no active cross-project migration.
 
 **Proposed / inactive.**
 
-[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from the active SCAD documentation migration.
+[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from active Migration 011; that migration audits SCAD reusable-workflow shape/refs but does not standardise third-party GitHub Action dependency maintenance.
 
 ## Recently completed
 
