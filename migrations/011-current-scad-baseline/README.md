@@ -84,12 +84,15 @@ Their GitHub Actions are thin callers, but the exact caller set depends on
 repository role. Migration 011 standardises the **filenames and ownership
 contract**:
 
-- `.github/workflows/scad.yml` — normal SCAD production/build caller;
-- `.github/workflows/release.yml` — only when the repository publishes
+- `.github/workflows/local-scad.yml` — normal SCAD production/build caller;
+- `.github/workflows/local-release.yml` — only when the repository publishes
   versioned releases;
-- `.github/workflows/pr-cleanup.yml` — only when PR preview output exists.
+- `.github/workflows/local-pr-cleanup.yml` — only when PR preview output exists.
 
-The shared reusable workflows own the substantial CI implementation.
+The shared reusable workflows own the substantial CI implementation. Owner-side
+`workflow_call` interfaces use `reusable-<capability>.yml`; repository-local
+event/manual entry workflows use `local-<operation>.yml`; qualification
+workflows use `test-<capability>.yml`.
 
 
 Current observed owner releases before qualification:
@@ -135,7 +138,8 @@ Blocking owner work includes:
 - reconcile owner tests, fixtures and consumer docs with the generic launcher
   contract;
 - verify the SCAD post-update hook owns only reusable-workflow ref alignment;
-- qualify the normal production, release and PR-preview cleanup caller contracts.
+- qualify the normal production/release reusable workflow contracts and the generic PR-preview cleanup caller contract;
+- resolve tool.scad-project #112 by renaming public `project-*` workflow APIs to `reusable-*`, removing the redundant SCAD PR-cleanup wrapper, and prefixing owner-local workflows with `local-`.
 
 The next accepted SCAD release must have exact-main and exact-tag/release
 qualification appropriate to the tool's release model.
@@ -410,7 +414,7 @@ Migration 011 is complete only when:
   direct dependency refs/gitlinks;
 - canonical managed root bootstrap/update launchers are installed;
 - every maintained rollout repository uses the shared numbered documentation families, including a local documentation `README.md` and `20-01-development.md` operating summary where applicable;
-- GitHub Actions callers use the standard filenames and match the released SCAD contract for each repository role;
+- GitHub Actions workflows follow the `local-*` / `reusable-*` / `test-*` naming convention and callers match the released SCAD contract for each repository role;
 - every intentional old dependency pin is documented as such;
 - exact PR/main CI evidence is retained for rollout repositories;
 - the template is updated last;
