@@ -318,6 +318,12 @@ Known cases requiring explicit disposition:
   work instead of leaving one ambiguous historical issue.
 - #42: retain only if its audit capability is still independently desired; it is
   not automatically part of this baseline.
+- #116: rollout-discovered reusable-CI result-propagation defect. A failed
+  required SCAD runtime step can currently be masked by the final reusable
+  result step. Keep this as a generic correctness follow-up and, while open,
+  inspect required runtime/materialization step conclusions in rollout evidence
+  rather than trusting the top-level green conclusion alone. The clamps
+  consumer defect that exposed it was fixed and requalified in PR #37.
 
 ### lib.scad.forge
 
@@ -486,9 +492,23 @@ requirements into release qualification.
    - immutable `rel/v0.2.4/bld` and `rel/v0.2.4/vrf` both retain
      `tool.git-project v0.2.14`, `tool.scad-project v0.15.11`,
      `lib.scad.forge v0.3.1` and `lib.scad.util v0.4.1`.
-2. **Current:** roll the accepted tooling/documentation baseline through the
-   standalone libraries `lib.scad.clamps` and `lib.scad.hub75` before the
-   HUB75 application/lab repositories consume their resulting releases.
+2. **Complete:** accept `lib.scad.clamps v0.1.9` at exact
+   `e9f2fe0039a5f1cb6e2a0386a736767d95e627e7`.
+   - integration PR #37 qualified exact head
+     `5b3d213f428acb6ea189350bc7a57706e1a4c0c9` in run `35902981445`;
+   - exact-main integration run `35903258232` — success;
+   - release-metadata exact-main run `35903756204` — success;
+   - release lifecycle run `35903841225` — success;
+   - annotated tag object `6ff6370aa18c4288af2b2e58566842c032a76d9b`
+     points to exact release commit
+     `e9f2fe0039a5f1cb6e2a0386a736767d95e627e7`;
+   - immutable `rel/v0.1.9/bld` and `rel/v0.1.9/vrf` both retain
+     `tool.git-project v0.2.14` and `tool.scad-project v0.15.11`;
+   - the release preserves the dual OpenSCAD/PythonSCAD clamp API/geometry and
+     adds the current numbered documentation/publication structure only.
+3. **Current:** roll the accepted tooling/documentation baseline through
+   `lib.scad.hub75` before the HUB75 application/lab repositories consume the
+   resulting standalone-library releases.
 
 Roll the accepted owner releases directly through maintained libraries and
 projects. This migration assumes the underlying architecture is already
