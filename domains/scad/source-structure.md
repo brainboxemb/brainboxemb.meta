@@ -75,15 +75,20 @@ When a component has a design document, the production `.scad` entrypoint
 should advertise it near the file header so a maintainer or automated agent
 encounters the design context before changing geometry.
 
-Use a short navigation comment, for example:
+Use ordinary comment bullets rather than inventing new structured
+`openscad_docsgen` block names:
 
 ```openscad
-// Design: <component>/design/design.md
-// Design review: <component>/<component>_render.scad
+// - Design: <component>/design/design.md
+// - Design review: <component>/<component>_render.scad
 ```
+
+Add a similar bullet for a separate manual/reference page when one exists.
 
 Adjust the relative paths to the actual component layout. These lines are
 navigation aids, not imports and not a second copy of the design rationale.
+The leading bullet is deliberate: a bare `// Design:` line is interpreted as
+an unknown structured block by the shared `openscad_docsgen` lint path.
 
 The design document is the first place to recover facts such as coordinate
 systems, print orientation, geometry ownership, accepted baseline shape and
