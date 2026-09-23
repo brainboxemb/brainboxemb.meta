@@ -111,20 +111,44 @@ release baseline.
 
 ### 1. tool.git-project
 
-First determine whether the existing released `v0.2.12` is already sufficient.
+**Accepted baseline: `v0.2.13`.**
 
-The accepted generic-tool release must prove:
+Exact immutable evidence:
 
-- canonical managed `bootstrap.ps1/.sh` and `update.ps1/.sh` launchers;
-- launcher source/version/revision metadata;
-- committed bootstrap-gitlink enforcement before mutating operations;
-- dirty/stale bootstrap refusal;
-- read-only `update.* status`;
-- correct generic dependency closure/update behavior;
-- exact release/tag self-test evidence.
+- release commit: `c048ae38516da78fcea138cf63ce1426831ea815`;
+- annotated tag object: `8231210740684cf8a3acf8eee9b908378699fe0a`,
+  pointing to that exact commit;
+- exact-main release-candidate gate: all seven released capability workflows
+  passed on `c048ae38516da78fcea138cf63ce1426831ea815`:
+  - `test Self` — run `35883226153`;
+  - `test PR cleanup` — run `35883226464`;
+  - `test Output publish` — run `35883226424`;
+  - `test Output same-job` — run `35883226131`;
+  - `test Release` — run `35883226549`;
+  - `test Moon` — run `35883226111`;
+  - `test Evidence schema` — run `35883226129`;
+- release lifecycle run `35883453527` passed and published the GitHub Release;
+- tagged `test Output same-job` verification run `35883475936` passed on
+  `v0.2.13`.
 
-Do not manufacture a new release if `v0.2.12` already satisfies this contract
-on immutable evidence.
+The launcher/dependency semantics already qualified through the `v0.2.12`
+line. Before Migration 011 froze its generic-tool baseline, the shared
+documentation/workflow dogfood work also changed the current owner contract:
+numbered documentation families were adopted and the repository-owned release
+entrypoint moved to `self-release.yml` with the shared self/reusable/test naming
+and Purpose/Scope convention. `v0.2.13` therefore captures the complete owner
+state being rolled forward; it is not a release created merely to change a
+number.
+
+Owner issue audit at acceptance:
+
+- #4 generic generated-output publication — **completed/closed**;
+- #16 release preparation hook — valid non-blocking generic follow-up;
+- #17 and #26 Moon performance/cache work — valid non-blocking follow-ups;
+- #22 duplicate release-request idempotency — valid non-blocking release
+  robustness follow-up;
+- #31 synthetic Git fixtures and #32 PR feedback optimization — valid
+  non-blocking owner-test/feedback work.
 
 ### 2. tool.scad-project
 
@@ -345,8 +369,10 @@ requirements into release qualification.
 
 ### Phase 2 — generic and SCAD tool baseline
 
-1. accept or replace the `tool.git-project` release;
-2. fix #107 and any directly exposed SCAD owner inconsistencies;
+1. **Complete:** accept `tool.git-project v0.2.13` at exact
+   `c048ae38516da78fcea138cf63ce1426831ea815`;
+2. **Current:** finish the remaining SCAD owner inconsistencies, including #112
+   workflow API/self-entry naming against the accepted generic-tool baseline;
 3. release/accept the new `tool.scad-project` baseline against that generic
    tool release.
 
