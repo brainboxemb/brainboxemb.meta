@@ -16,6 +16,7 @@ README / AGENTS     where do I start?
 20 design           how is the repository/system organised to achieve that?
 20-xx detail        how is one functional part built in detail?
 30 verification     how do we know the intended result is achieved?
+01 development      how do I work in and maintain this repository?
 source/API docs     how do I call the public API?
 ```
 
@@ -26,13 +27,13 @@ README.md
 AGENTS.md
 doc/
 ├── 00-plan.md
+├── 01-development.md
 ├── 10-specification.md
 ├── 20-design.md
 ├── 20-01-...md            # optional detailed design
 ├── 20-02-...md            # optional detailed design
 ├── ...
-├── 30-verification.md
-└── 40-...md               # other optional subject documents
+└── 30-verification.md
 
 vrf/
 └── ... executable verification sources and generated evidence
@@ -263,6 +264,33 @@ A published verification snapshot may include a copy of the applicable
 verification document so the evidence branch is self-contained, but the source
 authority remains `doc/30-verification.md`.
 
+## 01 — Development and maintenance
+
+`doc/01-development.md` is the repository-local operating manual for a
+maintainer/developer.
+
+It answers practical questions that do not belong in the engineering plan,
+product/library specification or architecture design:
+
+- what should I open or run for normal development in this repository;
+- which dependency/tool versions are selected locally and where they are changed;
+- which root launchers are managed rather than hand-maintained;
+- which GitHub Actions callers exist and why;
+- what build/verification/release path is normal here;
+- what repository-specific deviations from the shared SCAD convention exist.
+
+The local document should stay concise and link to the shared
+[SCAD repository development guide](repository-development.md) for generic
+bootstrap/update/workflow/version-management rules.
+
+Unlike the plan, this page is not primarily about current work or roadmap. It is
+the durable "how to work in this repo" page.
+
+Current-generation maintained SCAD repositories should normally have this
+document even when the repository otherwise needs only minimal documentation.
+
+Additional operating detail can remain in a clearly named optional subject document when it genuinely deserves its own page. The main `01-development.md` remains the repository-local operating entrypoint.
+
 ## API/reference documentation
 
 API/reference documentation is code-near and answers **how do I call it?**
@@ -291,6 +319,7 @@ The same roles apply to both, with different emphasis.
 20 design           library architecture and responsibilities
 20-xx detail        internal design of complex functional areas when useful
 30 verification     how intended behavior is demonstrated
+01 development      how to develop, update and release this repository
 API reference       exact consumer-facing calls
 ```
 
@@ -303,6 +332,7 @@ API reference       exact consumer-facing calls
 20-xx detail        optional non-visual detailed design topics
 component docs      detailed visual construction where useful
 30 verification     product/design verification strategy
+01 development      local development/update/release operating guide
 ```
 
 ## Evolution

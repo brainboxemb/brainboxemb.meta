@@ -78,9 +78,18 @@ repository to current-generation tooling would be a separate migration.
 | HUB75 component lab | v0.15.7 | clamps v0.1.8; mechint v0.1.6 |
 
 All eight normal rollout repositories currently contain root
-`bootstrap.ps1/.sh` and `update-repo.ps1/.sh`. Their workflow sets vary by
-repository role, which is valid only when the variation matches the released
-tooling contract.
+`bootstrap.ps1/.sh` and legacy `update-repo.ps1/.sh`.
+
+Their GitHub Actions are thin callers, but the exact caller set depends on
+repository role. Migration 011 standardises the **filenames and ownership
+contract**:
+
+- `.github/workflows/scad.yml` — normal SCAD production/build caller;
+- `.github/workflows/release.yml` — only when the repository publishes
+  versioned releases;
+- `.github/workflows/pr-cleanup.yml` — only when PR preview output exists.
+
+The shared reusable workflows own the substantial CI implementation.
 
 
 Current observed owner releases before qualification:
@@ -258,6 +267,27 @@ Acceptance rules:
 
 Do not copy substantial dependency/update logic into individual repositories.
 
+## Development/maintenance documentation
+
+Migration 011 also closes a durable documentation gap.
+
+The shared operating rules live in
+[`domains/scad/repository-development.md`](../../domains/scad/repository-development.md).
+
+Every maintained in-scope repository gets a concise local:
+
+```text
+doc/01-development.md
+```
+
+It records the repository-specific developer experience: normal entrypoints,
+direct dependencies/version-selection points, workflow set, build/verification/
+release path and intentional deviations.
+
+Generic rules are linked rather than copied.
+
+The template's existing `doc/40-ci-orchestration.md` can remain as a separate CI detail page; `doc/01-development.md` becomes the local developer/maintenance entrypoint and may link to it.
+
 ## GitHub Actions audit
 
 Every in-scope repository must be checked against the accepted
@@ -360,8 +390,8 @@ Migration 011 is complete only when:
 - all eight normal current-generation SCAD rollout repositories have audited
   direct dependency refs/gitlinks;
 - canonical managed root bootstrap/update launchers are installed;
-- GitHub Actions callers match the released SCAD contract for each repository
-  role;
+- every maintained rollout repository has `doc/01-development.md` with its local operating summary and exceptions;
+- GitHub Actions callers use the standard filenames and match the released SCAD contract for each repository role;
 - every intentional old dependency pin is documented as such;
 - exact PR/main CI evidence is retained for rollout repositories;
 - the template is updated last;
