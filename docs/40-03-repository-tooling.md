@@ -197,8 +197,8 @@ Recommended pattern:
   `Pages`, or `CI`;
 - reusable workflows keep the `Reusable` group word, followed by a short
   capability label, for example `Reusable release` or `Reusable PR cleanup`;
-- qualification workflows use `Self-test` or `Test <capability>`, for example
-  `Test release` or `Test Moon`.
+- qualification workflows consistently use `Test <capability>`, for example
+  `Test self`, `Test release`, or `Test Moon`.
 
 Use a domain/repository qualifier only when it disambiguates two workflows in
 the same repository. The repository name itself normally adds no useful
