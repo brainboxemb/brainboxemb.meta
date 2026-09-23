@@ -165,7 +165,7 @@ name: Release
 For reusable workflows, identify the public `workflow_call` contract:
 
 ```yaml
-name: Reusable generated-output publication
+name: reusable Output publish
 
 # Purpose: publish one generated-output family for a caller repository.
 # Scope: public reusable workflow API.
@@ -174,7 +174,7 @@ name: Reusable generated-output publication
 For test workflows, state the capability or contract being qualified:
 
 ```yaml
-name: Test release lifecycle
+name: test Release
 
 # Purpose: qualify the generic release-request/tag lifecycle without publishing a real release.
 # Scope: repository qualification workflow.
