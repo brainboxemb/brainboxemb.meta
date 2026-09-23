@@ -584,6 +584,68 @@ repository is either:
 
 Confirm classic repositories remained untouched.
 
+## Conclusions and follow-up observations
+
+Migration 011 exposed a documentation-quality gap that is broader than the
+mechanical numbering/layout migration itself. The migration should finish the
+qualified baseline first; the following observations are retained here so they
+can be translated into a dedicated meta follow-up after Migration 011 closes.
+
+### Human-readable specification quality
+
+`30-00-specification.md` is primarily written for a human reader. A shared
+numbering convention must not turn specification documents into uniform,
+minimal inventories. Each repository has its own kind of specification input
+and should explain the concepts that matter for that library/tool/project.
+
+A useful specification should make the reader understand **why** the abstraction
+exists, not only list what APIs or capabilities are present. Where it helps,
+show small concrete examples of the naive/common form and the semantic form.
+
+Examples of the intended explanatory level:
+
+- Forge can show why a raw `translate([x, y, z])` or `rotate(...)` requires
+  the reader to decode coordinates, while a semantic move/frame operation
+  communicates placement or coordinate intent directly;
+- Forge tagged CSG can show why plain nested `difference()` / `union()`
+  works mechanically but makes body/remove/keep roles implicit;
+- Forge cutters can explain the distinction between deliberate Boolean overlap
+  and actual mechanical clearance, preferably with small code examples;
+- mechint can explain why one shared interface/object definition prevents
+  male/female/profile dimensions from drifting independently;
+- clamps can explain why nominal bore, tension/interference and Boolean overlap
+  are separate design concepts;
+- HUB75 documentation can explain why explicit mechanical datums/interfaces are
+  preferable to reconstructing them from incidental geometry such as
+  `depth / 2`.
+
+The exact structure, examples and visual aids are repository-specific. The goal
+is consistent communication quality, not identical headings or an imposed
+template.
+
+Agent/developer-specific authority, repository rules and implementation
+constraints may be documented separately when useful, for example in
+`20-01-development.md` or AGENTS guidance. That material complements rather
+than replaces the human-facing explanation.
+
+### Generated visual design discoverability
+
+Migration 011 also confirmed that the SCAD build still publishes component-local
+detail design Markdown and its generated images under `prod/bld/design/...`.
+The gap is discoverability: migrated `40-00-design.md` pages can link only to
+the source `design/design.md`, making the richer generated/readable version
+appear to have disappeared.
+
+A follow-up documentation convention should preserve source design files as
+authority while also surfacing the corresponding generated Build publication
+where available. Human readers should be able to reach the rendered design,
+including its images, without having to infer the `prod/bld` path themselves.
+
+These observations are deliberately **not** used to reopen already-qualified
+Migration-011 owner/consumer releases. They are retained as migration
+conclusions and should become one or more meta follow-up issues after the
+baseline rollout and closing audit are complete.
+
 ## Completion criteria
 
 Migration 011 is complete only when:
