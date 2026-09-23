@@ -4,8 +4,11 @@ Status: **current shared documentation convention**
 
 ## Purpose
 
-Current-generation SCAD repositories use one predictable documentation model,
-but that model must not create documents for their own sake.
+Current-generation SCAD repositories specialize the shared
+[reusable repository documentation model](../../docs/working-model/repository-documentation.md).
+The same reader questions and numbered backbone apply, with SCAD-specific
+visual/API conventions layered on top. The model must not create documents for
+their own sake.
 
 Each document role answers a different question:
 
@@ -16,8 +19,9 @@ README / AGENTS     where do I start?
 20 design           how is the repository/system organised to achieve that?
 20-xx detail        how is one functional part built in detail?
 30 verification     how do we know the intended result is achieved?
+40 usage            how do I consume/use this repository?
 01 development      how do I work in and maintain this repository?
-source/API docs     how do I call the public API?
+source/API docs     exact public API reference
 ```
 
 The normal repository-level shape is:
@@ -33,7 +37,8 @@ doc/
 ├── 20-01-...md            # optional detailed design
 ├── 20-02-...md            # optional detailed design
 ├── ...
-└── 30-verification.md
+├── 30-verification.md
+└── 40-usage.md
 
 vrf/
 └── ... executable verification sources and generated evidence
@@ -291,6 +296,21 @@ document even when the repository otherwise needs only minimal documentation.
 
 Additional operating detail can remain in a clearly named optional subject document when it genuinely deserves its own page. The main `01-development.md` remains the repository-local operating entrypoint.
 
+## 40 — Usage
+
+`doc/40-usage.md` is the consumer-facing guide.
+
+For a reusable SCAD library it should explain the normal include/use model,
+show a small useful example, describe the main API families and route to the
+code-near/generated API reference.
+
+For a CAD application/project, a separate usage page is optional unless the
+repository has a meaningful reusable/operator-facing interface. Do not invent a
+consumer manual for a one-off design merely for symmetry.
+
+The shared repository documentation model owns the generic role; this SCAD
+convention adds only the domain-specific expectations above.
+
 ## API/reference documentation
 
 API/reference documentation is code-near and answers **how do I call it?**
@@ -319,6 +339,7 @@ The same roles apply to both, with different emphasis.
 20 design           library architecture and responsibilities
 20-xx detail        internal design of complex functional areas when useful
 30 verification     how intended behavior is demonstrated
+40 usage            how a consumer uses the library
 01 development      how to develop, update and release this repository
 API reference       exact consumer-facing calls
 ```
