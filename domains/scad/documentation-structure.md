@@ -5,7 +5,7 @@ Status: **current shared SCAD specialization**
 ## Shared model
 
 Current-generation maintained SCAD repositories specialize the shared
-[reusable repository documentation model](../../docs/20-13-repository-documentation.md).
+[reusable repository documentation model](../../docs/20-13_repository-documentation.md).
 
 The normal SCAD library documentation set is:
 
