@@ -6,8 +6,11 @@ Status: **current shared source/documentation convention**
 
 The shared SCAD architecture describes builds, runtimes and publication, but a
 project also needs a consistent human-facing source shape. This page defines the
-portfolio convention for current-generation OpenSCAD component source and design
-documentation.
+portfolio convention for current-generation OpenSCAD component source and
+component-local visual documentation.
+
+Repository-level plan, specification, design and verification document roles
+are defined in [SCAD documentation structure](documentation-structure.md).
 
 The goal is simple: a maintainer should be able to open a component or its
 design-render adapter directly in OpenSCAD, understand the available design
@@ -147,7 +150,11 @@ the Customizer as well rather than requiring a maintainer to edit source text.
 
 ## Support `<component>/design/design.md`
 
-Owns the step-by-step explanation of how the component is constructed and why.
+Owns the step-by-step visual explanation of how the component is constructed.
+Repository-level purpose, semantic contracts and verification strategy belong
+in the numbered `doc/` documents defined by
+[SCAD documentation structure](documentation-structure.md).
+
 Its normal `source:` points to the sibling support adapter, for example
 `source: hub75_p5_64x32_panel_render.scad`.
 
