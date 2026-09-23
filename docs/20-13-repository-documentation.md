@@ -67,7 +67,7 @@ For example:
 
 40-00-design.md
 40-01-repository-layout.md
-40-02_publication-model.md
+40-02-publication-model.md
 ```
 
 Do not assign a new top-level category merely because one subject grows. Add a
@@ -274,8 +274,8 @@ Use stable `40-xx` detail documents for substantial design areas:
 ```text
 40-00-design.md
 40-01-repository-layout.md
-40-02_tooling-boundary.md
-40-03_publication-model.md
+40-02-tooling-boundary.md
+40-03-publication-model.md
 ```
 
 For geometry-heavy SCAD components, component-local visual design
