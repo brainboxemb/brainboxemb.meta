@@ -204,19 +204,45 @@ Owner issue audit at acceptance:
 
 ### 3. lib.scad.forge
 
-Forge should enter the rollout from a coherent pre-1.0 API state rather than
-publishing another transitional duplicate surface.
+**Accepted baseline: `v0.3.1`.**
 
-At minimum reconcile:
+Migration 011 for Forge was intentionally scoped to integrating the accepted
+shared tooling baseline. A separate attempt to fold Forge API cleanup into the
+same owner release exposed an ambiguity in release-boundary/version selection;
+that policy follow-up is tracked in
+[brainboxemb.meta #155](https://github.com/brainboxemb/brainboxemb.meta/issues/155).
 
-- [Forge #30](https://github.com/brainboxemb/lib.scad.forge/issues/30) —
-  retire the `fg_overlap_mm()` compatibility alias according to the current
-  pre-1.0 cleanup policy;
-- any already-started resolution-context deprecation/removal work in the current
-  Forge plan must be internally consistent at the selected release boundary.
+The accepted Forge patch release therefore keeps API cleanup issue #30 separate
+and publishes the qualified repository/tooling integration only.
 
-Forge #12 and #13 remain evaluation/future-API questions unless evidence makes
-them required; they do not block this baseline merely because they are open.
+Exact immutable evidence:
+
+- release source commit:
+  `100693541e056e312605c88a2f145ee1cbb829a4`;
+- exact-main CI run `35896539896` — success;
+- both `prod/bld` and `prod/vrf` identify that exact source and record:
+  - `tool.git-project` gitlink
+    `d1ed47c7d85524cfcb2a8f7e1ea81ba106ae9c60` (`v0.2.14`);
+  - `tool.scad-project` gitlink
+    `8d167ad17dbfa798d68f46d871aaeed2e2e09857` (`v0.15.11`);
+- release lifecycle run `35896692612` — success;
+- annotated tag object `7452eda080c056a4a24be0c2a500cdafb2f6eccc`
+  points to exact release commit
+  `100693541e056e312605c88a2f145ee1cbb829a4`;
+- immutable release publications `rel/v0.3.1/bld` and `rel/v0.3.1/vrf`
+  both identify tag `v0.3.1`, the same exact source commit and the accepted
+  tool gitlinks.
+
+Owner issue disposition at acceptance:
+
+- #32 repository/tooling baseline integration — **completed/closed**;
+- #30 `fg_overlap_mm()` retirement — valid separate/non-blocking Forge API
+  follow-up; explicitly not part of `v0.3.1`;
+- #12 / #13 — non-blocking API evaluations unless deliberately promoted.
+
+Post-release owner documentation records `v0.3.1` as the accepted
+Migration-011 Forge baseline; later Forge API cleanup does not retroactively
+change this migration baseline.
 
 ### 4. lib.scad.util
 
@@ -273,7 +299,9 @@ Known cases requiring explicit disposition:
 
 ### lib.scad.forge
 
-- #30: blocking for the selected cleanup release.
+- #32: completed repository/tooling integration baseline.
+- #30: valid separate/non-blocking API cleanup follow-up; excluded from the
+  accepted `v0.3.1` tooling-integration release.
 - #12 / #13: non-blocking API evaluations unless deliberately promoted.
 
 ### lib.scad.util
@@ -284,6 +312,9 @@ Known cases requiring explicit disposition:
 
 - #116 is incorporated by this migration and can close when the owner-state
   audit and baseline reconstruction are retained here.
+- #155 tracks the release-boundary/version-selection ambiguity exposed while
+  integrating Forge; it is a policy follow-up and does not block the accepted
+  owner baselines.
 - #20 remains a deferred generic cross-domain release-flow follow-up.
 - Migration 007 / #66 remains separate from this migration.
 
@@ -410,8 +441,9 @@ requirements into release qualification.
 
 ### Phase 3 — Forge and util baseline
 
-1. **Current:** complete Forge's selected pre-release cleanup and release it;
-2. merge/qualify the util inspection-only cleanup and release it.
+1. **Complete:** accept `lib.scad.forge v0.3.1` at exact
+   `100693541e056e312605c88a2f145ee1cbb829a4`;
+2. **Current:** merge/qualify the util inspection-only cleanup and release it.
 
 ### Phase 4 — maintained consumer rollout
 
