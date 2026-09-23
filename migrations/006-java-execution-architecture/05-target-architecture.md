@@ -8,7 +8,7 @@ Use this document to review an implementation choice against the intended end st
 
 Status: **active design authority**
 
-The generic project-family/documentation boundary is defined in [Project families, coordination and engineering documentation](../../docs/working-model/project-families-and-documentation.md). Migration 006 stays inside that boundary.
+The generic project-family/documentation boundary is defined in [Project families, coordination and engineering documentation](../../docs/40-01-project-families.md). Migration 006 stays inside that boundary.
 
 ## Design goals
 

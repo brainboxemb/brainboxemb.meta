@@ -65,7 +65,7 @@ The public repository overview records the known current/classic classification.
 ## Where to look next
 
 - **which repositories exist** → [Public repository overview](../../repositories/README.md)
-- **how the shared tools fit together** → [How the shared tools fit together](../architecture/repository-tooling.md)
+- **how the shared tools fit together** → [How the shared tools fit together](40-03-repository-tooling.md)
 - **generated output** → [Generated output and publication](generated-output.md)
 - **versions and releases** → [Versioning and releases](versioning-and-releases.md)
 - **SCAD projects, libraries and tooling** → [SCAD and CAD](../../domains/scad/README.md)

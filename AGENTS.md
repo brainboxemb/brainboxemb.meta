@@ -10,13 +10,13 @@ shared rules that apply.
 
 Read:
 
-- [Shared engineering workflow](docs/working-model/engineering-workflow.md) —
+- [Shared engineering workflow](docs/20-10-engineering-workflow.md) —
   source-of-truth order, ownership, evidence and cross-repository work;
-- [Git and repository workflow](docs/working-model/git-workflow.md) — issues,
+- [Git and repository workflow](docs/20-11-git-workflow.md) — issues,
   branches, commits, pull requests, CI, changelog, merge and release handoff;
-- [How projects are organised](docs/working-model/projects.md) — generic
+- [How projects are organised](docs/40-02-projects.md) — generic
   project/tool ownership;
-- [Versioning and releases](docs/working-model/versioning-and-releases.md) —
+- [Versioning and releases](docs/20-12-versioning-and-releases.md) —
   released interfaces and dependency pins.
 
 Keep generic rules in those documents. Repository-local AGENTS files should
@@ -74,7 +74,7 @@ When changing this repository itself:
 
 - general overview → `README.md`;
 - public repository inventory → `repositories/`;
-- durable shared working model → `docs/working-model/`;
+- durable shared manuals/design → `docs/20-*` / `docs/40-*`;
 - domain guidance → `domains/`;
 - current cross-project work → `STATUS.md`;
 - migrations → `migrations/`;

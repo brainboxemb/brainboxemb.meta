@@ -23,7 +23,7 @@ software consumer
   project-specific source, metadata and release semantics
 ```
 
-The durable production model is documented in [Java execution model](../../docs/working-model/java-execution.md).
+The durable production model is documented in [Java execution model](40-01-java-execution.md).
 
 ## Platform qualification
 
@@ -35,7 +35,7 @@ The shared policy uses `auto | none | smoke | full`, with affected selection dec
 
 Java execution retains build/test evidence separately from orchestration evidence. Timing distinguishes Maven/build time from runner, checkout, setup and artifact-transfer overhead.
 
-Generated output follows the shared technical namespaces documented in [Generated output and publication](../../docs/working-model/generated-output.md).
+Generated output follows the shared technical namespaces documented in [Generated output and publication](../../docs/40-04-generated-output.md).
 
 ## CI architecture qualification
 

@@ -76,7 +76,7 @@ If a change only matters to one project, it normally belongs there rather than i
 
 A reusable library is neither generic tooling nor a project. It contains reusable design or software components that a project can consume directly.
 
-For the SCAD examples, see [Reusable SCAD libraries](../../domains/scad/libraries.md).
+For the SCAD examples, see [Reusable SCAD libraries](../domains/scad/libraries.md).
 
 ## Current and classic projects
 
@@ -84,13 +84,13 @@ Newer repositories use the current shared project setup. Older CAD repositories 
 
 We call those older setups **classic**. Classic projects remain valid and are not automatically migrated just because newer tooling exists.
 
-The [repository overview](../../repositories/README.md) records which setup a repository uses where that classification is known.
+The [repository overview](../repositories/README.md) records which setup a repository uses where that classification is known.
 
 ## More detail
 
-For the practical project layout, see [How brainboxemb projects are organised](../working-model/projects.md).
+For the practical project layout, see [How brainboxemb projects are organised](40-02-projects.md).
 
-For generated output and the `dev/`, `prod/` and `rel/` locations, see [Generated output and publication](../working-model/generated-output.md).
+For generated output and the `dev/`, `prod/` and `rel/` locations, see [Generated output and publication](40-04-generated-output.md).
 
 
 ## GitHub Actions workflow filenames

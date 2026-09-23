@@ -6,7 +6,7 @@ Java repositories had a reproducible Maven/JDK baseline but still duplicated rep
 
 Status: **complete**
 
-Durable model: [Java execution model](../../docs/working-model/java-execution.md).
+Durable model: [Java execution model](../../domains/software/40-01-java-execution.md).
 Historical rollout/evidence: [06 — Implementation and qualification plan](06-implementation-plan.md).
 
 ## Final architecture
@@ -157,6 +157,6 @@ Migration 006 is complete because:
 - generated Java evidence retains exact source/tool provenance and durable timing evidence;
 - Maven remains build/test authority with no duplicate canonical Linux producer;
 - project-family/engineering-documentation assembly remains outside Java execution;
-- the durable architecture lives in `docs/working-model/java-execution.md` rather than this temporary migration folder.
+- the durable architecture lives in `domains/software/40-01-java-execution.md` rather than this temporary migration folder.
 
 GitHub Actions dependency maintenance remains Migration 007 and is not activated automatically by this closeout.

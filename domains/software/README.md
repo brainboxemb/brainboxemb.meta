@@ -46,4 +46,4 @@ A useful rule is:
 - reproduce and qualify reusable Java CI behaviour in `exp.2026-004.java-ci-architecture`;
 - update this domain view when the portfolio-level relationship or navigation changes.
 
-For the durable Java execution model, see [Java execution model](../../docs/working-model/java-execution.md).
+For the durable Java execution model, see [Java execution model](40-01-java-execution.md).

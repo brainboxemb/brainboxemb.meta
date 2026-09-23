@@ -23,17 +23,18 @@ repository already documents it.
 ## Then load shared BrainboxEmb guidance
 
 The portfolio-wide agent entrypoint is
-[`brainboxemb.meta/AGENTS.md`](../../AGENTS.md).
+[`brainboxemb.meta/AGENTS.md`](../AGENTS.md).
 
 From there, load only the shared material relevant to the task:
 
-- [Git and repository workflow](git-workflow.md) for issues, branches, commits,
+- [Git and repository workflow](20-11-git-workflow.md) for issues, branches, commits,
   PRs, CI, changelog and merge discipline;
-- [project organisation](projects.md) for generic project/tool ownership;
-- [versioning and releases](versioning-and-releases.md) for released interfaces
+- [project organisation](40-02-projects.md) for generic project/tool ownership;
+- [reusable repository documentation](20-13-repository-documentation.md) for the shared plan/development/specification/design/verification/usage document roles;
+- [versioning and releases](20-12-versioning-and-releases.md) for released interfaces
   and consumer pins;
 - the applicable domain entrypoint under `domains/`;
-- [STATUS.md](../../STATUS.md) when the work spans repositories or relates to an
+- [STATUS.md](../STATUS.md) when the work spans repositories or relates to an
   active/proposed migration, experiment or PoP.
 
 A local repository plan should identify the shared **entrypoints** relevant to
@@ -138,7 +139,7 @@ while coordinating there.
 ## Cross-project work tracks
 
 If the task is a migration, experiment, PoP or other repository-spanning track,
-read [STATUS.md](../../STATUS.md) first.
+read [STATUS.md](../STATUS.md) first.
 
 Do not guess the active migration/experiment number from history. Derive the
 current track from live coordination state.
@@ -163,8 +164,9 @@ complete.
 
 ## Avoid duplicated authorities
 
-README and AGENTS are entrypoints. Plans, specifications, designs, coding
-standards and verification documents are durable authorities.
+README and AGENTS are entrypoints. Plans, development guides, specifications,
+designs, verification documents and consumer usage/reference documents are
+durable authorities.
 
 When shared guidance exists in meta, repository-local documentation should link
 to it and record only genuine local additions or exceptions.

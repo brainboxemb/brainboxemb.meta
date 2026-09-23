@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document is the historical owner order, qualification gates and evidence record for Migration 006. The durable post-migration model lives in [Java execution model](../../docs/working-model/java-execution.md).
+This document is the historical owner order, qualification gates and evidence record for Migration 006. The durable post-migration model lives in [Java execution model](../../domains/software/40-01-java-execution.md).
 
 Status: **complete**
 
@@ -99,7 +99,7 @@ explicit/manual stronger check       full when requested
 exact release qualification          full
 ```
 
-The durable rule is recorded in `docs/working-model/java-execution.md`.
+The durable rule is recorded in `domains/software/40-01-java-execution.md`.
 
 ## Step 5 — real event-timing framework rollout
 

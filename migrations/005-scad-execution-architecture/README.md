@@ -16,7 +16,7 @@ Predecessor: [Migration 004](../004-scad-repository-execution-model/README.md)
 
 ## Durable namespace rule
 
-The portfolio-wide rule is defined in [Generated output and publication](../../docs/working-model/generated-output.md).
+The portfolio-wide rule is defined in [Generated output and publication](../../docs/40-04-generated-output.md).
 
 Human-facing lifecycle names remain readable:
 
