@@ -18,7 +18,7 @@ cross-repository conventions live and which repository owns a change.
 
 | Family | Start here | Purpose |
 | --- | --- | --- |
-| 10 Plan | [10-00_plan.md](10-00_plan.md) | current meta-repository work |
+| 10 Plan | [10-00-plan.md](10-00-plan.md) | current meta-repository work |
 | 20 Manuals | [20-00-manuals.md](20-00-manuals.md) | how to work with and maintain the portfolio |
 | 30 Specification | [30-00-specification.md](30-00-specification.md) | why meta exists and for whom |
 | 40 Design | [40-00-design.md](40-00-design.md) | how portfolio coordination is organised |
