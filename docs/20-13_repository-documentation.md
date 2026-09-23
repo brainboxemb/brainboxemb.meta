@@ -29,7 +29,7 @@ README.md
 AGENTS.md
 
 docs/ or doc/
-├── 00-readme.md
+├── README.md
 │
 ├── 10-00_plan.md
 │
@@ -140,7 +140,7 @@ Do not copy complete plans, manuals or technical contracts into AGENTS.
 
 ## 00 — Overview
 
-`00-readme.md` is the front page of the documentation set.
+`README.md` is the front page of the documentation set and acts as chapter 00.
 
 It answers:
 
