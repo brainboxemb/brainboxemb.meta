@@ -36,13 +36,13 @@ There you can browse separately through:
 
 ### How projects are organised
 
-Read [How brainboxemb projects are organised](docs/working-model/projects.md).
+Read [How brainboxemb projects are organised](docs/40-02-projects.md).
 
 That page explains the common project structure in practical terms and points to the reference projects for SCAD and Java.
 
 ### Shared tooling
 
-Use the [technical guide](docs/README.md) when you want to understand how shared tooling, generated output, versions and releases work.
+Use the [technical guide](docs/00-readme.md) when you want to understand how shared tooling, generated output, versions and releases work.
 
 The implementation details stay in the tool repositories themselves.
 
@@ -52,7 +52,7 @@ Read [STATUS.md](STATUS.md).
 
 This is intentionally separate from the general documentation. It tells you whether a repository-spanning migration is active, what is deferred, and which plans are only proposals.
 
-To continue cross-project work in a fresh ChatGPT/work session, use the copy/paste instruction in [New chat / work-session handoff](docs/00-new-chat-handoff.md).
+To continue cross-project work in a fresh ChatGPT/work session, use the copy/paste instruction in [New chat / work-session handoff](docs/20-20-new-session-handoff.md).
 
 ### Experiments
 
