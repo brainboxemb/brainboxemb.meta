@@ -111,37 +111,43 @@ release baseline.
 
 ### 1. tool.git-project
 
-**Accepted baseline: `v0.2.13`.**
+**Accepted baseline: `v0.2.14`.**
 
-Exact immutable evidence:
+`v0.2.13` was initially accepted, but the first Forge Migration-011 rollout
+(PR #33, failed run `35888314845`) exposed a generic managed-launcher
+regression: an uninitialized `tools/tool.git-project` gitlink path could resolve
+Git's top-level to the dirty parent consumer worktree and be refused as though
+the bootstrap engine itself were dirty.
 
-- release commit: `c048ae38516da78fcea138cf63ce1426831ea815`;
-- annotated tag object: `8231210740684cf8a3acf8eee9b908378699fe0a`,
+Owner issue #42 / PR #43 fixed that distinction in both shell and PowerShell
+bootstrap/update launchers and added a regression fixture with unrelated dirty
+parent state before bootstrap.
+
+Exact immutable `v0.2.14` evidence:
+
+- release commit: `d1ed47c7d85524cfcb2a8f7e1ea81ba106ae9c60`;
+- annotated tag object: `ddd3025c7b1f544a48a94acf766efd68c034d8bd`,
   pointing to that exact commit;
-- exact-main release-candidate gate: all seven released capability workflows
-  passed on `c048ae38516da78fcea138cf63ce1426831ea815`:
-  - `test Self` — run `35883226153`;
-  - `test PR cleanup` — run `35883226464`;
-  - `test Output publish` — run `35883226424`;
-  - `test Output same-job` — run `35883226131`;
-  - `test Release` — run `35883226549`;
-  - `test Moon` — run `35883226111`;
-  - `test Evidence schema` — run `35883226129`;
-- release lifecycle run `35883453527` passed and published the GitHub Release;
-- tagged `test Output same-job` verification run `35883475936` passed on
-  `v0.2.13`.
+- complete exact-main release gate on that commit:
+  - `test Self` — run `35893428515`;
+  - `test PR cleanup` — run `35893428966`;
+  - `test Output publish` — run `35893428906`;
+  - `test Output same-job` — run `35893428650`;
+  - `test Release` — run `35893428870`;
+  - `test Moon` — run `35893428525`;
+  - `test Evidence schema` — run `35893428526`;
+- release lifecycle run `35893647253` passed and published the GitHub Release;
+- tagged `test Output same-job` verification run `35893672305` passed on
+  `v0.2.14`.
 
-The launcher/dependency semantics already qualified through the `v0.2.12`
-line. Before Migration 011 froze its generic-tool baseline, the shared
-documentation/workflow dogfood work also changed the current owner contract:
-numbered documentation families were adopted and the repository-owned release
-entrypoint moved to `self-release.yml` with the shared self/reusable/test naming
-and Purpose/Scope convention. `v0.2.13` therefore captures the complete owner
-state being rolled forward; it is not a release created merely to change a
-number.
+The numbered documentation families and self/reusable/test workflow naming
+qualified in `v0.2.13` remain unchanged. `v0.2.14` supersedes it as the
+Migration-011 generic-tool baseline solely because the rollout found a real
+managed-launcher correctness defect.
 
 Owner issue audit at acceptance:
 
+- #42 uninitialized bootstrap gitlink vs parent worktree — **completed/closed**;
 - #4 generic generated-output publication — **completed/closed**;
 - #16 release preparation hook — valid non-blocking generic follow-up;
 - #17 and #26 Moon performance/cache work — valid non-blocking follow-ups;
@@ -168,8 +174,14 @@ Exact immutable evidence:
   `8d167ad17dbfa798d68f46d871aaeed2e2e09857`;
 - tagged `test Self` workflow-dispatch run `35886652260` — success.
 
-The accepted release consumes `tool.git-project v0.2.13` and includes the
-Migration-011 owner cleanup:
+The accepted release was built against `tool.git-project v0.2.13` and includes the
+Migration-011 owner cleanup. The later `v0.2.14` generic patch changes only the
+managed consumer bootstrap/update launchers; it does not change the reusable
+Moon/publication interfaces consumed internally by `tool.scad-project v0.15.11`.
+Current consumers therefore pin their bootstrap gitlink/managed launchers to
+`v0.2.14` without requiring a SCAD-tool rerelease.
+
+The accepted SCAD owner cleanup includes:
 
 - #107 — canonical managed `update.ps1/.sh` launcher ownership: completed;
 - #110 — numbered repository documentation families: completed;
@@ -391,8 +403,8 @@ requirements into release qualification.
 
 ### Phase 2 — generic and SCAD tool baseline
 
-1. **Complete:** accept `tool.git-project v0.2.13` at exact
-   `c048ae38516da78fcea138cf63ce1426831ea815`;
+1. **Complete:** accept `tool.git-project v0.2.14` at exact
+   `d1ed47c7d85524cfcb2a8f7e1ea81ba106ae9c60`;
 2. **Complete:** accept `tool.scad-project v0.15.11` at exact
    `8d167ad17dbfa798d68f46d871aaeed2e2e09857`.
 
