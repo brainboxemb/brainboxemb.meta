@@ -103,13 +103,13 @@ Use these forms:
 
 | Kind | Filename form | Example |
 | --- | --- | --- |
-| Repository-local entry workflow | `local-<operation>.yml` | `local-release.yml` |
+| Repository self-entry workflow | `self-<operation>.yml` | `self-release.yml` |
 | Reusable workflow API | `reusable-<capability>.yml` | `reusable-generated-output-publish.yml` |
 | Contract/test workflow | `test-<capability>.yml` | `test-generated-output-publish.yml` |
 
 The prefixes describe workflow scope:
 
-- `local-` — started by events/manual dispatch in this repository and not a
+- `self-` — owned and started by this repository (event/manual dispatch), not a
   cross-repository workflow API;
 - `reusable-` — public `workflow_call` API that other workflows/repositories
   may call;
@@ -119,8 +119,8 @@ The prefixes describe workflow scope:
 Prefer:
 
 ```text
-local-release.yml
-local-pages.yml
+self-release.yml
+self-pages.yml
 
 test-self.yml
 test-execution-evidence-schema.yml
@@ -135,9 +135,9 @@ reusable-pr-preview-cleanup.yml
 reusable-release.yml
 ```
 
-Do not leave current repository-local workflow entrypoints unprefixed merely
+Do not leave current repository self-entry workflows unprefixed merely
 because names such as `release.yml` or `pages.yml` are familiar. The
-`local-` prefix makes their non-reusable scope explicit and groups them
+`self-` prefix makes their non-reusable scope explicit and groups them
 together in directory listings.
 
 Do not use the equivalent suffix form `<capability>-test.yml` for new/current
