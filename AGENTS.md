@@ -17,7 +17,9 @@ Read:
 - [How projects are organised](docs/40-02-projects.md) — generic
   project/tool ownership;
 - [Versioning and releases](docs/20-12-versioning-and-releases.md) —
-  released interfaces and dependency pins.
+  released interfaces and dependency pins;
+- [Shared repository tooling](docs/40-03-repository-tooling.md) — generic
+  tooling ownership plus GitHub Actions workflow filename/display-name conventions.
 
 Keep generic rules in those documents. Repository-local AGENTS files should
 link here and contain only local routing, exceptions or agent-specific
