@@ -70,17 +70,24 @@ Do not duplicate changing release numbers, portfolio rollout state or generic Gi
 
 ## Scope
 
+### Java reference template — first canary
+
+- `brainboxemb/template.java-project`
+  - owner issue: [#14](https://github.com/brainboxemb/template.java-project/issues/14)
+  - first consumer qualification of the shared guidance model;
+  - prove the minimal/current Java repository entry path before product rollout.
+
 ### Current Java tooling owner
 
 - `brainboxemb/tool.java-project`
   - owner issue: [#32](https://github.com/brainboxemb/tool.java-project/issues/32)
-  - qualify owner-vs-consumer guidance boundary.
+  - qualify owner-vs-consumer guidance boundary after the consumer pattern is proven.
 
 ### Real implementation consumer
 
 - `brainboxemb/2026-010-02.java.event-timing-framework`
   - owner issue: [#39](https://github.com/brainboxemb/2026-010-02.java.event-timing-framework/issues/39)
-  - prove the model on a real multi-module Java consumer.
+  - roll the proven model into a real multi-module Java consumer.
 
 ### Project-family coordination canary
 
@@ -94,33 +101,29 @@ Experiment/PoP repositories are **not normal Java rollout consumers merely becau
 
 `brainboxemb/exp.2026-004.java-ci-architecture` remains a retained experiment/regression repository and is out of the normal Migration-012 rollout unless a concrete guidance defect there is deliberately selected later.
 
-### Template last
-
-- `brainboxemb/template.java-project`
-  - owner issue: [#14](https://github.com/brainboxemb/template.java-project/issues/14)
-  - update only after real owner/consumer repositories qualify the model.
-
 ## Rollout sequence
 
 1. **Migration authority**
    - record this migration and activate it in `STATUS.md`;
-   - use Migration 010 as the pattern rather than inventing a Java-specific guidance model.
+   - use Migration 010 as the proven guidance model, while using the Java template as the first Java consumer canary.
 
-2. **Java tooling owner**
+2. **Template canary first**
+   - align `template.java-project/AGENTS.md`;
+   - prove a blank agent can discover local intent, shared meta guidance and dependency-owner non-inheritance in the minimal reference consumer;
+   - treat this as the qualification gate before rollout to real Java consumers.
+
+3. **Java tooling owner**
    - align `tool.java-project/AGENTS.md`;
    - preserve Java-tool-specific owner boundaries;
    - route generic Git/repository policy to meta.
 
-3. **Real Java consumer**
+4. **Real Java consumer rollout**
    - align `2026-010-02.java.event-timing-framework/AGENTS.md`;
    - prove local architecture/implementation constraints remain discoverable without copying shared rules.
 
-4. **Project-family coordination canary**
+5. **Project-family coordination canary**
    - align `2026-010-01.meta.event-timing-software/AGENTS.md`;
    - reproduce the workflow-naming discovery path and verify the shared repository-tooling authority is found.
-
-5. **Template last**
-   - align `template.java-project` only after the model is qualified elsewhere.
 
 6. **Closing audit**
    - verify exact repository revisions and live CI/evidence;
@@ -163,5 +166,5 @@ Migration 012 completes when:
 - the workflow-naming discovery failure is reproducibly closed in the event-timing coordination repository;
 - dependency-owner AGENTS non-inheritance is explicit in consumer repositories;
 - experiment/PoP repositories remain out of the normal rollout unless a concrete repository-specific need justifies inclusion;
-- `template.java-project` is updated last;
+- `template.java-project` qualifies the Java consumer pattern before rollout to real Java product repositories;
 - exact revisions and CI/evidence are recorded here before closure.
