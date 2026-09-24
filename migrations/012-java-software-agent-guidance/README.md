@@ -1,6 +1,6 @@
 # Migration 012 — standardise Java/software agent guidance
 
-Status: **active**
+Status: **complete**
 
 Tracking issue: [#165](https://github.com/brainboxemb/brainboxemb.meta/issues/165)
 
@@ -181,3 +181,53 @@ Migration 012 completes when:
 - experiment/PoP repositories remain out of the normal rollout unless a concrete repository-specific need justifies inclusion;
 - `template.java-project` qualifies the Java consumer pattern before rollout to real Java product repositories;
 - exact revisions and CI/evidence are recorded here before closure.
+
+
+## Qualification evidence
+
+The migration remained intentionally limited to agent-guidance routing and
+boundary cleanup.
+
+| Repository / role | Qualified PR head | PR evidence | Merged main |
+| --- | --- | --- | --- |
+| `template.java-project` — first Java consumer canary | `03430035e0a2212ebf9f6adc78800caeb59f8b69` | Java reference-consumer verification run `36035426619` — success | `c1b1e9e777c5a77529d86bb74e2bb4b2c8de85c2` |
+| `2026-010-02.java.event-timing-framework` — real Java implementation consumer | `1f930a93db977eb1bfefc99ee8b54d301f966f5e` | Java verification run `36034628335` — success | `eb1963daa4e93457a7a5ef911c1573f5aec21364` |
+| `tool.java-project` — tooling-owner guidance boundary | `f96bc2e106b4dce73fd32133401106d80e0794ea` | affected-policy run `36034532958` + self-test run `36034533831` — success | `86a699b5d6a15aba5f44aeadb78c6781bd71efeb` |
+| `2026-010-01.meta.event-timing-software` — project-family coordination canary | `67e335c44ceb8ff5589be3668139509e569b032f` | guidance-only change; no repository workflow matched the changed paths | `bcf1f7eb87e273f516d60d5b5a7ba67ba194f3b0` |
+
+The canary path now resolves as intended:
+
+```text
+local AGENTS
+    -> brainboxemb.meta/AGENTS.md
+    -> shared Git / repository workflow
+    -> shared repository-tooling conventions
+```
+
+In particular, a workflow change in the event-timing project now has an explicit
+route to the portfolio-wide GitHub Actions naming convention in
+`brainboxemb.meta/docs/40-03-repository-tooling.md`.
+
+Experiment/PoP repositories were intentionally not rolled out merely because
+their subject matter is Java.
+
+## Result
+
+Migration 012 is complete.
+
+The normal Java guidance pattern is now:
+
+```text
+local repository navigation / constraints
+        ↓
+brainboxemb.meta/AGENTS.md
+        ↓
+current shared working conventions
+```
+
+Pinned tool/dependency AGENTS files remain owner guidance and are not inherited
+as consumer working policy. Exact pinned behavior continues to come from
+configuration/gitlinks/immutable refs plus pinned README/docs/source/tests.
+
+No Java documentation restructure, tooling baseline refresh, workflow rename,
+dependency migration or product-architecture change was required.
