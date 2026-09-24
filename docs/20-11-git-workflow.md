@@ -32,6 +32,16 @@ docs/issue-...
 Do not invent a new naming convention in a consumer when the owner already has
 one.
 
+### GitHub Actions workflow naming
+
+When adding or renaming files under `.github/workflows/`, use the portfolio-wide
+workflow naming convention owned by
+[How the shared tools fit together](40-03-repository-tooling.md#github-actions-workflow-filenames).
+
+That page is the single authority for the `self-`, `reusable-` and `test-`
+filename categories, workflow display names and the required Purpose/Scope
+header. Do not duplicate that naming table in consumer repositories.
+
 ## Commits
 
 A commit should represent one coherent reviewable change.
