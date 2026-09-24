@@ -24,7 +24,19 @@ The concrete trigger was a workflow change in `2026-010-01.meta.event-timing-sof
 
 The problem is therefore not a missing naming rule. The Java/software repositories have not yet adopted the shared top-down agent-guidance model.
 
+## Scope boundary
+
+Migration 012 is intentionally small. Its normal production changes are limited
+to repository `AGENTS.md` routing/boundary cleanup plus the minimal migration
+coordination record needed to qualify and roll that guidance out.
+
+It does **not** by itself trigger a Java documentation restructure, tooling
+baseline refresh, workflow rename, dependency migration or product-architecture
+change. If a blank-agent check exposes one of those as a separate real defect,
+track it in the owning repository rather than silently broadening this migration.
+
 ## Goal
+
 
 A blank agent starting in a current Java/software repository must be able to determine:
 
