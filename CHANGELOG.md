@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Improved discovery of the portfolio-wide GitHub Actions workflow naming convention by routing normal Git/agent guidance to the shared repository-tooling authority.
+
 - Standardize maintained repository documentation around numbered families with a local `README.md` overview, `10-00-plan.md`, `20-00-manuals.md`, `30-00-specification.md`, `40-00-design.md` and `50-00-verification.md`; dogfood the model in meta, classify former `working-model`/architecture material into manual/design families, move the durable Java execution model into the software domain, and simplify the new-session handoff to a copy/paste repository pointer.
 - Define the generic Git root-launcher naming convention: canonical `tool.git-project` `consumer-bootstrap.*` / `consumer-update.*` templates materialize as root `bootstrap.*` / `update.*`, removing only the `consumer-` prefix.
 - Complete Migration 009 after the HUB75 checkpoint exposed a shared SCAD production concurrency race: release final owner baseline `tool.scad-project v0.15.7`, qualify production serialization plus the restored read-only `update-repo status` contract through Experiment 006, align every catalogued current-generation consumer to exact tool commit `bfaac9f6916c09bc6525abddf64c87238fe59103`, and repair HUB75 exact-main `prod/bld` / `prod/vrf` publication on run `35736506128`.
