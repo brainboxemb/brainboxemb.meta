@@ -112,14 +112,15 @@ Experiment/PoP repositories are **not normal Java rollout consumers merely becau
    - prove a blank agent can discover local intent, shared meta guidance and dependency-owner non-inheritance in the minimal reference consumer;
    - treat this as the qualification gate before rollout to real Java consumers.
 
-3. **Java tooling owner**
-   - align `tool.java-project/AGENTS.md`;
-   - preserve Java-tool-specific owner boundaries;
-   - route generic Git/repository policy to meta.
-
-4. **Real Java consumer rollout**
+3. **Real Java implementation rollout**
    - align `2026-010-02.java.event-timing-framework/AGENTS.md`;
-   - prove local architecture/implementation constraints remain discoverable without copying shared rules.
+   - use it as the first real Java implementation/end-user consumer after the template;
+   - prove product architecture/implementation constraints remain discoverable without copying shared rules.
+
+4. **Java tooling-owner cleanup**
+   - align `tool.java-project/AGENTS.md` as owner guidance;
+   - preserve the owner-versus-consumer boundary;
+   - this owner cleanup is required for consistency but is not the consumer rollout gate.
 
 5. **Project-family coordination canary**
    - align `2026-010-01.meta.event-timing-software/AGENTS.md`;
