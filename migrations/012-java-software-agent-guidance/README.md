@@ -88,11 +88,11 @@ Do not duplicate changing release numbers, portfolio rollout state or generic Gi
   - this is where the workflow-naming miss was observed;
   - its large project-specific AGENTS should be reduced/routed without losing genuine local documentation boundaries.
 
-### Retained Java qualification lab
+### Experiment repositories
 
-- `brainboxemb/exp.2026-004.java-ci-architecture`
-  - audit as a retained qualification/regression repository;
-  - keep experiment-specific retained evidence while routing current working method to meta.
+Experiment/PoP repositories are **not normal Java rollout consumers merely because their subject matter is Java**.
+
+`brainboxemb/exp.2026-004.java-ci-architecture` remains a retained experiment/regression repository and is out of the normal Migration-012 rollout unless a concrete guidance defect there is deliberately selected later.
 
 ### Template last
 
@@ -119,14 +119,10 @@ Do not duplicate changing release numbers, portfolio rollout state or generic Gi
    - align `2026-010-01.meta.event-timing-software/AGENTS.md`;
    - reproduce the workflow-naming discovery path and verify the shared repository-tooling authority is found.
 
-5. **Retained qualification lab**
-   - audit `exp.2026-004.java-ci-architecture`;
-   - keep only experiment-specific retained guidance locally.
-
-6. **Template last**
+5. **Template last**
    - align `template.java-project` only after the model is qualified elsewhere.
 
-7. **Closing audit**
+6. **Closing audit**
    - verify exact repository revisions and live CI/evidence;
    - record any genuine Java/software exceptions;
    - close owner issues and this migration only when a blank-agent path is reproducible.
@@ -166,6 +162,6 @@ Migration 012 completes when:
 - local AGENTS files are concise enough to remain navigation/constraint entrypoints rather than duplicate manuals;
 - the workflow-naming discovery failure is reproducibly closed in the event-timing coordination repository;
 - dependency-owner AGENTS non-inheritance is explicit in consumer repositories;
-- the retained Java qualification lab is intentionally aligned or documented as a justified exception;
+- experiment/PoP repositories remain out of the normal rollout unless a concrete repository-specific need justifies inclusion;
 - `template.java-project` is updated last;
 - exact revisions and CI/evidence are recorded here before closure.
