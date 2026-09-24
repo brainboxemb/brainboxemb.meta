@@ -6,7 +6,14 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-No cross-project migration is currently active.
+### Migration 012 — standardise Java/software agent guidance
+
+**Active.**
+
+[Migration record](migrations/012-java-software-agent-guidance/README.md)
+· tracking issue [#165](https://github.com/brainboxemb/brainboxemb.meta/issues/165).
+
+Migration 012 applies the blank-agent guidance model qualified by SCAD Migration 010 to the current Java/software family. The rollout starts with real owners/consumers, keeps dependency-owner AGENTS non-inherited, and updates `template.java-project` last.
 
 ## Proposed / inactive
 
