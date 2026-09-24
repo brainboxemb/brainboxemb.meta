@@ -18,6 +18,21 @@ No cross-project migration is currently active.
 
 ## Recently completed
 
+### Migration 012 — standardise Java/software agent guidance
+
+**Complete.**
+
+[Migration record](migrations/012-java-software-agent-guidance/README.md)
+· tracking issue [#165](https://github.com/brainboxemb/brainboxemb.meta/issues/165).
+
+Migration 012 aligned the current Java guidance path with the shared BrainboxEmb
+agent model. The Java template qualified the minimal consumer path first, the
+real event-timing Java implementation then proved it in a product repository,
+`tool.java-project` clarified its owner-only AGENTS boundary, and the
+event-timing coordination repository now routes generic workflow/tooling rules
+through `brainboxemb.meta`. Dependency-owner AGENTS remain non-inherited.
+
+
 ### Migration 011 — refresh current-generation SCAD baseline
 
 **Complete.**

@@ -16,13 +16,18 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-- [011 — refresh current-generation SCAD baseline](011-current-scad-baseline/README.md) — qualify released generic/SCAD tool and Forge/util baselines, then align every catalogued current-generation SCAD repository in dependencies, managed bootstrap/update launchers and reusable GitHub Actions callers.
+No cross-project migration is currently active.
 
 ## Proposed / inactive
 
 - [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; remains inactive while Migration 011 is the selected cross-project track; Migration 011 does not standardise third-party action update policy.
 
 ## Complete
+
+- [012 — standardise Java/software agent guidance](012-java-software-agent-guidance/README.md) — aligned Java template, real implementation, Java tooling-owner and event-timing coordination AGENTS with the shared top-down guidance model while keeping dependency-owner AGENTS non-inherited.
+
+
+- [011 — refresh current-generation SCAD baseline](011-current-scad-baseline/README.md) — aligned all normal current-generation SCAD rollout repositories to the released tooling/Forge baseline, canonical managed launchers, current documentation and role-appropriate self workflows.
 
 - [010 — standardise SCAD documentation and agent guidance](010-scad-documentation-agent-guidance/README.md) — qualified the blank-agent model through real current-generation SCAD libraries/projects, corrected shared conventions from canary evidence, aligned retained lab/experiment guidance and updated the template last.
 
