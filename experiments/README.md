@@ -69,7 +69,16 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-There is currently no active project-backed experiment/PoP.
+### Requirements traceability PoP
+
+[Experiment 007](007-requirements-traceability/README.md) — **active**.
+
+Evaluates machine-checkable traceability across use cases, requirements,
+interfaces/design and verification while preserving readable project Markdown.
+Sphinx-Needs/MyST is the first candidate, compared with a less invasive
+metadata/export integration. The event-timing software documentation is the
+first real reference slice.
+
 
 ## Proposed / inactive
 
