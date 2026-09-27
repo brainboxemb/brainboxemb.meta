@@ -1,11 +1,14 @@
-# Experiment 007 — requirements traceability PoP
+# Experiment 007 — interactive engineering documentation and traceability
 
-Status: **active**
+Status: **active — target experience and candidate architecture first**
 
 Tracking issue: [#167](https://github.com/brainboxemb/brainboxemb.meta/issues/167)
 
-Planned implementation/evidence repository:
-`brainboxemb/exp.2026-007.requirements-traceability`
+Implementation/evidence repository:
+[`brainboxemb/exp.2026-007.requirements-traceability`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability)
+
+Current owner issue:
+[`exp.2026-007.requirements-traceability#1`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/1)
 
 Reference project:
 `brainboxemb/2026-010-01.meta.event-timing-software`
@@ -15,147 +18,137 @@ Possible later production mechanism owner:
 
 ## Question
 
-Can BrainboxEmb engineering documentation gain useful, machine-checkable
-requirements traceability without replacing readable project Markdown or moving
-project meaning into a documentation framework?
+How can BrainboxEmb engineering documentation become easier to understand,
+navigate and verify as systems grow, while preserving readable project Markdown
+and the useful linear engineering book?
 
-The event-timing project already has a deliberate chain:
+Requirements traceability is one part of this question, not the complete target.
+
+The event-timing project already has:
+
+- a generated architecture book;
+- system use cases;
+- software-item requirements;
+- architecture and detailed design;
+- interface definitions;
+- verification planning/cases;
+- stable engineering identifiers such as `UC-001`, `SI01-REQ-020`,
+  `IF03-REQ-004` and `VC-ST1-001`.
+
+The experiment starts from the reader/author experience before selecting
+technology.
+
+## Target experience
+
+The experiment evaluates several views over one engineering knowledge base:
 
 ```text
-use case
-  -> requirement
-  -> interface / architecture / detailed design
-  -> implementation
-  -> verification case / evidence
+                         engineering knowledge
+                                  |
+       +--------------------------+--------------------------+
+       |                          |                          |
+       v                          v                          v
+  readable book             documentation portal       engineering explorer
+  ordered narrative         search/navigation          object/relationship views
+       |                          |                          |
+       +--------------------------+--------------------------+
+                                  |
+                           traceability checks
 ```
 
-It also already uses stable identifiers such as `UC-001`,
-`SI01-REQ-020`, `IF03-REQ-004` and `VC-ST1-001`.
+Desired capabilities include:
 
-The PoP must determine whether that existing model can become machine-checkable
-with acceptable authoring cost.
+- **Book** — coherent ordered reading/review/print view;
+- **Portal** — search, breadcrumbs, stable deep links and contextual navigation;
+- **Clickable architecture** — diagram elements navigate to engineering objects;
+- **Object view** — one component/use case/requirement/interface/test with its
+  generated relationships/backlinks;
+- **Focused graph** — bounded local relationship navigation around one selected
+  object;
+- **Workspace** — related views side-by-side so context is not constantly lost;
+- **Traceability/CI** — machine-checkable IDs, relations and coverage.
 
-## Target concept
+These should be views, not independent copies of engineering content.
 
-Keep project meaning in the owning project repository.
+## First phase
 
-Use a bounded traceability mechanism to:
+The implementation/evidence repository first defines:
 
-- represent stable engineering objects and typed links;
-- reject duplicate IDs and broken references;
-- check useful coverage rules;
-- generate traceability tables and graph views;
-- export a machine-readable graph for CI and later tooling;
-- keep the existing document assembler independent from the traceability engine.
+1. the target documentation experience;
+2. evaluation criteria;
+3. a candidate architecture/tool responsibility split;
+4. a bounded event-timing reference slice.
 
-The first candidate is current Sphinx-Needs with MyST/Markdown support.
+No documentation/traceability product is selected in advance.
 
-The PoP compares two integration shapes:
+Current candidates/references include:
 
-1. **native MyST/Sphinx-Needs authoring** — need objects and links are authored
-   directly in Markdown directives;
-2. **non-invasive source model** — existing readable Markdown remains the
-   primary authored form while a thin metadata/extraction layer produces or
-   imports a machine-readable traceability graph.
+- Sphinx-Needs for requirements/relationship modelling and validation;
+- Material for MkDocs for portal/navigation experience;
+- Structurizr for the model-versus-views architecture principle;
+- Antora as a multi-repository/versioned documentation reference;
+- a small custom explorer where the desired Object/Focused Graph/Workspace
+  experience is more specific than an existing portal provides.
 
-Do not turn this into a broad tool tournament. Add another candidate only when a
-qualified result exposes a concrete unresolved requirement.
+Another candidate is added only when it offers a materially different answer to
+a real qualification question.
 
-## Qualification cases
+## Qualification direction
 
-### TRC-01 — stable identity and graph
+After the target architecture is reviewed, the PoP should qualify the smallest
+central contract first:
 
-Represent a bounded event-timing slice using the project's existing ID schemes
-without renumbering or introducing a parallel identity model.
+```text
+small readable source fixture
+        |
+        v
+engineering graph
+        |
+        +--> validate IDs/links/coverage
+        +--> machine-readable export
+        +--> object/backlink view
+        +--> focused relation query
+        +--> stable source links
+```
 
-### TRC-02 — invalid-reference detection
+Only then should the experiment build a portal/view prototype.
 
-Automated verification must reject at least:
-
-- duplicate IDs;
-- references to unknown IDs;
-- malformed or unsupported relationships.
-
-### TRC-03 — coverage rules
-
-Demonstrate machine-checkable rules for the promoted slice, including:
-
-- an SI-01 requirement has at least one upstream source;
-- a requirement has an applicable interface/design allocation;
-- a requirement in the selected verification baseline has verification
-  coverage;
-- orphaned verification cases can be identified.
-
-### TRC-04 — generated views and export
-
-Generate at least:
-
-- a traceability/coverage table;
-- a graph/flow view;
-- a machine-readable graph/export suitable for CI or later tooling.
-
-### TRC-05 — real event-timing slice
-
-Model a bounded current slice from the real event-timing documentation,
-including representative:
-
-- `UC-*`;
-- `SI01-REQ-*`;
-- `IF03-REQ-*`;
-- SAD/SDD allocation;
-- `VC-ST1-001`.
-
-The reference project must not be modified merely to satisfy the experiment.
-
-### TRC-06 — authoring/readability cost
-
-Compare the practical source impact of native MyST directives with a
-sidecar/extracted metadata approach. The result should explicitly describe:
-
-- source readability on GitHub;
-- duplication risk;
-- maintenance burden;
-- review ergonomics;
-- required project syntax changes.
-
-### TRC-07 — tool.eng-docs handoff
-
-Prove a clean boundary by which a later `tool.eng-docs` capability could
-consume/publish traceability results without taking ownership of project
-requirements and without making Sphinx the general document assembler.
+The existing event-timing project is a read-only reference during this phase.
 
 ## Ownership
 
 `brainboxemb.meta` owns:
 
 - the cross-project question and active sequencing;
-- the qualification scope;
-- retained evidence/conclusion;
-- the decision whether later production adoption should start.
+- retained conclusion/evidence;
+- the decision whether production adoption/migration should start.
 
-The planned experiment repository owns:
+The experiment repository owns:
 
-- the isolated fixture;
-- PoP implementation and candidate configuration;
+- target-experience and candidate research;
+- isolated fixtures;
+- PoP implementations;
 - executable qualification cases;
-- generated traceability evidence.
+- generated experiment evidence.
 
-The event-timing coordination repository is a reference source during the PoP.
-Its production documents remain unchanged unless a later adoption track is
-explicitly selected.
+The event-timing coordination repository remains owner of its requirements,
+architecture, interfaces, verification and documentation meaning.
 
-`tool.eng-docs` is only a possible later production owner for a generic
-traceability mechanism. It is not the experiment implementation owner.
+`tool.eng-docs` is only a possible later production owner of generic mechanisms.
+It is not the experiment implementation owner.
 
 ## Decision outcomes
 
-Experiment 007 should close with one explicit outcome:
+Experiment 007 may conclude with a combined architecture rather than one tool.
 
-- adopt Sphinx-Needs behind a bounded integration;
-- adopt the traceability/interchange model but implement a smaller
-  `tool.eng-docs` capability;
-- retain manual traceability because automation cost exceeds its value;
-- define one concrete unresolved requirement that justifies a narrowly scoped
-  additional candidate.
+A valid result can:
+
+- adopt a bounded existing traceability engine behind a project-independent
+  interchange model;
+- use a dedicated portal technology while retaining `tool.eng-docs` for book
+  assembly;
+- add a small explorer for the interaction model not provided by the portal;
+- implement a smaller generic `tool.eng-docs` graph/validation capability;
+- retain more manual traceability if automation cost exceeds the benefit.
 
 Completion does not automatically create or activate a production migration.
