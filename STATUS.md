@@ -6,7 +6,20 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-No cross-project migration is currently active.
+### Experiment 007 — requirements traceability
+
+**Active.**
+
+[Experiment record](experiments/007-requirements-traceability/README.md)
+· tracking issue [#167](https://github.com/brainboxemb/brainboxemb.meta/issues/167).
+
+Experiment 007 evaluates whether requirements/use-case/design/verification
+traceability can become machine-checkable without replacing readable project
+Markdown or moving project meaning into the documentation toolchain. The first
+candidate is Sphinx-Needs/MyST, compared with a thinner metadata/export model.
+The event-timing documentation is the bounded real reference case; production
+owners remain unchanged during the PoP.
+
 
 ## Proposed / inactive
 
