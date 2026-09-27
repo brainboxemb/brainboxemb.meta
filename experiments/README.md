@@ -69,15 +69,15 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-### Requirements traceability PoP
+### Interactive engineering documentation and traceability PoP
 
-[Experiment 007](007-requirements-traceability/README.md) — **active**.
+[Experiment 007](007-requirements-traceability/README.md) — **active — target experience and candidate architecture first**.
 
-Evaluates machine-checkable traceability across use cases, requirements,
-interfaces/design and verification while preserving readable project Markdown.
-Sphinx-Needs/MyST is the first candidate, compared with a less invasive
-metadata/export integration. The event-timing software documentation is the
-first real reference slice.
+Evaluates a combined engineering-documentation experience: coherent book,
+portal navigation, clickable architecture, generated engineering-object views,
+focused relationship exploration and machine-checkable traceability. The
+event-timing software documentation is the first real reference slice. No
+candidate tool is selected in advance.
 
 
 ## Proposed / inactive
