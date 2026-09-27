@@ -6,19 +6,20 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Experiment 007 — requirements traceability
+### Experiment 007 — interactive engineering documentation and traceability
 
-**Active.**
+**Active — target experience and candidate architecture first.**
 
 [Experiment record](experiments/007-requirements-traceability/README.md)
-· tracking issue [#167](https://github.com/brainboxemb/brainboxemb.meta/issues/167).
+· tracking issue [#167](https://github.com/brainboxemb/brainboxemb.meta/issues/167)
+· implementation/evidence repository [`exp.2026-007.requirements-traceability`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability).
 
-Experiment 007 evaluates whether requirements/use-case/design/verification
-traceability can become machine-checkable without replacing readable project
-Markdown or moving project meaning into the documentation toolchain. The first
-candidate is Sphinx-Needs/MyST, compared with a thinner metadata/export model.
-The event-timing documentation is the bounded real reference case; production
-owners remain unchanged during the PoP.
+Experiment 007 evaluates how the engineering book, documentation portal,
+clickable architecture, generated object views, focused relationship navigation
+and machine-checkable traceability can work as views over one engineering
+knowledge base. No tool is selected in advance. The event-timing documentation
+is the bounded real reference case; production owners remain unchanged during
+the PoP.
 
 
 ## Proposed / inactive
