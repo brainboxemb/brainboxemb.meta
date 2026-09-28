@@ -1,6 +1,6 @@
 # Migration 013 — adopt interactive engineering documentation and traceability
 
-Status: **active — Step 4**
+Status: **active — Step 5**
 
 Tracking issue: [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
 
@@ -152,7 +152,7 @@ Retained production-canary evidence:
 
 ## Step 3 — stable source anchors and compact relation authoring
 
-Status: **complete as a behaviour canary; authoring syntax under requalification**
+Status: **complete as a behaviour canary; source syntax superseded by Step 4 native MyST/Sphinx-Needs adoption**
 
 Owners:
 - project meaning: event-timing coordination repository;
@@ -213,13 +213,13 @@ therefore requalify native MyST/Sphinx-Needs against the exact 17-object /
 
 ## Step 4 — reusable engineering graph boundary
 
-Status: **active — native MyST/Sphinx-Needs selected**
+Status: **complete**
 
 Experiment 007 #20/#21 closed the authoring gate. Exact experiment main
 `419be32364f6d9c9c80f2ff9e8008ad48282dae2` passed authoring-v2 run
 `36462734883`.
 
-The selected source boundary is:
+The selected production boundary is:
 
 ```text
 normal Markdown/MyST narrative
@@ -237,43 +237,51 @@ normal Markdown/MyST narrative
 optional BrainboxEmb normalization / review / portal / diagram cross-validation
 ```
 
-Select the smallest reusable owner
-capability needed for:
+Source extraction is owned by Sphinx-Needs. BrainboxEmb tooling does not
+maintain a second Markdown/hidden-JSON authoring language. Diagram `object_id`
+values reference existing engineering objects from the Needs graph.
 
-- object IDs/types;
-- source locations;
-- typed relations;
-- generated backlinks;
-- duplicate/unknown-link/type validation;
-- bounded focused traversal;
-- coverage checks where configured.
+Released reusable owner:
 
-`tool.eng-docs` is the likely owner, but this is reassessed from the proven
-authoring shape rather than assumed.
+- owner PR [tool.eng-docs #47](https://github.com/brainboxemb/tool.eng-docs/pull/47);
+- exact merged owner main
+  `63af20a033d6295a28c844d12cb87f76165e69a5`;
+- immutable `tool.eng-docs v0.4.0` points to that exact revision;
+- `eng-docs graph` consumes `needs.json`, normalizes explicitly selected
+  outgoing relation fields, derives incoming context and validates diagram
+  object references without taking ownership of project semantics.
 
-The normalized graph contract should remain usable independently of reader
-views, but source extraction is now owned by Sphinx-Needs. BrainboxEmb tooling
-must not maintain a second custom Markdown/hidden-JSON authoring language merely
-to recreate the same object/link model.
+Retained real-consumer qualification:
 
-For diagram integration, a node `object_id` is a reference to an existing
-engineering object from the Needs graph. The design/Need owns the engineering
-object; the diagram owns only its visual/navigation reference.
+- event-timing issue
+  [#149](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/issues/149);
+- event-timing PR
+  [#150](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/150);
+- final qualified consumer head
+  `a93035a360716820bd280e4aef7a5d79dc92443e`;
+- exact PR documentation run `36471704180` — green including publication;
+- released consumer dependency pin `tool.eng-docs v0.4.0` with exact gitlink
+  `63af20a033d6295a28c844d12cb87f76165e69a5`;
+- merged event-timing main
+  `a35553d6ddf5126879fa14d3b894a852610c6f4d`;
+- current `prod/docs/orchestration/materialization.json` and normalized
+  engineering graph both identify that exact main;
+- bounded graph remains exactly 17 objects / 34 authored outgoing relations;
+- the generated GitHub reader keeps content first, traceability below it and a
+  horizontal rule as the closing separator for generated Need blocks;
+- the native Sphinx reader uses the consumer-owned `engineering_reader` card
+  layout with traceability metadata collapsed by default.
 
-Revised release gate:
-
-- revise the already-merged unreleased `tool.eng-docs v0.4.0` graph code so
-  its public boundary consumes/normalizes Needs export rather than parsing
-  project Markdown;
-- qualify diagram-object resolution against that exported graph;
-- release the revised owner capability immutably;
-- update the event-timing consumer to native MyST source plus the released owner
-  revision before merging production adoption.
+This completes the reusable graph-owner and released real-consumer adoption
+gate. Step 5 may now build reader-facing portal views from the same source and
+graph evidence.
 
 ## Step 5 — event-timing production portal canary
 
-Use released/pinned owner mechanisms to add a real derived portal while keeping
-the existing book.
+Status: **active**
+
+Use the released/pinned Step-4 mechanisms to add a real derived portal while
+keeping the existing Book as a first-class review/reading output.
 
 The canary should provide:
 

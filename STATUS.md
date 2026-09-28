@@ -8,42 +8,47 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### Migration 013 — adopt interactive engineering documentation and traceability
 
-**Active — Step 4: revise reusable graph boundary around native MyST/Sphinx-Needs.**
+**Active — Step 5: event-timing production portal canary.**
 
 [Migration record](migrations/013-interactive-engineering-documentation/README.md)
 · tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
-· retained source [Experiment 007](experiments/007-requirements-traceability/README.md)
-· authoring follow-up [Experiment 007 #20](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/20)
-· qualified comparison [Experiment 007 #21](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/pull/21).
+· retained source [Experiment 007](experiments/007-requirements-traceability/README.md).
 
-Steps 1 through 3 established useful production behaviour: stable engineering
-identity, one-way authored relations, generated inverse context and a real
-17-object / 34-relation event-timing slice. Relation ownership remains:
-requirements own `derived_from`, design owns `satisfies`, and verification
-owns `verifies`.
+Steps 1 through 4 are now production-qualified. Native MyST/Sphinx-Needs is the
+selected authoring form for graph-exposed engineering objects; each object owns
+its stable ID and outgoing relations, Sphinx-Needs generates inverse context,
+and `needs.json` is the source graph consumed by the optional normalized
+BrainboxEmb graph boundary.
 
-Production review exposed a source-authoring problem: the compact Step-3 form
-duplicates identity/type/anchor information and hides relation input in
-comments. Experiment 007 therefore requalified that choice on the same
-17-object / 34-relation meaning.
+Step 4 completed with:
 
-Experiment 007 PR #21 is now merged as exact main
-`419be32364f6d9c9c80f2ff9e8008ad48282dae2`. Exact-main authoring-v2 run
-`36462734883` is green. The result explicitly selects **native
-MyST/Sphinx-Needs** for graph-exposed engineering objects:
+- `tool.eng-docs v0.4.0` at exact owner main/tag
+  `63af20a033d6295a28c844d12cb87f76165e69a5`;
+- owner PR [#47](https://github.com/brainboxemb/tool.eng-docs/pull/47),
+  which removed the second custom Markdown/hidden-JSON graph parser and made
+  the reusable graph command consume Sphinx-Needs export;
+- event-timing consumer PR
+  [#150](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/150)
+  with final qualified head
+  `a93035a360716820bd280e4aef7a5d79dc92443e`;
+- exact consumer qualification run `36471704180` green, including generated
+  review publication;
+- merged event-timing main
+  `a35553d6ddf5126879fa14d3b894a852610c6f4d`;
+- current `prod/docs` materialization and engineering-graph evidence both
+  identify that exact main while retaining the 17-object / 34-relation graph.
 
-- one typed directive owns each engineering object and stable ID;
-- each object authors only its own outgoing relations;
-- Sphinx-Needs generates inverse/backlinks and validates typed links;
-- `needs.json` is the machine-readable graph boundary;
-- diagram `object_id` values reference existing engineering IDs rather than
-  define a second graph object.
+The generated GitHub reader now keeps engineering content first, presents
+traceability as secondary bullet metadata and closes generated Need blocks with
+a horizontal rule. The native Sphinx reader uses a consumer-owned
+`engineering_reader` card layout with traceability metadata collapsed by
+default.
 
-Step 4 must now revise the already-merged but unreleased `tool.eng-docs
-v0.4.0` work: remove the second custom Markdown/hidden-JSON source parser and
-consume/normalize the Needs export only where BrainboxEmb needs an additional
-stable graph/review/portal boundary. Event-timing production adoption remains
-draft until that revised owner capability is released.
+Step 5 now adds the first real derived portal over the same authoritative
+event-timing source. It must retain the engineering Book, use the existing
+engineering IDs and diagram identities, provide useful object/focused/workspace
+navigation, and publish with exact source/tool provenance. The portal must not
+become a second source of requirements, architecture or verification meaning.
 
 ## Proposed / inactive
 
