@@ -71,13 +71,15 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ### Interactive engineering documentation and traceability PoP
 
-[Experiment 007](007-requirements-traceability/README.md) — **active — target experience and candidate architecture first**.
+[Experiment 007](007-requirements-traceability/README.md) — **active — clickable real architecture and richer use cases next**.
 
-Evaluates a combined engineering-documentation experience: coherent book,
-portal navigation, clickable architecture, generated engineering-object views,
-focused relationship exploration and machine-checkable traceability. The
-event-timing software documentation is the first real reference slice. No
-candidate tool is selected in advance.
+The PoP has qualified a minimal engineering graph, Sphinx-Needs as a viable
+relationship/validation engine, Material for MkDocs as a reader-facing portal
+candidate, a thin two-pane workspace, and compact project-owned metadata beside
+readable Markdown as the current authoring direction. A live Pages review
+surface retains the human-facing results. The next bounded step connects the
+real SI-01 architecture diagram to the same engineering IDs and richer use-case
+context without a parallel mapping.
 
 
 ## Proposed / inactive
