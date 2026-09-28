@@ -1,6 +1,6 @@
 # Migration 013 — adopt interactive engineering documentation and traceability
 
-Status: **active**
+Status: **active — Step 3**
 
 Tracking issue: [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
 
@@ -77,9 +77,11 @@ demand-driven only after the canary proves the released mechanisms.
 
 ## Step 1 — reusable diagram engineering identity
 
+Status: **complete**
+
 Owner: `brainboxemb/tool.eng-docs`
 
-Current released baseline: `v0.3.10`.
+Released capability: `v0.3.11` at exact owner main `99a565eedc999a77bb0339a684660b08edbc04dd`.
 
 Add the smallest reusable mechanism proven by Step 06:
 
@@ -100,9 +102,22 @@ Constraints:
 - no event-timing IDs in reusable examples;
 - no portal-owned label-to-object mapping.
 
-This is the first migration gate.
+This was the first migration gate.
+
+Retained qualification evidence:
+
+- owner PR [tool.eng-docs #42](https://github.com/brainboxemb/tool.eng-docs/pull/42);
+- exact final PR head `a1f172fa1c4831920436a4122175fffe666ac81d`;
+- exact merged owner main `99a565eedc999a77bb0339a684660b08edbc04dd`;
+- exact-main Test run `36446180862` — green;
+- release lifecycle run `36446445274` — green;
+- tagged `v0.3.11` Test run `36446465549` — green;
+- released SVG and draw.io output retain `data-engineering-id` without a
+  Sphinx-Needs or external-graph dependency.
 
 ## Step 2 — event-timing diagram canary
+
+Status: **complete**
 
 Owner: `brainboxemb/2026-010-01.meta.event-timing-software`
 
@@ -118,7 +133,26 @@ After Step 1 is released:
   machine-readable metadata;
 - do not add a second lookup map.
 
+Retained production-canary evidence:
+
+- event-timing PR [#144](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/144);
+- released dependency pin `tool.eng-docs v0.3.11` / exact
+  `99a565eedc999a77bb0339a684660b08edbc04dd`;
+- canary PR head `8e926b320dd7d5e37f2b72b51df12af2769356ec`,
+  documentation run `36447217338` — green;
+- merged canary `99599da84039a2827317718205b5ed1ab80c087c`;
+- subsequent visual-only Figure SI01-01 refinement merged as
+  `24b9dc0338f6e7d49e456e6e8f54ab46431c3cb8`;
+- current exact-main documentation run `36448500779` — green;
+- current `prod/docs/source-sha.txt` identifies exact source
+  `24b9dc0338f6e7d49e456e6e8f54ab46431c3cb8`;
+- current generated `layered-architecture.svg` and
+  `layered-architecture.drawio` both preserve `TimingNode`,
+  `CommandHandler`, `Conductor` and `RemoteApi`.
+
 ## Step 3 — stable source anchors and compact relation authoring
+
+Status: **active**
 
 Owners:
 - project meaning: event-timing coordination repository;
