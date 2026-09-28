@@ -51,9 +51,8 @@ Migration 013 preserves these Experiment-007 decisions:
 
 1. the engineering **Book** remains a first-class output;
 2. normal readable Markdown remains project source;
-3. the final project authoring format is an explicit production decision;
-   native MyST/Sphinx-Needs and compact adjacent metadata remain candidates until
-   the authoring-v2 requalification is reviewed;
+3. native MyST/Sphinx-Needs is the selected authoring form for graph-exposed
+   engineering objects; ordinary narrative remains normal Markdown/MyST;
 4. stable engineering IDs and source targets are explicit;
 5. relationships are authored once and inverse backlinks/matrices are generated;
 6. a normalized engineering-graph boundary separates source authoring from
@@ -214,13 +213,31 @@ therefore requalify native MyST/Sphinx-Needs against the exact 17-object /
 
 ## Step 4 — reusable engineering graph boundary
 
-Status: **active — gated by authoring requalification**
+Status: **active — native MyST/Sphinx-Needs selected**
 
-Before releasing the reusable owner capability, make an explicit production
-authoring decision using Experiment 007 #20/#21. The graph behaviour from Step 3
-is retained; only the source-authoring representation is reopened.
+Experiment 007 #20/#21 closed the authoring gate. Exact experiment main
+`419be32364f6d9c9c80f2ff9e8008ad48282dae2` passed authoring-v2 run
+`36462734883`.
 
-After that gate, select the smallest reusable owner
+The selected source boundary is:
+
+```text
+normal Markdown/MyST narrative
+        |
+        +-- typed Sphinx-Needs engineering objects
+        |      +-- stable ID
+        |      +-- outgoing relations
+        |      +-- typed validation
+        |      +-- generated backlinks
+        |
+        v
+    needs.json
+        |
+        v
+optional BrainboxEmb normalization / review / portal / diagram cross-validation
+```
+
+Select the smallest reusable owner
 capability needed for:
 
 - object IDs/types;
@@ -235,18 +252,23 @@ capability needed for:
 authoring shape rather than assumed.
 
 The normalized graph contract should remain usable independently of reader
-views, but this migration no longer assumes whether source extraction is a
-custom Markdown parser or a Sphinx-Needs export boundary. If native MyST is
-selected, avoid maintaining a second custom metadata language merely to recreate
-the same object/link model.
+views, but source extraction is now owned by Sphinx-Needs. BrainboxEmb tooling
+must not maintain a second custom Markdown/hidden-JSON authoring language merely
+to recreate the same object/link model.
 
-Release gate:
+For diagram integration, a node `object_id` is a reference to an existing
+engineering object from the Needs graph. The design/Need owns the engineering
+object; the diagram owns only its visual/navigation reference.
 
-- do not release `tool.eng-docs v0.4.0` while the authoring choice is open;
-- do not merge the event-timing reusable-graph adoption while it depends on the
-  unreleased owner;
-- record the human authoring decision in Experiment 007 and this migration
-  before production rollout resumes.
+Revised release gate:
+
+- revise the already-merged unreleased `tool.eng-docs v0.4.0` graph code so
+  its public boundary consumes/normalizes Needs export rather than parsing
+  project Markdown;
+- qualify diagram-object resolution against that exported graph;
+- release the revised owner capability immutably;
+- update the event-timing consumer to native MyST source plus the released owner
+  revision before merging production adoption.
 
 ## Step 5 — event-timing production portal canary
 
@@ -295,9 +317,9 @@ Migration 013
         |
         +--> Step 3: traceability behaviour canary
         |
-        +--> authoring requalification: compact vs native MyST
+        +--> authoring requalification: native MyST selected
         |
-        +--> Step 4: reusable graph boundary
+        +--> Step 4: Needs-export graph boundary
         |
         +--> Step 5: event-timing production portal
         |
