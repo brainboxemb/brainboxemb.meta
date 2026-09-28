@@ -6,7 +6,25 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-No cross-project migration is currently active.
+### Experiment 007 — interactive engineering documentation and traceability
+
+**Active — clickable real architecture and richer use-case navigation next.**
+
+[Experiment record](experiments/007-requirements-traceability/README.md)
+· tracking issue [#167](https://github.com/brainboxemb/brainboxemb.meta/issues/167)
+· implementation/evidence repository [`exp.2026-007.requirements-traceability`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability)
+· [live human review](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/)
+· current owner issue [#15](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/15).
+
+Steps 01–05 have qualified the target experience, minimal engineering graph,
+Sphinx-Needs engine boundary, Material portal/workspace and real Markdown
+authoring. The current direction keeps the engineering book first-class, uses
+one engineering graph for generated backlinks/object views, and prefers compact
+project-owned metadata beside readable Markdown over native MyST or default
+sidecar metadata. The next PoP uses the real SI-01 layered architecture and
+richer use cases to qualify clickable diagram identity and realistic
+side-by-side navigation. Production owners remain unchanged during the PoP.
+
 
 ## Proposed / inactive
 

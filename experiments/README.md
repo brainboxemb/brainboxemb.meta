@@ -69,7 +69,18 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-There is currently no active project-backed experiment/PoP.
+### Interactive engineering documentation and traceability PoP
+
+[Experiment 007](007-requirements-traceability/README.md) — **active — clickable real architecture and richer use cases next**.
+
+The PoP has qualified a minimal engineering graph, Sphinx-Needs as a viable
+relationship/validation engine, Material for MkDocs as a reader-facing portal
+candidate, a thin two-pane workspace, and compact project-owned metadata beside
+readable Markdown as the current authoring direction. A live Pages review
+surface retains the human-facing results. The next bounded step connects the
+real SI-01 architecture diagram to the same engineering IDs and richer use-case
+context without a parallel mapping.
+
 
 ## Proposed / inactive
 

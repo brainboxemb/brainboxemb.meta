@@ -333,6 +333,13 @@ repositories:
       generation: current
       provider: tool.scad-project
 
+  - repository: brainboxemb/exp.2026-007.requirements-traceability
+    category: experiment
+    domain: documentation
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Proof of Principle for interactive engineering documentation, architecture navigation, traceability and linked verification views.
+
   - repository: brainboxemb/fork.andylevesque.quackworks
     category: external-source
     domain: scad
