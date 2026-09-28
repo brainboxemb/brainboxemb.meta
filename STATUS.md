@@ -8,24 +8,27 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### Migration 013 — adopt interactive engineering documentation and traceability
 
-**Active — Step 3: stable source anchors and compact relation authoring.**
+**Active — Step 4: reusable engineering graph boundary.**
 
 [Migration record](migrations/013-interactive-engineering-documentation/README.md)
 · tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
 · qualified source [Experiment 007](experiments/007-requirements-traceability/README.md)
 · [live retained experiment review](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/).
 
-Steps 1 and 2 are complete. `tool.eng-docs v0.3.11` released the reusable
-diagram-node `object_id` contract, and the event-timing production canary pins
-that release and preserves `TimingNode`, `CommandHandler`, `Conductor` and
-`RemoteApi` engineering identities in both generated SVG and editable draw.io
-output. Current `prod/docs` is built from event-timing main
-`24b9dc0338f6e7d49e456e6e8f54ab46431c3cb8` and retains all four identities.
+Steps 1 through 3 are complete. The event-timing production canary now proves
+stable source anchors, compact adjacent relation authoring and generated inverse
+review over a real 17-object / 34-relation slice. Relation ownership follows the
+engineering flow: requirements own `derived_from`, design owns `satisfies`,
+and verification owns `verifies`. Exact event-timing main
+`a855e66f6ecb325ab77139745ef50a5c6b7acc17` passed documentation run
+`36454981276`; current `prod/docs` identifies that exact source and publishes
+both the normalized graph and a human review view showing authored input beside
+generated incoming relations.
 
-Step 3 now moves to the event-timing coordination repository: prove stable source
-targets plus compact adjacent project-owned relation metadata on the bounded real
-slice before deciding what generic extraction/graph mechanism belongs in a
-reusable owner.
+Step 4 now selects and qualifies the smallest reusable extraction/graph boundary
+from that proven production shape. `tool.eng-docs` remains the likely owner, but
+the reusable API is derived from the canary rather than copied wholesale from
+Experiment 007.
 
 ## Proposed / inactive
 
