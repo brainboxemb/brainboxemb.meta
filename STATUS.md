@@ -8,13 +8,13 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### Migration 013 — adopt interactive engineering documentation and traceability
 
-**Active — Step 4: authoring requalification gate before reusable graph release.**
+**Active — Step 4: revise reusable graph boundary around native MyST/Sphinx-Needs.**
 
 [Migration record](migrations/013-interactive-engineering-documentation/README.md)
 · tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
 · retained source [Experiment 007](experiments/007-requirements-traceability/README.md)
 · authoring follow-up [Experiment 007 #20](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/20)
-· draft comparison [Experiment 007 #21](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/pull/21).
+· qualified comparison [Experiment 007 #21](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/pull/21).
 
 Steps 1 through 3 established useful production behaviour: stable engineering
 identity, one-way authored relations, generated inverse context and a real
@@ -22,20 +22,28 @@ identity, one-way authored relations, generated inverse context and a real
 requirements own `derived_from`, design owns `satisfies`, and verification
 owns `verifies`.
 
-Production review then exposed a source-authoring problem: the compact Step-3
-form duplicates identity/type/anchor information and hides relation input in
-comments. The earlier Experiment-007 preference against native
-MyST/Sphinx-Needs was an experiment finding, not an explicit production
-decision. Experiment 007 is therefore requalifying the authoring choice before
-Step 4 is released.
+Production review exposed a source-authoring problem: the compact Step-3 form
+duplicates identity/type/anchor information and hides relation input in
+comments. Experiment 007 therefore requalified that choice on the same
+17-object / 34-relation meaning.
 
-The first authoring-v2 run `36459941403` is green: current compact authoring
-and native MyST/Sphinx-Needs normalize to the same 17 objects / 34 relations;
-native Needs generates backlinks and rejects unknown or invalid typed links.
-Human review of the maintained source remains the decision gate.
+Experiment 007 PR #21 is now merged as exact main
+`419be32364f6d9c9c80f2ff9e8008ad48282dae2`. Exact-main authoring-v2 run
+`36462734883` is green. The result explicitly selects **native
+MyST/Sphinx-Needs** for graph-exposed engineering objects:
 
-`tool.eng-docs v0.4.0` stays unreleased and event-timing reusable-graph adoption
-stays draft until that explicit authoring decision is recorded.
+- one typed directive owns each engineering object and stable ID;
+- each object authors only its own outgoing relations;
+- Sphinx-Needs generates inverse/backlinks and validates typed links;
+- `needs.json` is the machine-readable graph boundary;
+- diagram `object_id` values reference existing engineering IDs rather than
+  define a second graph object.
+
+Step 4 must now revise the already-merged but unreleased `tool.eng-docs
+v0.4.0` work: remove the second custom Markdown/hidden-JSON source parser and
+consume/normalize the Needs export only where BrainboxEmb needs an additional
+stable graph/review/portal boundary. Event-timing production adoption remains
+draft until that revised owner capability is released.
 
 ## Proposed / inactive
 
