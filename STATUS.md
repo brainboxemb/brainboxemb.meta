@@ -8,20 +8,24 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### Migration 013 — adopt interactive engineering documentation and traceability
 
-**Active — Step 1: reusable diagram engineering identity.**
+**Active — Step 3: stable source anchors and compact relation authoring.**
 
 [Migration record](migrations/013-interactive-engineering-documentation/README.md)
 · tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
 · qualified source [Experiment 007](experiments/007-requirements-traceability/README.md)
 · [live retained experiment review](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/).
 
-Experiment 007 is complete and accepted for production adoption. Migration 013
-starts deliberately with the smallest reusable owner capability: optional
-engineering `object_id` on `tool.eng-docs` diagram nodes, preserved into SVG
-(and editable draw.io metadata where practical) without importing
-project-specific graph semantics or a Sphinx-Needs dependency. The event-timing
-documentation is the first real production canary after that owner capability is
-released.
+Steps 1 and 2 are complete. `tool.eng-docs v0.3.11` released the reusable
+diagram-node `object_id` contract, and the event-timing production canary pins
+that release and preserves `TimingNode`, `CommandHandler`, `Conductor` and
+`RemoteApi` engineering identities in both generated SVG and editable draw.io
+output. Current `prod/docs` is built from event-timing main
+`24b9dc0338f6e7d49e456e6e8f54ab46431c3cb8` and retains all four identities.
+
+Step 3 now moves to the event-timing coordination repository: prove stable source
+targets plus compact adjacent project-owned relation metadata on the bounded real
+slice before deciding what generic extraction/graph mechanism belongs in a
+reusable owner.
 
 ## Proposed / inactive
 
