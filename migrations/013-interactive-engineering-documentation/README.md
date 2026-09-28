@@ -51,8 +51,9 @@ Migration 013 preserves these Experiment-007 decisions:
 
 1. the engineering **Book** remains a first-class output;
 2. normal readable Markdown remains project source;
-3. native MyST/Sphinx-Needs directives are not the default project authoring
-   format;
+3. the final project authoring format is an explicit production decision;
+   native MyST/Sphinx-Needs and compact adjacent metadata remain candidates until
+   the authoring-v2 requalification is reviewed;
 4. stable engineering IDs and source targets are explicit;
 5. relationships are authored once and inverse backlinks/matrices are generated;
 6. a normalized engineering-graph boundary separates source authoring from
@@ -152,11 +153,11 @@ Retained production-canary evidence:
 
 ## Step 3 — stable source anchors and compact relation authoring
 
-Status: **complete**
+Status: **complete as a behaviour canary; authoring syntax under requalification**
 
 Owners:
 - project meaning: event-timing coordination repository;
-- generic syntax/extraction mechanism: reassess before implementation.
+- generic syntax/extraction mechanism: reassess after authoring requalification.
 
 Qualify the smallest production authoring convention using the real first slice:
 
@@ -199,14 +200,27 @@ Retained production-canary evidence:
 - the project-local validator rejects duplicate IDs, unknown relation targets
   and unknown design-relation owners.
 
-The canary intentionally does not establish a stable reusable graph API. That is
-the Step-4 owner responsibility derived from this qualified source shape.
+The canary intentionally does not establish a stable reusable graph API. It also
+does **not** make the anchor + hidden-JSON syntax a final production decision.
+Follow-up review found that the current form repeats ID/type/anchor information
+and hides the relation input that an engineer maintains.
+
+Experiment 007 issue
+[#20](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/20)
+and draft PR
+[#21](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/pull/21)
+therefore requalify native MyST/Sphinx-Needs against the exact 17-object /
+34-relation production meaning before Step 4 is released.
 
 ## Step 4 — reusable engineering graph boundary
 
-Status: **active**
+Status: **active — gated by authoring requalification**
 
-After Step 3 proves the source convention, select the smallest reusable owner
+Before releasing the reusable owner capability, make an explicit production
+authoring decision using Experiment 007 #20/#21. The graph behaviour from Step 3
+is retained; only the source-authoring representation is reopened.
+
+After that gate, select the smallest reusable owner
 capability needed for:
 
 - object IDs/types;
@@ -220,8 +234,19 @@ capability needed for:
 `tool.eng-docs` is the likely owner, but this is reassessed from the proven
 authoring shape rather than assumed.
 
-Sphinx-Needs may remain an optional engine/export adapter. The normalized graph
-contract must not require consumers to author native Sphinx directives.
+The normalized graph contract should remain usable independently of reader
+views, but this migration no longer assumes whether source extraction is a
+custom Markdown parser or a Sphinx-Needs export boundary. If native MyST is
+selected, avoid maintaining a second custom metadata language merely to recreate
+the same object/link model.
+
+Release gate:
+
+- do not release `tool.eng-docs v0.4.0` while the authoring choice is open;
+- do not merge the event-timing reusable-graph adoption while it depends on the
+  unreleased owner;
+- record the human authoring decision in Experiment 007 and this migration
+  before production rollout resumes.
 
 ## Step 5 — event-timing production portal canary
 
@@ -268,7 +293,9 @@ Migration 013
         |
         +--> Step 2: event-timing diagram canary
         |
-        +--> Step 3: source anchors + compact metadata
+        +--> Step 3: traceability behaviour canary
+        |
+        +--> authoring requalification: compact vs native MyST
         |
         +--> Step 4: reusable graph boundary
         |
