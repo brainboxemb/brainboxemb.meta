@@ -16,7 +16,7 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-No cross-project migration is currently active.
+- [013 — adopt interactive engineering documentation and traceability](013-interactive-engineering-documentation/README.md) — production adoption of qualified Experiment 007, starting with generic diagram engineering identity in `tool.eng-docs` and then the event-timing documentation canary.
 
 ## Proposed / inactive
 
