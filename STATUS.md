@@ -6,25 +6,22 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Experiment 007 — interactive engineering documentation and traceability
+### Migration 013 — adopt interactive engineering documentation and traceability
 
-**Active — clickable real architecture and richer use-case navigation next.**
+**Active — Step 1: reusable diagram engineering identity.**
 
-[Experiment record](experiments/007-requirements-traceability/README.md)
-· tracking issue [#167](https://github.com/brainboxemb/brainboxemb.meta/issues/167)
-· implementation/evidence repository [`exp.2026-007.requirements-traceability`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability)
-· [live human review](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/)
-· current owner issue [#15](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/15).
+[Migration record](migrations/013-interactive-engineering-documentation/README.md)
+· tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
+· qualified source [Experiment 007](experiments/007-requirements-traceability/README.md)
+· [live retained experiment review](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/).
 
-Steps 01–05 have qualified the target experience, minimal engineering graph,
-Sphinx-Needs engine boundary, Material portal/workspace and real Markdown
-authoring. The current direction keeps the engineering book first-class, uses
-one engineering graph for generated backlinks/object views, and prefers compact
-project-owned metadata beside readable Markdown over native MyST or default
-sidecar metadata. The next PoP uses the real SI-01 layered architecture and
-richer use cases to qualify clickable diagram identity and realistic
-side-by-side navigation. Production owners remain unchanged during the PoP.
-
+Experiment 007 is complete and accepted for production adoption. Migration 013
+starts deliberately with the smallest reusable owner capability: optional
+engineering `object_id` on `tool.eng-docs` diagram nodes, preserved into SVG
+(and editable draw.io metadata where practical) without importing
+project-specific graph semantics or a Sphinx-Needs dependency. The event-timing
+documentation is the first real production canary after that owner capability is
+released.
 
 ## Proposed / inactive
 
@@ -35,6 +32,22 @@ side-by-side navigation. Production owners remain unchanged during the PoP.
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from active Migration 011; that migration audits SCAD reusable-workflow shape/refs but does not standardise third-party GitHub Action dependency maintenance.
 
 ## Recently completed
+
+### Experiment 007 — interactive engineering documentation and traceability
+
+**Complete — qualified for production adoption; retained as review/regression lab.**
+
+[Experiment record](experiments/007-requirements-traceability/README.md)
+· implementation/evidence repository [`exp.2026-007.requirements-traceability`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability)
+· [live human review](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/).
+
+The experiment qualified the Book/Portal/Object/Focused-Graph/Workspace model,
+readable Markdown with compact adjacent relation metadata, generated backlinks,
+stable engineering identity, Sphinx-Needs as an optional engine boundary,
+Material as a portal candidate, and clickable real architecture on the current
+SI-01 diagram. Step 06 received positive human review on 28 September 2026.
+Production rollout now belongs to active Migration 013.
+
 
 ### Migration 012 — standardise Java/software agent guidance
 
