@@ -1,6 +1,6 @@
 # Migration 013 — adopt interactive engineering documentation and traceability
 
-Status: **active — Step 3**
+Status: **active — Step 4**
 
 Tracking issue: [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
 
@@ -152,7 +152,7 @@ Retained production-canary evidence:
 
 ## Step 3 — stable source anchors and compact relation authoring
 
-Status: **active**
+Status: **complete**
 
 Owners:
 - project meaning: event-timing coordination repository;
@@ -176,7 +176,35 @@ Requirements:
 
 Do not migrate the complete document set in this step.
 
+Retained production-canary evidence:
+
+- event-timing issue [#147](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/issues/147);
+- event-timing PR [#148](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/148);
+- final qualified PR head `1098facba9ff05a91e401875b621783b4327b980`;
+- PR documentation run `36454777469` — green, including publication;
+- merged event-timing main `a855e66f6ecb325ab77139745ef50a5c6b7acc17`;
+- exact-main documentation run `36454981276` — green, including publication;
+- current `prod/docs/source-sha.txt`, engineering-graph evidence and
+  materialization evidence all identify exact main
+  `a855e66f6ecb325ab77139745ef50a5c6b7acc17`;
+- bounded production graph: 17 engineering objects / 34 authored relations;
+- production authoring direction:
+  - requirements own upstream `derived_from`;
+  - design/architecture owns `satisfies`;
+  - verification owns `verifies`;
+  - inverse relations are generated rather than authored;
+- `prod/docs/evidence/traceability/review.md` exposes the exact hidden authored
+  Markdown/YAML input beside normalized outgoing and generated incoming
+  relations, while ordinary engineering documents remain readable normally;
+- the project-local validator rejects duplicate IDs, unknown relation targets
+  and unknown design-relation owners.
+
+The canary intentionally does not establish a stable reusable graph API. That is
+the Step-4 owner responsibility derived from this qualified source shape.
+
 ## Step 4 — reusable engineering graph boundary
+
+Status: **active**
 
 After Step 3 proves the source convention, select the smallest reusable owner
 capability needed for:
