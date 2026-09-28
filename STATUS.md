@@ -8,27 +8,34 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### Migration 013 — adopt interactive engineering documentation and traceability
 
-**Active — Step 4: reusable engineering graph boundary.**
+**Active — Step 4: authoring requalification gate before reusable graph release.**
 
 [Migration record](migrations/013-interactive-engineering-documentation/README.md)
 · tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
-· qualified source [Experiment 007](experiments/007-requirements-traceability/README.md)
-· [live retained experiment review](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/).
+· retained source [Experiment 007](experiments/007-requirements-traceability/README.md)
+· authoring follow-up [Experiment 007 #20](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/20)
+· draft comparison [Experiment 007 #21](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/pull/21).
 
-Steps 1 through 3 are complete. The event-timing production canary now proves
-stable source anchors, compact adjacent relation authoring and generated inverse
-review over a real 17-object / 34-relation slice. Relation ownership follows the
-engineering flow: requirements own `derived_from`, design owns `satisfies`,
-and verification owns `verifies`. Exact event-timing main
-`a855e66f6ecb325ab77139745ef50a5c6b7acc17` passed documentation run
-`36454981276`; current `prod/docs` identifies that exact source and publishes
-both the normalized graph and a human review view showing authored input beside
-generated incoming relations.
+Steps 1 through 3 established useful production behaviour: stable engineering
+identity, one-way authored relations, generated inverse context and a real
+17-object / 34-relation event-timing slice. Relation ownership remains:
+requirements own `derived_from`, design owns `satisfies`, and verification
+owns `verifies`.
 
-Step 4 now selects and qualifies the smallest reusable extraction/graph boundary
-from that proven production shape. `tool.eng-docs` remains the likely owner, but
-the reusable API is derived from the canary rather than copied wholesale from
-Experiment 007.
+Production review then exposed a source-authoring problem: the compact Step-3
+form duplicates identity/type/anchor information and hides relation input in
+comments. The earlier Experiment-007 preference against native
+MyST/Sphinx-Needs was an experiment finding, not an explicit production
+decision. Experiment 007 is therefore requalifying the authoring choice before
+Step 4 is released.
+
+The first authoring-v2 run `36459941403` is green: current compact authoring
+and native MyST/Sphinx-Needs normalize to the same 17 objects / 34 relations;
+native Needs generates backlinks and rejects unknown or invalid typed links.
+Human review of the maintained source remains the decision gate.
+
+`tool.eng-docs v0.4.0` stays unreleased and event-timing reusable-graph adoption
+stays draft until that explicit authoring decision is recorded.
 
 ## Proposed / inactive
 
