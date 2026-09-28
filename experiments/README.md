@@ -69,17 +69,8 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-### Interactive engineering documentation and traceability PoP
-
-[Experiment 007](007-requirements-traceability/README.md) — **active — clickable real architecture and richer use cases next**.
-
-The PoP has qualified a minimal engineering graph, Sphinx-Needs as a viable
-relationship/validation engine, Material for MkDocs as a reader-facing portal
-candidate, a thin two-pane workspace, and compact project-owned metadata beside
-readable Markdown as the current authoring direction. A live Pages review
-surface retains the human-facing results. The next bounded step connects the
-real SI-01 architecture diagram to the same engineering IDs and richer use-case
-context without a parallel mapping.
+There is currently no active project-backed experiment/PoP. Production adoption
+of completed Experiment 007 is tracked by Migration 013.
 
 
 ## Proposed / inactive
@@ -106,6 +97,19 @@ dovetail can be developed as normal product design rather than another PoP.
 
 
 ## Complete
+
+### Interactive engineering documentation and traceability PoP
+
+[Experiment 007](007-requirements-traceability/README.md) — **complete — qualified for production adoption; reusable review/regression lab retained**.
+
+The PoP qualified the Book/Portal/Object/Focused-Graph/Workspace model, a
+normalized engineering graph, Sphinx-Needs as an optional validation/relationship
+engine, Material as a portal candidate, readable Markdown with compact adjacent
+metadata, generated backlinks, stable source targeting, and clickable real
+architecture using the same engineering IDs. Final Step-06 human review accepted
+the interaction at realistic SI-01 diagram/use-case scale. Production adoption
+is now owned by Migration 013.
+
 
 ### Transitive SCAD library dependencies PoP
 
