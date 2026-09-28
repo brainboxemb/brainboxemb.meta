@@ -1,14 +1,17 @@
 # Experiment 007 — interactive engineering documentation and traceability
 
-Status: **active — target experience and candidate architecture first**
+Status: **active — clickable real architecture and richer use-case navigation next**
 
 Tracking issue: [#167](https://github.com/brainboxemb/brainboxemb.meta/issues/167)
 
 Implementation/evidence repository:
 [`brainboxemb/exp.2026-007.requirements-traceability`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability)
 
+Human review site:
+[Experiment 007 GitHub Pages](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/)
+
 Current owner issue:
-[`exp.2026-007.requirements-traceability#1`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/1)
+[`exp.2026-007.requirements-traceability#15`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/15)
 
 Reference project:
 `brainboxemb/2026-010-01.meta.event-timing-software`
@@ -24,23 +27,10 @@ and the useful linear engineering book?
 
 Requirements traceability is one part of this question, not the complete target.
 
-The event-timing project already has:
+## Target architecture
 
-- a generated architecture book;
-- system use cases;
-- software-item requirements;
-- architecture and detailed design;
-- interface definitions;
-- verification planning/cases;
-- stable engineering identifiers such as `UC-001`, `SI01-REQ-020`,
-  `IF03-REQ-004` and `VC-ST1-001`.
-
-The experiment starts from the reader/author experience before selecting
-technology.
-
-## Target experience
-
-The experiment evaluates several views over one engineering knowledge base:
+Experiment 007 treats the engineering content as one knowledge model with
+several views:
 
 ```text
                          engineering knowledge
@@ -56,99 +46,152 @@ The experiment evaluates several views over one engineering knowledge base:
                            traceability checks
 ```
 
-Desired capabilities include:
+The views must not become independently maintained copies of the same use case,
+requirement, architecture element or verification case.
+
+## Qualified so far
+
+### Step 01 — target experience
+
+The experiment retained these distinct reader needs:
 
 - **Book** — coherent ordered reading/review/print view;
-- **Portal** — search, breadcrumbs, stable deep links and contextual navigation;
+- **Portal** — search, breadcrumbs, stable deep links and fast navigation;
 - **Clickable architecture** — diagram elements navigate to engineering objects;
-- **Object view** — one component/use case/requirement/interface/test with its
-  generated relationships/backlinks;
-- **Focused graph** — bounded local relationship navigation around one selected
-  object;
-- **Workspace** — related views side-by-side so context is not constantly lost;
+- **Object view** — one engineering object with generated relationships/backlinks;
+- **Focused graph** — bounded local relationship navigation;
+- **Workspace** — related contexts remain visible side-by-side;
 - **Traceability/CI** — machine-checkable IDs, relations and coverage.
 
-These should be views, not independent copies of engineering content.
+### Step 02 — minimal engineering graph
 
-## First phase
+A dependency-free graph baseline qualified:
 
-The implementation/evidence repository first defines:
+- stable object IDs/types;
+- typed relations;
+- generated backlinks;
+- duplicate/unknown-link/type validation;
+- coverage rules;
+- focused breadth-first traversal.
 
-1. the target documentation experience;
-2. evaluation criteria;
-3. a candidate architecture/tool responsibility split;
-4. a bounded event-timing reference slice.
+This remains the control contract for later engines.
 
-No documentation/traceability product is selected in advance.
+### Step 03 — Sphinx-Needs comparison
 
-Current candidates/references include:
+Sphinx-Needs qualified as a strong candidate for relationship modelling,
+validation/backlinks and machine-readable `needs.json` export.
 
-- Sphinx-Needs for requirements/relationship modelling and validation;
-- Material for MkDocs for portal/navigation experience;
-- Structurizr for the model-versus-views architecture principle;
-- Antora as a multi-repository/versioned documentation reference;
-- a small custom explorer where the desired Object/Focused Graph/Workspace
-  experience is more specific than an existing portal provides.
+The experiment also found that built-in flow traversal is not automatically the
+same as the desired exact focused-graph semantics; the project-independent graph
+contract remains the authority for that interaction.
 
-Another candidate is added only when it offers a materially different answer to
-a real qualification question.
+Sphinx-Needs is therefore a viable engine, not the documentation architecture by
+itself.
 
-## Qualification direction
+### Step 04 — Material portal/workspace
 
-After the target architecture is reviewed, the PoP should qualify the smallest
-central contract first:
+Material for MkDocs qualified as a strong reader-facing portal candidate for:
+
+- search/navigation;
+- breadcrumbs/deep links;
+- generated object pages;
+- static hosting;
+- a thin custom two-pane engineering workspace.
+
+The existing engineering book remains a separate first-class output rather than
+being moved into MkDocs.
+
+The qualified responsibility split is currently:
 
 ```text
-small readable source fixture
+project engineering source
         |
         v
-engineering graph
+engineering graph / validation
         |
-        +--> validate IDs/links/coverage
-        +--> machine-readable export
-        +--> object/backlink view
-        +--> focused relation query
-        +--> stable source links
+        +----------------------+
+        |                      |
+        v                      v
+tool.eng-docs Book        Material portal
+                             |
+                             +--> object pages
+                             +--> focused graph
+                             +--> thin workspace
 ```
 
-Only then should the experiment build a portal/view prototype.
+### Step 05 — real Markdown authoring
 
-The existing event-timing project is a read-only reference during this phase.
+A 19-object real event-timing slice compared:
+
+- native MyST/Sphinx-Needs directives;
+- normal Markdown with compact adjacent metadata;
+- normal Markdown with separate sidecar metadata.
+
+Qualified findings:
+
+1. **real upstream sources are broader than use cases** — SAD/SVP document
+   sections can legitimately source requirements;
+2. **stable engineering ID does not automatically mean stable source deep
+   link** — current bold SI01/IF03 requirement titles need an explicit anchor
+   convention;
+3. **relations should be authored once** — use-case/architecture/verification
+   backlinks and matrices are generated;
+4. native MyST is technically strong but too invasive as the default authored
+   form for normal GitHub/Markdown review;
+5. sidecar metadata is technically clean but creates avoidable synchronization
+   and drift risk;
+6. **compact project-owned metadata adjacent to ordinary Markdown is the
+   selected authoring direction for the next PoP**.
+
+The exact compact metadata syntax remains experimental.
+
+## Current step — clickable real architecture and richer use cases
+
+Owner issue:
+[`exp.2026-007.requirements-traceability#15`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/15)
+
+The next bounded PoP uses the real SI-01 layered architecture and real use-case
+narrative to qualify:
+
+- diagram elements carrying the same engineering object IDs as the graph;
+- architecture → object → use-case navigation without a parallel lookup table;
+- `TimingNode` navigation into `UC-001` and `UC-014`;
+- richer side-by-side use-case + architecture context at realistic scale;
+- direct links back to authoritative source objects;
+- the likely `tool.eng-docs` boundary for preserving object identity in
+  generated SVG/diagram output.
+
+The experiment should answer this before proposing production adoption.
 
 ## Ownership
 
 `brainboxemb.meta` owns:
 
 - the cross-project question and active sequencing;
-- retained conclusion/evidence;
-- the decision whether production adoption/migration should start.
+- retained conclusions/evidence;
+- the decision whether a later production adoption/migration should start.
 
 The experiment repository owns:
 
-- target-experience and candidate research;
 - isolated fixtures;
 - PoP implementations;
 - executable qualification cases;
-- generated experiment evidence.
+- generated experiment evidence and the human review site.
 
 The event-timing coordination repository remains owner of its requirements,
 architecture, interfaces, verification and documentation meaning.
 
-`tool.eng-docs` is only a possible later production owner of generic mechanisms.
-It is not the experiment implementation owner.
+`tool.eng-docs` remains a possible later production owner for generic
+extraction, graph/validation, diagram-identity and publication mechanisms. It is
+not the experiment implementation owner.
 
-## Decision outcomes
+## Production decision
 
-Experiment 007 may conclude with a combined architecture rather than one tool.
+Experiment 007 is still active.
 
-A valid result can:
+No event-timing documentation migration and no `tool.eng-docs` production
+change is authorized yet.
 
-- adopt a bounded existing traceability engine behind a project-independent
-  interchange model;
-- use a dedicated portal technology while retaining `tool.eng-docs` for book
-  assembly;
-- add a small explorer for the interaction model not provided by the portal;
-- implement a smaller generic `tool.eng-docs` graph/validation capability;
-- retain more manual traceability if automation cost exceeds the benefit.
-
-Completion does not automatically create or activate a production migration.
+After the clickable-real-architecture/use-case step, the experiment should
+explicitly decide whether the evidence is sufficient for a production-adoption
+proposal or whether one further bounded PoP is needed.
