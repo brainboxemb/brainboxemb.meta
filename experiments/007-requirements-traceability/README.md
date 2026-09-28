@@ -1,6 +1,6 @@
 # Experiment 007 — interactive engineering documentation and traceability
 
-Status: **active — clickable real architecture and richer use-case navigation next**
+Status: **complete — qualified for production adoption; retained as review/regression lab**
 
 Tracking issue: [#167](https://github.com/brainboxemb/brainboxemb.meta/issues/167)
 
@@ -10,13 +10,16 @@ Implementation/evidence repository:
 Human review site:
 [Experiment 007 GitHub Pages](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/)
 
-Current owner issue:
-[`exp.2026-007.requirements-traceability#15`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/15)
+Final owner issue:
+[`exp.2026-007.requirements-traceability#15`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/15) — complete
 
 Reference project:
 `brainboxemb/2026-010-01.meta.event-timing-software`
 
-Possible later production mechanism owner:
+Production adoption:
+[Migration 013](../../migrations/013-interactive-engineering-documentation/README.md)
+
+First reusable mechanism owner:
 `brainboxemb/tool.eng-docs`
 
 ## Question
@@ -145,23 +148,25 @@ Qualified findings:
 
 The exact compact metadata syntax remains experimental.
 
-## Current step — clickable real architecture and richer use cases
+## Step 06 — clickable real architecture and richer use cases
 
-Owner issue:
-[`exp.2026-007.requirements-traceability#15`](https://github.com/brainboxemb/exp.2026-007.requirements-traceability/issues/15)
-
-The next bounded PoP uses the real SI-01 layered architecture and real use-case
-narrative to qualify:
+The final bounded PoP used the real SI-01 layered architecture and real use-case
+narrative. It qualified:
 
 - diagram elements carrying the same engineering object IDs as the graph;
 - architecture → object → use-case navigation without a parallel lookup table;
 - `TimingNode` navigation into `UC-001` and `UC-014`;
-- richer side-by-side use-case + architecture context at realistic scale;
+- side-by-side real use-case + architecture context at realistic scale;
 - direct links back to authoritative source objects;
-- the likely `tool.eng-docs` boundary for preserving object identity in
-  generated SVG/diagram output.
+- an optional diagram `object_id` preserved into generated SVG as the smallest
+  reusable `tool.eng-docs` mechanism.
 
-The experiment should answer this before proposing production adoption.
+The Step-06 fixture was refreshed to current event-timing main
+`d6f629093e865a7fc33c9adbaaad7e66a5510751` and its matching generated
+`prod/docs` architecture output before final review.
+
+Human review on 28 September 2026 accepted the clickable architecture/workspace
+direction. No additional UX PoP is required before production adoption.
 
 ## Ownership
 
@@ -187,11 +192,16 @@ not the experiment implementation owner.
 
 ## Production decision
 
-Experiment 007 is still active.
+Experiment 007 is complete.
 
-No event-timing documentation migration and no `tool.eng-docs` production
-change is authorized yet.
+The qualified production direction is handed to
+[Migration 013](../../migrations/013-interactive-engineering-documentation/README.md).
 
-After the clickable-real-architecture/use-case step, the experiment should
-explicitly decide whether the evidence is sufficient for a production-adoption
-proposal or whether one further bounded PoP is needed.
+The experiment repository remains retained as:
+
+- executable qualification evidence;
+- a human review surface;
+- a regression lab for future graph/navigation/documentation changes.
+
+Production implementation must happen in the normal owners. The experiment
+repository is not a production dependency.
