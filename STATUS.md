@@ -53,7 +53,7 @@ readable Markdown with compact adjacent relation metadata, generated backlinks,
 stable engineering identity, Sphinx-Needs as an optional engine boundary,
 Material as a portal candidate, and clickable real architecture on the current
 SI-01 diagram. Step 06 received positive human review on 28 September 2026.
-Production rollout now belongs to active Migration 013.
+Production rollout completed through Migration 013; Experiment 007 remains the retained review/regression lab.
 
 
 ### Migration 012 — standardise Java/software agent guidance
