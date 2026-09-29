@@ -21,15 +21,26 @@ The correction was developed on the dedicated event-timing integration branch
 `migration-013-full-project-adoption` and reviewed as one cut-over in PR #163.
 No further partial Migration-013 slices were merged independently to `main`.
 
-Final event-timing main `0924620ad37ccfb30b4dcb16180e7851d370c2df` now
-contains every current **promoted stable engineering object** in the production
-Needs/graph model:
+The full-project cut-over at
+`0924620ad37ccfb30b4dcb16180e7851d370c2df` established complete coverage of
+the then-promoted stable engineering objects. A later post-close
+architecture-interaction audit found that the engineering graph itself was
+complete for its declared identities, but Figure SI01-01 still declared identity
+for only a selected subset of visible semantic architecture elements.
+
+That presentation/identity gap has since been closed. Current event-timing main
+`b062bcf575aedc280f6a617a61ce03a7142402e0` contains:
 
 - 19 system use cases;
 - 13 SI-01 requirements;
 - 10 IF-03 requirements;
-- 10 diagram-linked architecture identities;
+- 41 diagram-linked architecture identities;
 - 1 formal verification case (`VC-ST1-001`).
+
+The 41 diagram identities comprise all 27 semantic top-level
+class/component/packaging-component nodes plus 14 selected nested software
+components. Annotation/layout text, class attributes and descriptive rows remain
+non-engineering diagram content by design.
 
 The project deliberately does not manufacture graph objects for ordinary
 narrative. IF-11, SI-02, focused SDD candidate material and SVP test profiles
@@ -482,6 +493,63 @@ Final evidence:
 
 This is the final Migration-013 completion state. No global engineering-graph
 service or repository-wide conversion of ordinary narrative is introduced.
+
+## Step 8 — architecture identity completeness hardening
+
+Status: **complete**
+
+A post-close human review found that Figure SI01-01 was technically interactive
+but only 10 of its 30 top-level node boxes carried engineering identity. The
+graph/portal contract guaranteed correctness for declared identities, but did
+not yet guarantee that every semantic architecture node declared one.
+
+The correction tightened both the project contract and the reusable diagram
+capability:
+
+- event-timing issue
+  [#164](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/issues/164)
+  / PR
+  [#165](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/165)
+  assigned stable graph identity to all 27 semantic top-level
+  class/component/packaging-component nodes;
+- project CI now rejects a semantic top-level architecture node without
+  `object_id`; the three layout/annotation-only nodes intentionally remain
+  outside the graph;
+- owner issue
+  [tool.eng-docs #48](https://github.com/brainboxemb/tool.eng-docs/issues/48)
+  / PR
+  [#49](https://github.com/brainboxemb/tool.eng-docs/pull/49)
+  added optional `object_id` to structured diagram items, including
+  SVG/draw.io preservation, uniqueness validation and graph normalization;
+- released `tool.eng-docs v0.4.1` points to exact owner revision
+  `501b469c4d8c7e1579ef55df2558bfd80ab1b8fd`; release run
+  `36573477509` (#28) and tagged Test run `36573495806` (#174) are green on
+  Linux and Windows;
+- event-timing issue
+  [#166](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/issues/166)
+  / PR
+  [#167](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/167)
+  adopted that immutable release and promoted 14 visible nested I/O software
+  components without adding a label lookup map;
+- the retained nested set is `AntennaManager`, `Antenna`,
+  `SimulatedAntenna`, `Display`, `DisplayRev1Can`, `DisplayRev2Wifi`,
+  `Keypad`, `KeypadRev1Can`, `Beeper`, `CanNetworkController`,
+  `NetworkDeviceService`, `UpstreamGateway`, `Connector` and
+  `RabbitMqConnector`;
+- event-timing main `b062bcf575aedc280f6a617a61ce03a7142402e0`
+  passed exact-main documentation run `36574327641` (#765), including the
+  normal graph/reader checks, a browser exercise of nested `AntennaManager`
+  selection, `prod/docs` publication and GitHub Pages deployment;
+- current production evidence records **84 graph objects / 42 authored
+  relations / 41 clickable diagram identities** and pins
+  `tool.eng-docs v0.4.1` at exact revision
+  `501b469c4d8c7e1579ef55df2558bfd80ab1b8fd`.
+
+This is a post-close hardening of the already-selected Migration-013 model, not a
+new migration phase requiring another technology decision. It strengthens the
+retained production invariant: semantic architecture content shown as an
+interactive engineering object must declare its identity in source rather than
+depending on a reader-side label map.
 
 ## Initial owner sequence
 
