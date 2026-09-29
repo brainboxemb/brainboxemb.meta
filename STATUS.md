@@ -6,13 +6,15 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
+No cross-project migration is currently active.
+
 ## Proposed / inactive
 
 ### Migration 007 — standardise GitHub Actions dependency maintenance
 
 **Proposed / inactive.**
 
-[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from active Migration 011; that migration audits SCAD reusable-workflow shape/refs but does not standardise third-party GitHub Action dependency maintenance.
+[Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from completed Migration 011; that migration audited SCAD reusable-workflow shape/refs but did not standardise third-party GitHub Action dependency maintenance.
 
 ## Recently completed
 
