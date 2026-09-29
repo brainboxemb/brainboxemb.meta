@@ -6,18 +6,6 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 013 — complete interactive engineering documentation adoption
-
-**Active — reopened after post-close consumer audit.**
-
-[Migration record](migrations/013-interactive-engineering-documentation/README.md)
-· tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
-· event-timing integration PR [#163](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/163).
-
-The original production canary qualified the technology and source/graph model, but left the running event-timing project deliberately bounded: only part of the current use cases, SI-01 requirements and IF-03 requirements are Needs/graph objects, several current document families remain outside the graph, and CI still asserts a fixed canary object set.
-
-The remaining adoption is now isolated on a dedicated event-timing migration branch. No further partial Migration-013 slices should merge independently to the running project. The migration closes again only after the full current-project coverage/relationship/reader audit is complete and one coherent cut-over is reviewed.
-
 ## Proposed / inactive
 
 ### Migration 007 — standardise GitHub Actions dependency maintenance
@@ -27,6 +15,28 @@ The remaining adoption is now isolated on a dedicated event-timing migration bra
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from active Migration 011; that migration audits SCAD reusable-workflow shape/refs but does not standardise third-party GitHub Action dependency maintenance.
 
 ## Recently completed
+
+### Migration 013 — adopt interactive engineering documentation and traceability
+
+**Complete — full event-timing project adoption cut over and live portal deployed.**
+
+[Migration record](migrations/013-interactive-engineering-documentation/README.md)
+· tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
+· event-timing cut-over PR [#163](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/163)
+· [live engineering portal](https://brainboxemb.github.io/2026-010-01.meta.event-timing-software/).
+
+The post-close audit corrected the earlier bounded-canary completion. Event-timing
+main `0924620ad37ccfb30b4dcb16180e7851d370c2df` now carries the complete current
+stable engineering-object set: 19 system use cases, 13 SI-01 requirements,
+10 IF-03 requirements, 10 diagram-linked architecture identities and the existing
+formal verification case. Exact-main documentation run `36569571453` (#760)
+passed full-project coverage, reader, portal/browser and generated-publication
+checks; `prod/docs` records 53 objects / 42 relations and the same exact source
+revision. The GitHub Pages deployment from that run also completed successfully.
+
+Narrative without a promoted stable engineering ID remains narrative by design;
+future promoted IDs automatically become graph coverage obligations rather than
+requiring another bounded migration slice.
 
 ### Experiment 007 — interactive engineering documentation and traceability
 
