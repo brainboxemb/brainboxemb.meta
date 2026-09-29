@@ -1,6 +1,6 @@
 # Migration 013 — adopt interactive engineering documentation and traceability
 
-Status: **active — reopened after post-close full-project adoption audit**
+Status: **complete — full event-timing project adoption cut over and live portal deployed**
 
 Tracking issue: [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
 
@@ -10,13 +10,33 @@ Qualified source experiment:
 Human review:
 [Experiment 007 GitHub Pages](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/)
 
-## Reopened full-project adoption
+## Full-project adoption correction
 
-The original closing audit proved the selected technology and a bounded production canary, but a post-close audit found that the running event-timing project itself remained only partially migrated. The canary therefore remains valid qualification evidence, but not a valid project cut-over state.
+The original closing audit proved the selected technology and a bounded production
+canary, but a post-close audit found that the running event-timing project itself
+remained only partially migrated. Migration 013 was therefore reopened rather
+than accepting a mixed old/new project state.
 
-Current production main still has only 3 of 19 system use cases, 6 of 13 SI-01 requirements and 3 of 10 IF-03 requirements as native Needs objects. IF-11, the SSSD, SI-02 SSD, current SDDs and the SVP are not yet represented as graph-owned engineering objects where applicable, and CI still asserts the bounded canary set.
+The correction was developed on the dedicated event-timing integration branch
+`migration-013-full-project-adoption` and reviewed as one cut-over in PR #163.
+No further partial Migration-013 slices were merged independently to `main`.
 
-The remaining adoption is performed on the dedicated event-timing integration branch `migration-013-full-project-adoption` / draft PR #163. Partial adoption slices are not merged independently to `main`. The next cut-over happens only after full current-project coverage, relationship, reader/output and consumer-surface audits pass together.
+Final event-timing main `0924620ad37ccfb30b4dcb16180e7851d370c2df` now
+contains every current **promoted stable engineering object** in the production
+Needs/graph model:
+
+- 19 system use cases;
+- 13 SI-01 requirements;
+- 10 IF-03 requirements;
+- 10 diagram-linked architecture identities;
+- 1 formal verification case (`VC-ST1-001`).
+
+The project deliberately does not manufacture graph objects for ordinary
+narrative. IF-11, SI-02, focused SDD candidate material and SVP test profiles
+remain narrative where they do not yet own promoted stable engineering IDs.
+The full-project coverage validator also detects future legacy-style promoted
+IDs, so a newly introduced stable object cannot silently recreate a bounded
+canary state.
 
 ## Why this migration exists
 
@@ -351,16 +371,16 @@ Current `prod/docs` evidence at final main
 The portal remains derived output. It does not own requirements, architecture,
 use-case or verification meaning.
 
-## Step 6 — closing audit
+## Step 6 — initial canary closing audit
 
-Status: **complete**
+Status: **superseded by the full-project adoption correction below**
 
 | Completion criterion | Final evidence | Result |
 | --- | --- | --- |
 | Reusable owner capabilities are released | `tool.eng-docs v0.4.0` is the immutable released graph owner; exact release/consumer SHA `63af20a033d6295a28c844d12cb87f76165e69a5`. | Pass |
 | Event-timing pins released owner revisions | `project.yml` pins `tool.eng-docs v0.4.0`; CI also checks the exact gitlink SHA. | Pass |
 | Production SVG exposes real engineering IDs | Final `prod/docs/assets/architecture/layered-architecture.svg` contains `data-engineering-id` for `TimingNode`, `CommandHandler`, `Conductor` and `RemoteApi`. | Pass |
-| Selected source slice has stable anchors and checked typed relations | Sphinx-Needs requires explicit IDs; the 17 selected objects retain stable Need IDs, generated reader/native-reader anchors and schema-checked `derived_from`, `satisfies` and `verifies` target types. | Pass |
+| Initial selected source slice has stable anchors and checked typed relations | Sphinx-Needs requires explicit IDs; the original selected objects retain stable Need IDs, generated reader/native-reader anchors and schema-checked `derived_from`, `satisfies` and `verifies` target types. This criterion was later expanded to full-project stable-object coverage. | Pass |
 | Book and portal derive from the same authoritative source | Final Book source SHA, Moon materialization, normalized graph and portal provenance all identify exact event-timing main `ff41c90a555f2f00fcb5a145f815eb88ba0bffa0`. | Pass |
 | No hand-maintained inverse matrix or diagram label map is required | Sphinx-Needs generates inverse/backlink fields; repository audit found no authored `derived_from_back` / `satisfies_back` / `verifies_back` relation input and the portal consumes SVG `data-engineering-id` directly. | Pass |
 | Exact revision / CI / publication evidence is retained | Steps 1–5 above retain owner releases, consumer heads/merges, exact CI runs and generated publication branches; final production run is #650. | Pass |
@@ -386,9 +406,7 @@ engineering-graph model:
 - exact source/tool/materialization evidence is retained through the normal
   documentation lifecycle.
 
-The production authoring convention is intentionally **bounded**: Migration 013
-qualifies the selected 17-object slice and does not require converting every
-ordinary Markdown paragraph or every future use case into a Need immediately.
+The production authoring convention is **stable-object scoped, not paragraph scoped**. After the full-project correction, every currently promoted stable engineering object is covered by Needs/graph validation. Ordinary narrative remains Markdown/MyST until it receives a promoted stable engineering ID; any such future ID automatically becomes a coverage obligation.
 
 ### Optional / consumer-selected reader capabilities
 
@@ -403,9 +421,7 @@ of truth:
 - clickable architecture interaction in that portal;
 - retained browser screenshots or other visual review evidence beyond the
   underlying CI assertions;
-- GitHub Pages or another hosting layer for the Material site. The event-timing
-  production canary qualifies the static site in generated documentation
-  branches; a separate Pages deployment is not required for this migration.
+- GitHub Pages or another hosting layer is not part of the reusable graph contract for every future consumer. For the event-timing Migration-013 closeout, however, direct live portal publication became a required consumer criterion and is now deployed from protected `main`.
 
 The Step-5 portal canary was required **evidence for this migration**, but the
 portal UI is not elevated into the reusable source/graph contract. A future
@@ -420,15 +436,52 @@ links back to authored source additionally pin the exact repository revision and
 source location. This avoids pretending that ordinary Markdown line numbers are
 the engineering identity while still giving reviewers an exact source jump.
 
-### Closing result
+### Initial closing result
 
-Migration 013 passes its closing audit on final event-timing production main
-`ff41c90a555f2f00fcb5a145f815eb88ba0bffa0`, exact-main documentation run
-`36528778737` (#650), released `tool.eng-docs v0.4.0` and the retained
-Experiment 007 regression/reference lab.
+The original canary closing audit passed on event-timing main
+`ff41c90a555f2f00fcb5a145f815eb88ba0bffa0`, but the later full-project audit
+showed that this was not a sufficient migration completion state. That evidence
+is retained as canary qualification history rather than the final cut-over.
 
-No global engineering-graph service, repository-wide MyST rewrite or mandatory
-portal hosting is introduced by this migration.
+## Step 7 — full-project adoption and final cut-over
+
+Status: **complete**
+
+The reopened migration replaced the bounded-canary production state with a
+source-driven full-project coverage contract.
+
+Final evidence:
+
+- event-timing cut-over PR
+  [#163](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/163);
+- exact merged event-timing main
+  `0924620ad37ccfb30b4dcb16180e7851d370c2df`;
+- exact-main documentation run `36569571453` (#760) — green;
+- `prod/docs/source-sha.txt`, normalized graph and portal provenance all identify
+  that exact main revision;
+- normalized production graph: **53 objects / 42 authored outgoing relations**;
+- graph object set: **19 use cases / 13 SI-01 requirements / 10 IF-03
+  requirements / 10 architecture objects / 1 verification case**;
+- the 10 architecture objects with diagram identity are
+  `TimingSystem`, `SystemStatus`, `TimingNode`, `LogBook`, `TimingData`,
+  `UpstreamProtocol`, `TimeSource`, `CommandHandler`, `Conductor` and
+  `RemoteApi`;
+- CI derives expected coverage from current stable source IDs instead of a
+  hard-coded object count and rejects missing/unexpected graph objects;
+- the IF-03 → SI-01 relation table was removed after those mappings became
+  native `derived_from` relations, preserving single-authority outgoing
+  relation ownership;
+- generated GitHub-reader, native Sphinx reader, Book, normalized graph and
+  Material portal all pass on the same exact source revision;
+- the portal explorer is browser-exercised against the real generated
+  architecture;
+- GitHub Pages deployment completed successfully and exposes the live portal at
+  https://brainboxemb.github.io/2026-010-01.meta.event-timing-software/;
+- Experiment 007 remains the reusable review/regression lab;
+- `tool.eng-docs v0.4.0` remains the released reusable graph owner.
+
+This is the final Migration-013 completion state. No global engineering-graph
+service or repository-wide conversion of ordinary narrative is introduced.
 
 ## Initial owner sequence
 
@@ -451,7 +504,10 @@ Migration 013
         +--> Step 5: event-timing production portal
         |
         v
-Step 6: closing audit — complete
+Step 6: initial canary closing audit — later superseded
+        |
+        v
+Step 7: full-project adoption + live consumer cut-over — complete
 ```
 
 The migration should stop and reassess if a production owner exposes a concrete
