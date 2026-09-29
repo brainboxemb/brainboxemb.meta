@@ -6,49 +6,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 013 — adopt interactive engineering documentation and traceability
-
-**Active — Step 5: event-timing production portal canary.**
-
-[Migration record](migrations/013-interactive-engineering-documentation/README.md)
-· tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
-· retained source [Experiment 007](experiments/007-requirements-traceability/README.md).
-
-Steps 1 through 4 are now production-qualified. Native MyST/Sphinx-Needs is the
-selected authoring form for graph-exposed engineering objects; each object owns
-its stable ID and outgoing relations, Sphinx-Needs generates inverse context,
-and `needs.json` is the source graph consumed by the optional normalized
-BrainboxEmb graph boundary.
-
-Step 4 completed with:
-
-- `tool.eng-docs v0.4.0` at exact owner main/tag
-  `63af20a033d6295a28c844d12cb87f76165e69a5`;
-- owner PR [#47](https://github.com/brainboxemb/tool.eng-docs/pull/47),
-  which removed the second custom Markdown/hidden-JSON graph parser and made
-  the reusable graph command consume Sphinx-Needs export;
-- event-timing consumer PR
-  [#150](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/150)
-  with final qualified head
-  `a93035a360716820bd280e4aef7a5d79dc92443e`;
-- exact consumer qualification run `36471704180` green, including generated
-  review publication;
-- merged event-timing main
-  `a35553d6ddf5126879fa14d3b894a852610c6f4d`;
-- current `prod/docs` materialization and engineering-graph evidence both
-  identify that exact main while retaining the 17-object / 34-relation graph.
-
-The generated GitHub reader now keeps engineering content first, presents
-traceability as secondary bullet metadata and closes generated Need blocks with
-a horizontal rule. The native Sphinx reader uses a consumer-owned
-`engineering_reader` card layout with traceability metadata collapsed by
-default.
-
-Step 5 now adds the first real derived portal over the same authoritative
-event-timing source. It must retain the engineering Book, use the existing
-engineering IDs and diagram identities, provide useful object/focused/workspace
-navigation, and publish with exact source/tool provenance. The portal must not
-become a second source of requirements, architecture or verification meaning.
+No cross-project migration is currently active.
 
 ## Proposed / inactive
 
@@ -59,6 +17,28 @@ become a second source of requirements, architecture or verification meaning.
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from active Migration 011; that migration audits SCAD reusable-workflow shape/refs but does not standardise third-party GitHub Action dependency maintenance.
 
 ## Recently completed
+
+### Migration 013 — adopt interactive engineering documentation and traceability
+
+**Complete — production Book/graph/portal canary qualified and closing audit passed.**
+
+[Migration record](migrations/013-interactive-engineering-documentation/README.md)
+· tracking issue [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
+· retained source [Experiment 007](experiments/007-requirements-traceability/README.md).
+
+The final event-timing production baseline is exact main
+`ff41c90a555f2f00fcb5a145f815eb88ba0bffa0`, qualified by main
+documentation run `36528778737` (#650). Book materialization, normalized
+17-object / 34-relation graph and Material portal all identify that exact
+source revision. The selected use-case slice retains full authoritative
+narrative, generated traceability and clickable real architecture without a
+second source parser, hand-maintained inverse matrix or diagram lookup map.
+
+Required production contracts are stable engineering IDs, typed authored
+outgoing relations, generated inverse context, released graph normalization /
+diagram cross-validation and exact provenance. GitHub-reader presentation,
+native Sphinx HTML and the Material portal/workspace remain derived reader
+surfaces rather than additional engineering authorities.
 
 ### Experiment 007 — interactive engineering documentation and traceability
 
