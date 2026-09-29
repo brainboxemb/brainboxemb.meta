@@ -1,6 +1,6 @@
 # Migration 013 — adopt interactive engineering documentation and traceability
 
-Status: **active — Step 5**
+Status: **complete**
 
 Tracking issue: [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
 
@@ -278,38 +278,149 @@ graph evidence.
 
 ## Step 5 — event-timing production portal canary
 
-Status: **active**
+Status: **complete**
 
-Use the released/pinned Step-4 mechanisms to add a real derived portal while
-keeping the existing Book as a first-class review/reading output.
+The first real production portal canary keeps the existing engineering Book as
+a first-class output and derives search/object/workspace views from the same
+native MyST/Sphinx-Needs source and normalized graph.
 
-The canary should provide:
+Initial production portal qualification:
 
-- existing engineering book;
-- portal search/navigation;
-- generated object views;
-- focused relation context;
-- clickable real architecture;
-- richer use-case workspace;
-- direct authoritative source navigation;
-- exact source/tool provenance through the normal documentation lifecycle.
+- event-timing issue
+  [#152](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/issues/152);
+- event-timing PR
+  [#153](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/153);
+- final rebased canary head
+  `5b75aa6375b9ceb9ac4ac792906895659541a233`;
+- PR documentation run `36527968988` (#647) — green including publication;
+- merged main
+  `8cb55ff6d6bca47b1f8f79a29f9554481efd7d12`;
+- exact-main documentation run `36528108235` (#648) — green;
+- Material for MkDocs `9.7.7` provides the derived search/navigation surface;
+- all 17 graph objects receive searchable generated object pages;
+- the two-pane explorer uses the real generated SI01-01 SVG and its existing
+  `data-engineering-id` values directly;
+- a real headless Chrome gate exercises selected-object, relation-context and
+  authoritative-source navigation;
+- portal provenance records exact source/tool revisions and publishes through
+  the normal `dev/pr-*/docs` / `prod/docs` lifecycle.
 
-The portal is derived output. It does not own requirements, architecture or
-verification meaning.
+The closing-audit review then found one real production gap: the selected
+use-case Needs initially contained only Goal + Primary actor while their richer
+authoritative narrative remained immediately outside the directive. That was
+closed without adding the project-specific Experiment-007 source parser:
+
+- event-timing issue
+  [#156](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/issues/156);
+- event-timing PR
+  [#157](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/157);
+- qualified PR head
+  `ee77bf16ae5fd1ced4699d1af65beeebcc628ce2`;
+- PR documentation run `36528604011` (#649) — green including publication;
+- merged final event-timing main
+  `ff41c90a555f2f00fcb5a145f815eb88ba0bffa0`;
+- exact-main documentation run `36528778737` (#650) — green;
+- the existing closing fences for `UC-001`, `UC-008` and `UC-014` were
+  moved only far enough to keep their already-authored narrative inside the
+  same Need object; no use-case prose was duplicated or rewritten;
+- CI proves richer use-case content reaches `needs.json`, the normalized graph,
+  generated GitHub reader, Material object/search views and the real browser
+  workspace.
+
+Current `prod/docs` evidence at final main
+`ff41c90a555f2f00fcb5a145f815eb88ba0bffa0` records:
+
+- Book `source-sha.txt`: exact final main;
+- Moon `software:docs.assemble` materialization: exact final main / success;
+- normalized graph: 17 objects / 34 authored outgoing relations / exact final main;
+- portal provenance: exact final main, `tool.eng-docs v0.4.0` at
+  `63af20a033d6295a28c844d12cb87f76165e69a5`;
+- production SVG identities: `TimingNode`, `CommandHandler`, `Conductor`
+  and `RemoteApi`;
+- full `UC-001` narrative through Preconditions, Main flow and
+  Alternative/failure flows before generated traceability metadata.
+
+The portal remains derived output. It does not own requirements, architecture,
+use-case or verification meaning.
 
 ## Step 6 — closing audit
 
-Migration 013 completes only when:
+Status: **complete**
 
-- reusable owner capabilities are released;
-- the event-timing canary pins released owner revisions;
-- production-generated SVG exposes real diagram engineering IDs;
-- the selected source slice has stable anchors and checked typed relations;
-- book and portal are generated from the same authoritative source;
-- no hand-maintained inverse matrices or diagram label maps are required;
-- exact revisions/CI/publication evidence are retained here;
-- optional versus required capabilities are explicitly documented;
-- Experiment 007 remains available as a regression/reference lab.
+| Completion criterion | Final evidence | Result |
+| --- | --- | --- |
+| Reusable owner capabilities are released | `tool.eng-docs v0.4.0` is the immutable released graph owner; exact release/consumer SHA `63af20a033d6295a28c844d12cb87f76165e69a5`. | Pass |
+| Event-timing pins released owner revisions | `project.yml` pins `tool.eng-docs v0.4.0`; CI also checks the exact gitlink SHA. | Pass |
+| Production SVG exposes real engineering IDs | Final `prod/docs/assets/architecture/layered-architecture.svg` contains `data-engineering-id` for `TimingNode`, `CommandHandler`, `Conductor` and `RemoteApi`. | Pass |
+| Selected source slice has stable anchors and checked typed relations | Sphinx-Needs requires explicit IDs; the 17 selected objects retain stable Need IDs, generated reader/native-reader anchors and schema-checked `derived_from`, `satisfies` and `verifies` target types. | Pass |
+| Book and portal derive from the same authoritative source | Final Book source SHA, Moon materialization, normalized graph and portal provenance all identify exact event-timing main `ff41c90a555f2f00fcb5a145f815eb88ba0bffa0`. | Pass |
+| No hand-maintained inverse matrix or diagram label map is required | Sphinx-Needs generates inverse/backlink fields; repository audit found no authored `derived_from_back` / `satisfies_back` / `verifies_back` relation input and the portal consumes SVG `data-engineering-id` directly. | Pass |
+| Exact revision / CI / publication evidence is retained | Steps 1–5 above retain owner releases, consumer heads/merges, exact CI runs and generated publication branches; final production run is #650. | Pass |
+| Required versus optional capabilities are explicit | The production contract and optional reader surfaces are classified below. | Pass |
+| Experiment 007 remains a regression/reference lab | `exp.2026-007.requirements-traceability` main remains complete and explicitly retained, including its human-review Pages site. | Pass |
+
+### Required production contract
+
+These are the durable Migration-013 invariants for a project that adopts the
+engineering-graph model:
+
+- one authoritative project source; derived readers must not become independent
+  requirements/architecture/verification authorities;
+- native MyST/Sphinx-Needs objects for the graph-exposed slice, with explicit
+  stable engineering IDs;
+- project-owned typed **outgoing** relations, validated near their owner;
+- generated inverse/backlink context rather than authored inverse matrices;
+- a released reusable `eng-docs graph` boundary consuming `needs.json` and
+  preserving exact source provenance;
+- diagram `object_id` / generated `data-engineering-id` identity when a
+  diagram participates in engineering navigation, with graph cross-validation;
+- normal Book generation remains available as a first-class linear review view;
+- exact source/tool/materialization evidence is retained through the normal
+  documentation lifecycle.
+
+The production authoring convention is intentionally **bounded**: Migration 013
+qualifies the selected 17-object slice and does not require converting every
+ordinary Markdown paragraph or every future use case into a Need immediately.
+
+### Optional / consumer-selected reader capabilities
+
+These are qualified views or conveniences, not additional engineering sources
+of truth:
+
+- generated GitHub-reader presentation, including content-first rendering,
+  compact traceability metadata and the subtle `— — —` body/metadata separator;
+- native Sphinx HTML cards and their collapsed metadata presentation;
+- the Material portal itself, including search, generated object pages and the
+  two-pane workspace;
+- clickable architecture interaction in that portal;
+- retained browser screenshots or other visual review evidence beyond the
+  underlying CI assertions;
+- GitHub Pages or another hosting layer for the Material site. The event-timing
+  production canary qualifies the static site in generated documentation
+  branches; a separate Pages deployment is not required for this migration.
+
+The Step-5 portal canary was required **evidence for this migration**, but the
+portal UI is not elevated into the reusable source/graph contract. A future
+consumer may use the core production contract with a different reader surface
+without inventing a second engineering authority.
+
+### Stable-source target interpretation
+
+The stable engineering target is the explicit Need ID. Native Sphinx output and
+the generated GitHub reader expose that ID as a stable object anchor. Direct
+links back to authored source additionally pin the exact repository revision and
+source location. This avoids pretending that ordinary Markdown line numbers are
+the engineering identity while still giving reviewers an exact source jump.
+
+### Closing result
+
+Migration 013 passes its closing audit on final event-timing production main
+`ff41c90a555f2f00fcb5a145f815eb88ba0bffa0`, exact-main documentation run
+`36528778737` (#650), released `tool.eng-docs v0.4.0` and the retained
+Experiment 007 regression/reference lab.
+
+No global engineering-graph service, repository-wide MyST rewrite or mandatory
+portal hosting is introduced by this migration.
 
 ## Initial owner sequence
 
@@ -332,7 +443,7 @@ Migration 013
         +--> Step 5: event-timing production portal
         |
         v
-closing audit
+Step 6: closing audit — complete
 ```
 
 The migration should stop and reassess if a production owner exposes a concrete
