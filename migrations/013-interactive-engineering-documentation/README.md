@@ -1,6 +1,6 @@
 # Migration 013 — adopt interactive engineering documentation and traceability
 
-Status: **complete**
+Status: **active — reopened after post-close full-project adoption audit**
 
 Tracking issue: [#169](https://github.com/brainboxemb/brainboxemb.meta/issues/169)
 
@@ -9,6 +9,14 @@ Qualified source experiment:
 
 Human review:
 [Experiment 007 GitHub Pages](https://brainboxemb.github.io/exp.2026-007.requirements-traceability/)
+
+## Reopened full-project adoption
+
+The original closing audit proved the selected technology and a bounded production canary, but a post-close audit found that the running event-timing project itself remained only partially migrated. The canary therefore remains valid qualification evidence, but not a valid project cut-over state.
+
+Current production main still has only 3 of 19 system use cases, 6 of 13 SI-01 requirements and 3 of 10 IF-03 requirements as native Needs objects. IF-11, the SSSD, SI-02 SSD, current SDDs and the SVP are not yet represented as graph-owned engineering objects where applicable, and CI still asserts the bounded canary set.
+
+The remaining adoption is performed on the dedicated event-timing integration branch `migration-013-full-project-adoption` / draft PR #163. Partial adoption slices are not merged independently to `main`. The next cut-over happens only after full current-project coverage, relationship, reader/output and consumer-surface audits pass together.
 
 ## Why this migration exists
 
