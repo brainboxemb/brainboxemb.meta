@@ -27,14 +27,17 @@ No cross-project migration is currently active.
 · event-timing cut-over PR [#163](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/163)
 · [live engineering portal](https://brainboxemb.github.io/2026-010-01.meta.event-timing-software/).
 
-The post-close audit corrected the earlier bounded-canary completion. Event-timing
-main `0924620ad37ccfb30b4dcb16180e7851d370c2df` now carries the complete current
-stable engineering-object set: 19 system use cases, 13 SI-01 requirements,
-10 IF-03 requirements, 10 diagram-linked architecture identities and the existing
-formal verification case. Exact-main documentation run `36569571453` (#760)
-passed full-project coverage, reader, portal/browser and generated-publication
-checks; `prod/docs` records 53 objects / 42 relations and the same exact source
-revision. The GitHub Pages deployment from that run also completed successfully.
+The post-close audit corrected the earlier bounded-canary completion. The later
+architecture-interaction hardening completed the same identity model across all
+semantic elements visible in Figure SI01-01. Current event-timing main
+`b062bcf575aedc280f6a617a61ce03a7142402e0` carries 19 system use cases,
+13 SI-01 requirements, 10 IF-03 requirements, 41 diagram-linked architecture
+identities and the existing formal verification case. Exact-main documentation
+run `36574327641` (#765) passed full-project coverage, reader, portal/browser,
+generated-publication and GitHub Pages deployment checks; `prod/docs` records
+84 objects / 42 relations and the same exact source revision. Event-timing pins
+released `tool.eng-docs v0.4.1` at exact owner revision
+`501b469c4d8c7e1579ef55df2558bfd80ab1b8fd`.
 
 Narrative without a promoted stable engineering ID remains narrative by design;
 future promoted IDs automatically become graph coverage obligations rather than
