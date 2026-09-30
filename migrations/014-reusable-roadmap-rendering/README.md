@@ -301,6 +301,24 @@ event-timing #214. The only remaining gate is deliberate: after #214 is merged,
 run and retain the same documentation qualification on the exact event-timing
 `main` commit. Only then may Migration 014 be marked complete.
 
+## Detail-board presentation follow-up
+
+First-consumer review also exposed a second duplicated presentation mechanism:
+the event-timing portrait step/detail boards are still rendered locally. That
+follow-up is now tracked in `tool.eng-docs` issue #65 / PR #66.
+
+The same ownership boundary applies:
+
+- `tool.eng-docs` owns generic print-friendly BoardView layout/rendering;
+- event-timing owns lane, activity, document and planning-change semantics;
+- the consumer adapter maps those concepts into BoardView;
+- roadmap and detail boards should share one presentation style rather than
+  maintain separate color/layout implementations.
+
+This follow-up is part of Migration 014 because it is another cross-repository
+extraction triggered by the same planning-publication cut-over. It does not
+expand `tool.eng-docs` into a planning-domain model.
+
 ## Completion criteria
 
 Migration 014 is complete only when:
