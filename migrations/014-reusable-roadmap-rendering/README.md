@@ -1,11 +1,15 @@
 # Migration 014 — adopt reusable roadmap rendering
 
-Status: **active — owner released; first consumer PR qualified; main cut-over pending**
+Status: **active — owner visual refinement in review; consumer requalification pending**
 
 Tracking issue: [#181](https://github.com/brainboxemb/brainboxemb.meta/issues/181)
 
-Reusable-owner issue:
-[tool.eng-docs #59](https://github.com/brainboxemb/tool.eng-docs/issues/59)
+Reusable-owner issues:
+[tool.eng-docs #59](https://github.com/brainboxemb/tool.eng-docs/issues/59) and
+[tool.eng-docs #61](https://github.com/brainboxemb/tool.eng-docs/issues/61)
+
+Current owner refinement PR:
+[tool.eng-docs #62](https://github.com/brainboxemb/tool.eng-docs/pull/62)
 
 First production consumer:
 [`2026-010-01.meta.event-timing-software`](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software)
@@ -191,7 +195,14 @@ cut-over. Record exact tag, owner revision and green release evidence here.
 
 ### Step 4 — event-timing consumer cut-over
 
-Status: **active — PR qualification green; exact-main qualification pending**
+Status: **active — initial v0.5.0 qualification green; visual requalification pending**
+
+Before final cut-over, owner issue #61 / PR #62 refines the generic visual
+hierarchy based on first-consumer review. This does not change the ownership
+boundary: variable-height wrapping/pagination remains generic, while the consumer
+still owns which ordered metadata value represents its end date/forecast and which
+heading names its document-status badge group. The refined owner capability must
+be released and the consumer repinned/requalified before this step can complete.
 
 Owner: `brainboxemb/2026-010-01.meta.event-timing-software`
 
@@ -255,9 +266,13 @@ currently qualifies the cut-over at head
   reader verification, retained producer-evidence checks and preview
   publication.
 
-The remaining migration gate is deliberate: after #214 is merged, run and retain
-the same documentation qualification on the exact event-timing `main` commit.
-Only then may Migration 014 be marked complete.
+The v0.5.0 run above remains valid evidence for the structural extraction, but
+first-consumer visual review found the generic card hierarchy too loose. The
+additional owner refinement is tracked in tool.eng-docs #61 / PR #62. Final
+consumer qualification therefore requires a released refined owner version,
+repinning #214 to that release, a green exact-PR documentation run, and then the
+same qualification on the exact event-timing `main` commit. Only then may
+Migration 014 be marked complete.
 
 ## Completion criteria
 
