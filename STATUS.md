@@ -6,17 +6,6 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Migration 014 — adopt reusable roadmap rendering
-
-**Active — owner v0.5.0 released; event-timing PR qualification green; exact-main
-consumer qualification pending.**
-
-[Migration 014](migrations/014-reusable-roadmap-rendering/README.md) now has a
-released reusable owner capability in `tool.eng-docs v0.5.0`. Event-timing PR
-[#214](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/214)
-is pinned to that release and its exact-head documentation run is green with
-full SIP Result/Demo content. The migration remains active until the same
-consumer qualification is retained on exact event-timing `main`.
 
 ## Proposed / inactive
 
@@ -27,6 +16,23 @@ consumer qualification is retained on exact event-timing `main`.
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from completed Migration 011; that migration audited SCAD reusable-workflow shape/refs but did not standardise third-party GitHub Action dependency maintenance.
 
 ## Recently completed
+
+### Migration 014 — adopt reusable roadmap rendering
+
+**Complete — reusable RoadmapView/BoardView owner released and exact event-timing main cut-over qualified.**
+
+[Migration record](migrations/014-reusable-roadmap-rendering/README.md)
+· tracking issue [#181](https://github.com/brainboxemb/brainboxemb.meta/issues/181)
+· event-timing cut-over PR [#214](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/214).
+
+Final owner baseline is `tool.eng-docs v0.6.6` at exact revision
+`d619e97020afd343000ff90288555970c5cb32a7`. The consumer merged to
+event-timing `main` as `2daf8e5ad4ea301baef1e1c430372984ef3c66dc`;
+exact-main documentation run `36759432740` is green through planning generation,
+traceability, generated publication and GitHub Pages deployment. Project planning
+semantics remain consumer-owned while reusable roadmap/detail-board presentation
+is now owned by `tool.eng-docs`.
+
 
 ### Migration 013 — adopt interactive engineering documentation and traceability
 
