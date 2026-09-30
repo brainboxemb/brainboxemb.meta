@@ -305,7 +305,7 @@ The current Step-4 feature PR should not remain a CI-driven layout-debug loop.
 Event-timing PR
 [#214](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/214)
 currently qualifies the refined cut-over at head
-`7cf82d5cd9bc891c850551b63fea1151571c02d9`:
+`0c0727b707dd51f4a990f1eac3e9697eafc56b2a`:
 
 - `project.yml` and the `tools/tool.eng-docs` gitlink pin released
   `v0.6.0` / `86deb06231a8d4fce64ffe877f82edaa7ba803bb`;
@@ -335,11 +335,17 @@ currently qualifies the refined cut-over at head
   and reduced double whitespace at the page/card edges;
 - project-owned step/lane/activity/document semantics are mapped into BoardView;
   the previous local `render_step_svg()` implementation has been removed;
-- exact-head v0.6.0 documentation run
+- v0.6.0 documentation run
   [36746582605](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36746582605)
-  passed planning generation, BoardView detail boards, traceability,
-  portal/reader verification and preview publication at
-  `7cf82d5cd9bc891c850551b63fea1151571c02d9`;
+  established the BoardView consumer path;
+- final cleaned exact-head documentation run
+  [36747227525](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36747227525)
+  passed planning generation, RoadmapView/BoardView output, traceability,
+  portal/reader verification, retained producer-evidence checks and preview
+  publication at `0c0727b707dd51f4a990f1eac3e9697eafc56b2a`;
+- the obsolete local roadmap renderer and separate
+  `generate_sip_step_pdfs.py` renderer are removed; released eng-docs now owns
+  the final SVG/PDF presentation mechanisms;
 - preview inspection also exposed and removed one duplicated Step-5 SIP heading
   before retaining the final qualification evidence.
 
