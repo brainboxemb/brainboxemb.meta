@@ -16,13 +16,15 @@ Having a migration directory does not mean that work is active.
 
 ## Active
 
-- [014 — adopt reusable roadmap rendering](014-reusable-roadmap-rendering/README.md) — extract a generic RoadmapView/rendering capability to `tool.eng-docs`, then cut event-timing over as the first real consumer without constraining authoritative SIP prose by card geometry.
+- _None._
 
 ## Proposed / inactive
 
 - [007 — standardise GitHub Actions dependency maintenance](007-github-actions-dependency-maintenance/README.md) — standardise action pinning/update policy and evaluate Dependabot plus `actions-up`; remains inactive while Migration 011 is the selected cross-project track; Migration 011 does not standardise third-party action update policy.
 
 ## Complete
+
+- [014 — adopt reusable roadmap rendering](014-reusable-roadmap-rendering/README.md) — released reusable RoadmapView/BoardView rendering in `tool.eng-docs v0.6.6` and completed the exact event-timing main cut-over without constraining authoritative SIP prose by presentation geometry.
 
 - [013 — adopt interactive engineering documentation and traceability](013-interactive-engineering-documentation/README.md) — completed full event-timing production adoption of the qualified interactive engineering-documentation and traceability model.
 
