@@ -1,6 +1,6 @@
 # Migration 014 — adopt reusable roadmap rendering
 
-Status: **active — refined owner released; first consumer PR qualified; exact-main cut-over pending**
+Status: **complete — reusable owner released and exact first-consumer main cut-over qualified**
 
 Tracking issue: [#181](https://github.com/brainboxemb/brainboxemb.meta/issues/181)
 
@@ -194,15 +194,14 @@ cut-over. Record exact tag, owner revision and green release evidence here.
 
 ### Step 4 — event-timing consumer cut-over
 
-Status: **active — v0.6.0 PR qualification green; exact-main qualification pending**
+Status: **done**
 
-First-consumer review triggered owner issue #61 / PR #62 to refine the generic
-visual hierarchy without changing the ownership boundary. Variable-height
-wrapping/pagination remains generic, while the consumer owns which ordered
-metadata value represents its end date/forecast and which heading names its
-document-status badge group. That refinement was released as v0.5.1. A denser three-column grid followed in
-v0.5.2, and the reusable print-friendly BoardView/detail-board renderer is now
-released as v0.6.0. Event-timing has been repinned and requalified on v0.6.0.
+First-consumer review expanded the presentation qualification beyond the initial
+RoadmapView extraction. The reusable owner was refined through the roadmap and
+BoardView/detail-board path and the final consumer baseline is released
+`tool.eng-docs v0.6.6`. The ownership boundary did not change: generic
+layout/rendering remains in the tool and event-timing retains planning meaning,
+mapping and terminology.
 
 Owner: `brainboxemb/2026-010-01.meta.event-timing-software`
 
@@ -304,56 +303,50 @@ The current Step-4 feature PR should not remain a CI-driven layout-debug loop.
 
 Event-timing PR
 [#214](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/214)
-currently qualifies the refined cut-over at head
-`0c0727b707dd51f4a990f1eac3e9697eafc56b2a`:
+completed the production cut-over and merged to `main` as
+`2daf8e5ad4ea301baef1e1c430372984ef3c66dc`.
 
-- `project.yml` and the `tools/tool.eng-docs` gitlink pin released
-  `v0.6.0` / `86deb06231a8d4fce64ffe877f82edaa7ba803bb`;
-- the project-local manager-roadmap file is now a consumer adapter that reuses
-  the existing project-owned `parse_sip()` semantics and emits RoadmapView;
-- generic card layout, wrapping, pagination, SVG and PDF rendering are owned by
-  `eng-docs roadmap`;
-- existing publication filenames are retained so document assembly did not need
-  an unrelated migration;
-- Step 4 was restored to four Result bullets and seven Demo bullets, proving the
-  authoritative SIP is no longer forced into the former 1..3-bullet / fixed-line
-  card contract;
-- the earlier v0.5.0 run
-  [36737383063](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36737383063)
-  established the structural cut-over;
-- exact-head v0.5.1 documentation run
-  [36742717634](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36742717634)
-  passed planning generation, traceability, portal verification, generated
-  reader verification, retained producer-evidence checks and preview
-  publication at `7b456adc34eb179831d9246e3600d8daa7774d24`;
-- the consumer maps the visible marker to the step number, shows end/forecast
-  before effort, keeps the title free of redundant `Step N` text, and groups
-  document badges under `DOCUMENT STATUS`;
-- overall plan/cadence data is now shown once in the first `PLAN / TERMS`
-  overview card instead of being repeated in every page header;
-- the released v0.5.2 grid renders the production roadmap with three columns
-  and reduced double whitespace at the page/card edges;
-- project-owned step/lane/activity/document semantics are mapped into BoardView;
-  the previous local `render_step_svg()` implementation has been removed;
-- v0.6.0 documentation run
-  [36746582605](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36746582605)
-  established the BoardView consumer path;
-- final cleaned exact-head documentation run
-  [36747227525](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36747227525)
-  passed planning generation, RoadmapView/BoardView output, traceability,
-  portal/reader verification, retained producer-evidence checks and preview
-  publication at `0c0727b707dd51f4a990f1eac3e9697eafc56b2a`;
-- the obsolete local roadmap renderer and separate
-  `generate_sip_step_pdfs.py` renderer are removed; released eng-docs now owns
-  the final SVG/PDF presentation mechanisms;
-- preview inspection also exposed and removed one duplicated Step-5 SIP heading
-  before retaining the final qualification evidence.
+Final qualified state:
 
-The structural v0.5.0 evidence remains part of the migration history. The
-first-consumer visual refinement has now also been released and qualified through
-event-timing #214. The only remaining gate is deliberate: after #214 is merged,
-run and retain the same documentation qualification on the exact event-timing
-`main` commit. Only then may Migration 014 be marked complete.
+- the consumer pins released `tool.eng-docs v0.6.6` at exact owner revision
+  `d619e97020afd343000ff90288555970c5cb32a7`;
+- RoadmapView and BoardView own generic card layout, wrapping, pagination and
+  SVG/PDF rendering;
+- event-timing keeps SIP parsing, activity/lane/document meaning and mapping into
+  the reusable view models;
+- the obsolete local roadmap renderer and separate step-PDF renderer are removed;
+- complete SIP Result/Demo wording is no longer constrained by fixed card geometry;
+- the final BoardView hierarchy uses a leading step marker, one continuous
+  planning-status line, uniform neutral uppercase section headings and compact
+  activity header metadata;
+- the obsolete `baseline` label was removed from the example/header terminology;
+- exact PR-head documentation run
+  [36758838382](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36758838382)
+  passed planning generation, traceability, portal/reader verification and preview
+  publication on `5a32f41686cedf0ec2698a2530e0d91c534d4337`;
+- after merge, exact-main documentation run
+  [36759432740](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36759432740)
+  passed the same production qualification plus generated-output publication and
+  GitHub Pages deployment on `2daf8e5ad4ea301baef1e1c430372984ef3c66dc`.
+
+The final reusable-owner release evidence is:
+
+- exact owner main `d619e97020afd343000ff90288555970c5cb32a7`;
+- exact-main Test run
+  [36758189565](https://github.com/brainboxemb/tool.eng-docs/actions/runs/36758189565)
+  green;
+- immutable release `v0.6.6`;
+- tagged Test run
+  [36758382213](https://github.com/brainboxemb/tool.eng-docs/actions/runs/36758382213)
+  green;
+- Release run
+  [36758357782](https://github.com/brainboxemb/tool.eng-docs/actions/runs/36758357782)
+  green.
+
+The earlier v0.5.x/v0.6.0 qualification evidence above remains retained as
+migration history, but the completion baseline is v0.6.6 plus the exact merged
+event-timing main revision.
+
 
 ## Detail-board presentation follow-up
 
@@ -370,14 +363,16 @@ The same ownership boundary applies:
 - roadmap and detail boards should share one presentation style rather than
   maintain separate color/layout implementations.
 
-This follow-up remains part of Migration 014 because it is another
+This follow-up completed as part of Migration 014 because it was another
 cross-repository extraction triggered by the same planning-publication cut-over.
-It does not expand `tool.eng-docs` into a planning-domain model. Event-timing
+It did not expand `tool.eng-docs` into a planning-domain model. Event-timing
 now emits BoardView and receives SVG/PDF from `eng-docs board`.
 
 ## Completion criteria
 
-Migration 014 is complete only when:
+**All completion criteria are satisfied.**
+
+Migration 014 is complete because:
 
 - released `tool.eng-docs` owns the reusable RoadmapView and BoardView rendering contracts;
 - reusable schemas/examples contain no event-timing/SIP semantics;
