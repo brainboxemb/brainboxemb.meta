@@ -8,13 +8,15 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ### Migration 014 — adopt reusable roadmap rendering
 
-**Active — specification and reusable-owner implementation.**
+**Active — owner v0.5.0 released; event-timing PR qualification green; exact-main
+consumer qualification pending.**
 
-[Migration 014](migrations/014-reusable-roadmap-rendering/README.md) extracts the
-generic roadmap presentation/rendering boundary to `tool.eng-docs` without
-making authoritative project planning prose obey fixed card geometry. Owner work
-is tracked in [tool.eng-docs #59](https://github.com/brainboxemb/tool.eng-docs/issues/59);
-event-timing is the first production consumer after a released owner capability.
+[Migration 014](migrations/014-reusable-roadmap-rendering/README.md) now has a
+released reusable owner capability in `tool.eng-docs v0.5.0`. Event-timing PR
+[#214](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/214)
+is pinned to that release and its exact-head documentation run is green with
+full SIP Result/Demo content. The migration remains active until the same
+consumer qualification is retained on exact event-timing `main`.
 
 ## Proposed / inactive
 

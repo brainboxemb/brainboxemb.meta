@@ -1,6 +1,6 @@
 # Migration 014 — adopt reusable roadmap rendering
 
-Status: **active — specification and owner implementation**
+Status: **active — owner released; first consumer PR qualified; main cut-over pending**
 
 Tracking issue: [#181](https://github.com/brainboxemb/brainboxemb.meta/issues/181)
 
@@ -152,7 +152,7 @@ the first place normal layout errors are discovered.
 
 ### Step 1 — specification and contract
 
-Status: **active**
+Status: **done**
 
 Gate:
 
@@ -162,7 +162,7 @@ Gate:
 
 ### Step 2 — reusable owner implementation
 
-Status: **planned**
+Status: **done**
 
 Owner: `brainboxemb/tool.eng-docs`
 
@@ -184,14 +184,14 @@ Do not copy the event-timing renderer unchanged.
 
 ### Step 3 — owner release
 
-Status: **planned**
+Status: **done**
 
 Release the qualified `tool.eng-docs` capability before production consumer
 cut-over. Record exact tag, owner revision and green release evidence here.
 
 ### Step 4 — event-timing consumer cut-over
 
-Status: **planned**
+Status: **active — PR qualification green; exact-main qualification pending**
 
 Owner: `brainboxemb/2026-010-01.meta.event-timing-software`
 
@@ -207,6 +207,57 @@ After the owner release:
 - qualify exact PR and exact main documentation builds.
 
 The current Step-4 feature PR should not remain a CI-driven layout-debug loop.
+
+## Qualification evidence
+
+### Reusable owner
+
+- `tool.eng-docs` PR
+  [#60](https://github.com/brainboxemb/tool.eng-docs/pull/60) merged the generic
+  RoadmapView implementation to main as
+  `f9607fedee988c96d6e7dfccf50594eb3d8c36c9`.
+- Exact-main Test run
+  [36736031799](https://github.com/brainboxemb/tool.eng-docs/actions/runs/36736031799)
+  passed Linux, Windows, conformance-document generation and generated-output
+  publication.
+- Release `v0.5.0` was created from that exact main revision.
+- Tagged verification run
+  [36736466247](https://github.com/brainboxemb/tool.eng-docs/actions/runs/36736466247)
+  passed Linux, Windows, conformance generation and publication.
+- Release workflow
+  [36736447736](https://github.com/brainboxemb/tool.eng-docs/actions/runs/36736447736)
+  completed successfully and published the Python package assets.
+- Owner issue
+  [#59](https://github.com/brainboxemb/tool.eng-docs/issues/59) is closed as
+  completed.
+
+### First production consumer
+
+Event-timing PR
+[#214](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/214)
+currently qualifies the cut-over at head
+`a59a11b9f3ae4318632a139b43df953452091259`:
+
+- `project.yml` and the `tools/tool.eng-docs` gitlink pin released
+  `v0.5.0` / `f9607fedee988c96d6e7dfccf50594eb3d8c36c9`;
+- the project-local manager-roadmap file is now a consumer adapter that reuses
+  the existing project-owned `parse_sip()` semantics and emits RoadmapView;
+- generic card layout, wrapping, pagination, SVG and PDF rendering are owned by
+  `eng-docs roadmap`;
+- existing publication filenames are retained so document assembly did not need
+  an unrelated migration;
+- Step 4 was restored to four Result bullets and seven Demo bullets, proving the
+  authoritative SIP is no longer forced into the former 1..3-bullet / fixed-line
+  card contract;
+- documentation run
+  [36737383063](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36737383063)
+  passed planning generation, traceability, portal verification, generated
+  reader verification, retained producer-evidence checks and preview
+  publication.
+
+The remaining migration gate is deliberate: after #214 is merged, run and retain
+the same documentation qualification on the exact event-timing `main` commit.
+Only then may Migration 014 be marked complete.
 
 ## Completion criteria
 
