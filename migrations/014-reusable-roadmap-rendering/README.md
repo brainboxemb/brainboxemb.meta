@@ -1,6 +1,6 @@
 # Migration 014 — adopt reusable roadmap rendering
 
-Status: **active — owner visual refinement in review; consumer requalification pending**
+Status: **active — refined owner released; first consumer PR qualified; exact-main cut-over pending**
 
 Tracking issue: [#181](https://github.com/brainboxemb/brainboxemb.meta/issues/181)
 
@@ -195,14 +195,14 @@ cut-over. Record exact tag, owner revision and green release evidence here.
 
 ### Step 4 — event-timing consumer cut-over
 
-Status: **active — initial v0.5.0 qualification green; visual requalification pending**
+Status: **active — v0.5.1 PR qualification green; exact-main qualification pending**
 
-Before final cut-over, owner issue #61 / PR #62 refines the generic visual
-hierarchy based on first-consumer review. This does not change the ownership
-boundary: variable-height wrapping/pagination remains generic, while the consumer
-still owns which ordered metadata value represents its end date/forecast and which
-heading names its document-status badge group. The refined owner capability must
-be released and the consumer repinned/requalified before this step can complete.
+First-consumer review triggered owner issue #61 / PR #62 to refine the generic
+visual hierarchy without changing the ownership boundary. Variable-height
+wrapping/pagination remains generic, while the consumer owns which ordered
+metadata value represents its end date/forecast and which heading names its
+document-status badge group. That refinement is now released as v0.5.1 and the
+event-timing PR has been repinned and requalified.
 
 Owner: `brainboxemb/2026-010-01.meta.event-timing-software`
 
@@ -242,15 +242,36 @@ The current Step-4 feature PR should not remain a CI-driven layout-debug loop.
   [#59](https://github.com/brainboxemb/tool.eng-docs/issues/59) is closed as
   completed.
 
+#### Visual refinement
+
+- First-consumer visual review is captured in owner issue
+  [#61](https://github.com/brainboxemb/tool.eng-docs/issues/61), closed by
+  [PR #62](https://github.com/brainboxemb/tool.eng-docs/pull/62).
+- PR #62 merged to owner main as
+  `6815a2f003150ad803f1162b1eed0e6b96e2636d`.
+- Exact-main Test run
+  [36741834973](https://github.com/brainboxemb/tool.eng-docs/actions/runs/36741834973)
+  passed Linux, Windows, conformance generation and publication.
+- Release `v0.5.1` was created from that exact main revision.
+- Tagged verification run
+  [36742112482](https://github.com/brainboxemb/tool.eng-docs/actions/runs/36742112482)
+  passed the same owner qualification at the immutable tag.
+- Release workflow
+  [36742092047](https://github.com/brainboxemb/tool.eng-docs/actions/runs/36742092047)
+  completed successfully and published the package assets.
+- The refinement adds a compact visible marker, stable state/primary-meta
+  placement, named badge groups and quieter section/card styling while retaining
+  adaptive height and pagination.
+
 ### First production consumer
 
 Event-timing PR
 [#214](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/pull/214)
-currently qualifies the cut-over at head
-`a59a11b9f3ae4318632a139b43df953452091259`:
+currently qualifies the refined cut-over at head
+`7b456adc34eb179831d9246e3600d8daa7774d24`:
 
 - `project.yml` and the `tools/tool.eng-docs` gitlink pin released
-  `v0.5.0` / `f9607fedee988c96d6e7dfccf50594eb3d8c36c9`;
+  `v0.5.1` / `6815a2f003150ad803f1162b1eed0e6b96e2636d`;
 - the project-local manager-roadmap file is now a consumer adapter that reuses
   the existing project-owned `parse_sip()` semantics and emits RoadmapView;
 - generic card layout, wrapping, pagination, SVG and PDF rendering are owned by
@@ -260,19 +281,25 @@ currently qualifies the cut-over at head
 - Step 4 was restored to four Result bullets and seven Demo bullets, proving the
   authoritative SIP is no longer forced into the former 1..3-bullet / fixed-line
   card contract;
-- documentation run
+- the earlier v0.5.0 run
   [36737383063](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36737383063)
+  established the structural cut-over;
+- exact-head v0.5.1 documentation run
+  [36742717634](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/actions/runs/36742717634)
   passed planning generation, traceability, portal verification, generated
   reader verification, retained producer-evidence checks and preview
-  publication.
+  publication at `7b456adc34eb179831d9246e3600d8daa7774d24`;
+- the consumer maps the visible marker to the step number, shows end/forecast
+  before effort, keeps the title free of redundant `Step N` text, and groups
+  document badges under `DOCUMENT STATUS`;
+- preview inspection also exposed and removed one duplicated Step-5 SIP heading
+  before retaining the final qualification evidence.
 
-The v0.5.0 run above remains valid evidence for the structural extraction, but
-first-consumer visual review found the generic card hierarchy too loose. The
-additional owner refinement is tracked in tool.eng-docs #61 / PR #62. Final
-consumer qualification therefore requires a released refined owner version,
-repinning #214 to that release, a green exact-PR documentation run, and then the
-same qualification on the exact event-timing `main` commit. Only then may
-Migration 014 be marked complete.
+The structural v0.5.0 evidence remains part of the migration history. The
+first-consumer visual refinement has now also been released and qualified through
+event-timing #214. The only remaining gate is deliberate: after #214 is merged,
+run and retain the same documentation qualification on the exact event-timing
+`main` commit. Only then may Migration 014 be marked complete.
 
 ## Completion criteria
 
