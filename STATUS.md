@@ -6,7 +6,15 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-No cross-project migration is currently active.
+### Migration 014 — adopt reusable roadmap rendering
+
+**Active — specification and reusable-owner implementation.**
+
+[Migration 014](migrations/014-reusable-roadmap-rendering/README.md) extracts the
+generic roadmap presentation/rendering boundary to `tool.eng-docs` without
+making authoritative project planning prose obey fixed card geometry. Owner work
+is tracked in [tool.eng-docs #59](https://github.com/brainboxemb/tool.eng-docs/issues/59);
+event-timing is the first production consumer after a released owner capability.
 
 ## Proposed / inactive
 
