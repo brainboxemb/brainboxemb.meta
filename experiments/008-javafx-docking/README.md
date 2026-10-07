@@ -56,7 +56,7 @@ The first PoP baseline is:
 - Java 21;
 - JavaFX 21;
 - Maven, matching the Development Client build direction;
-- JMetro for normal JavaFX look and feel;
+- Transit 2.0.0 for normal JavaFX look and feel;
 - SnapFX as docking/workbench infrastructure.
 
 SnapFX is not selected in advance. Another candidate should be implemented only
@@ -75,12 +75,14 @@ The experiment must establish at least:
    fresh application session;
 6. stable panel IDs and a factory can reconstruct the workbench without leaking
    docking-framework APIs throughout view classes;
-7. JMetro and application CSS can coexist with the docking chrome;
-8. Terminal, Device Log and Client Log can remain dark/monospace inside a light
+7. Transit and application CSS can coexist with the docking chrome;
+8. Transit 2.0.0 behaves correctly on the Java 21 / JavaFX 21 experiment
+   baseline even though the current Transit source builds against JavaFX 22;
+9. Terminal, Device Log and Client Log can remain dark/monospace inside a light
    workbench;
-9. continuously changing/dynamic content such as a Tag Plot behaves correctly
-   while docking and resizing;
-10. the selected docking dependency can be consumed reproducibly from the
+10. continuously changing/dynamic content such as a Tag Plot behaves correctly
+    while docking and resizing;
+11. the selected docking dependency can be consumed reproducibly from the
     Maven-based Development Client.
 
 ## Ownership

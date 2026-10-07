@@ -17,7 +17,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 The PoP evaluates whether an IDE-style docking layer can support the Event Timing
 Development Client without coupling individual views to the docking framework.
-The first candidate is SnapFX on Java 21 / JavaFX 21 with Maven and JMetro.
+The first docking candidate is SnapFX on Java 21 / JavaFX 21 with Maven and Transit 2.0.0 as the theme candidate.
 Qualification covers docking/tabbing, float/redock and cross-window behaviour,
 layout persistence, dynamic-view behaviour, styling and dependency/build
 repeatability. Production Java 21 or docking adoption remains a separate decision.
