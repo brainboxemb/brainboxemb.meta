@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import datetime as dt
 import json
 import os
@@ -90,6 +91,7 @@ def fetch_recent_runs(
     repo: str,
     token: str | None,
     cutoff: dt.datetime,
+    stats: dict[str, int] | None = None,
 ) -> list[dict[str, Any]]:
     runs: list[dict[str, Any]] = []
     page = 1
@@ -99,6 +101,8 @@ def fetch_recent_runs(
         data = request_json_with_retry(
             f"{dashboard.API}/repos/{owner}/{repo}/actions/runs?{query}", token
         )
+        if stats is not None:
+            stats["pages"] = stats.get("pages", 0) + 1
         batch = data.get("workflow_runs", [])
         if not batch:
             break
@@ -115,6 +119,8 @@ def fetch_recent_runs(
             break
         page += 1
 
+    if stats is not None:
+        stats["runs"] = len(runs)
     return runs
 
 
@@ -161,14 +167,36 @@ def build_snapshot(
     workflow_info: dict[tuple[str, str], dict[str, Any]] = {}
     errors: list[str] = []
 
-    for entry in configured_repositories(config):
+    entries = configured_repositories(config)
+
+    def collect_one(entry: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]], str | None]:
         owner = str(entry["owner"])
         repo = str(entry["name"])
-        print(f"Collecting Actions metrics for {owner}/{repo}…", file=sys.stderr)
+        started = time.monotonic()
+        stats: dict[str, int] = {}
         try:
-            runs = fetch_recent_runs(owner, repo, token, cutoff)
+            runs = fetch_recent_runs(owner, repo, token, cutoff, stats=stats)
+            return entry, runs, None
         except Exception as exc:
-            errors.append(f"{owner}/{repo}: {exc}")
+            return entry, [], str(exc)
+        finally:
+            print(
+                f"Actions metrics {owner}/{repo}: "
+                f"{stats.get('pages', 0)} pages, {stats.get('runs', 0)} runs, "
+                f"{time.monotonic() - started:.1f}s",
+                file=sys.stderr,
+                flush=True,
+            )
+
+    # Restrict concurrent GitHub requests; retain deterministic catalog ordering.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        results = list(executor.map(collect_one, entries))
+
+    for entry, runs, error in results:
+        owner = str(entry["owner"])
+        repo = str(entry["name"])
+        if error is not None:
+            errors.append(f"{owner}/{repo}: {error}")
             continue
 
         all_runs.extend(runs)

@@ -3,6 +3,9 @@ import importlib.util
 import pathlib
 import sys
 import unittest
+import time
+from threading import Lock
+from unittest import mock
 
 MODULE = pathlib.Path(__file__).parents[1] / "src" / "collect_action_metrics.py"
 spec = importlib.util.spec_from_file_location("action_metrics", MODULE)
@@ -13,6 +16,58 @@ spec.loader.exec_module(action_metrics)
 
 
 class ActionMetricsTests(unittest.TestCase):
+
+    def test_parallel_collection_and_bounded_concurrency(self):
+        config = {"dashboard": {"owner": "brainboxemb"},
+                  "groups": [{"repositories": ["one", "two", "three", "four", "five"]}]}
+        lock = Lock()
+        active = 0
+        peak = 0
+        def fetch(owner, repo, token, cutoff, stats=None):
+            nonlocal active, peak
+            with lock:
+                active += 1
+                peak = max(active, peak)
+            time.sleep(0.02)
+            with lock:
+                active -= 1
+            stats.update({"pages": 1, "runs": 1})
+            return [{"status": "completed", "conclusion": "success", "workflow_id": 1,
+                     "name": "Build", "run_started_at": "2026-10-07T10:00:00Z",
+                     "updated_at": "2026-10-07T10:00:01Z"}]
+        with mock.patch.object(action_metrics, "fetch_recent_runs", side_effect=fetch):
+            snapshot, errors = action_metrics.build_snapshot(config, None)
+        self.assertEqual(errors, [])
+        self.assertEqual(snapshot["summary"]["runs"], 5)
+        self.assertEqual(sum(w["runs"] for w in snapshot["workflows"]), 5)
+        self.assertGreater(peak, 1)
+        self.assertLessEqual(peak, 4)
+
+    def test_collection_failure_does_not_publish_partial_snapshot(self):
+        config = {"dashboard": {"owner": "brainboxemb"},
+                  "groups": [{"repositories": ["ok", "broken"]}]}
+        def fetch(owner, repo, token, cutoff, stats=None):
+            if repo == "broken":
+                raise RuntimeError("API error")
+            return []
+        with mock.patch.object(action_metrics, "fetch_recent_runs", side_effect=fetch):
+            snapshot, errors = action_metrics.build_snapshot(config, None)
+        self.assertIsNone(snapshot)
+        self.assertIn("broken", errors[0])
+
+    def test_pagination_counts_pages_and_runs(self):
+        cutoff = dt.datetime(2026, 9, 8, tzinfo=dt.timezone.utc)
+        batch = [{"created_at": "2026-10-08T00:00:00Z"}] * 100
+        with mock.patch.object(action_metrics, "request_json_with_retry", side_effect=[
+            {"workflow_runs": batch},
+            {"workflow_runs": [{"created_at": "2026-09-07T00:00:00Z"}]}
+        ]) as req:
+            stats = {}
+            runs = action_metrics.fetch_recent_runs("brainboxemb", "repo", None, cutoff, stats)
+        self.assertEqual(len(runs), 100)
+        self.assertEqual(stats, {"pages": 2, "runs": 100})
+        self.assertEqual(req.call_count, 2)
+
     def test_summarize_runs(self):
         runs = [
             {
