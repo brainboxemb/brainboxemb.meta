@@ -6,6 +6,21 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
+### Experiment 008 — JavaFX docking workbench
+
+**Active.**
+
+[Experiment record](experiments/008-javafx-docking/README.md)
+· tracking issue [#183](https://github.com/brainboxemb/brainboxemb.meta/issues/183)
+· implementation/evidence repository [`exp.2026-008.javafx-docking`](https://github.com/brainboxemb/exp.2026-008.javafx-docking)
+· initial experiment PR [#1](https://github.com/brainboxemb/exp.2026-008.javafx-docking/pull/1).
+
+The PoP evaluates whether an IDE-style docking layer can support the Event Timing
+Development Client without coupling individual views to the docking framework.
+The first docking candidate is SnapFX on Java 21 / JavaFX 21 with Maven and Transit 2.0.0 as the theme candidate.
+Qualification covers docking/tabbing, float/redock and cross-window behaviour,
+layout persistence, dynamic-view behaviour, styling and dependency/build
+repeatability. Production Java 21 or docking adoption remains a separate decision.
 
 ## Proposed / inactive
 

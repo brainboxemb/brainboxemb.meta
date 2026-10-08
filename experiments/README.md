@@ -69,8 +69,16 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-There is currently no active project-backed experiment/PoP. Production adoption
-of completed Experiment 007 is tracked by Migration 013.
+### JavaFX docking workbench PoP
+
+[Experiment 008](008-javafx-docking/README.md) — **active**.
+
+The experiment evaluates an IDE-style dockable JavaFX workbench for the Event
+Timing Development Client and future diagnostic tools. SnapFX is the first
+candidate on a Java 21 / JavaFX 21 baseline; docking, floating/cross-window
+behaviour, layout persistence, styling and a reproducible Maven integration are
+qualification gates. Tracking issue:
+[#183](https://github.com/brainboxemb/brainboxemb.meta/issues/183).
 
 
 ## Proposed / inactive

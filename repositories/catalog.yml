@@ -340,6 +340,13 @@ repositories:
     dashboard_group: Sites & experiments
     role: Proof of Principle for interactive engineering documentation, architecture navigation, traceability and linked verification views.
 
+  - repository: brainboxemb/exp.2026-008.javafx-docking
+    category: experiment
+    domain: java
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Proof of Principle for JavaFX IDE-style docking, floating workbench panels, layout persistence and Development Client integration.
+
   - repository: brainboxemb/fork.andylevesque.quackworks
     category: external-source
     domain: scad
