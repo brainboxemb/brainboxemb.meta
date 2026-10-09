@@ -6,22 +6,6 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Experiment 008 — JavaFX docking workbench
-
-**Active.**
-
-[Experiment record](experiments/008-javafx-docking/README.md)
-· tracking issue [#183](https://github.com/brainboxemb/brainboxemb.meta/issues/183)
-· implementation/evidence repository [`exp.2026-008.javafx-docking`](https://github.com/brainboxemb/exp.2026-008.javafx-docking)
-· initial experiment PR [#1](https://github.com/brainboxemb/exp.2026-008.javafx-docking/pull/1).
-
-The PoP evaluates whether an IDE-style docking layer can support the Event Timing
-Development Client without coupling individual views to the docking framework.
-The first docking candidate is SnapFX on Java 21 / JavaFX 21 with Maven and Transit 2.0.0 as the theme candidate.
-Qualification covers docking/tabbing, float/redock and cross-window behaviour,
-layout persistence, dynamic-view behaviour, styling and dependency/build
-repeatability. Production Java 21 or docking adoption remains a separate decision.
-
 ## Proposed / inactive
 
 ### Migration 007 — standardise GitHub Actions dependency maintenance
@@ -31,6 +15,21 @@ repeatability. Production Java 21 or docking adoption remains a separate decisio
 [Migration 007](migrations/007-github-actions-dependency-maintenance/README.md) records the intended exact-SHA/PR-based action-maintenance work, including Dependabot and `actions-up` evaluation. It remains separate from completed Migration 011; that migration audited SCAD reusable-workflow shape/refs but did not standardise third-party GitHub Action dependency maintenance.
 
 ## Recently completed
+
+### Experiment 008 — JavaFX docking workbench
+
+**Complete — JavaFX workbench qualified; BentoFX preferred as Event Timing Step-6 D02 input.**
+
+[Experiment record](experiments/008-javafx-docking/README.md)
+· tracking issue [#183](https://github.com/brainboxemb/brainboxemb.meta/issues/183)
+· implementation/evidence repository [`exp.2026-008.javafx-docking`](https://github.com/brainboxemb/exp.2026-008.javafx-docking).
+
+The PoP established that ordinary JavaFX views can remain independent from the
+docking framework. BentoFX is the preferred candidate over SnapFX for the next
+Event Timing technology decision because it required less corrective adapter
+code, has an explicit workbench structure and resolves normally from Maven
+Central. Experiment 008 does not itself authorize SI-02 implementation; the
+decision is handed to Event Timing Step 6 D02.
 
 ### Migration 014 — adopt reusable roadmap rendering
 
