@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Complete Experiment 008 after the JavaFX docking workbench comparison qualified framework-independent application views and selected BentoFX as the preferred Event Timing Step-6 D02 input over SnapFX; retain the experiment repository as evidence, while final SI-02 toolkit/runtime/client/packaging selection remains product-owned.
+
 - Activate Experiment 008 to qualify a JavaFX IDE-style docking workbench for the Event Timing Development Client, register `exp.2026-008.javafx-docking` in the portfolio catalog, and track SnapFX-first Java 21 / JavaFX 21 docking, floating, persistence and Maven-integration evidence together with Transit 2.0.0 theme compatibility under meta issue #183.
 - Complete Migration 013 after released `tool.eng-docs v0.4.0`, the native MyST/Sphinx-Needs 17-object / 34-relation production graph, real SVG engineering identities, generated Book/readers, Material portal/workspace and richer selected use-case narratives all qualify on event-timing exact main `ff41c90a555f2f00fcb5a145f815eb88ba0bffa0`, exact-main documentation run `36528778737` (#650); retain Experiment 007 as the regression/reference lab and classify the source/graph/provenance contract as required while reader/hosting surfaces remain consumer-selected.
 - Standardize maintained repository documentation around numbered families with a local `README.md` overview, `10-00-plan.md`, `20-00-manuals.md`, `30-00-specification.md`, `40-00-design.md` and `50-00-verification.md`; dogfood the model in meta, classify former `working-model`/architecture material into manual/design families, move the durable Java execution model into the software domain, and simplify the new-session handoff to a copy/paste repository pointer.
