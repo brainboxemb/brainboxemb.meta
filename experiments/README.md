@@ -69,16 +69,7 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-### JavaFX docking workbench PoP
-
-[Experiment 008](008-javafx-docking/README.md) — **active**.
-
-The experiment evaluates an IDE-style dockable JavaFX workbench for the Event
-Timing Development Client and future diagnostic tools. SnapFX is the first
-candidate on a Java 21 / JavaFX 21 baseline; docking, floating/cross-window
-behaviour, layout persistence, styling and a reproducible Maven integration are
-qualification gates. Tracking issue:
-[#183](https://github.com/brainboxemb/brainboxemb.meta/issues/183).
+There is currently no active project-backed experiment/PoP.
 
 
 ## Proposed / inactive
@@ -105,6 +96,18 @@ dovetail can be developed as normal product design rather than another PoP.
 
 
 ## Complete
+
+### JavaFX docking workbench PoP
+
+[Experiment 008](008-javafx-docking/README.md) — **complete — JavaFX workbench
+qualified; BentoFX preferred as Event Timing Step-6 D02 input**.
+
+The PoP compared SnapFX and BentoFX on a shared Java 21 / JavaFX 21 / Transit
+workbench. Application views remained framework-independent. BentoFX is the
+preferred candidate because its explicit workbench model, smaller adapter burden,
+better out-of-the-box feel and normal Maven Central dependency were a better fit.
+SnapFX remains useful evidence for floating/persistence behaviour. Product
+technology selection remains owned by Event Timing Step 6 D02.
 
 ### Interactive engineering documentation and traceability PoP
 
