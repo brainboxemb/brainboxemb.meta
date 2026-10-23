@@ -69,7 +69,11 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-There is currently no active project-backed experiment/PoP.
+### Experiment 009 — simulated LED displays
+
+[Experiment 009](009-simulated-display/README.md) — **active — initial architecture and LCD vertical slice**.
+
+Native C rendering and serial interpretation with JavaFX pixel simulation, then RGB HUB75 and ESP-IDF qualification. The implementation and evidence belong to [`exp.2026-009.simulated-display`](https://github.com/brainboxemb/exp.2026-009.simulated-display); coordination is tracked in [meta issue #188](https://github.com/brainboxemb/brainboxemb.meta/issues/188).
 
 
 ## Proposed / inactive
