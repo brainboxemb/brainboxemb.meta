@@ -6,6 +6,16 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
+### Experiment 009 — simulated LED displays
+
+**Active — initial architecture and LCD vertical slice.**
+
+[Experiment record](experiments/009-simulated-display/README.md)
+· tracking issue [#188](https://github.com/brainboxemb/brainboxemb.meta/issues/188)
+· implementation/evidence repository [`exp.2026-009.simulated-display`](https://github.com/brainboxemb/exp.2026-009.simulated-display).
+
+The PoP develops a platform-independent C display core with a Java 21 / JavaFX desktop simulator. First qualify a 90×35 monochrome red display with a 5×7 font and SparkFun serial commands; then evaluate a 160×64 five-panel HUB75 path and ESP-IDF integration. No production migration is implied.
+
 ## Proposed / inactive
 
 ### Migration 007 — standardise GitHub Actions dependency maintenance

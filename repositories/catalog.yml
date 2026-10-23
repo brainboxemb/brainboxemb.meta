@@ -347,6 +347,13 @@ repositories:
     dashboard_group: Sites & experiments
     role: Proof of Principle for JavaFX IDE-style docking, floating workbench panels, layout persistence and Development Client integration.
 
+  - repository: brainboxemb/exp.2026-009.simulated-display
+    category: experiment
+    domain: software
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Native C LED display simulation PoP with JavaFX frontend, SparkFun serial text and planned HUB75/ESP-IDF qualification.
+
   - repository: brainboxemb/fork.andylevesque.quackworks
     category: external-source
     domain: scad
