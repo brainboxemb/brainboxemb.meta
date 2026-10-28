@@ -272,6 +272,13 @@ repositories:
       generation: current
       provider: tool.java-project
 
+  - repository: brainboxemb/2026-010-03.raspberry-pi-test-image
+    category: project
+    domain: infrastructure
+    lifecycle: current
+    dashboard_group: Software projects
+    role: Reproducible Raspberry Pi Zero-class test image, provisioning, target verification and headless artifact execution environment for Event Timing.
+
   - repository: brainboxemb/site.notes
     category: site
     domain: web
