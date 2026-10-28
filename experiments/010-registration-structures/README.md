@@ -94,6 +94,24 @@ Equal elapsed times share a rank.
 Change propagation/display tests must also prove that a consumer sees the correct final
 projection without depending on incidental internal ordering or stale derived state.
 
+## Qualification environments
+
+The experiment uses two deliberately different environments:
+
+1. **desktop / CI** — fast iteration, correctness, randomized tests, comparative profiling and
+   repeatable benchmark development;
+2. **Raspberry Pi Zero target hardware** — retained end-stage evidence for startup latency,
+   preallocation/pool initialization, growth events, steady-state mutation/query performance,
+   memory pressure and GC/allocation behaviour on constrained hardware.
+
+Desktop results are useful for relative comparison and finding defects, but do not by themselves
+select the production structure. Before a production adoption decision, the shortlisted candidates
+must be rerun on the actual Pi Zero model/JVM intended for deployment.
+
+The benchmark harness must therefore remain Java-version compatible with the production target,
+non-GUI, command-line runnable, and able to emit machine-readable results without depending on
+desktop-only profilers.
+
 ## Performance evidence
 
 Performance qualification includes at least:
@@ -107,7 +125,8 @@ Performance qualification includes at least:
 - worst-case ordered-array shifts;
 - display-facing iteration/query/update workload;
 - allocated bytes/op where the JVM exposes allocation counters;
-- retained capacity/pool size and growth-event counts.
+- retained capacity/pool size and growth-event counts;
+- the same shortlisted workload repeated on Raspberry Pi Zero, including fresh-process startup.
 
 A fast steady state does not compensate for unacceptable startup cost, and low startup cost
 does not compensate for recurring heap churn.
