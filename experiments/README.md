@@ -69,7 +69,18 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-There is currently no active project-backed experiment/PoP.
+### Java registration state and projection structures
+
+[Experiment 010](010-registration-structures/README.md) — **active — architecture/prototype/qualification in progress**.
+
+This experiment evaluates the Event Timing registration data path as one system:
+retained active-registration state, ADD/REV and stage-start mutations, incremental
+competition ranking, change/dirty propagation, and display-facing projections. The
+qualification explicitly measures startup/preallocation cost around the normal ~500
+registration population, growth beyond that baseline, steady-state allocations and
+mutation/query/display-update performance.
+
+Tracking issue: [#190](https://github.com/brainboxemb/brainboxemb.meta/issues/190).
 
 
 ## Proposed / inactive
