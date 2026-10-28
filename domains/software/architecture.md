@@ -58,3 +58,16 @@ This allows cache invalidation, fresh-runner reuse, cross-workflow behaviour and
 The initial Java CI PoP is complete. It qualified cross-workflow Maven cache persistence, representative later-run latency value, product-scoped Git build-identity invalidation, and release/canonical-artifact policy. Shared caching is supported as an optional latency optimisation, not as a guaranteed hosted-compute saving. Exact-tag release remains fresh/cache-independent. No production migration is active; the PoP repository remains available as a reusable regression lab.
 
 See the [experiment/PoP record](../../experiments/004-java-ci-architecture/README.md) for the current cross-project qualification status.
+
+
+## Registration-state architecture qualification
+
+Event Timing registration storage, mutation propagation, competition ranking and display-facing
+projection structures are being qualified independently in
+[Experiment 010](../../experiments/010-registration-structures/README.md).
+
+The experiment treats startup/preallocation, steady-state allocation behaviour, capacity growth,
+incremental mutation cost and display/update semantics as one architecture question. Production
+registration structures remain owned by the Event Timing implementation repository; the experiment
+provides evidence for a later production decision rather than changing the production architecture
+directly.
