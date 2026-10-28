@@ -112,6 +112,12 @@ The benchmark harness must therefore remain Java-version compatible with the pro
 non-GUI, command-line runnable, and able to emit machine-readable results without depending on
 desktop-only profilers.
 
+Target-image/environment ownership is deliberately outside this experiment. Event Timing tracks
+that infrastructure separately in
+[`2026-010-01.meta.event-timing-software#935`](https://github.com/brainboxemb/2026-010-01.meta.event-timing-software/issues/935),
+with proposed repository `brainboxemb/2026-010-03.raspberry-pi-test-image`. Experiment 010
+consumes that reproducible target environment; it does not build or own the Raspberry Pi image.
+
 ## Performance evidence
 
 Performance qualification includes at least:
