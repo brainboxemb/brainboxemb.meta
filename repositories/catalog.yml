@@ -277,7 +277,7 @@ repositories:
     domain: infrastructure
     lifecycle: current
     dashboard_group: Software projects
-    role: Reproducible Raspberry Pi Zero-class image build and installation infrastructure for Event Timing; device credentials and consumer test workloads remain outside the image.
+    role: Brainbox Zero reusable Raspberry Pi Zero platform-image build and installation infrastructure; Event Timing is a current consumer, while device credentials and consumer test workloads remain outside the image.
 
   - repository: brainboxemb/site.notes
     category: site
