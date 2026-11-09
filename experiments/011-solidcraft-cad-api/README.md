@@ -34,9 +34,16 @@ on their own, provide the desired CAD domain API.
 Rust has been selected for the first typed **CAD-domain** PoP, without
 excluding Python as an alternative implementation language later.
 
+The [µcad project](https://codeberg.org/microcad/microcad/) was also provided as
+an **API design reference**, specifically for declarative named parts/sketches,
+unit-aware quantities and separating design intent from evaluation. Its
+older GitHub repository was reviewed; the current Codeberg source was not
+accessible to the automated reader. We are not adopting the µcad engine or DSL.
+See [µcad design notes](https://github.com/brainboxemb/exp.2026-011.solidcraft/blob/feature/issue-1-python-interface/docs/07-microcad-inspiration.md).
+
 ## First implemented semantic subset
 
-- `Part::box3d(length, width, height)`.
+- `Part::box3d(length, width, height)` and typed `Part::box_with_units(Length::mm(...), Length::inches(...), ...)`.
 - `.edges(Edges::OuterVertical).fillet(radius)`.
 - `.through_holes(&holes)`, including input validation.
 - SolidCraft-specific adapter expanding each high-level operation into
@@ -54,9 +61,11 @@ still require real SolidCraft inspection.
 GitHub Actions [offline qualification run](https://github.com/brainboxemb/exp.2026-011.solidcraft/actions/runs/42658989559)
 succeeded on `cf40297f9446767218f5e58020c4e312c7a63527`:
 
-- 7 Rust tests passed;
+- 7 Rust tests passed in the earlier qualified run; later CI also covers typed units.
 - 8 Python fixture tests passed;
 - semantic CAD model generated syntactically valid SolidCraft JSON.
+
+Additionally, the [latest push CI run](https://github.com/brainboxemb/exp.2026-011.solidcraft/actions/runs/42659957864) passed after adding typed lengths and µcad design notes.
 
 This demonstrates **source / offline adapter correctness only**.
 It does **not** prove the generated script builds the right CAD solid.
