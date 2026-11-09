@@ -352,7 +352,7 @@ repositories:
     domain: cad
     lifecycle: current
     dashboard_group: Sites & experiments
-    role: Isolated SolidCraft typed-command-facade experiment, evaluating Python and Rust wrappers around native GUI and headless SolidCraft commands.
+    role: Isolated semantic CAD API Proof of Principle using Rust CAD domain objects and a SolidCraft command adapter, with Python bindings as a reference.
 
   - repository: brainboxemb/fork.andylevesque.quackworks
     category: external-source

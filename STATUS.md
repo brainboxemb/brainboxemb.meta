@@ -6,15 +6,15 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Experiment 011 — SolidCraft command facade
+### Experiment 011 — SolidCraft CAD API
 
 **Active — first proof of principle, not yet live-qualified.**
 
-[Experiment record](experiments/011-solidcraft-command-facade/README.md)
+[Experiment record](experiments/011-solidcraft-cad-api/README.md)
 · implementation repository [`exp.2026-011.solidcraft`](https://github.com/brainboxemb/exp.2026-011.solidcraft)
 · [initial draft PR #2](https://github.com/brainboxemb/exp.2026-011.solidcraft/pull/2).
 
-Evaluate a small **typed scripting API** that maps Python or Rust method calls to SolidCraft's existing JSON commands, in both a Windows GUI and a headless session. `vcad` is only a reference for an ergonomic Rust API—not another CAD engine in this experiment. Python fixtures and a small Rust ScriptTransport prototype are present but not live-qualified. Docker is deferred.
+Develop a **semantic CAD API** (Part, holes, edge selections, fillet) independent of SolidCraft's commands. A SolidCraft adapter translates one CAD feature into multiple engine operations. CadQuery and vcad inform API design only; SolidCraft remains the only CAD engine. **Offline CI passes** for the Rust and Python fixtures, but the actual SolidCraft CLI, GUI and native design history are still unqualified. Docker is deferred.
 
 ## Proposed / inactive
 

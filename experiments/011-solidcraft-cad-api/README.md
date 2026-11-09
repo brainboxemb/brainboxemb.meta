@@ -1,0 +1,79 @@
+# Experiment 011 — SolidCraft CAD API
+
+**Status: active — offline API/adapter checks qualified; real SolidCraft runtime unqualified.**
+
+Implementation/evidence:
+[`brainboxemb/exp.2026-011.solidcraft`](https://github.com/brainboxemb/exp.2026-011.solidcraft);
+[draft PR #2](https://github.com/brainboxemb/exp.2026-011.solidcraft/pull/2);
+[tracking issue #1](https://github.com/brainboxemb/exp.2026-011.solidcraft/issues/1).
+
+## The question
+
+Can we provide a **real CAD modeling interface** in which a user describes
+`Part`, `Hole`, `Edges`, fillets, workplanes and features, while SolidCraft
+owns the actual geometry and design history?
+
+This is **not** just a one-function-per-SolidCraft-command wrapper.
+`vcad` and **CadQuery** are *references for good public CAD API design*;
+neither CAD engine is integrated into this experiment.
+
+## Architecture
+
+```text
+semantic CAD domain API (engine-independent)
+             -> SolidCraft adapter (high-level feature to many commands)
+             -> transport (native script now / GUI / MCP later)
+             -> SolidCraft (only geometry engine)
+```
+
+The upstream [`waynegramlich/scraftcnc`](https://github.com/waynegramlich/scraftcnc/tree/main/scraftcnc/pybind)
+contains existing Python command bindings (`scraftpybind`) that are useful
+as a *lower-level transport / command mapping reference*. They do not,
+on their own, provide the desired CAD domain API.
+
+Rust has been selected for the first typed **CAD-domain** PoP, without
+excluding Python as an alternative implementation language later.
+
+## First implemented semantic subset
+
+- `Part::box3d(length, width, height)`.
+- `.edges(Edges::OuterVertical).fillet(radius)`.
+- `.through_holes(&holes)`, including input validation.
+- SolidCraft-specific adapter expanding each high-level operation into
+  native sketch, extrusion, cut and fillet commands.
+- Command script transport and offline tests.
+
+See [API design informed by CadQuery and vcad](https://github.com/brainboxemb/exp.2026-011.solidcraft/blob/feature/issue-1-python-interface/docs/05-cad-api-design.md).
+
+**The edge selection is intentionally limited** to the four original
+outside box edges; generic topological selection and local workplanes
+still require real SolidCraft inspection.
+
+## Evidence
+
+GitHub Actions [offline qualification run](https://github.com/brainboxemb/exp.2026-011.solidcraft/actions/runs/42658989559)
+succeeded on `cf40297f9446767218f5e58020c4e312c7a63527`:
+
+- 7 Rust tests passed;
+- 8 Python fixture tests passed;
+- semantic CAD model generated syntactically valid SolidCraft JSON.
+
+This demonstrates **source / offline adapter correctness only**.
+It does **not** prove the generated script builds the right CAD solid.
+
+## Remaining qualification
+
+1. Run SolidCraft 0.30.1 against the generated script on Windows.
+2. Inspect real STEP geometry: dimensions, holes, outside edge fillets.
+3. Save/reopen native feature history and alter parameters.
+4. Implement/qualify GUI control and headless MCP transport backends.
+5. Investigate reliable topological references, workplanes and selectors.
+
+## Boundaries
+
+No new geometry kernel. No use of CadQuery or vcad for processing.
+No OpenSCAD migration and no production integration.
+
+**Experiment 012** remains a separate proposed/inactive investigation
+into PartCAD–SolidCraft interoperability. A generic shared Docker
+toolchain is deferred.

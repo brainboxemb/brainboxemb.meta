@@ -69,9 +69,9 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-### SolidCraft command facade
+### SolidCraft CAD API
 
-[Experiment 011](011-solidcraft-command-facade/README.md) — **active; Python and Rust examples added, GUI/CLI integration unqualified**. The goal is a typed and readable wrapper around SolidCraft commands, not a new CAD engine. The `vcad` API is a style reference only; `scraftpybind` is an existing Python candidate.
+[Experiment 011](011-solidcraft-cad-api/README.md) — **active; semantic Rust API and Python/Rust offline CI passing, GUI/CLI geometry unqualified**. The target is a **CAD-domain interface**, not a one-to-one command wrapper: Part, geometry operations and selections compile through a SolidCraft adapter. CadQuery/vcad are API design references only; SolidCraft is the sole CAD engine. Offline CI passes; runtime geometry remains unqualified.
 
 
 ## Proposed / inactive
