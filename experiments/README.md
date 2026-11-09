@@ -69,12 +69,16 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-There is currently no active project-backed experiment/PoP.
+### SolidCraft Python interface
+
+[Experiment 011](011-solidcraft-python-interface/README.md) — **active; first Python fixture tests pass offline, GUI and CLI integration unqualified**. Uses a pinned external `scraftpybind` implementation from `waynegramlich/scraftcnc` to test visible Windows and headless SolidCraft modeling.
 
 
 ## Proposed / inactive
 
-There is currently no other proposed project-backed experiment/PoP.
+### PartCAD–SolidCraft interoperability
+
+[Experiment 012](012-partcad-solidcraft/README.md) — **proposed / inactive; separate from Experiment 011, repository not yet created**. Investigate SolidCraft model/part exchange and native parameters through the existing PartCAD plugin before considering reusable infrastructure.
 
 ## Stopped
 

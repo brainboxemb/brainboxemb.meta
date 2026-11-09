@@ -1,0 +1,44 @@
+# Experiment 011 — SolidCraft Python interface
+
+**Status: active — initial offline fixture checks passed; live integration not yet qualified.**
+
+Implementation/evidence repository:
+[`brainboxemb/exp.2026-011.solidcraft`](https://github.com/brainboxemb/exp.2026-011.solidcraft).
+
+Initial work: [draft PR #2](https://github.com/brainboxemb/exp.2026-011.solidcraft/pull/2).
+Experiment-local tracking: [issue #1](https://github.com/brainboxemb/exp.2026-011.solidcraft/issues/1).
+
+## Question
+
+Can we create and revise a native parametric SolidCraft model from readable Python, both live in the Windows GUI and headless, by reusing an existing Python binding rather than building our own JSON/MCP protocol client?
+
+## Starting direction
+
+- SolidCraft supplies a command-based CAD engine, a GUI control channel, a headless CLI and MCP.
+- The third-party [`scraftpybind`](https://github.com/waynegramlich/scraftcnc/tree/main/scraftcnc/pybind), inside `waynegramlich/scraftcnc`, maps SolidCraft commands to Python methods with a GUI and headless transport.
+- Pin this upstream source; do not copy or fork it unless we identify a specific gap that requires intervention.
+- SolidCraft **0.30.1** is the initial current-release target. Upstream's Python commands were generated from CLI **0.20.0**. Compatibility is **unverified**.
+
+## Acceptance cases
+
+| Case | Question |
+|---|---|
+| PY-01 | Can offline binding and example tests run from a pinned checkout? |
+| PY-02 | Can Python create a visible model in the Windows GUI control session? |
+| PY-03 | Can Python create and export the equivalent model headlessly through MCP? |
+| PY-04 | Can it save/reopen a native SolidCraft file and revise parameters without losing history? |
+| PY-05 | Are runtime versions, errors, and output reproducible and understandable? |
+
+At the start of the experiment, five experiment-owned Python fixture tests passed offline; this verifies only the planned command sequence, **not** SolidCraft or its installed GUI/CLI.
+
+A source review uncovered a Windows token-folder mismatch in the pinned upstream Python binding. The experiment's fixture handles the Windows default path without copying token files or modifying upstream.
+
+## Boundaries
+
+**Experiment 011 owns** Python interface scripts, transport experiments, fixtures, and evidence.
+
+**Experiment 012 (separate, proposed)** will examine PartCAD's SolidCraft adapter for import/export, declared parameters and its existing Docker image. Do not fold that investigation into 011.
+
+A new `docker.cad-toolchain` is deferred. An isolated Dockerfile may later be introduced *inside the experiment* if a repeatable headless testcase justifies it.
+
+Production CAD/SCAD model repositories and shared tooling stay unchanged. Completing this experiment will not automatically start a migration.

@@ -6,7 +6,25 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
+### Experiment 011 — SolidCraft Python interface
+
+**Active — first proof of principle, not yet live-qualified.**
+
+[Experiment record](experiments/011-solidcraft-python-interface/README.md)
+· implementation repository [`exp.2026-011.solidcraft`](https://github.com/brainboxemb/exp.2026-011.solidcraft)
+· [initial draft PR #2](https://github.com/brainboxemb/exp.2026-011.solidcraft/pull/2).
+
+Evaluate the existing `scraftpybind` Python command interface, with a pinned upstream source, in both the Windows SolidCraft GUI and a headless MCP session. First offline fixture tests pass; installed SolidCraft compatibility and native design-history changes still need live qualification. Docker is deferred.
+
 ## Proposed / inactive
+
+### Experiment 012 — PartCAD–SolidCraft interoperability
+
+**Proposed / inactive — no implementation repository yet.**
+
+[Experiment proposal](experiments/012-partcad-solidcraft/README.md).
+
+Investigate the separate `partcad/partcad-solidcraft` plugin: native-design import with parameters, interchange through STEP/OCP, export, and its existing container image. This is not part of the Python command-binding experiment and does not authorize a shared Docker toolchain.
 
 ### Migration 007 — standardise GitHub Actions dependency maintenance
 

@@ -347,6 +347,13 @@ repositories:
     dashboard_group: Sites & experiments
     role: Proof of Principle for JavaFX IDE-style docking, floating workbench panels, layout persistence and Development Client integration.
 
+  - repository: brainboxemb/exp.2026-011.solidcraft
+    category: experiment
+    domain: cad
+    lifecycle: current
+    dashboard_group: Sites & experiments
+    role: Isolated SolidCraft Python-interface experiment using pinned scraftpybind for GUI and headless CAD modeling.
+
   - repository: brainboxemb/fork.andylevesque.quackworks
     category: external-source
     domain: scad
