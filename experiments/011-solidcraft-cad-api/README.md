@@ -45,16 +45,14 @@ See [µcad design notes](https://github.com/brainboxemb/exp.2026-011.solidcraft/
 
 - `Part::box3d(length, width, height)` and typed `Part::box_with_units(Length::mm(...), Length::inches(...), ...)`.
 - `.edges(Edges::OuterVertical).fillet(radius)`.
-- `.through_holes(&holes)`, including input validation.
+- `.through_holes(&holes)` and `.faces(Faces::Top).workplane().circles(&holes)?.cut_through()?`, including input validation.
 - SolidCraft-specific adapter expanding each high-level operation into
   native sketch, extrusion, cut and fillet commands.
 - Command script transport and offline tests.
 
 See [API design informed by CadQuery and vcad](https://github.com/brainboxemb/exp.2026-011.solidcraft/blob/feature/issue-1-python-interface/docs/05-cad-api-design.md).
 
-**The edge selection is intentionally limited** to the four original
-outside box edges; generic topological selection and local workplanes
-still require real SolidCraft inspection.
+**Top-face selection is now implemented for a base box only**: the SolidCraft adapter uses the documented native face-attachment mechanism on `sketch.create` rather than a free-floating global plane. The reference point and local-face 2D orientation require live verification. The edge selector is still limited to four original outside box edges; general topology is not implemented. See [face/workplane design](https://github.com/brainboxemb/exp.2026-011.solidcraft/blob/feature/issue-1-python-interface/docs/08-face-workplanes.md).
 
 ## Evidence
 
@@ -65,14 +63,14 @@ succeeded on `cf40297f9446767218f5e58020c4e312c7a63527`:
 - 8 Python fixture tests passed;
 - semantic CAD model generated syntactically valid SolidCraft JSON.
 
-Additionally, the [latest push CI run](https://github.com/brainboxemb/exp.2026-011.solidcraft/actions/runs/42659957864) passed after adding typed lengths and µcad design notes.
+Additionally, the [typed-length CI](https://github.com/brainboxemb/exp.2026-011.solidcraft/actions/runs/42659957864) and the [face-workplane CI](https://github.com/brainboxemb/exp.2026-011.solidcraft/actions/runs/42667955909) passed. The latest proof of principle now includes native face-attachment command mapping tests.
 
 This demonstrates **source / offline adapter correctness only**.
 It does **not** prove the generated script builds the right CAD solid.
 
 ## Remaining qualification
 
-1. Run SolidCraft 0.30.1 against the generated script on Windows.
+1. Run the [Windows qualification script](https://github.com/brainboxemb/exp.2026-011.solidcraft/blob/feature/issue-1-python-interface/scripts/qualify-solidcraft.ps1) against installed SolidCraft 0.30.1; retain CLI results, native `.sc` and STEP evidence.
 2. Inspect real STEP geometry: dimensions, holes, outside edge fillets.
 3. Save/reopen native feature history and alter parameters.
 4. Implement/qualify GUI control and headless MCP transport backends.
