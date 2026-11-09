@@ -6,7 +6,25 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
+### Experiment 011 — SolidCraft CAD API
+
+**Active — first proof of principle, not yet live-qualified.**
+
+[Experiment record](experiments/011-solidcraft-cad-api/README.md)
+· implementation repository [`exp.2026-011.solidcraft`](https://github.com/brainboxemb/exp.2026-011.solidcraft)
+· [initial draft PR #2](https://github.com/brainboxemb/exp.2026-011.solidcraft/pull/2).
+
+Develop a **semantic CAD API** (Part, holes, edge selections, fillet) independent of SolidCraft's commands. A SolidCraft adapter translates one CAD feature into multiple engine operations. CadQuery and vcad inform API design only; SolidCraft remains the only CAD engine. **Offline CI passes** for the Rust and Python fixtures, but the actual SolidCraft CLI, GUI and native design history are still unqualified. Docker is deferred.
+
 ## Proposed / inactive
+
+### Experiment 012 — PartCAD–SolidCraft interoperability
+
+**Proposed / inactive — no implementation repository yet.**
+
+[Experiment proposal](experiments/012-partcad-solidcraft/README.md).
+
+Investigate the separate `partcad/partcad-solidcraft` plugin: native-design import with parameters, interchange through STEP/OCP, export, and its existing container image. This is not part of the Python command-binding experiment and does not authorize a shared Docker toolchain.
 
 ### Migration 007 — standardise GitHub Actions dependency maintenance
 

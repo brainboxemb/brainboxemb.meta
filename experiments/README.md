@@ -69,12 +69,16 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-There is currently no active project-backed experiment/PoP.
+### SolidCraft CAD API
+
+[Experiment 011](011-solidcraft-cad-api/README.md) — **active; semantic Rust API and Python/Rust offline CI passing, GUI/CLI geometry unqualified**. The target is a **CAD-domain interface**, not a one-to-one command wrapper: Part, geometry operations and selections compile through a SolidCraft adapter. CadQuery/vcad are API design references only; SolidCraft is the sole CAD engine. Offline CI passes; runtime geometry remains unqualified.
 
 
 ## Proposed / inactive
 
-There is currently no other proposed project-backed experiment/PoP.
+### PartCAD–SolidCraft interoperability
+
+[Experiment 012](012-partcad-solidcraft/README.md) — **proposed / inactive; separate from Experiment 011, repository not yet created**. Investigate SolidCraft model/part exchange and native parameters through the existing PartCAD plugin before considering reusable infrastructure.
 
 ## Stopped
 
