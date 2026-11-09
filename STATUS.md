@@ -14,7 +14,7 @@ For the normal repository overview, start with [`README.md`](README.md).
 · implementation repository [`exp.2026-011.solidcraft`](https://github.com/brainboxemb/exp.2026-011.solidcraft)
 · [initial draft PR #2](https://github.com/brainboxemb/exp.2026-011.solidcraft/pull/2).
 
-Evaluate the existing `scraftpybind` Python command interface, with a pinned upstream source, in both the Windows SolidCraft GUI and a headless MCP session. First offline fixture tests pass; installed SolidCraft compatibility and native design-history changes still need live qualification. Docker is deferred.
+Evaluate the existing `scraftpybind` Python command interface, with a pinned upstream source, in both the Windows SolidCraft GUI and a headless MCP session. Offline fixtures have been added but not executed; installed SolidCraft compatibility and native design-history changes still need live qualification. Docker is deferred.
 
 ## Proposed / inactive
 

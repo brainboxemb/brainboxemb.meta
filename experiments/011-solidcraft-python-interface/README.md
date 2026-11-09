@@ -29,7 +29,7 @@ Can we create and revise a native parametric SolidCraft model from readable Pyth
 | PY-04 | Can it save/reopen a native SolidCraft file and revise parameters without losing history? |
 | PY-05 | Are runtime versions, errors, and output reproducible and understandable? |
 
-At the start of the experiment, five experiment-owned Python fixture tests passed offline; this verifies only the planned command sequence, **not** SolidCraft or its installed GUI/CLI.
+At the start of the experiment, five Python fixture tests were added but not yet executed; these test only the planned command sequence, **not** SolidCraft or its installed GUI/CLI.
 
 A source review uncovered a Windows token-folder mismatch in the pinned upstream Python binding. The experiment's fixture handles the Windows default path without copying token files or modifying upstream.
 
