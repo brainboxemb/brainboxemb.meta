@@ -6,15 +6,15 @@ For the normal repository overview, start with [`README.md`](README.md).
 
 ## Active now
 
-### Experiment 011 — SolidCraft Python interface
+### Experiment 011 — SolidCraft command facade
 
 **Active — first proof of principle, not yet live-qualified.**
 
-[Experiment record](experiments/011-solidcraft-python-interface/README.md)
+[Experiment record](experiments/011-solidcraft-command-facade/README.md)
 · implementation repository [`exp.2026-011.solidcraft`](https://github.com/brainboxemb/exp.2026-011.solidcraft)
 · [initial draft PR #2](https://github.com/brainboxemb/exp.2026-011.solidcraft/pull/2).
 
-Evaluate the existing `scraftpybind` Python command interface, with a pinned upstream source, in both the Windows SolidCraft GUI and a headless MCP session. Offline fixtures have been added but not executed; installed SolidCraft compatibility and native design-history changes still need live qualification. Docker is deferred.
+Evaluate a small **typed scripting API** that maps Python or Rust method calls to SolidCraft's existing JSON commands, in both a Windows GUI and a headless session. `vcad` is only a reference for an ergonomic Rust API—not another CAD engine in this experiment. Python fixtures and a small Rust ScriptTransport prototype are present but not live-qualified. Docker is deferred.
 
 ## Proposed / inactive
 

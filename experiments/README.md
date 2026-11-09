@@ -69,9 +69,9 @@ This turns the original PoP into a durable CI architecture qualification suite r
 
 ## Active project-backed work
 
-### SolidCraft Python interface
+### SolidCraft command facade
 
-[Experiment 011](011-solidcraft-python-interface/README.md) — **active; first Python fixture tests pass offline, GUI and CLI integration unqualified**. Uses a pinned external `scraftpybind` implementation from `waynegramlich/scraftcnc` to test visible Windows and headless SolidCraft modeling.
+[Experiment 011](011-solidcraft-command-facade/README.md) — **active; Python and Rust examples added, GUI/CLI integration unqualified**. The goal is a typed and readable wrapper around SolidCraft commands, not a new CAD engine. The `vcad` API is a style reference only; `scraftpybind` is an existing Python candidate.
 
 
 ## Proposed / inactive

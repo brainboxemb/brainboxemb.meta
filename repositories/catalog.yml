@@ -352,7 +352,7 @@ repositories:
     domain: cad
     lifecycle: current
     dashboard_group: Sites & experiments
-    role: Isolated SolidCraft Python-interface experiment using pinned scraftpybind for GUI and headless CAD modeling.
+    role: Isolated SolidCraft typed-command-facade experiment, evaluating Python and Rust wrappers around native GUI and headless SolidCraft commands.
 
   - repository: brainboxemb/fork.andylevesque.quackworks
     category: external-source
