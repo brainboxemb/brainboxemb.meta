@@ -70,7 +70,7 @@ It does **not** prove the generated script builds the right CAD solid.
 
 ## Remaining qualification
 
-1. Run the [Windows qualification script](https://github.com/brainboxemb/exp.2026-011.solidcraft/blob/feature/issue-1-python-interface/scripts/qualify-solidcraft.ps1) against installed SolidCraft 0.30.1; retain CLI results, native `.sc` and STEP evidence.
+1. Run the [Windows qualification script](https://github.com/brainboxemb/exp.2026-011.solidcraft/blob/feature/issue-1-python-interface/scripts/qualify-solidcraft.ps1) with `-SkipBuild -Snapshot` against installed SolidCraft 0.30.1 (**no Rust installation required**); retain CLI results, native `.sc`, STEP evidence and preview. The committed JSON fixture is checked against Rust-generated output in [offline CI](https://github.com/brainboxemb/exp.2026-011.solidcraft/actions/runs/42668871056).
 2. Inspect real STEP geometry: dimensions, holes, outside edge fillets.
 3. Save/reopen native feature history and alter parameters.
 4. Implement/qualify GUI control and headless MCP transport backends.
